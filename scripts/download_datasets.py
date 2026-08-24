@@ -13,6 +13,7 @@ Não requer dependências externas (usa apenas a stdlib).
 
 import argparse
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -31,6 +32,10 @@ DATASETS = {
         "base_url": "https://huggingface.co/datasets/joelniklaus/brazilian_court_decisions/resolve/main",
         "files": ["train.jsonl", "test.jsonl", "validation.jsonl"],
     },
+    "tcu_acordaos": {
+        "base_url": "https://sites.tcu.gov.br/dados-abertos/jurisprudencia/arquivos/acordao-completo",
+        "files": [f"acordao-completo-{ano}.csv" for ano in range(2003, 2024)],
+    },
 }
 
 
@@ -42,16 +47,34 @@ def format_size(num_bytes: float) -> str:
     return f"{num_bytes:.1f}TB"
 
 
+CHUNK_SIZE = 8 * 1024 * 1024  # requests sem Range são cortadas em ~8MB em
+# alguns ambientes de rede (proxy/antivírus corporativo, não o servidor);
+# baixar em pedaços via Range evita isso e permite retomada real.
+MAX_RETRIES_PER_CHUNK = 5
+
+
+def _content_length(url: str) -> int | None:
+    req = urllib.request.Request(url, method="HEAD")
+    with urllib.request.urlopen(req) as resp:
+        length = resp.headers.get("Content-Length")
+        return int(length) if length is not None else None
+
+
 def download_file(url: str, dest: Path, force: bool) -> None:
     if dest.exists() and not force:
         print(f"  [skip] {dest.name} já existe ({format_size(dest.stat().st_size)})")
         return
 
     print(f"  [down] {dest.name}")
+    tmp_dest = dest.with_suffix(dest.suffix + ".part")
+    if force and tmp_dest.exists():
+        tmp_dest.unlink()
 
-    def report(block_num, block_size, total_size):
-        downloaded = block_num * block_size
-        if total_size > 0:
+    total_size = _content_length(url)
+    downloaded = tmp_dest.stat().st_size if tmp_dest.exists() else 0
+
+    def report():
+        if total_size:
             pct = min(downloaded / total_size * 100, 100)
             sys.stdout.write(
                 f"\r        {format_size(downloaded)} / {format_size(total_size)} ({pct:5.1f}%)"
@@ -60,14 +83,34 @@ def download_file(url: str, dest: Path, force: bool) -> None:
             sys.stdout.write(f"\r        {format_size(downloaded)}")
         sys.stdout.flush()
 
-    tmp_dest = dest.with_suffix(dest.suffix + ".part")
-    try:
-        urllib.request.urlretrieve(url, tmp_dest, reporthook=report)
-        tmp_dest.rename(dest)
-    finally:
-        sys.stdout.write("\n")
-        if tmp_dest.exists():
-            tmp_dest.unlink()
+    report()
+    with tmp_dest.open("ab") as f:
+        while total_size is None or downloaded < total_size:
+            range_end = downloaded + CHUNK_SIZE - 1
+            req = urllib.request.Request(
+                url, headers={"Range": f"bytes={downloaded}-{range_end}"}
+            )
+            for attempt in range(1, MAX_RETRIES_PER_CHUNK + 1):
+                try:
+                    with urllib.request.urlopen(req) as resp:
+                        chunk = resp.read()
+                    break
+                except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
+                    if attempt == MAX_RETRIES_PER_CHUNK:
+                        raise
+                    sys.stdout.write(
+                        f"\n        [retry {attempt}/{MAX_RETRIES_PER_CHUNK}] {exc}\n"
+                    )
+            if not chunk:
+                break
+            f.write(chunk)
+            downloaded += len(chunk)
+            report()
+            if total_size is None and len(chunk) < CHUNK_SIZE:
+                break  # servidor não informou tamanho e a última leitura foi curta
+
+    sys.stdout.write("\n")
+    tmp_dest.rename(dest)
 
 
 def download_dataset(name: str, force: bool) -> None:

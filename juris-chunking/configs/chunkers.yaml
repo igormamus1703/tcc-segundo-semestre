@@ -1,0 +1,36 @@
+# Parâmetros de cada estratégia de chunking.
+# tokenizer: declare qual tokenizer é usado para contar "tokens" abaixo,
+# e seja consistente em todo o pipeline (seção 3 do plano_tecnico.md).
+tokenizer: tiktoken:cl100k_base
+
+fixed:
+  # Duas configurações, para comparar com o BR-TaxQA-R (2048/1024).
+  - name: fixed_512_256
+    size: 512
+    stride: 256
+  - name: fixed_1024_512
+    size: 1024
+    stride: 512
+
+recursive:
+  name: recursive_default
+  chunk_size: 1024
+  chunk_overlap: 128
+  # Separadores jurídicos, do mais para o menos específico.
+  separators:
+    - "\n\nACÓRDÃO"
+    - "\n\nVOTO"
+    - "\n\nRELATÓRIO"
+    - "\n\nEMENTA"
+    - "\n\n"
+    - "\n"
+    - ". "
+    - " "
+
+structural:
+  name: structural_default
+  # Limite máximo por seção; acima disso, subdivide internamente.
+  max_section_tokens: 1024
+  overlap: 128
+  # Repassa o rótulo da seção (E2) para cada subchunk gerado.
+  propagate_section_label: true

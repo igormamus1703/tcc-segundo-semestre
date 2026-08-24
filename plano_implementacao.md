@@ -4,6 +4,12 @@ Plano de execução do código, escrito para ser executado fase a fase (Sonnet 5
 Complementa o `plano_tecnico.md` (arquitetura e cronograma) e o **substitui onde
 houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
+**Status (24/08):** F0, F1 e F2 concluídas. F1: gate passou (97,9% match de
+docs, 99,2% qrels preservados). F2: segmentador validado contra o corpus
+inteiro, 92,7% de acurácia por caractere (curva de iteração no docstring de
+`juris-chunking/src/segmenter/rules.py`). Próxima: F3 — Chunkers. Ver
+`juris-chunking/README.md` para o status detalhado e como reproduzir.
+
 **Estado do código em 18/08:** o esqueleto de módulos em `juris-chunking/src/`
 (stubs com `NotImplementedError`) segue a arquitetura do `plano_tecnico.md` e
 continua válido na forma — os contratos (`Chunker`, `Chunk`, agregação
@@ -118,13 +124,13 @@ Invariante em todo o pipeline: `doc.text[start:end] == chunk.text`.
 Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável.
 **Não começar a fase seguinte sem fechar a anterior.**
 
-### F0 — Ambiente (30 min)
+### F0 — Ambiente (30 min) ✅ concluída
 - Instalar `requirements.txt` no `.venv` do `juris-chunking` (hoje só tem pytest).
 - Maior risco: `ranx` (numba) no Python 3.13 — testar primeiro; fallback: venv
   com Python 3.11/3.12.
 - Aceite: `python -c "import faiss, bm25s, tiktoken, ranx, sentence_transformers"`.
 
-### F1 — Download, join e montagem do corpus (`scripts/` + `src/ingest.py`)
+### F1 — Download, join e montagem do corpus (`scripts/` + `src/ingest.py`) ✅ concluída
 - Estender `scripts/download_datasets.py` com o dataset `tcu_acordaos`: baixa os
   21 CSVs anuais (2003–2023) da URL da seção 0 para `data/tcu_acordaos/`
   (arquivo temporário + rename; retomável; alguns anos são grandes).
@@ -146,7 +152,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
 - Aceite: `python -m src.ingest` ponta a ponta; conferir 2–3 docs no olho e o
   `join_report.json`.
 
-### F2 — Segmentador (`src/segmenter/`)
+### F2 — Segmentador (`src/segmenter/`) ✅ concluída
 - `rules.py`: reescrever para pistas textuais reais de acórdão íntegro
   (a validar/iterar contra os spans ouro): início de `relatorio` ≈ padrões de
   abertura de relatório; fronteira relatório→voto ≈ "É o relatório";
