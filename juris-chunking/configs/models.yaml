@@ -1,0 +1,26 @@
+# Embedders e retrievers.
+# Nenhuma API paga (seção 3 do plano_tecnico.md) — só modelos abertos,
+# auto-hospedáveis, executados localmente.
+
+embedders:
+  # Modelo compacto adaptado ao português (topo do MTEB-BR).
+  - name: pt_compact
+    hf_id: "PREENCHER"  # escolher a partir do MTEB-BR, arXiv:2607.04581
+  # Multilíngue forte de referência.
+  - name: multilingual_ref
+    hf_id: "intfloat/multilingual-e5-large"
+  # Opcional: RoBERTaLexPT — só se houver fine-tune (é encoder MLM, não
+  # bi-encoder de recuperação; ver aviso na seção 3 do plano_tecnico.md).
+  # - name: robertalexpt
+  #   hf_id: "PREENCHER"
+
+lexical:
+  backend: bm25s   # alternativa: rank_bm25
+
+dense:
+  index: faiss.IndexFlatIP   # brute force, suficiente para ~16k docs
+
+aggregation:
+  default: max_pooling
+  sensitivity_analysis: sum_top_k
+  sum_top_k_value: 3

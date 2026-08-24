@@ -1,0 +1,37 @@
+# Dataset
+datasets>=2.19
+
+# Tokenização
+tiktoken>=0.7
+
+# Chunking baseline
+langchain-text-splitters>=0.2
+
+# BM25
+bm25s>=0.2
+
+# Denso
+sentence-transformers>=3.0
+
+# Índice vetorial
+faiss-cpu>=1.8
+
+# Métricas / significância
+ranx>=0.3
+
+# Estatística
+scipy>=1.13
+numpy>=1.26
+pandas>=2.2
+
+# Gráficos
+matplotlib>=3.9
+
+# Notebooks
+jupyter>=1.0
+
+# Config
+pyyaml>=6.0
+
+# Testes
+pytest>=8.0
