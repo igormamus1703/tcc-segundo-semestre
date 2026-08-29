@@ -4,11 +4,16 @@ Plano de execução do código, escrito para ser executado fase a fase (Sonnet 5
 Complementa o `plano_tecnico.md` (arquitetura e cronograma) e o **substitui onde
 houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
-**Status (24/08):** F0, F1 e F2 concluídas. F1: gate passou (97,9% match de
+**Status (24/08):** F0, F1, F2 e F3 concluídas. F1: gate passou (97,9% match de
 docs, 99,2% qrels preservados). F2: segmentador validado contra o corpus
 inteiro, 92,7% de acurácia por caractere (curva de iteração no docstring de
-`juris-chunking/src/segmenter/rules.py`). Próxima: F3 — Chunkers. Ver
-`juris-chunking/README.md` para o status detalhado e como reproduzir.
+`juris-chunking/src/segmenter/rules.py`). F3: 5 estratégias de chunking
+implementadas e validadas ponta a ponta contra o corpus real (offsets
+conferidos, zero divergências); um bug real foi encontrado e corrigido no
+recursive (offset recovery nativo do LangChain assumia unidade errada para
+`chunk_overlap` — ver docstring de `src/chunkers/recursive.py`). Próxima:
+F4 — Indexação + runs. Ver `juris-chunking/README.md` para o status
+detalhado e como reproduzir.
 
 **Estado do código em 18/08:** o esqueleto de módulos em `juris-chunking/src/`
 (stubs com `NotImplementedError`) segue a arquitetura do `plano_tecnico.md` e
@@ -169,7 +174,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
 - Aceite: `python -m src.segmenter.validate` imprime acurácia global e por
   seção; iterar regras até estabilizar (reportar a curva de iterações no TCC).
 
-### F3 — Chunkers (`src/chunkers/`)
+### F3 — Chunkers (`src/chunkers/`) ✅ concluída
 - `src/tokenization.py`: `count_tokens`, e
   `token_windows(text, size, stride) -> [(start_char, end_char)]` via `encode` +
   `decode_tokens_bytes` cumulativo (cuidado com fronteiras UTF-8; testar com

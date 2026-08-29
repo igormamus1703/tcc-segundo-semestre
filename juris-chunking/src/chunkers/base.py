@@ -29,6 +29,9 @@ class Chunk:
 class Document:
     doc_id: str
     text: str
+    # spans ouro (colunas do CSV do TCU), só usado por
+    # StructuralChunker(span_source="gold") — ver corpus_docs.jsonl.
+    gold_spans: list[dict] | None = None
 
 
 class Chunker(ABC):

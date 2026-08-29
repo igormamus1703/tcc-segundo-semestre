@@ -16,21 +16,29 @@ recursive:
   name: recursive_default
   chunk_size: 1024
   chunk_overlap: 128
-  # Separadores jurídicos, do mais para o menos específico.
+  # Separadores genéricos de texto corrido, do mais para o menos
+  # específico — de propósito SEM os cabeçalhos de seção ("EMENTA",
+  # "RELATÓRIO", "VOTO", "ACÓRDÃO"): eles quase não ocorrem como texto no
+  # corpus montado (ver seção 0-1 do plano_implementacao.md e o docstring
+  # de src/segmenter/rules.py) e usá-los aqui equivaleria a dar ao chunker
+  # "estrutura-cega" uma pista estrutural que ele não deveria ter.
   separators:
-    - "\n\nACÓRDÃO"
-    - "\n\nVOTO"
-    - "\n\nRELATÓRIO"
-    - "\n\nEMENTA"
     - "\n\n"
     - "\n"
     - ". "
     - " "
 
 structural:
-  name: structural_default
-  # Limite máximo por seção; acima disso, subdivide internamente.
-  max_section_tokens: 1024
-  overlap: 128
-  # Repassa o rótulo da seção (E2) para cada subchunk gerado.
-  propagate_section_label: true
+  # Duas variantes de run (seção F3 do plano_implementacao.md): "gold" usa
+  # os spans das colunas do CSV do TCU (ablação sem erro de segmentação);
+  # "pred" usa os spans previstos pelo Segmenter (o que um pipeline real
+  # teria disponível sem estrutura ouro; acurácia medida em
+  # results/tables/segmenter_validation.json).
+  - name: structural_gold
+    span_source: gold
+    max_section_tokens: 1024
+    overlap: 128
+  - name: structural_pred
+    span_source: pred
+    max_section_tokens: 1024
+    overlap: 128

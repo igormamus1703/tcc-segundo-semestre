@@ -66,8 +66,12 @@ leitura completos.
       92,7% de acurácia por caractere, 1,6% de fallback
       (`results/tables/segmenter_validation.json`; curva de iteração
       documentada no docstring de `src/segmenter/rules.py`).
-- [ ] **F3 — Chunkers** (`tokenization.py`, `fixed.py`, `recursive.py`,
-      `structural.py`).
+- [x] **F3 — Chunkers**: `fixed` (2 configs), `recursive` e `structural`
+      (`gold`/`pred`) — 5 estratégias, validadas ponta a ponta contra o
+      corpus real (invariante `doc.text[start:end] == chunk.text` conferida,
+      zero divergências). Achado: o `add_start_index` nativo do
+      `RecursiveCharacterTextSplitter` quebra com `length_function` em
+      tokens — corrigido com cursor manual (`src/chunkers/recursive.py`).
 - [ ] **F4 — Indexação + runs** (BM25, denso, agregação chunk→doc).
 - [ ] **F5 — Avaliação, significância e recortes.**
 
@@ -77,6 +81,8 @@ leitura completos.
 python scripts/download_datasets.py juristcu tcu_acordaos  # (raiz do repo)
 python -m src.ingest                  # monta o corpus + roda EDA
 python -m src.segmenter.validate      # mede acurácia do segmentador contra o gabarito
+python -m src.chunkers.run --strategy all --limit-docs 500  # smoke test
+python -m src.chunkers.run --strategy all                   # corpus inteiro
 pytest                                # roda a suíte de testes
 ```
 
