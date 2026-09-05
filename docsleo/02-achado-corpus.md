@@ -74,6 +74,37 @@ roda e os 39 testes passam. As duas coisas são verdade ao mesmo tempo. O
 problema não é o código, é que **o número publicado no artigo veio de uma
 versão anterior dele**.
 
+**3. Confirmação empírica (rodada de 05/09/2026).** Depois de baixar os 6 GB de
+CSVs do TCU, rodei o `python -m src.ingest` completo. O `join_report.json`
+gerado:
+
+```json
+{
+  "n_juristcu_docs": 16045,
+  "n_acordaos_referenciados": 12881,
+  "n_acordaos_encontrados": 12880,
+  "n_docs_com_match": 15837,
+  "taxa_match_docs": 0.987,
+  "n_corpus_final": 12880,
+  "n_qrel_total": 2250,
+  "n_qrel_preservados": 2243,
+  "taxa_qrel_preservado": 0.9969,
+  "n_qrel_pares_apos_colisao": 2219
+}
+```
+
+`wc -l corpus_docs.jsonl` = **12.880 linhas**. Não há mais dúvida: o pipeline,
+como está no `main`, produz **12.880 documentos**.
+
+**Os dois gates do plano passam com folga** (exigência: ≥ 90% nos dois):
+- match de documentos: **98,7%**
+- qrels preservados: **99,69%**
+
+⚠️ Note que nem esses dois números batem com o que o README e o artigo dizem
+hoje (97,9% e 99,2%) — mais uma evidência de que os artefatos publicados vêm de
+uma rodada diferente da que o código atual produz. Os valores novos são
+inclusive **melhores**.
+
 ## Por que isso é urgente (e não um detalhe de bookkeeping)
 
 Estes números, hoje no artigo e no pôster, **todos** vêm da rodada de 113k:

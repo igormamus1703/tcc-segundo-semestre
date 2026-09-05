@@ -55,3 +55,4 @@ O que cada anotação precisa ter, no mínimo:
 | [04-modelos-embedding.md](04-modelos-embedding.md) | Escolha do embedder via MTEB-BR; resolve o `PREENCHER` do `models.yaml` |
 | [05-diario-execucao.md](05-diario-execucao.md) | Diário cronológico: comandos rodados, saídas, tempos |
 | [06-implementacao-f4.md](06-implementacao-f4.md) | F4/F5 implementadas: decisões de projeto e as armadilhas de biblioteca encontradas |
+| [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) | **Tabela de substituição:** cada número do artigo × o valor medido. Nenhum número entra no texto final sem passar por aqui |
