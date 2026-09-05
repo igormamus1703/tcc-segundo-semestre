@@ -72,8 +72,21 @@ leitura completos.
       zero divergências). Achado: o `add_start_index` nativo do
       `RecursiveCharacterTextSplitter` quebra com `length_function` em
       tokens — corrigido com cursor manual (`src/chunkers/recursive.py`).
-- [ ] **F4 — Indexação + runs** (BM25, denso, agregação chunk→doc).
-- [ ] **F5 — Avaliação, significância e recortes.**
+- [x] **F4 — Indexação + runs**: BM25 (`bm25s`) e denso
+      (`sentence-transformers` + FAISS `IndexFlatIP`, com cache `.npy`),
+      agregação chunk→doc e CLI `src/run_experiments.py` que grava os TREC
+      runs. `configs/models.yaml` resolvido: `pt_compact` =
+      `embeddinggemma-300m` (13º de 93 no MTEB-BR com 308M parâmetros) e
+      default sem gate = `multilingual-e5-base`.
+- [x] **F5 — Avaliação, significância e recortes**: métricas via `ranx`,
+      comparação pareada com correção para comparações múltiplas, bootstrap
+      (IC 95%) e os três recortes. `python -m src.evaluate` gera as tabelas.
+
+> ⚠️ **Corpus:** o `eda_stats.json`/`segmenter_validation.json` versionados
+> foram regerados em 05/09 sobre o corpus que o `ingest.py` produz hoje
+> (**12.880** acórdãos, não 113.827 — ver `docsleo/02-achado-corpus.md`). A
+> escolha do corpus oficial ainda está pendente de decisão da equipe, e os
+> números do artigo dependem dela.
 
 ## Uso
 
@@ -83,7 +96,27 @@ python -m src.ingest                  # monta o corpus + roda EDA
 python -m src.segmenter.validate      # mede acurácia do segmentador contra o gabarito
 python -m src.chunkers.run --strategy all --limit-docs 500  # smoke test
 python -m src.chunkers.run --strategy all                   # corpus inteiro
+python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
+python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
+python -m src.evaluate                # F5: gera results/tables/*.csv
 pytest                                # roda a suíte de testes
+```
+
+Smoke test da F4 antes de rodar o corpus inteiro:
+
+```bash
+python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
+```
+
+**Retriever denso — um passo manual, e só se quiser o modelo melhor.** O
+`pt_compact` (`google/embeddinggemma-300m`) é *gated* no Hugging Face: exige
+conta, aceite da licença Gemma e `hf auth login`. O **default do pipeline é o
+`multilingual_ref`** (`intfloat/multilingual-e5-base`, MIT, sem gate), então
+tudo roda ponta a ponta sem nenhum cadastro. Para usar o gated:
+
+```bash
+hf auth login
+python -m src.run_experiments --strategy all --retriever dense --embedder pt_compact
 ```
 
 ## Estrutura
