@@ -112,6 +112,38 @@ O relatório usa superscritos Unicode que o console cp1252 do Windows não
 encoda. Por isso ele é gravado em arquivo (`significance_report.txt`, UTF-8) em
 vez de impresso.
 
+## Divergência entre o contrato do plano e o `ingest.py`
+
+O `plano_implementacao.md` §2 especifica o `corpus_docs.jsonl` assim:
+
+```
+{"doc_id": str, "text": str, "n_tokens": int, "gold_spans": [...], "ano": int, ...}
+```
+
+Mas o `ingest.py` **não grava `n_tokens`**. Os campos reais são
+`doc_id, text, gold_spans, ano, colegiado, tipo_processo`. O `corpus_stats()`
+até calcula as contagens de token para o EDA — e as **descarta** depois.
+
+Isso quebrou o recorte por tamanho de documento (`KeyError: 'n_tokens'`), que é
+um dos três recortes obrigatórios da F5.
+
+**Como resolvi, sem mexer no `ingest.py`:** `load_doc_lengths()` usa o campo
+quando ele existe e, quando não existe, conta os tokens e **cacheia** em
+`data/interim/doc_lengths.json` (tokenizar 780 MB leva minutos, e o recorte não
+muda entre execuções). Assim o pipeline funciona com o corpus atual e continua
+correto se o `ingest.py` passar a gravar o campo.
+
+> 📌 **A decidir com o Igor:** o certo a longo prazo é o `ingest.py` gravar
+> `n_tokens`, como o plano manda — ele já tem o número em mãos no
+> `corpus_stats()`. Não fiz porque exigiria re-rodar o join dos 6 GB, e a
+> orientação foi não mexer na estrutura antes de confirmar com ele.
+
+Nota menor, do mesmo tipo: o `ingest.py` chama `tiktoken` diretamente, embora o
+plano diga que "todo módulo que precisa contar ou janelar por token importa
+[de `src/tokenization.py`], nunca chama tiktoken direto". Hoje é inofensivo
+(ambos usam `cl100k_base`), mas é o tipo de duplicação que faz o tokenizer
+divergir sem ninguém perceber.
+
 ## Correção de significância — ponto forte para a banca
 
 `ranx.compare` aplica correção para comparações múltiplas. Comparar 10 runs
