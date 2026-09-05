@@ -123,6 +123,45 @@ def report_to_text(report) -> str:
 
 # --- CLI: gera as tabelas finais do TCC -------------------------------------
 
+def load_doc_lengths(corpus_path: Path, cache_path: Path | None = None) -> dict[str, int]:
+    """{doc_id: n_tokens}, para o recorte por tercil de tamanho.
+
+    A seção 2 do `plano_implementacao.md` especifica `n_tokens` como campo do
+    `corpus_docs.jsonl`, mas o `ingest.py` não o grava (o `corpus_stats()`
+    calcula as contagens e as descarta depois de montar o EDA). Então:
+    usamos o campo quando ele existir e, senão, contamos aqui — cacheando o
+    resultado, porque tokenizar o corpus inteiro leva minutos e o recorte não
+    muda entre execuções.
+    """
+    import json as _json
+
+    if cache_path is None:
+        cache_path = corpus_path.parent / "doc_lengths.json"
+    if cache_path.exists():
+        return {k: int(v) for k, v in _json.loads(cache_path.read_text(encoding="utf-8")).items()}
+
+    from .tokenization import count_tokens
+
+    lengths: dict[str, int] = {}
+    precisou_contar = False
+    with corpus_path.open(encoding="utf-8") as f:
+        for line in f:
+            d = _json.loads(line)
+            n = d.get("n_tokens")
+            if n is None:
+                if not precisou_contar:
+                    print(
+                        "  corpus_docs.jsonl sem 'n_tokens' — contando (uma vez; "
+                        f"o resultado fica em {cache_path.name})",
+                        flush=True,
+                    )
+                    precisou_contar = True
+                n = count_tokens(d["text"])
+            lengths[d["doc_id"]] = int(n)
+    cache_path.write_text(_json.dumps(lengths), encoding="utf-8")
+    return lengths
+
+
 def _write_csv(path: Path, rows: list[dict]) -> None:
     import csv as _csv
 
@@ -195,11 +234,7 @@ def main() -> None:
         )
 
     if args.corpus.exists():
-        lengths = {}
-        with args.corpus.open(encoding="utf-8") as f:
-            for line in f:
-                d = json.loads(line)
-                lengths[d["doc_id"]] = d["n_tokens"]
+        lengths = load_doc_lengths(args.corpus)
         _write_csv(
             args.tables_dir / "slices_doc_length.csv",
             slice_by_doc_length_tercile(qrels, runs, lengths, args.metric),

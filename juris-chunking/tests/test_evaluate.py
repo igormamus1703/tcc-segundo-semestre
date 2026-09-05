@@ -149,3 +149,52 @@ def test_slice_by_retriever_extrai_retriever_do_nome(qrels, run_bom):
     linhas = slice_by_retriever(qrels, [run_bom])
     assert linhas[0]["valor"] == "bm25"
     assert linhas[0]["estrategia"] == "structural_gold"
+
+
+# --- tamanhos de documento --------------------------------------------------
+
+def test_load_doc_lengths_usa_n_tokens_quando_existe(tmp_path):
+    import json
+
+    from src.evaluate import load_doc_lengths
+
+    corpus = tmp_path / "corpus.jsonl"
+    corpus.write_text(
+        "\n".join(
+            json.dumps({"doc_id": f"d{i}", "text": "x " * 50, "n_tokens": 123 + i})
+            for i in range(3)
+        ),
+        encoding="utf-8",
+    )
+    assert load_doc_lengths(corpus) == {"d0": 123, "d1": 124, "d2": 125}
+
+
+def test_load_doc_lengths_conta_quando_campo_ausente(tmp_path):
+    """O ingest atual não grava `n_tokens`, apesar do contrato do plano."""
+    import json
+
+    from src.evaluate import load_doc_lengths
+
+    corpus = tmp_path / "corpus.jsonl"
+    corpus.write_text(
+        json.dumps({"doc_id": "d0", "text": "acórdão do tribunal de contas"}),
+        encoding="utf-8",
+    )
+    lengths = load_doc_lengths(corpus)
+    assert lengths["d0"] > 0
+
+
+def test_load_doc_lengths_cacheia(tmp_path):
+    import json
+
+    from src.evaluate import load_doc_lengths
+
+    corpus = tmp_path / "corpus.jsonl"
+    corpus.write_text(json.dumps({"doc_id": "d0", "text": "texto"}), encoding="utf-8")
+    cache = tmp_path / "doc_lengths.json"
+    load_doc_lengths(corpus, cache)
+    assert cache.exists()
+
+    # com o cache no lugar, o corpus nem é lido de novo
+    corpus.unlink()
+    assert load_doc_lengths(corpus, cache) == {"d0": 1}
