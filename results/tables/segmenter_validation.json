@@ -1,37 +1,37 @@
 {
-  "n_docs": 113827,
-  "acuracia_char_global": 0.9271,
-  "fallback_rate": 0.0164,
+  "n_docs": 12880,
+  "acuracia_char_global": 0.9222,
+  "fallback_rate": 0.0,
   "por_secao": {
     "dispositivo": {
-      "cobertura": 0.9888,
-      "precisao": 0.7897,
-      "gold_chars": 239468517,
-      "predicted_chars": 299828960
+      "cobertura": 0.987,
+      "precisao": 0.7428,
+      "gold_chars": 33267049,
+      "predicted_chars": 44198810
     },
     "ementa": {
-      "cobertura": 0.9354,
-      "precisao": 0.561,
-      "gold_chars": 44070486,
-      "predicted_chars": 73476206
+      "cobertura": 0.9362,
+      "precisao": 0.5022,
+      "gold_chars": 6460092,
+      "predicted_chars": 12042252
     },
     "fundamentacao": {
-      "cobertura": 0.9068,
-      "precisao": 0.9523,
-      "gold_chars": 914581535,
-      "predicted_chars": 870958368
+      "cobertura": 0.9109,
+      "precisao": 0.9644,
+      "gold_chars": 182947380,
+      "predicted_chars": 172790305
     },
     "indefinido": {
       "cobertura": 0.0,
       "precisao": 0.0,
       "gold_chars": 0,
-      "predicted_chars": 125163704
+      "predicted_chars": 28069470
     },
     "relatorio": {
-      "cobertura": 0.9281,
-      "precisao": 0.9811,
-      "gold_chars": 3156575669,
-      "predicted_chars": 2985947587
+      "cobertura": 0.9218,
+      "precisao": 0.9825,
+      "gold_chars": 556053532,
+      "predicted_chars": 521706058
     }
   }
 }

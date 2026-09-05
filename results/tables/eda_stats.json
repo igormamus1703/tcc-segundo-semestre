@@ -1,15 +1,15 @@
 {
-  "n_docs": 113827,
+  "n_docs": 12880,
   "tokens_por_doc": {
-    "mediana": 7347,
-    "p90": 24163,
-    "p99": 71480,
-    "media": 11651.1
+    "mediana": 11426,
+    "p90": 38390,
+    "p99": 105313,
+    "media": 18174.0
   },
   "presenca_secao": {
-    "ementa": 0.9986,
-    "relatorio": 0.9743,
-    "fundamentacao": 0.976,
-    "dispositivo": 0.9835
+    "ementa": 0.9987,
+    "relatorio": 0.9998,
+    "fundamentacao": 0.9988,
+    "dispositivo": 1.0
   }
 }
