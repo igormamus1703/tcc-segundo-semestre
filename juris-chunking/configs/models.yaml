@@ -1,26 +1,63 @@
 # Embedders e retrievers.
 # Nenhuma API paga (seção 3 do plano_tecnico.md) — só modelos abertos,
 # auto-hospedáveis, executados localmente.
+#
+# Os prefixos NÃO são decorativos: cada família de modelo foi treinada com um
+# formato de entrada específico para consulta e para passagem. Usar o prefixo
+# errado (ou nenhum) degrada a recuperação silenciosamente — o modelo não
+# reclama, só recupera pior. Por isso ficam aqui, versionados junto do hf_id.
 
 embedders:
-  # Modelo compacto adaptado ao português (topo do MTEB-BR).
+  # Modelo compacto adaptado ao português.
+  # Justificativa (MTEB-BR, arXiv:2607.04581): com 308M parâmetros fica em 13º
+  # de 93 modelos, a 0,033 do líder — sendo que os líderes de recuperação têm
+  # 8-12B e seriam inviáveis no nosso orçamento de compute.
+  # ATENÇÃO: modelo GATED no Hugging Face. Exige conta, aceite da licença Gemma
+  # em https://huggingface.co/google/embeddinggemma-300m e `hf auth login`.
+  # É o ÚNICO passo manual do projeto (ver docsleo/04-modelos-embedding.md).
   - name: pt_compact
-    hf_id: "PREENCHER"  # escolher a partir do MTEB-BR, arXiv:2607.04581
-  # Multilíngue forte de referência.
+    hf_id: "google/embeddinggemma-300m"
+    query_prefix: "task: search result | query: "
+    passage_prefix: "title: none | text: "
+    batch_size: 64
+    gated: true
+
+  # Multilíngue forte de referência. Licença MIT, SEM gate: é o default
+  # executável, para o pipeline rodar ponta a ponta sem nenhum passo manual.
   - name: multilingual_ref
-    hf_id: "intfloat/multilingual-e5-large"
+    hf_id: "intfloat/multilingual-e5-base"
+    query_prefix: "query: "
+    passage_prefix: "passage: "
+    batch_size: 64
+    gated: false
+
   # Opcional: RoBERTaLexPT — só se houver fine-tune (é encoder MLM, não
   # bi-encoder de recuperação; ver aviso na seção 3 do plano_tecnico.md).
+  # O mesmo aviso vale para o BERTimbau, que aparece bem no ranking GERAL do
+  # MTEB-BR mas não é um bi-encoder treinado para retrieval.
   # - name: robertalexpt
   #   hf_id: "PREENCHER"
 
 lexical:
   backend: bm25s   # alternativa: rank_bm25
+  # Normalização aplicada igualmente na indexação e na busca
+  # (src/indexing/text_norm.py): lowercase, remoção de acentos e stopwords PT.
+  # Sem acentos porque 20 anos de publicação do TCU trazem o mesmo termo
+  # acentuado e não acentuado ("acórdão"/"acordao").
 
 dense:
-  index: faiss.IndexFlatIP   # brute force, suficiente para ~16k docs
+  index: faiss.IndexFlatIP   # brute force, exato — sem erro de recall de ANN
+  # Default do pipeline: o modelo SEM gate, para que qualquer integrante da
+  # equipe consiga reproduzir sem criar conta no Hugging Face.
+  default_embedder: multilingual_ref
 
 aggregation:
   default: max_pooling
   sensitivity_analysis: sum_top_k
   sum_top_k_value: 3
+
+retrieval:
+  # Busca fundo em chunks antes de agregar: documentos longos espalham seus
+  # chunks pelo ranking, e truncar cedo perderia documentos relevantes.
+  top_chunks: 2000
+  top_docs: 1000
