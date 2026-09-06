@@ -1,0 +1,10 @@
+﻿[05:14:54] rodada 20260906-0514
+[05:14:54] log em C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\logs\rodada_20260906-0514.log
+[05:14:54] --- verificacoes previas ---
+[05:14:55] === INICIO: BM25 (5 estrategias) ===
+experimento 20260906-0515_bm25
+  hardware: NVIDIA GeForce RTX 5060 (8.0G)
+  commit: 1ebd6894 (arvore suja) em leo/f4-indexacao-e-docs
+structural_gold__bm25: 286,689 chunks, 117,959 linhas, 200.8s  [decorrido 0.1 h]
+structural_pred__bm25: 285,308 chunks, 117,984 linhas, 228.5s  [decorrido 0.1 h]
+recursive_default__bm25: 270,070 chunks, 120,681 linhas, 198.3s  [decorrido 0.2 h]

@@ -5,6 +5,7 @@ Não editar à mão.
 
 | Rodada | Início | Duração | Commit | Hardware | Etapas |
 |---|---|---|---|---|---|
+| [`20260906-0503_previsao_denso`](20260906-0503_previsao_denso/) | 2026-09-06T05:03:30 | 11 min | `43dbb382` | NVIDIA GeForce RTX 5060 | 4 |
 | [`20260906-0451_bm25_fixed_512_256-structural_gold`](20260906-0451_bm25_fixed_512_256-structural_gold/) | 2026-09-06T04:51:44 | 0 min | `1adfc85a` | NVIDIA GeForce RTX 5060 | 0 |
 | [`20260906-0450_bm25_fixed_512_256-structural_gold`](20260906-0450_bm25_fixed_512_256-structural_gold/) | 2026-09-06T04:50:17 | 0 min | `1adfc85a` | NVIDIA GeForce RTX 5060 | 0 |
 | [`20260906-0449_bm25_fixed_512_256-structural_gold`](20260906-0449_bm25_fixed_512_256-structural_gold/) | 2026-09-06T04:49:19 | 0 min | `1adfc85a` | NVIDIA GeForce RTX 5060 | 2 |

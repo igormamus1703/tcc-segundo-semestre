@@ -1,0 +1,73 @@
+{
+  "rotulo": "bm25",
+  "inicio": "2026-09-06T05:15:06",
+  "fim": null,
+  "duracao_s": 631.0,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever bm25",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl"
+  },
+  "git": {
+    "commit": "1ebd6894d56543aecd59ae178c0ee410ba477ee7",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 117959,
+      "segundos": 200.8
+    },
+    {
+      "nome": "structural_pred__bm25",
+      "run": "structural_pred__bm25",
+      "n_chunks": 285308,
+      "n_queries": 150,
+      "n_linhas_run": 117984,
+      "segundos": 228.5
+    },
+    {
+      "nome": "recursive_default__bm25",
+      "run": "recursive_default__bm25",
+      "n_chunks": 270070,
+      "n_queries": 150,
+      "n_linhas_run": 120681,
+      "segundos": 198.3
+    }
+  ]
+}
