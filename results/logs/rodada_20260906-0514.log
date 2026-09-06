@@ -8,3 +8,40 @@ experimento 20260906-0515_bm25
 structural_gold__bm25: 286,689 chunks, 117,959 linhas, 200.8s  [decorrido 0.1 h]
 structural_pred__bm25: 285,308 chunks, 117,984 linhas, 228.5s  [decorrido 0.1 h]
 recursive_default__bm25: 270,070 chunks, 120,681 linhas, 198.3s  [decorrido 0.2 h]
+fixed_1024_512__bm25: 450,786 chunks, 85,377 linhas, 393.3s  [decorrido 0.3 h]
+fixed_512_256__bm25: 907,914 chunks, 82,653 linhas, 430.4s  [decorrido 0.4 h]
+fim em 24.3 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0515_bm25
+[05:39:24] === FIM: BM25 (5 estrategias) em 24.5 min ===
+[05:39:24] === INICIO: avaliacao do BM25 ===
+experimento: 20260906-0515_bm25
+5 runs, qrels de qrels.trec
+  structural_pred__bm25                         nDCG@10=0.2526  MAP@10=0.1017
+  structural_gold__bm25                         nDCG@10=0.2521  MAP@10=0.1024
+  fixed_1024_512__bm25                          nDCG@10=0.2510  MAP@10=0.1013
+  fixed_512_256__bm25                           nDCG@10=0.2486  MAP@10=0.0963
+  recursive_default__bm25                       nDCG@10=0.2412  MAP@10=0.0931
+tabelas gravadas em C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0515_bm25\tables
+[05:39:49] === FIM: avaliacao do BM25 em 0.4 min ===
+[05:39:49] === INICIO: denso (orcamento: 5 h) ===
+experimento 20260906-0540_dense_bge_m3
+  hardware: NVIDIA GeForce RTX 5060 (8.0G)
+  commit: 204e946e (arvore suja) em leo/f4-indexacao-e-docs
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+System.Management.Automation.RemoteException
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights:   1%|ÔûÅ         | 5/391 [00:01<01:39,  3.88it/s]
+Loading weights: 100%|ÔûêÔûêÔûêÔûêÔûêÔûêÔûêÔûêÔûêÔûê| 391/391 [00:01<00:00, 298.49it/s]
+  [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[05:44:24] === FIM: denso (orcamento: 5 h) em 4.6 min ===
+[05:44:24] === INICIO: avaliacao do denso ===
+experimento: 20260906-0515_bm25
+5 runs, qrels de qrels.trec
+  structural_pred__bm25                         nDCG@10=0.2526  MAP@10=0.1017
+  structural_gold__bm25                         nDCG@10=0.2521  MAP@10=0.1024
+  fixed_1024_512__bm25                          nDCG@10=0.2510  MAP@10=0.1013
+  fixed_512_256__bm25                           nDCG@10=0.2486  MAP@10=0.0963
+  recursive_default__bm25                       nDCG@10=0.2412  MAP@10=0.0931
+tabelas gravadas em C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0515_bm25\tables
+[05:44:43] === FIM: avaliacao do denso em 0.3 min ===
+[05:44:43] rodada concluida
+[05:44:43] resultados em results\experiments\ (ver INDICE.md)

@@ -246,6 +246,10 @@ def test_orcamento_de_tempo_registra_o_que_ficou_de_fora(monkeypatch, tmp_path,
 
     # o orcamento ja esta estourado no primeiro laco -> nada roda, tudo e registrado
     monkeypatch.setattr(rx, "run_one", fake_run_one)
+    # Sem redirecionar a raiz, o main() cria a pasta do experimento em
+    # results/experiments/ DE VERDADE, e cada rodada da suite deixa lixo la.
+    import src.experiment as ex
+    monkeypatch.setattr(ex, "EXPERIMENTS_DIR", tmp_path / "experiments")
     monkeypatch.setattr(sys, "argv", [
         "run_experiments", "--strategy", "fixed_512_256", "structural_gold",
         "--retriever", "bm25", "--max-horas", "0",

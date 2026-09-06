@@ -52,7 +52,7 @@ Depende da decisão 1. A tabela de substituição completa está em
 
 ## 🟡 3. Trabalhos Relacionados — reforçar o argumento do BR-TaxQA-R
 
-Já apurado (ver [03-referencias-verificadas.md](03-referencias-verificadas.md)):
+Já apurado (ver [04-referencias-verificadas.md](04-referencias-verificadas.md)):
 eles compararam janela deslizante de **2.048 tokens** contra um splitter
 recursivo de **1.000 caracteres** (~250 tokens), avaliando **geração** (RAGAS).
 
@@ -110,17 +110,18 @@ Numa GPU T4 (Colab) a mesma carga sai em ~2 h — a diferença é de ~60x.
 ## 🟢 4. Execução (posso tocar sozinho)
 
 - [x] Ambiente, datasets (6 GB) e corpus montado
-- [x] F4 e F5 implementadas, 84 testes passando
+- [x] F4 e F5 implementadas, **110 testes** passando
 - [x] Chunking do corpus completo: 2.200.767 chunks nas 5 estratégias
-- [ ] Runs BM25 (5 estratégias) → **primeiro nDCG@10**
-- [ ] Runs densos (5 estratégias) — ~24 h de CPU, ou ~2 h se alguém tiver GPU
-- [ ] Tabelas finais: `main_results.csv`, `significance.csv`, os 3 recortes
+- [x] Runs BM25 (5 estratégias) → **primeiro nDCG@10**, reproduzido idêntico em 2 rodadas
+- [x] Tabelas: `main_results.csv`, `significance.csv`, `power_analysis.csv`, os 4 recortes
+- [x] Figuras autocontidas (`src/plots.py`)
+- [x] GPU resolvida: RTX 5060 + `torch cu130`, bge-m3 fp16, ~10 h para o denso completo
+- [ ] Runs densos — **em execução** (orçamento de 5 h por noite; o cache continua na noite seguinte)
 - [ ] Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`)
 - [ ] Notebooks 01–03 (só consomem `results/`)
 
-**Pergunta prática para o time:** alguém tem GPU disponível, ou usamos Colab? O
-encode denso é o único passo que realmente demora. Com o cache `.npy`
-implementado, só precisa rodar **uma vez** por modelo.
+A pergunta sobre GPU está respondida: a RTX 5060 do Leo dá conta. O item 1b
+abaixo fica como registro do que foi medido.
 
 ---
 

@@ -90,7 +90,10 @@ class Experimento:
     def __init__(self, rotulo: str, config: dict | None = None, raiz: Path | None = None):
         self.rotulo = rotulo
         self.inicio = datetime.now()
-        base = raiz or EXPERIMENTS_DIR
+        # Lê o módulo em vez da constante importada: assim um teste que
+        # redireciona `EXPERIMENTS_DIR` não escreve na pasta real de resultados.
+        import sys as _sys
+        base = raiz or getattr(_sys.modules[__name__], "EXPERIMENTS_DIR")
         self.dir = base / f"{timestamp_slug(self.inicio)}_{rotulo}"
         self.runs_dir = self.dir / "runs"
         self.tables_dir = self.dir / "tables"
@@ -159,8 +162,8 @@ def _atualizar_indice() -> None:
         "Gerado automaticamente por `src/experiment.py` ao fim de cada rodada.",
         "Não editar à mão.",
         "",
-        "| Rodada | Início | Duração | Commit | Hardware | Etapas |",
-        "|---|---|---|---|---|---|",
+        "| Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for d in sorted(EXPERIMENTS_DIR.iterdir(), reverse=True):
         mf = d / "manifest.json"
@@ -172,9 +175,19 @@ def _atualizar_indice() -> None:
             continue
         dur = m.get("duracao_s") or 0
         hw = m.get("hardware", {})
+        # O resumo da avaliação (gravado por `src.evaluate`) faz o índice
+        # responder "o que deu" sem abrir a pasta. Rodada ainda não avaliada
+        # mostra "—", não erro.
+        av = m.get("avaliacao") or {}
+        melhor = av.get("melhor_run")
+        ndcg = (av.get("por_run") or {}).get(melhor, {}).get("ndcg@10") if melhor else None
+        melhor_txt = f"{ndcg:.4f} (`{melhor}`)" if ndcg is not None else "—"
+        sig = av.get("significancia") or {}
+        sig_txt = (f"{sig['pares_p_menor_0_05']}/{sig['pares']}" if sig else "—")
         linhas.append(
             f"| [`{d.name}`]({d.name}/) | {m.get('inicio','')} | {dur/60:.0f} min "
             f"| `{(m.get('git') or {}).get('commit','')[:8]}` "
-            f"| {hw.get('gpu') or hw.get('cpu') or '?'} | {len(m.get('etapas', []))} |"
+            f"| {hw.get('gpu') or hw.get('cpu') or '?'} | {len(m.get('etapas', []))} "
+            f"| {melhor_txt} | {sig_txt} |"
         )
     (EXPERIMENTS_DIR / "INDICE.md").write_text("\n".join(linhas) + "\n", encoding="utf-8")

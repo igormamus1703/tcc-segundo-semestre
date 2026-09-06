@@ -240,6 +240,7 @@ def _write_csv(path: Path, rows: list[dict]) -> None:
 def main() -> None:
     import argparse
     import json
+    from datetime import datetime
 
     from .analysis import (
         slice_by_doc_length_tercile,
@@ -293,6 +294,12 @@ def main() -> None:
     _write_csv(args.tables_dir / "main_results.csv", rows)
     for r in sorted(rows, key=lambda r: -r["ndcg@10"]):
         print(f"  {r['run']:<45} nDCG@10={r['ndcg@10']:.4f}  MAP@10={r['map@10']:.4f}")
+    resumo_avaliacao = {
+        "quando": datetime.now().isoformat(timespec="seconds"),
+        "metrica_principal": "ndcg@10",
+        "por_run": {r["run"]: {m: round(r[m], 4) for m in DEFAULT_METRICS} for r in rows},
+        "melhor_run": max(rows, key=lambda r: r["ndcg@10"])["run"],
+    }
 
     # 2. Significância pareada (só faz sentido com 2+ runs).
     if len(runs) > 1:
@@ -307,6 +314,13 @@ def main() -> None:
             args.tables_dir / "power_analysis.csv",
             poder_de_todos_os_pares(qrels, runs, args.metric),
         )
+        sig = significance_rows(report, args.metric)
+        resumo_avaliacao["significancia"] = {
+            "metrica": args.metric,
+            "pares": len(sig),
+            "pares_p_menor_0_05": sum(1 for s in sig if s["p_value"] < 0.05),
+            "menor_p": round(min((s["p_value"] for s in sig), default=1.0), 4),
+        }
 
     # 3. Recortes analíticos.
     if args.queries.exists():
@@ -345,6 +359,21 @@ def main() -> None:
             args.tables_dir / "slices_section.csv",
             slice_by_section(chunks_top, gold, top_k=args.section_top_k),
         )
+
+    # 5. O manifesto da rodada passa a carregar o resumo da avaliação: um
+    #    arquivo só responde "o que foi rodado" E "o que deu". É o que o
+    #    INDICE.md lê para mostrar o nDCG de cada rodada de relance.
+    manifesto = runs_dir.parent / "manifest.json"
+    if manifesto.is_file():
+        try:
+            m = json.loads(manifesto.read_text(encoding="utf-8"))
+            m["avaliacao"] = resumo_avaliacao
+            manifesto.write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+            from .experiment import _atualizar_indice
+
+            _atualizar_indice()
+        except Exception as e:  # a avaliação já está nas tabelas; não abortar por isso
+            print(f"  aviso: não atualizei o manifesto ({type(e).__name__}: {e})")
 
     print(f"tabelas gravadas em {args.tables_dir}")
 

@@ -156,7 +156,7 @@ múltiplas. Recortes obrigatórios: por tipo de consulta, por tamanho de documen
 > | `Alibaba-NLP/gte-multilingual-base` | 8192 | Descartado: o código remoto quebra com assert de CUDA no stack atual |
 >
 > Detalhes e medições em
-> `docs/docsleo/branches/leo-f4-indexacao-e-docs/04-modelos-embedding.md`.
+> `docs/docsleo/branches/leo-f4-indexacao-e-docs/05-modelos-embedding.md`.
 
 Não use API paga. Custo, reprodutibilidade e o fato de que a nota não sobe por isso.
 

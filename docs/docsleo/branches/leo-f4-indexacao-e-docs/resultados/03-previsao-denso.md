@@ -5,7 +5,7 @@
 
 ## A previsão, registrada ANTES de rodar
 
-Em [11-analise-do-dominio.md](../11-analise-do-dominio.md) registrei, antes de
+Em [03-analise-do-dominio.md](../03-analise-do-dominio.md) registrei, antes de
 ver qualquer número denso:
 
 > "a diferença entre estrutural e fixo deve ser maior no denso do que no BM25",

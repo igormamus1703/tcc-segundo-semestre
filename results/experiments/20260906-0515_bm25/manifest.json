@@ -1,8 +1,8 @@
 {
   "rotulo": "bm25",
   "inicio": "2026-09-06T05:15:06",
-  "fim": null,
-  "duracao_s": 631.0,
+  "fim": "2026-09-06T05:39:23",
+  "duracao_s": 1456.7,
   "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever bm25",
   "config": {
     "estrategias": [
@@ -68,6 +68,66 @@
       "n_queries": 150,
       "n_linhas_run": 120681,
       "segundos": 198.3
+    },
+    {
+      "nome": "fixed_1024_512__bm25",
+      "run": "fixed_1024_512__bm25",
+      "n_chunks": 450786,
+      "n_queries": 150,
+      "n_linhas_run": 85377,
+      "segundos": 393.3
+    },
+    {
+      "nome": "fixed_512_256__bm25",
+      "run": "fixed_512_256__bm25",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 82653,
+      "segundos": 430.4
     }
-  ]
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-06T05:44:31",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      }
+    },
+    "melhor_run": "structural_pred__bm25",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 10,
+      "pares_p_menor_0_05": 0,
+      "menor_p": 0.0969
+    }
+  }
 }

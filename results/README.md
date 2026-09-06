@@ -48,6 +48,32 @@ Para forçar um nome: `--label meu_rotulo`.
 | `experiments/*/execucao.log` | ✅ | Leve, e mostra os tempos reais |
 | `experiments/*/runs/*.trec` | ❌ | ~33 MB por rodada, e o manifesto diz como regerar |
 
+## Figuras: toda imagem é autocontida
+
+`python -m src.plots` gera as figuras de uma rodada em
+`experiments/<rodada>/figuras/`, e **cada uma carrega no rodapé** a rodada, a
+data, o corpus (nº de docs, consultas e qrels), o retriever/modelo com sua
+configuração e o commit — tudo lido do `manifest.json`, nada digitado à mão.
+
+```
+experiments/20260906-0515_bm25/figuras/
+├── 20260906-0515_bm25__resultados_principais.{pdf,png}
+├── 20260906-0515_bm25__recorte_tipo_consulta.{pdf,png}
+├── 20260906-0515_bm25__recorte_tamanho_doc.{pdf,png}
+├── 20260906-0515_bm25__secoes_recuperadas.{pdf,png}
+└── 20260906-0515_bm25__significancia.{pdf,png}
+```
+
+O nome do arquivo começa com a rodada e o rodapé repete o contexto, de
+propósito: uma figura copiada sozinha para o artigo, para o pôster ou para uma
+mensagem continua dizendo de onde veio. Sem isso, três semanas depois ninguém
+sabe se aquele gráfico é do corpus de 12.880 ou do de 113.827, do BM25 ou do
+denso, de antes ou depois de uma correção.
+
+**Regra:** figura que vai para documentação ou artigo sai do `src.plots`, nunca
+de um script avulso — e, ao copiar para uma pasta de docs, vai para uma
+subpasta com o nome da rodada (`figuras/<rodada>/`), não solta.
+
 ## O manifesto
 
 Cada rodada grava um `manifest.json` com:

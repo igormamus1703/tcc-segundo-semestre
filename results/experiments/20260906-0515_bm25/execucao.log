@@ -4,3 +4,6 @@
 [05:18:29] structural_gold__bm25: 286,689 chunks, 117,959 linhas, 200.8s  [decorrido 0.1 h]
 [05:22:18] structural_pred__bm25: 285,308 chunks, 117,984 linhas, 228.5s  [decorrido 0.1 h]
 [05:25:37] recursive_default__bm25: 270,070 chunks, 120,681 linhas, 198.3s  [decorrido 0.2 h]
+[05:32:12] fixed_1024_512__bm25: 450,786 chunks, 85,377 linhas, 393.3s  [decorrido 0.3 h]
+[05:39:23] fixed_512_256__bm25: 907,914 chunks, 82,653 linhas, 430.4s  [decorrido 0.4 h]
+[05:39:23] fim em 24.3 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0515_bm25
