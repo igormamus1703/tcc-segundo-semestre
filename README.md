@@ -64,24 +64,25 @@ python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
 
 ### 3. Anote tudo na SUA pasta de documentação
 
-Cada integrante tem a sua pasta, com esta estrutura:
+**Toda a documentação da equipe fica dentro de `docs/`** — uma subpasta por
+integrante, para não poluir a raiz do repositório:
 
 ```
-docs<nome>/
-└── branches/
-    └── <nome-da-branch>/
-        ├── README.md        o que a branch faz + checklist de merge
-        ├── NN-assunto.md    decisões, achados, execução
-        ├── testes/          estado da suíte e o que cada teste trava
-        └── resultados/      números medidos, com o comando que os gerou
+docs/
+└── docs<nome>/
+    └── branches/
+        └── <nome-da-branch>/
+            ├── README.md        o que a branch faz + checklist de merge
+            ├── NN-assunto.md    decisões, achados, execução
+            └── resultados/      números medidos, com o comando que os gerou
 ```
 
 | Integrante | Pasta |
 |---|---|
-| Leonardo Marques | `docsleo/` ([exemplo pronto, use como modelo](docsleo/)) |
-| João Vitor Manfrim | `docsjoao/` |
-| Felipe Ribas | `docsfelipe/` |
-| Igor Mamus | `docsigor/` |
+| Leonardo Marques | `docs/docsleo/` ([exemplo pronto, use como modelo](docs/docsleo/)) |
+| João Vitor Manfrim | `docs/docsjoao/` |
+| Felipe Ribas | `docs/docsfelipe/` |
+| Igor Mamus | `docs/docsigor/` |
 
 Toda anotação precisa ter, no mínimo: **data e autor**, **o comando exato**
 (copiável, não parafraseado), **o número que saiu** e o artefato que o
@@ -93,7 +94,7 @@ aberto**.
 > ele não corresponde ao que o código produz porque alguém foi ler a mensagem
 > de um commit de agosto. Se a decisão de filtrar o corpus tivesse sido anotada
 > quando foi tomada, o artigo nunca teria saído com o número errado. Ver
-> [docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md](docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md).
+> [docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md).
 
 **Nenhum número vai para o artigo sem estar anotado com o artefato que o
 comprova.** Se você não consegue apontar o arquivo em `results/` que gerou

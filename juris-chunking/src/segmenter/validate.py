@@ -27,7 +27,7 @@ from .segment import LabeledSpan, Segmenter
 
 INTERIM_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "interim"
 CORPUS_DOCS = INTERIM_DIR / "corpus_docs.jsonl"
-RESULTS_TABLES_DIR = Path(__file__).resolve().parent.parent.parent.parent / "results" / "tables"
+RESULTS_CORPUS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "results" / "corpus"
 
 
 def iter_corpus_docs(path: Path = CORPUS_DOCS):
@@ -122,7 +122,7 @@ def validate(corpus_path: Path = CORPUS_DOCS, limit: int | None = None) -> dict:
 if __name__ == "__main__":
     limit = int(sys.argv[1]) if len(sys.argv) > 1 else None
     report = validate(limit=limit)
-    RESULTS_TABLES_DIR.mkdir(parents=True, exist_ok=True)
-    with (RESULTS_TABLES_DIR / "segmenter_validation.json").open("w", encoding="utf-8") as f:
+    RESULTS_CORPUS_DIR.mkdir(parents=True, exist_ok=True)
+    with (RESULTS_CORPUS_DIR / "segmenter_validation.json").open("w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
     print(json.dumps(report, ensure_ascii=False, indent=2))
