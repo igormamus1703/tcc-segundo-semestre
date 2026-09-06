@@ -5,6 +5,7 @@ from src.analysis import (
     bootstrap_ci,
     doc_length_terciles,
     per_query_scores,
+    query_length_terciles,
     slice_by_doc_length_tercile,
     slice_by_query_type,
     slice_by_retriever,
@@ -198,3 +199,57 @@ def test_load_doc_lengths_cacheia(tmp_path):
     # com o cache no lugar, o corpus nem é lido de novo
     corpus.unlink()
     assert load_doc_lengths(corpus, cache) == {"d0": 1}
+
+
+# --- encoding dos doc_ids ---------------------------------------------------
+
+def test_load_qrels_preserva_acento_no_doc_id(tmp_path):
+    """`Qrels.from_file` do ranx lê com o encoding da plataforma e transforma
+    `plenário` em `plenÃ¡rio`. Quase todo doc_id do corpus do TCU tem acento,
+    e a corrupção some silenciosamente (as métricas fecham, porque os runs
+    sofrem a mesma), só quebrando o cruzamento com dados externos."""
+    p = tmp_path / "q.trec"
+    p.write_text("1 0 2251-2017-plenário 3\n1 0 29-2009-plenário 1\n", encoding="utf-8")
+    qrels = load_qrels(p)
+    docs = qrels.to_dict()["1"]
+    assert "2251-2017-plenário" in docs
+    assert docs["2251-2017-plenário"] == 3
+
+
+def test_load_run_preserva_acento_no_doc_id(tmp_path):
+    p = tmp_path / "r.trec"
+    p.write_text("1 Q0 2251-2017-plenário 1 0.900000 teste\n", encoding="utf-8")
+    run = load_run(p)
+    assert "2251-2017-plenário" in run.to_dict()["1"]
+
+
+def test_qrels_e_run_com_acento_casam_e_avaliam(tmp_path):
+    """Ponta a ponta: doc_id acentuado tem que gerar nDCG 1.0, não 0."""
+    q = tmp_path / "q.trec"
+    q.write_text("1 0 2251-2017-plenário 3\n", encoding="utf-8")
+    r = tmp_path / "r.trec"
+    r.write_text("1 Q0 2251-2017-plenário 1 0.900000 t\n", encoding="utf-8")
+    assert evaluate_run(load_qrels(q), load_run(r))["ndcg@10"] == pytest.approx(1.0)
+
+
+def test_query_terciles_ficam_equilibrados_mesmo_com_relevantes_grandes():
+    """Os documentos relevantes são sistematicamente maiores que o corpus, então
+    cortar pelos percentis do CORPUS joga quase tudo nos tercis superiores (na
+    rodada real deu 3/67/80). Cortando pelos percentis das próprias consultas,
+    os grupos ficam equilibrados."""
+    # 30 consultas cujos relevantes são todos grandes em relação ao corpus
+    qrels = Qrels({f"q{i}": {f"d{i}": 3} for i in range(30)})
+    lengths = {f"d{i}": 10_000 + i * 500 for i in range(30)}
+    tercil, (p33, p66) = query_length_terciles(qrels, lengths)
+    contagem = {}
+    for t in tercil.values():
+        contagem[t] = contagem.get(t, 0) + 1
+    assert set(contagem) == {"curto", "medio", "longo"}
+    assert min(contagem.values()) >= 9  # ~10 por grupo
+    assert p33 < p66
+
+
+def test_query_terciles_ignora_consulta_sem_doc_conhecido():
+    qrels = Qrels({"q0": {"d0": 3}, "q1": {"fantasma": 3}})
+    tercil, _ = query_length_terciles(qrels, {"d0": 1000})
+    assert "q0" in tercil and "q1" not in tercil
