@@ -5,6 +5,7 @@ Não editar à mão.
 
 | Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |
 |---|---|---|---|---|---|---|---|
+| [`20260906-0547_dense_bge_m3`](20260906-0547_dense_bge_m3/) | 2026-09-06T05:47:59 | 0 min | `76aee67f` | NVIDIA GeForce RTX 5060 | 0 | — | — |
 | [`20260906-0515_bm25`](20260906-0515_bm25/) | 2026-09-06T05:15:06 | 24 min | `1ebd6894` | NVIDIA GeForce RTX 5060 | 5 | 0.2526 (`structural_pred__bm25`) | 0/10 |
 | [`20260906-0503_previsao_denso`](20260906-0503_previsao_denso/) | 2026-09-06T05:03:30 | 11 min | `43dbb382` | NVIDIA GeForce RTX 5060 | 4 | — | — |
 | [`20260906-0417_validacao_subcorpus`](20260906-0417_validacao_subcorpus/) | 2026-09-06T04:17:23 | 15 min | `a8b43bfb` | NVIDIA GeForce RTX 5060 | 2 | — | — |

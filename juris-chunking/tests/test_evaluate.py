@@ -342,3 +342,56 @@ def test_poder_exige_consultas_suficientes(qrels):
     um = Run({"q0": {"d0": 1.0}}, name="um")
     with pytest.raises(ValueError):
         poder_estatistico(Qrels({"q0": {"d0": 3}}), um, um)
+
+
+# --- avaliação cruzando rodadas ---------------------------------------------
+
+def test_desambigua_runs_de_mesmo_nome_em_rodadas_diferentes(tmp_path):
+    """`fixed__bm25` pode existir em duas rodadas. Sem prefixo, o
+    `Report.comparisons` do ranx — indexado por frozenset({a, b}) — colapsa o
+    par num conjunto de um elemento e estoura com KeyError."""
+    from src.evaluate import _desambiguar_nomes
+
+    a = tmp_path / "20260101-0000_x" / "runs" / "fixed__bm25.trec"
+    b = tmp_path / "20260202-0000_y" / "runs" / "fixed__bm25.trec"
+    c = tmp_path / "20260202-0000_y" / "runs" / "outro__bm25.trec"
+    runs = [Run({"q0": {"d0": 1.0}}, name="fixed__bm25"),
+            Run({"q0": {"d0": 1.0}}, name="fixed__bm25"),
+            Run({"q0": {"d0": 1.0}}, name="outro__bm25")]
+    _desambiguar_nomes(runs, [a, b, c])
+    assert runs[0].name == "20260101-0000_x/fixed__bm25"
+    assert runs[1].name == "20260202-0000_y/fixed__bm25"
+    assert runs[2].name == "outro__bm25"  # sem colisão, fica como está
+
+
+def test_recusa_juntar_rodadas_de_corpus_diferente(tmp_path):
+    """Juntar uma rodada do corpus completo com uma de subcorpus daria uma
+    tabela em que metade dos runs foi avaliada contra qrels que não são os
+    seus — plausível à vista e completamente errado."""
+    import json
+
+    from src.evaluate import _exigir_mesmo_corpus
+
+    a, b = tmp_path / "rodA", tmp_path / "rodB"
+    for d, n_docs in ((a, 12880), (b, 451)):
+        d.mkdir()
+        (d / "manifest.json").write_text(json.dumps(
+            {"corpus": {"n_docs": n_docs}, "config": {"n_queries": 150}}), encoding="utf-8")
+
+    with pytest.raises(SystemExit, match="não mediram o mesmo corpus"):
+        _exigir_mesmo_corpus(a, b)
+
+
+def test_aceita_juntar_rodadas_do_mesmo_corpus(tmp_path):
+    """É o caso real: BM25 e denso rodam em rodadas separadas, mesmo corpus."""
+    import json
+
+    from src.evaluate import _exigir_mesmo_corpus
+
+    a, b = tmp_path / "rodBM25", tmp_path / "rodDenso"
+    for d in (a, b):
+        d.mkdir()
+        (d / "manifest.json").write_text(json.dumps(
+            {"corpus": {"n_docs": 12880}, "config": {"n_queries": 150}}), encoding="utf-8")
+
+    _exigir_mesmo_corpus(a, b)  # não levanta
