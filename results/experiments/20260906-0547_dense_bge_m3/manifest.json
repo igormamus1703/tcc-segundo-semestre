@@ -1,8 +1,8 @@
 {
   "rotulo": "dense_bge_m3",
   "inicio": "2026-09-06T05:47:59",
-  "fim": null,
-  "duracao_s": 0.9,
+  "fim": "2026-09-06T10:44:21",
+  "duracao_s": 17781.7,
   "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever dense --max-horas 5",
   "config": {
     "estrategias": [
@@ -50,5 +50,96 @@
     "gpu": "NVIDIA GeForce RTX 5060",
     "vram_gb": 8.0
   },
-  "etapas": []
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 5902.8
+    },
+    {
+      "nome": "structural_pred__dense-bge_m3",
+      "run": "structural_pred__dense-bge_m3",
+      "n_chunks": 285308,
+      "n_queries": 150,
+      "n_linhas_run": 133266,
+      "segundos": 5914.1
+    },
+    {
+      "nome": "recursive_default__dense-bge_m3",
+      "run": "recursive_default__dense-bge_m3",
+      "n_chunks": 270070,
+      "n_queries": 150,
+      "n_linhas_run": 134254,
+      "segundos": 5948.8
+    }
+  ],
+  "pulados_por_tempo": [
+    "fixed_1024_512__dense",
+    "fixed_512_256__dense"
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-06T10:47:23",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      },
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      }
+    },
+    "melhor_run": "structural_pred__bm25",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 28,
+      "pares_p_menor_0_05": 15,
+      "menor_p": 0.0
+    }
+  }
 }

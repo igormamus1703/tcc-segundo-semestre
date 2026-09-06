@@ -1,0 +1,10 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica
+recursive_default__dense-bge_m3,tipo_consulta,LLM,50,0.2631694598835201,0.20502801087839093,0.3233863926256909,ndcg@10
+recursive_default__dense-bge_m3,tipo_consulta,expression from LLM question,50,0.23008279677149712,0.1815930866968443,0.28066827791110827,ndcg@10
+recursive_default__dense-bge_m3,tipo_consulta,search log,50,0.0969680555252562,0.0632266079511778,0.13422218790824234,ndcg@10
+structural_gold__dense-bge_m3,tipo_consulta,LLM,50,0.23997695730016294,0.19121335201784095,0.2923883054734825,ndcg@10
+structural_gold__dense-bge_m3,tipo_consulta,expression from LLM question,50,0.21645162483101127,0.16706385000496135,0.26650175503717616,ndcg@10
+structural_gold__dense-bge_m3,tipo_consulta,search log,50,0.09773662273916343,0.06387567284943028,0.1349178366903196,ndcg@10
+structural_pred__dense-bge_m3,tipo_consulta,LLM,50,0.23825453398117724,0.18813940602919757,0.290691088770998,ndcg@10
+structural_pred__dense-bge_m3,tipo_consulta,expression from LLM question,50,0.22764673060030877,0.17337962584434838,0.28268365835035825,ndcg@10
+structural_pred__dense-bge_m3,tipo_consulta,search log,50,0.10775467203352034,0.07429772840314235,0.1431117972796151,ndcg@10
