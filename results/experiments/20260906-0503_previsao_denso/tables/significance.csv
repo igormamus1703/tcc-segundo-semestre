@@ -1,0 +1,7 @@
+metric,run_a,run_b,p_value,significativo_p<0.05,wins_a,ties,losses_a
+ndcg@10,fixed_1024_512__bm25,fixed_1024_512__dense-bge_m3,0.07455493166495125,False,17,0,8
+ndcg@10,fixed_1024_512__bm25,structural_gold__bm25,0.6093820882861223,False,11,1,13
+ndcg@10,fixed_1024_512__bm25,structural_gold__dense-bge_m3,0.053573431761888266,False,17,0,8
+ndcg@10,fixed_1024_512__dense-bge_m3,structural_gold__bm25,0.1496453283766325,False,11,0,14
+ndcg@10,fixed_1024_512__dense-bge_m3,structural_gold__dense-bge_m3,0.3809137696135889,False,13,0,12
+ndcg@10,structural_gold__bm25,structural_gold__dense-bge_m3,0.10226752096463183,False,16,0,9

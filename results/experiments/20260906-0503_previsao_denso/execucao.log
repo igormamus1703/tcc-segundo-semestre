@@ -4,3 +4,9 @@
 [05:03:36] structural_gold__bm25: 10,975 chunks, 7,525 linhas, 4.4s  [decorrido 0.0 h]
 [05:03:44] fixed_1024_512__bm25: 17,452 chunks, 5,994 linhas, 7.9s  [decorrido 0.0 h]
 [05:03:50]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[05:07:27]     bloco 1/1 (10,975 chunks) em 3.6 min — faltam ~0.0 h
+[05:07:27] structural_gold__dense-bge_m3: 10,975 chunks, 7,418 linhas, 223.6s  [decorrido 0.1 h]
+[05:07:33]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[05:14:04]     bloco 1/1 (17,452 chunks) em 6.5 min — faltam ~0.0 h
+[05:14:05] fixed_1024_512__dense-bge_m3: 17,452 chunks, 6,337 linhas, 397.5s  [decorrido 0.2 h]
+[05:14:05] fim em 10.6 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0503_previsao_denso

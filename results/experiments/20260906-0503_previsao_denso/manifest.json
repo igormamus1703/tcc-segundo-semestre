@@ -1,8 +1,8 @@
 {
   "rotulo": "previsao_denso",
   "inicio": "2026-09-06T05:03:30",
-  "fim": null,
-  "duracao_s": 13.3,
+  "fim": "2026-09-06T05:14:05",
+  "duracao_s": 634.4,
   "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold fixed_1024_512 --retriever all --processed-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\mini\\processed --queries C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\mini\\queries.jsonl --label previsao_denso",
   "config": {
     "estrategias": [
@@ -64,6 +64,23 @@
       "n_queries": 25,
       "n_linhas_run": 5994,
       "segundos": 7.9
+    },
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 10975,
+      "n_queries": 25,
+      "n_linhas_run": 7418,
+      "segundos": 223.6
+    },
+    {
+      "nome": "fixed_1024_512__dense-bge_m3",
+      "run": "fixed_1024_512__dense-bge_m3",
+      "n_chunks": 17452,
+      "n_queries": 25,
+      "n_linhas_run": 6337,
+      "segundos": 397.5
     }
-  ]
+  ],
+  "erro": null
 }
