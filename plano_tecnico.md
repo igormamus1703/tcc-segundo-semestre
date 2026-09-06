@@ -2,6 +2,16 @@
 
 Documento interno da equipe. Não é o entregável do professor.
 
+> **Status em 06/09/2026 — leia antes de usar este documento.**
+> Este é o plano de referência (arquitetura, stack, cronograma) e **não é
+> atualizado a cada execução**. Para saber o que está feito e o que falta, veja
+> o **`plano_implementacao.md`**, que tem a tabela de status e substitui este
+> documento onde houver conflito.
+>
+> Em resumo: F0–F5 implementadas, BM25 rodado no corpus real (primeiro número
+> obtido), retriever denso pendente. Duas escolhas deste documento mudaram por
+> medição — o embedder e o cronograma —, e estão marcadas abaixo.
+
 ---
 
 ## 1. Arquitetura do código
@@ -118,8 +128,8 @@ múltiplas. Recortes obrigatórios: por tipo de consulta, por tamanho de documen
 | Tokenização | `tiktoken` ou tokenizer do próprio modelo | seja consistente e declare qual |
 | Chunking baseline | `langchain-text-splitters` | só o splitter, não o framework inteiro |
 | BM25 | `bm25s` (rápido) ou `rank_bm25` | `bm25s` é ordens de magnitude mais rápido |
-| Denso | `sentence-transformers` | |
-| Índice vetorial | `faiss-cpu` | brute force basta nesta escala |
+| Denso | `sentence-transformers` | GPU com `torch+cu130`; fp16 dá ~3x sobre fp32 e ~60x sobre CPU |
+| Índice vetorial | `faiss-cpu` | brute force basta nesta escala; o custo está no encode, não na busca |
 | Métricas | `ranx` | nDCG/MRR/MAP + significância pareada |
 | Estatística | `scipy`, bootstrap manual | |
 | Gráficos | `matplotlib` | |
@@ -131,6 +141,22 @@ múltiplas. Recortes obrigatórios: por tipo de consulta, por tamanho de documen
 - Opcionalmente `RoBERTaLexPT` (jurídico PT) — mas atenção: é um encoder MLM, não
   um bi-encoder treinado para recuperação. Só use se for fazer fine-tune, senão
   o desempenho será enganosamente ruim e alguém na banca vai apontar isso.
+
+> **Decidido por medição (06/09):** o critério que acabou dominando a escolha
+> **não** foi a posição no ranking, e sim a **janela de contexto**. Um encoder
+> de 512 tokens trunca 83% dos nossos chunks e descarta 37% do conteúdo — e,
+> pior, atinge as estratégias de forma desigual: só a `fixed_512_256` caberia
+> inteira, o que lhe daria vantagem artificial e invalidaria a comparação.
+>
+> | Modelo | Janela | Situação |
+> |---|---|---|
+> | **`BAAI/bge-m3`** | 1024 (nativa 8192) | **Adotado como default.** Truncamento zero, Apache-2.0, sem gate |
+> | `google/embeddinggemma-300m` | 2048 | Melhor no MTEB-BR (13º de 93, 308M), mas **gated**: exige `hf auth login` |
+> | `intfloat/multilingual-e5-base` | 512 | Rebaixado a análise de sensibilidade — a janela pequena enviesa a comparação |
+> | `Alibaba-NLP/gte-multilingual-base` | 8192 | Descartado: o código remoto quebra com assert de CUDA no stack atual |
+>
+> Detalhes e medições em
+> `docs/docsleo/branches/leo-f4-indexacao-e-docs/04-modelos-embedding.md`.
 
 Não use API paga. Custo, reprodutibilidade e o fato de que a nota não sobe por isso.
 
@@ -160,6 +186,12 @@ Não use API paga. Custo, reprodutibilidade e o fato de que a nota não sobe por
 **Marcos duros:** Semana 3 (viabilidade), Semana 7 (primeiro número), Semana 11
 (tabela fechada). Se algum atrasar mais de uma semana, corte escopo — comece pelo
 segundo modelo de embedding, que é o mais dispensável.
+
+> **Situação real em 06/09:** os três primeiros marcos vieram **adiantados**.
+> Viabilidade decidida em 18/08 (Semana 1), F0–F3 fechadas em 24/08, e o
+> **primeiro número saiu em 06/09** — o marco previsto para a Semana 7.
+> O gargalo deixou de ser código: hoje são (a) a decisão do corpus oficial,
+> que é da equipe, e (b) ~10 h de GPU para o encode denso.
 
 **Fora de escopo, explicitamente:** ColBERT / late interaction, fine-tuning de
 retriever, avaliação de geração (RAGAS), rotulagem retórica em nível de sentença.

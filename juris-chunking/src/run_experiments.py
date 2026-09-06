@@ -131,6 +131,7 @@ def run_one(
     embedder: str | None = None,
     processed_dir: Path = PROCESSED_DIR,
     runs_dir: Path = RUNS_DIR,
+    log=None,
 ) -> dict:
     t0 = time.time()
     chunks = load_chunks(strategy, processed_dir)
@@ -141,10 +142,11 @@ def run_one(
     if retriever == "dense":
         nome_embedder = embedder or models_cfg.get("dense", {}).get("default_embedder")
         retriever_tag = f"dense-{nome_embedder}"
-        print(f"  [{strategy}] {index.describe()}", flush=True)
+        (log or print)(f"  [{strategy}] {index.describe()}")
         # Cache dos embeddings junto dos chunks da estratégia (contrato da
         # secao 2 do plano_implementacao.md).
-        index.build(chunks, cache_dir=processed_dir / strategy, show_progress=True)
+        index.build(chunks, cache_dir=processed_dir / strategy,
+                    show_progress=False, log=log or print)
     else:
         retriever_tag = retriever
 
@@ -238,6 +240,7 @@ def main() -> None:
                     embedder=args.embedder,
                     processed_dir=args.processed_dir,
                     runs_dir=runs_dir,
+                    log=exp.log,
                 )
                 exp.registrar(info["run"], info)
                 exp.log(

@@ -209,7 +209,7 @@ def test_run_name_do_denso_carrega_o_modelo(processed_dir, queries_file, models_
         def describe(self):
             return "fake"
 
-        def build(self, chunks, cache_dir=None, show_progress=False):
+        def build(self, chunks, cache_dir=None, show_progress=False, bloco=50_000, log=print):
             pass
 
         def search_batch(self, queries, top_k=100):
