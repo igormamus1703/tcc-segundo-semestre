@@ -56,3 +56,4 @@ O que cada anotação precisa ter, no mínimo:
 | [05-diario-execucao.md](05-diario-execucao.md) | Diário cronológico: comandos rodados, saídas, tempos |
 | [06-implementacao-f4.md](06-implementacao-f4.md) | F4/F5 implementadas: decisões de projeto e as armadilhas de biblioteca encontradas |
 | [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) | **Tabela de substituição:** cada número do artigo × o valor medido. Nenhum número entra no texto final sem passar por aqui |
+| [08-decisoes-pendentes.md](08-decisoes-pendentes.md) | **Comece por aqui:** o que a equipe precisa decidir, por ordem de urgência, e o que dá para tocar em paralelo |
