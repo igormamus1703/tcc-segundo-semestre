@@ -119,7 +119,7 @@ O que aproveitamos, e o que deliberadamente não seguimos.
 
 Comparou janela deslizante de 2.048 *tokens* contra splitter recursivo de 1.000
 *caracteres*, avaliando **geração** (RAGAS). Ver
-[03-referencias-verificadas.md](03-referencias-verificadas.md): a comparação
+[04-referencias-verificadas.md](04-referencias-verificadas.md): a comparação
 confunde estrutura com tamanho de chunk, e é o gap que este trabalho ocupa.
 
 ### Legal RAG Bench (arXiv:2603.01710)

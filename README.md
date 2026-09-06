@@ -119,6 +119,12 @@ aberto**.
 comprova.** Se você não consegue apontar o arquivo em `results/` que gerou
 aquele valor, ele não entra.
 
+**O mesmo vale para figuras.** Toda figura sai de `python -m src.plots`, que
+estampa no rodapé a rodada, a data, o corpus, o modelo e o commit — lidos do
+manifesto. Ao levar uma figura para a sua pasta de docs, coloque-a em
+`resultados/figuras/<nome-da-rodada>/`, nunca solta. Uma imagem sem contexto
+vira, em três semanas, um gráfico que ninguém sabe de onde veio.
+
 ### 4. Só então o merge
 
 Abra o merge com o `README.md` da sua branch preenchido (o que mudou, testes

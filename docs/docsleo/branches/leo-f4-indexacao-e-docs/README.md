@@ -1,78 +1,99 @@
 # Branch `leo/f4-indexacao-e-docs`
 
-**Autor:** Leonardo Marques · **Aberta em:** 2026-09-05 · **Status:** 🟡 em teste, ainda não mergeada
+**Autor:** Leonardo Marques · **Aberta em:** 2026-09-05 · **Status:** 🟡 rodada final em execução
 
 Implementa as fases **F4 (indexação e runs)** e **F5 (avaliação, significância e
-recortes)**, que estavam como stubs com `NotImplementedError`, e documenta as
-divergências entre o que o artigo publica e o que o código produz.
+recortes)**, que estavam como stubs, e documenta os achados que surgiram ao
+rodar o pipeline sobre o corpus real.
+
+## Comece por aqui
+
+| Se você tem 2 minutos | Leia |
+|---|---|
+| O problema mais urgente do projeto | [02-achado-corpus.md](02-achado-corpus.md) — o artigo diz 113.827 documentos, o código produz 12.880 |
+| O achado mais interessante | [03-analise-do-dominio.md](03-analise-do-dominio.md) — 72% da relevância está em 22,8% do texto |
+| O que precisa ser decidido | [08-decisoes-pendentes.md](08-decisoes-pendentes.md) |
+| Os números para corrigir no artigo | [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) |
 
 ## Documentos
 
+### Achados e decisões
 | Doc | Assunto |
 |---|---|
-| [02-achado-corpus.md](02-achado-corpus.md) | 🔴 **O mais importante:** o corpus do código (12.880) ≠ o do artigo (113.827) |
-| [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) | Tabela de substituição: número do artigo × valor medido |
+| [02-achado-corpus.md](02-achado-corpus.md) | 🔴 O corpus do código (12.880) ≠ o do artigo (113.827) |
+| [03-analise-do-dominio.md](03-analise-do-dominio.md) | Onde mora a relevância no acórdão + comparação com os baselines do JurisTCU |
+| [04-referencias-verificadas.md](04-referencias-verificadas.md) | As 8 citações conferidas no arXiv e o que o BR-TaxQA-R realmente concluiu |
+| [05-modelos-embedding.md](05-modelos-embedding.md) | Escolha do embedder — decidida pela janela de contexto, não pelo ranking |
 | [08-decisoes-pendentes.md](08-decisoes-pendentes.md) | Checklist do que a equipe precisa decidir |
-| [03-referencias-verificadas.md](03-referencias-verificadas.md) | As 8 citações verificadas no arXiv + o que o BR-TaxQA-R concluiu |
-| [04-modelos-embedding.md](04-modelos-embedding.md) | Escolha do embedder via MTEB-BR e o único passo manual do projeto |
+
+### Execução
+| Doc | Assunto |
+|---|---|
 | [01-ambiente-setup.md](01-ambiente-setup.md) | Setup da máquina, versões, junctions |
-| [05-diario-execucao.md](05-diario-execucao.md) | Diário cronológico dos comandos e saídas |
 | [06-implementacao-f4.md](06-implementacao-f4.md) | Decisões de projeto e armadilhas de biblioteca |
-| [11-analise-do-dominio.md](11-analise-do-dominio.md) | **Achado:** 72% da relevância está na fundamentação (22,8% do texto); e a comparação com os baselines do JurisTCU |
-| [resultados/](resultados/) | Números medidos, por retriever |
+| [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) | Tabela de substituição: número do artigo × valor medido |
+| [09-diario-execucao.md](09-diario-execucao.md) | Diário cronológico dos comandos |
+
+### Resultados
+| Doc | Assunto |
+|---|---|
+| [resultados/01-bm25.md](resultados/01-bm25.md) | Primeiro número: BM25 nas 5 estratégias, com gráficos |
+| [resultados/02-benchmark-gpu.md](resultados/02-benchmark-gpu.md) | Custo do encode, escolha de precisão e o que NÃO acelerou |
+| [resultados/03-previsao-denso.md](resultados/03-previsao-denso.md) | Previsão registrada antes de rodar, e o teste dela |
 
 ## Código entregue
 
 | Entrega | Onde |
 |---|---|
 | BM25 sobre chunks (`bm25s`) | `src/indexing/lexical.py` |
-| Retriever denso (FAISS `IndexFlatIP` + cache `.npy`) | `src/indexing/dense.py` |
+| Retriever denso (FAISS + cache `.npy` + checkpoint) | `src/indexing/dense.py` |
 | Normalização PT compartilhada por indexação e busca | `src/indexing/text_norm.py` |
-| Orquestrador estratégia × retriever → TREC run | `src/run_experiments.py` |
-| Métricas, significância pareada e CLI das tabelas | `src/evaluate.py` |
-| Bootstrap IC 95% e os três recortes | `src/analysis.py` |
-| `hf_id` do `pt_compact` resolvido pelo MTEB-BR | `configs/models.yaml` |
+| Orquestrador com orçamento de tempo | `src/run_experiments.py` |
+| Métricas, significância e poder estatístico | `src/evaluate.py`, `src/analysis.py` |
+| Rastreabilidade das rodadas (manifesto + log) | `src/experiment.py` |
+| Figuras do artigo | `src/plots.py` |
+| Rodada completa em um comando | `scripts/rodada_completa.ps1` |
 
-## Testes: 89 passed ✅
+## Testes: 110 passando
 
-```bash
-cd juris-chunking && pytest -q
-```
-
-Eram 39 antes desta branch. Os 50 novos estão em `test_indexing.py` (18),
-`test_evaluate.py` (21) e `test_run_experiments.py` (11), e existem sobretudo
-para travar **erros silenciosos** — os que não levantam exceção, só pioram o
-número ou esvaziam uma tabela:
+Eram **39** antes desta branch. Os 71 novos existem sobretudo para travar
+**erros silenciosos** — os que não levantam exceção, só pioram o número ou
+esvaziam uma tabela:
 
 - **encoding**: o `ranx` lê TREC com o encoding da plataforma e transforma
   `plenário` em `plenÃ¡rio`; quase todo doc_id do TCU tem acento
-- **alinhamento**: `make_comparable=True` altera o Run in-place, e ler os ids
+- **alinhamento**: `make_comparable=True` altera o `Run` in-place, e ler os ids
   antes pareia o score com a consulta errada
 - **cache**: embedding reaproveitado de outro conjunto de chunks não
   corresponde mais ao chunk daquela posição
+- **checkpoint**: bloco truncado por interrupção precisa ser refeito, não aceito
 - **normalização**: se a busca normalizar diferente da indexação, o recall cai
   sem nenhum erro
 - **recortes**: tercis cortados pelos percentis do corpus dão grupos de 3/67/80
 
-O teste do denso usa um modelo falso determinístico, para não baixar 500 MB de
-pesos numa suíte unitária; a validação com o modelo real é feita por smoke test.
+Três bugs reais foram encontrados **pelos próprios testes** antes de causarem
+dano: o `np.save` que acrescenta `.npy` e quebraria o checkpoint na primeira
+gravação; o `--max-horas 0` que é *falsy* e desligava o próprio orçamento; e o
+teste que criava pastas na `results/experiments/` de verdade.
 
 ## Checklist para o merge
 
-- [x] `pytest` verde (89 passed)
+- [x] `pytest` verde (110)
 - [x] Pipeline rodado ponta a ponta no corpus real (ingest → chunkers → BM25 → avaliação)
-- [x] Artefatos regenerados e versionados (`results/tables/`)
-- [ ] **Revisão do Igor** — especialmente a questão do corpus ([02](02-achado-corpus.md)), porque muda o artigo
-- [ ] Runs densos concluídos
+- [x] Artefatos regenerados e versionados
+- [x] Documentação e figuras
+- [ ] Rodada densa concluída (em execução)
+- [ ] **Revisão do Igor** — sobretudo a questão do corpus, porque muda o artigo
 - [ ] Merge
 
 ## Pontos de atenção para quem revisar
 
-1. **A branch altera `results/tables/eda_stats.json` e `segmenter_validation.json`.**
-   Não é regressão: os valores antigos vinham de uma rodada anterior ao filtro
-   `wanted_keys`. Ver [02-achado-corpus.md](02-achado-corpus.md).
-2. **Não mexi em `ingest.py`, `segmenter/` nem `chunkers/`** — as fases do Igor
-   ficaram intactas. Duas melhorias sugeridas para o `ingest.py` estão em
-   [08-decisoes-pendentes.md](08-decisoes-pendentes.md), item 5, aguardando o aval dele.
-3. **Os números do artigo mudam** se esta branch for aceita — lista completa em
+1. **A branch altera `results/corpus/*.json`.** Não é regressão: os valores
+   antigos vinham de uma rodada anterior ao filtro `wanted_keys`.
+2. **`results/` foi reorganizado** em `corpus/` e `experiments/<data-hora>_rótulo/`,
+   com manifesto por rodada. Ver `results/README.md`.
+3. **Não mexi em `ingest.py`, `segmenter/` nem `chunkers/`** — as fases do Igor
+   ficaram intactas. Duas melhorias sugeridas estão em
+   [08-decisoes-pendentes.md](08-decisoes-pendentes.md), item 5.
+4. **Os números do artigo mudam** se esta branch for aceita — lista completa em
    [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md).

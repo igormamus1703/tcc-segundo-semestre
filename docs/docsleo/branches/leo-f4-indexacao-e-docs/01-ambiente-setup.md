@@ -6,7 +6,7 @@
 
 **Só um, e só se usarmos o `embeddinggemma`:** aceitar a licença Gemma no
 Hugging Face e rodar `hf auth login`. Ver
-[04-modelos-embedding.md](04-modelos-embedding.md).
+[05-modelos-embedding.md](05-modelos-embedding.md).
 
 Tudo o mais é automatizado:
 - os dois datasets são públicos e baixam por script, **sem credencial**;
