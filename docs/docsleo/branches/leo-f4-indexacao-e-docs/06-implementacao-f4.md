@@ -22,7 +22,10 @@ estava pronto.
 | `configs/models.yaml` | resolvido o `PREENCHER`; prefixos declarados por modelo |
 | `tests/test_indexing.py`, `test_evaluate.py`, `test_run_experiments.py` | **novos** — 42 testes |
 
-Total: `pytest` passou de 39 para **81 testes**, todos verdes.
+Total: `pytest` passou de 39 para **110 testes**, todos verdes. (Este documento
+descreve a implementação inicial; o que veio depois — checkpoint do encode,
+orçamento de tempo, rastreabilidade das rodadas e figuras — está no
+[09-diario-execucao.md](09-diario-execucao.md) e nos documentos de resultados.)
 
 ## Decisões de projeto (e por quê)
 
@@ -158,7 +161,8 @@ explicitamente no artigo.
 python -m src.chunkers.run --strategy all           # F3 (pré-requisito)
 python -m src.run_experiments --strategy all --retriever bm25
 python -m src.run_experiments --strategy all --retriever dense
-python -m src.evaluate                              # gera results/tables/*.csv
+python -m src.evaluate                              # avalia a rodada mais recente
+python -m src.plots                                 # gera as figuras dessa rodada
 ```
 
 Smoke test antes do corpus inteiro:
@@ -168,11 +172,19 @@ python -m src.chunkers.run --strategy all --limit-docs 500
 python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
 ```
 
-Artefatos gerados: `results/runs/*.trec`, e em `results/tables/`
-`main_results.csv`, `significance.csv`, `significance_report.txt`,
-`slices_query_type.csv`, `slices_doc_length.csv`, `slices_retriever.csv` — que
-são exatamente os itens 3, 4 e 5 do "Definition of done" do
-`plano_implementacao.md`.
+Artefatos gerados, todos dentro de
+`results/experiments/<AAAAMMDD-HHMM>_<rótulo>/`:
+
+- `runs/*.trec` e `runs/*__chunks.jsonl` (o chunk vencedor de cada documento)
+- `tables/main_results.csv`, `significance.csv`, `significance_report.txt`,
+  `power_analysis.csv` e os quatro recortes (`slices_query_type`,
+  `slices_doc_length`, `slices_retriever`, `slices_section`)
+- `figuras/<rodada>__*.pdf` e `.png`
+- `manifest.json` e `execucao.log`
+
+Cobrem os itens 3, 4 e 5 do "Definition of done" do `plano_implementacao.md`.
+A caracterização do corpus (`eda_stats.json`, `segmenter_validation.json`) vive
+separada, em `results/corpus/`, porque só muda quando o corpus muda.
 
 ## O que ainda falta
 

@@ -15,6 +15,12 @@ tempo.
 | 16:38 | `download_datasets.py juristcu` | 90 MB |
 | 16:40 → 18:50 | `download_datasets.py tcu_acordaos` | 6,0 GB, 21 CSVs |
 | 17:00 | Contagem de chaves no `doc.csv` do JurisTCU | **12.881** chaves únicas → o corpus do artigo (113.827) não é o que o código produz. [02-achado-corpus.md](02-achado-corpus.md) |
+
+> **12.881 e 12.880 são coisas diferentes**, e aparecem os dois ao longo dos
+> documentos: 12.881 é o número de acórdãos **referenciados** pelo JurisTCU
+> (chaves de join únicas no `doc.csv`); 12.880 é o corpus **montado** — um
+> desses acórdãos não foi encontrado nos CSVs anuais do TCU. O número que vale
+> para qualquer resultado é **12.880**.
 | 17:00 | Verificação das 8 citações no arXiv | Nenhuma fantasma. [04-referencias-verificadas.md](04-referencias-verificadas.md) |
 | 17:05 → 19:30 | Implementação de F4/F5 (BM25, denso, runs, avaliação, recortes) | 39 → 81 testes |
 | 19:00 | `python -m src.ingest` | **12.880** docs, join 98,7%, qrels 99,69% |
