@@ -1,0 +1,6 @@
+[05:03:31] experimento 20260906-0503_previsao_denso
+[05:03:31]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[05:03:31]   commit: 43dbb382 em leo/f4-indexacao-e-docs
+[05:03:36] structural_gold__bm25: 10,975 chunks, 7,525 linhas, 4.4s  [decorrido 0.0 h]
+[05:03:44] fixed_1024_512__bm25: 17,452 chunks, 5,994 linhas, 7.9s  [decorrido 0.0 h]
+[05:03:50]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
