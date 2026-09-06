@@ -3,3 +3,6 @@
 [04:17:25]   commit: a8b43bfb (arvore suja) em leo/f4-indexacao-e-docs
 [04:17:58] structural_gold__bm25: 43,259 chunks, 16,585 linhas, 32.8s
 [04:18:06]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[04:32:33]     bloco 1/1 (43,259 chunks) em 14.4 min — faltam ~0.0 h
+[04:32:34] structural_gold__dense-bge_m3: 43,259 chunks, 17,447 linhas, 875.7s
+[04:32:34] fim em 15.2 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0417_validacao_subcorpus

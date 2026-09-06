@@ -1,0 +1,5 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica
+structural_gold__bm25,tipo_consulta,LLM,26,0.48994543889599673,0.41378642353660533,0.5620998612121821,ndcg@10
+structural_gold__bm25,tipo_consulta,search log,4,0.5114946664129844,0.49734193500004703,0.5256473978259217,ndcg@10
+structural_gold__dense-bge_m3,tipo_consulta,LLM,26,0.41501938323368537,0.3318083183520974,0.49917020453560706,ndcg@10
+structural_gold__dense-bge_m3,tipo_consulta,search log,4,0.32606759990663725,0.10176510912030247,0.4772850866076091,ndcg@10
