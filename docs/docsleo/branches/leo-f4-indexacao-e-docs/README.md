@@ -18,6 +18,7 @@ divergências entre o que o artigo publica e o que o código produz.
 | [01-ambiente-setup.md](01-ambiente-setup.md) | Setup da máquina, versões, junctions |
 | [05-diario-execucao.md](05-diario-execucao.md) | Diário cronológico dos comandos e saídas |
 | [06-implementacao-f4.md](06-implementacao-f4.md) | Decisões de projeto e armadilhas de biblioteca |
+| [11-analise-do-dominio.md](11-analise-do-dominio.md) | **Achado:** 72% da relevância está na fundamentação (22,8% do texto); e a comparação com os baselines do JurisTCU |
 | [resultados/](resultados/) | Números medidos, por retriever |
 
 ## Código entregue

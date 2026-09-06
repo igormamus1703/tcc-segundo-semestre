@@ -120,6 +120,39 @@ def write_trec_run(path: Path, ranked: dict[str, list[tuple[str, float]]], run_n
     return n_lines
 
 
+def write_chunks_top(
+    path: Path,
+    ranked: dict[str, list[tuple[str, float]]],
+    vencedores: dict[str, dict[str, tuple[str, float]]],
+    por_id: dict[str, Chunk],
+    run_name: str,
+    top_k: int = 50,
+) -> int:
+    """Grava o chunk que "ganhou" cada documento recuperado, com seu offset.
+
+    Só os `top_k` primeiros documentos de cada consulta — é o que a análise por
+    seção usa, e guardar os 1000 multiplicaria o arquivo sem serventia.
+    """
+    n = 0
+    with path.open("w", encoding="utf-8") as f:
+        for qid, docs in ranked.items():
+            for rank, (doc_id, score) in enumerate(docs[:top_k], start=1):
+                venc = vencedores.get(qid, {}).get(doc_id)
+                if not venc:
+                    continue
+                chunk = por_id.get(venc[0])
+                if chunk is None:
+                    continue
+                f.write(json.dumps({
+                    "run": run_name, "query_id": qid, "rank": rank,
+                    "doc_id": doc_id, "chunk_id": chunk.chunk_id,
+                    "section": chunk.section, "start": chunk.start, "end": chunk.end,
+                    "score": round(float(score), 6),
+                }, ensure_ascii=False) + "\n")
+                n += 1
+    return n
+
+
 def run_one(
     strategy: str,
     retriever: str,
@@ -132,6 +165,7 @@ def run_one(
     processed_dir: Path = PROCESSED_DIR,
     runs_dir: Path = RUNS_DIR,
     log=None,
+    bloco: int = 25_000,
 ) -> dict:
     t0 = time.time()
     chunks = load_chunks(strategy, processed_dir)
@@ -146,24 +180,38 @@ def run_one(
         # Cache dos embeddings junto dos chunks da estratégia (contrato da
         # secao 2 do plano_implementacao.md).
         index.build(chunks, cache_dir=processed_dir / strategy,
-                    show_progress=False, log=log or print)
+                    show_progress=False, log=log or print, bloco=bloco)
     else:
         retriever_tag = retriever
 
     chunk_to_doc = dict(zip(index.chunk_ids, index.doc_ids))
+    por_id = {c.chunk_id: c for c in chunks}
     agg_fn = AGGREGATIONS[aggregation]
 
     results = index.search_batch([q["text"] for q in queries], top_k=top_chunks)
 
+    suffix = "" if aggregation == "max_pooling" else f"__{aggregation}"
+    run_name = f"{strategy}__{retriever_tag}{suffix}"
+
     ranked: dict[str, list[tuple[str, float]]] = {}
+    # Qual CHUNK deu o score de cada documento? É o que permite depois dizer de
+    # qual macro-seção do acórdão veio o trecho que fez o documento ser
+    # recuperado (`analysis.slice_by_section`) — inclusive nas baselines, que
+    # não carregam rótulo de seção, mas carregam offset.
+    vencedores: dict[str, dict[str, tuple[str, float]]] = {}
     for q, hits in zip(queries, results):
         scored = [(cid, chunk_to_doc[cid], score) for cid, score in hits]
         doc_scores = agg_fn(scored)
         ranked[q["query_id"]] = sorted(doc_scores.items(), key=lambda kv: -kv[1])[:top_docs]
+        melhor: dict[str, tuple[str, float]] = {}
+        for cid, doc_id, score in scored:
+            if doc_id not in melhor or score > melhor[doc_id][1]:
+                melhor[doc_id] = (cid, score)
+        vencedores[q["query_id"]] = melhor
 
-    suffix = "" if aggregation == "max_pooling" else f"__{aggregation}"
-    run_name = f"{strategy}__{retriever_tag}{suffix}"
     n_lines = write_trec_run(runs_dir / f"{run_name}.trec", ranked, run_name)
+    write_chunks_top(runs_dir / f"{run_name}__chunks.jsonl", ranked, vencedores,
+                     por_id, run_name)
 
     return {
         "run": run_name,
@@ -176,11 +224,16 @@ def run_one(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Gera TREC runs por estrategia x retriever.")
-    parser.add_argument("--strategy", default="all", help="Nome da estrategia ou 'all'.")
+    parser.add_argument("--strategy", nargs="+", default=["all"],
+                        help="Estrategias na ORDEM de execucao, ou 'all'. A ordem importa "
+                             "numa rodada longa: o que roda primeiro e o que estara pronto "
+                             "se algo interromper.")
     parser.add_argument("--retriever", default="bm25", choices=["bm25", "dense", "all"])
     parser.add_argument("--embedder", default=None, help="Nome em models.yaml (so para dense).")
     parser.add_argument("--aggregation", default="max_pooling", choices=list(AGGREGATIONS))
     parser.add_argument("--top-chunks", type=int, default=2000)
+    parser.add_argument("--bloco", type=int, default=25_000,
+                        help="Chunks por bloco de checkpoint no encode denso.")
     parser.add_argument("--top-docs", type=int, default=1000)
     parser.add_argument("--limit-queries", type=int, default=None, help="Smoke test.")
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
@@ -195,15 +248,26 @@ def main() -> None:
     if not queries:
         raise SystemExit(f"nenhuma consulta lida de {args.queries}")
 
-    if args.strategy == "all":
-        strategies = sorted(p.name for p in args.processed_dir.iterdir() if p.is_dir())
+    if args.strategy == ["all"]:
+        # Ordem deliberada: as estrategias estruturais primeiro, porque sao as
+        # que respondem a pergunta de pesquisa; as fixas, mais caras, por
+        # ultimo. Numa rodada de ~10 h, se algo interromper, o que ja terminou
+        # e o que mais importa.
+        disponiveis = {p.name for p in args.processed_dir.iterdir() if p.is_dir()}
+        preferencia = ["structural_gold", "structural_pred", "recursive_default",
+                       "fixed_1024_512", "fixed_512_256"]
+        strategies = [e for e in preferencia if e in disponiveis]
+        strategies += sorted(disponiveis - set(strategies))
         if not strategies:
             raise SystemExit(
                 f"nenhuma estrategia em {args.processed_dir} — rode "
                 "`python -m src.chunkers.run` antes"
             )
     else:
-        strategies = [args.strategy]
+        strategies = list(args.strategy)
+        faltando = [e for e in strategies if not (args.processed_dir / e).is_dir()]
+        if faltando:
+            raise SystemExit(f"estrategia(s) sem chunks gerados: {faltando}")
 
     retrievers = ["bm25", "dense"] if args.retriever == "all" else [args.retriever]
 
@@ -241,6 +305,7 @@ def main() -> None:
                     processed_dir=args.processed_dir,
                     runs_dir=runs_dir,
                     log=exp.log,
+                    bloco=args.bloco,
                 )
                 exp.registrar(info["run"], info)
                 exp.log(
@@ -254,8 +319,8 @@ def _rotulo_automatico(args, retrievers, models_cfg) -> str:
     partes = ["-".join(retrievers)]
     if "dense" in retrievers:
         partes.append(args.embedder or models_cfg.get("dense", {}).get("default_embedder", ""))
-    if args.strategy != "all":
-        partes.append(args.strategy)
+    if args.strategy != ["all"]:
+        partes.append("-".join(args.strategy))
     if args.limit_queries:
         partes.append(f"smoke{args.limit_queries}q")
     if args.aggregation != "max_pooling":

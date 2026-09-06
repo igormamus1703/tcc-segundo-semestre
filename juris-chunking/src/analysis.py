@@ -158,6 +158,129 @@ def slice_by_doc_length_tercile(
     return rows
 
 
+def poder_estatistico(
+    qrels: Qrels,
+    run_a: Run,
+    run_b: Run,
+    metric: str = "ndcg@10",
+    alpha: float = 0.05,
+    poder: float = 0.80,
+) -> dict:
+    """Qual diferença seria detectável com o número de consultas que temos?
+
+    Um resultado não significativo tem duas leituras possíveis — "não há
+    diferença" e "há, mas o teste não teria como vê-la" — e só a análise de
+    poder separa as duas. É a pergunta natural da banca diante de uma tabela
+    sem nenhum p < 0,05.
+
+    Devolve o **efeito mínimo detectável (MDE)**: a menor diferença média de
+    métrica que um teste t pareado com estas `n` consultas detectaria, com o
+    poder pedido. Se a diferença observada for menor que o MDE, o experimento
+    simplesmente não tem resolução para ela — o que é um achado a reportar, não
+    um defeito a esconder.
+    """
+    from scipy import stats
+
+    a = per_query_scores(qrels, run_a, metric)
+    b = per_query_scores(qrels, run_b, metric)
+    qids = sorted(set(a) & set(b))
+    difs = np.array([a[q] - b[q] for q in qids])
+    n = len(difs)
+    if n < 2:
+        raise ValueError("consultas insuficientes para análise de poder")
+
+    dp = float(difs.std(ddof=1))
+    observado = float(difs.mean())
+    # z de duas caudas para alpha + z de uma cauda para o poder
+    z_alpha = stats.norm.ppf(1 - alpha / 2)
+    z_poder = stats.norm.ppf(poder)
+    mde = (z_alpha + z_poder) * dp / np.sqrt(n) if dp > 0 else 0.0
+    d_cohen = observado / dp if dp > 0 else 0.0
+
+    # quantas consultas seriam necessárias para detectar o efeito observado
+    n_necessario = (
+        int(np.ceil(((z_alpha + z_poder) * dp / abs(observado)) ** 2))
+        if observado != 0 else None
+    )
+    return {
+        "run_a": run_a.name,
+        "run_b": run_b.name,
+        "metric": metric,
+        "n_queries": n,
+        "diferenca_observada": observado,
+        "desvio_padrao_das_diferencas": dp,
+        "mde": float(mde),
+        "detectavel": bool(abs(observado) >= mde),
+        "d_de_cohen": float(d_cohen),
+        "n_necessario_para_detectar": n_necessario,
+    }
+
+
+def poder_de_todos_os_pares(qrels: Qrels, runs: list[Run], metric: str = "ndcg@10") -> list[dict]:
+    linhas = []
+    for i, a in enumerate(runs):
+        for b in runs[i + 1 :]:
+            try:
+                linhas.append(poder_estatistico(qrels, a, b, metric))
+            except ValueError:
+                continue
+    return linhas
+
+
+def section_of_span(start: int, end: int, gold_spans: list[dict]) -> str | None:
+    """De qual macro-seção do acórdão vem o trecho `[start, end)`?
+
+    Devolve a seção com maior sobreposição de caracteres. É isto que permite
+    fazer a análise por seção **também nas baselines**: `fixed` e `recursive`
+    devolvem `section=None`, mas o offset do chunk sabe de onde ele veio.
+    O `plano_tecnico.md` §1 aponta esta análise como valendo "uma seção inteira
+    de discussão no TCC" — ela responde se o chunking estrutural muda *quais
+    partes do acórdão* chegam ao topo do ranking, não só o quanto acerta.
+    """
+    melhor, maior = None, 0
+    for s in gold_spans:
+        sobreposicao = min(end, s["end"]) - max(start, s["start"])
+        if sobreposicao > maior:
+            melhor, maior = s["section"], sobreposicao
+    return melhor
+
+
+def slice_by_section(
+    chunks_top: list[dict],
+    gold_spans_por_doc: dict[str, list[dict]],
+    top_k: int = 10,
+) -> list[dict]:
+    """Distribuição das seções entre os chunks que venceram a agregação.
+
+    `chunks_top` traz, por consulta, o chunk que deu o score de cada documento
+    recuperado (o argmax do max-pooling). Contamos de qual seção veio cada um,
+    nos `top_k` primeiros documentos de cada consulta.
+    """
+    contagem: dict[tuple[str, str], int] = {}
+    totais: dict[str, int] = {}
+    for reg in chunks_top:
+        if reg["rank"] > top_k:
+            continue
+        run = reg["run"]
+        secao = reg.get("section") or section_of_span(
+            reg["start"], reg["end"], gold_spans_por_doc.get(reg["doc_id"], [])
+        ) or "indefinido"
+        contagem[(run, secao)] = contagem.get((run, secao), 0) + 1
+        totais[run] = totais.get(run, 0) + 1
+
+    linhas = []
+    for (run, secao), n in sorted(contagem.items()):
+        linhas.append({
+            "run": run,
+            "recorte": "secao_do_chunk",
+            "valor": secao,
+            "n_chunks": n,
+            "fracao": n / totais[run] if totais[run] else 0.0,
+            "top_k": top_k,
+        })
+    return linhas
+
+
 def slice_by_retriever(qrels: Qrels, runs: list[Run], metric: str = "ndcg@10") -> list[dict]:
     """Recorte por retriever: agrupa os runs por BM25 vs. denso, para responder
     se o efeito do chunking depende do tipo de retriever."""
