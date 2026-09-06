@@ -15,11 +15,39 @@ DEFAULT_METRICS = ("ndcg@10", "mrr@10", "map@10", "recall@100")
 
 
 def load_qrels(path: Path) -> Qrels:
-    return Qrels.from_file(str(path), kind="trec")
+    """Lê um qrels TREC em UTF-8.
+
+    NÃO usa `Qrels.from_file`: o ranx lê o arquivo com o encoding padrão da
+    plataforma (latin-1/cp1252 no Windows), e todo doc_id acentuado volta como
+    mojibake — `plenário` vira `plenÃ¡rio`. Como os runs passariam pela mesma
+    corrupção, as métricas até fechariam; mas qualquer cruzamento com dados
+    lidos fora do ranx (os tamanhos de documento do recorte por tercil, por
+    exemplo) deixa de casar, e o recorte sai VAZIO sem nenhum erro.
+    Os doc_ids do corpus do TCU são do tipo `2251-2017-plenário`, ou seja,
+    quase todos têm acento.
+    """
+    d: dict[str, dict[str, int]] = {}
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            parts = line.split()
+            if len(parts) < 4:
+                continue
+            qid, _, doc_id, score = parts[0], parts[1], parts[2], parts[3]
+            d.setdefault(qid, {})[doc_id] = int(float(score))
+    return Qrels(d)
 
 
 def load_run(path: Path, name: str | None = None) -> Run:
-    return Run.from_file(str(path), kind="trec", name=name or path.stem)
+    """Lê um run TREC em UTF-8 — mesmo motivo do `load_qrels`."""
+    d: dict[str, dict[str, float]] = {}
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            parts = line.split()
+            if len(parts) < 5:
+                continue
+            qid, doc_id, score = parts[0], parts[2], parts[4]
+            d.setdefault(qid, {})[doc_id] = float(score)
+    return Run(d, name=name or path.stem)
 
 
 def evaluate_run(qrels: Qrels, run: Run, metrics=DEFAULT_METRICS) -> dict[str, float]:

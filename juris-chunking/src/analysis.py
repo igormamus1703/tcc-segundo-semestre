@@ -96,6 +96,36 @@ def doc_length_terciles(doc_lengths: dict[str, int]) -> tuple[float, float]:
     return tuple(np.percentile(valores, [33.333, 66.667]))
 
 
+def query_length_terciles(
+    qrels: Qrels, doc_lengths: dict[str, int]
+) -> tuple[dict[str, str], tuple[float, float]]:
+    """Classifica cada CONSULTA em curto/médio/longo pela mediana do tamanho
+    dos seus documentos relevantes.
+
+    Os cortes vêm da distribuição dessas medianas POR CONSULTA, não da
+    distribuição de tamanho dos 12.880 documentos do corpus. A diferença
+    importa muito: os documentos julgados relevantes são sistematicamente
+    maiores que o acervo (são os acórdãos mais substantivos), então usar os
+    percentis do corpus joga quase todas as consultas nos tercis superiores —
+    na primeira rodada isso deu 3 / 67 / 80 consultas, e um grupo de 3 não
+    sustenta nenhuma comparação. Usando os percentis das próprias consultas,
+    os três grupos ficam equilibrados por construção.
+    """
+    medianas: dict[str, float] = {}
+    for qid, docs in qrels.to_dict().items():
+        tamanhos = [doc_lengths[d] for d in docs if d in doc_lengths]
+        if tamanhos:
+            medianas[qid] = float(np.median(tamanhos))
+    if not medianas:
+        return {}, (0.0, 0.0)
+
+    p33, p66 = np.percentile(np.asarray(list(medianas.values())), [33.333, 66.667])
+    tercil: dict[str, str] = {}
+    for qid, m in medianas.items():
+        tercil[qid] = "curto" if m <= p33 else ("medio" if m <= p66 else "longo")
+    return tercil, (float(p33), float(p66))
+
+
 def slice_by_doc_length_tercile(
     qrels: Qrels,
     runs: list[Run],
@@ -110,21 +140,7 @@ def slice_by_doc_length_tercile(
     senão cada estratégia seria avaliada sobre um subconjunto diferente de
     consultas, e as colunas da tabela deixariam de ser comparáveis.
     """
-    p33, p66 = doc_length_terciles(doc_lengths)
-    qrels_dict = qrels.to_dict()
-
-    tercil_da_query: dict[str, str] = {}
-    for qid, docs in qrels_dict.items():
-        tamanhos = [doc_lengths[d] for d in docs if d in doc_lengths]
-        if not tamanhos:
-            continue
-        mediana = float(np.median(tamanhos))
-        if mediana <= p33:
-            tercil_da_query[qid] = "curto"
-        elif mediana <= p66:
-            tercil_da_query[qid] = "medio"
-        else:
-            tercil_da_query[qid] = "longo"
+    tercil_da_query, _cortes = query_length_terciles(qrels, doc_lengths)
 
     rows = []
     for run in runs:

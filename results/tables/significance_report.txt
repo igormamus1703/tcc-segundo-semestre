@@ -1,0 +1,7 @@
+#    Model                      NDCG@10
+---  -----------------------  ---------
+a    fixed_1024_512__bm25         0.251
+b    fixed_512_256__bm25          0.249
+c    recursive_default__bm25      0.241
+d    structural_gold__bm25        0.252
+e    structural_pred__bm25        0.253
