@@ -212,6 +212,56 @@ def load_gold_spans(corpus_path: Path, cache_path: Path | None = None) -> dict[s
     return spans
 
 
+def _exigir_mesmo_corpus(a: Path, b: Path) -> None:
+    """Duas rodadas só podem ser avaliadas juntas se mediram o MESMO corpus.
+
+    Juntar uma rodada do corpus completo com uma de subcorpus produziria uma
+    tabela em que metade dos runs foi avaliada contra qrels que não são os
+    seus — números plausíveis à vista e completamente errados. Melhor abortar
+    com a diferença na tela.
+    """
+    import json as _json
+
+    def resumo(d: Path) -> dict:
+        mf = d / "manifest.json"
+        if not mf.is_file():
+            return {}
+        m = _json.loads(mf.read_text(encoding="utf-8"))
+        return {
+            "n_docs": (m.get("corpus") or {}).get("n_docs"),
+            "n_queries": (m.get("config") or {}).get("n_queries"),
+            "corpus": (m.get("config") or {}).get("corpus"),
+        }
+
+    ra, rb = resumo(a), resumo(b)
+    if not ra or not rb:
+        print(f"  aviso: sem manifesto para comparar corpus entre {a.name} e {b.name}")
+        return
+    difs = [k for k in ("n_docs", "n_queries", "corpus")
+            if ra.get(k) is not None and rb.get(k) is not None and ra[k] != rb[k]]
+    if difs:
+        detalhes = "\n".join(f"    {k}: {a.name}={ra[k]!r}  vs  {b.name}={rb[k]!r}" for k in difs)
+        raise SystemExit(
+            f"as rodadas {a.name} e {b.name} não mediram o mesmo corpus:\n{detalhes}\n"
+            "  Avaliá-las juntas cruzaria runs com qrels que não são os deles."
+        )
+
+
+def _desambiguar_nomes(runs: list, caminhos: list[Path]) -> None:
+    """Prefixa com a rodada os runs cujo nome se repete entre rodadas.
+
+    `fixed_1024_512__bm25` pode existir em duas rodadas; sem prefixo, o
+    `Report.comparisons` do ranx — indexado por `frozenset({a, b})` — colapsa
+    o par em um conjunto de um elemento e estoura com KeyError.
+    """
+    from collections import Counter
+
+    contagem = Counter(r.name for r in runs)
+    for run, caminho in zip(runs, caminhos):
+        if contagem[run.name] > 1:
+            run.name = f"{caminho.parent.parent.name}/{run.name}"
+
+
 def _experimento_mais_recente(experiments_dir: Path) -> Path | None:
     """A pasta datada mais recente que tenha runs. O nome começa com
     `AAAAMMDD-HHMM`, então a ordem alfabética já é a cronológica."""
@@ -261,6 +311,11 @@ def main() -> None:
                         help="Pasta em results/experiments/ (default: a mais recente).")
     parser.add_argument("--runs-dir", type=Path, default=None)
     parser.add_argument("--tables-dir", type=Path, default=None)
+    parser.add_argument("--incluir", type=Path, nargs="+", default=None, metavar="RODADA",
+                        help="Rodadas adicionais cujos runs entram na mesma avaliação. "
+                             "É como se comparam BM25 e denso lado a lado, já que cada "
+                             "um roda em sua própria rodada: a significância pareada e "
+                             "os recortes passam a cruzar os dois retrievers.")
     parser.add_argument("--qrels", type=Path, default=INTERIM_DIR / "qrels.trec")
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
     parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl")
@@ -285,8 +340,23 @@ def main() -> None:
             f"nenhum run em {runs_dir} — rode `python -m src.run_experiments` antes"
         )
     print(f"experimento: {runs_dir.parent.name}", flush=True)
+
+    # Rodadas adicionais: os runs entram na mesma avaliação, mas os
+    # `__chunks.jsonl` também — senão o recorte por seção cobriria só metade
+    # dos runs da tabela.
+    dirs_de_runs = [runs_dir]
+    for extra in args.incluir or []:
+        extra_runs = extra / "runs" if (extra / "runs").is_dir() else extra
+        novos = sorted(extra_runs.glob("*.trec"))
+        if not novos:
+            raise SystemExit(f"nenhum run em {extra_runs}")
+        _exigir_mesmo_corpus(runs_dir.parent, extra_runs.parent)
+        run_paths += novos
+        dirs_de_runs.append(extra_runs)
+        print(f"  + {extra_runs.parent.name} ({len(novos)} runs)", flush=True)
     qrels = load_qrels(args.qrels)
     runs = [load_run(p) for p in run_paths]
+    _desambiguar_nomes(runs, run_paths)
     print(f"{len(runs)} runs, qrels de {args.qrels.name}", flush=True)
 
     # 1. Tabela principal: estratégia x retriever x métricas.
@@ -350,9 +420,10 @@ def main() -> None:
     #    que fez cada documento ser recuperado. Vale para as baselines também,
     #    via offset (plano_tecnico.md §1).
     chunks_top = []
-    for p in sorted(runs_dir.glob("*__chunks.jsonl")):
-        with p.open(encoding="utf-8") as f:
-            chunks_top.extend(json.loads(line) for line in f)
+    for d in dirs_de_runs:
+        for p in sorted(d.glob("*__chunks.jsonl")):
+            with p.open(encoding="utf-8") as f:
+                chunks_top.extend(json.loads(line) for line in f)
     if chunks_top and args.corpus.exists():
         gold = load_gold_spans(args.corpus)
         _write_csv(
