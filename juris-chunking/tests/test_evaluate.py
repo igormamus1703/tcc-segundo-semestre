@@ -395,3 +395,14 @@ def test_aceita_juntar_rodadas_do_mesmo_corpus(tmp_path):
             {"corpus": {"n_docs": 12880}, "config": {"n_queries": 150}}), encoding="utf-8")
 
     _exigir_mesmo_corpus(a, b)  # não levanta
+
+
+def test_rotulo_da_figura_ignora_o_prefixo_de_rodada():
+    """Runs desambiguados viram `<rodada>/estrategia__retriever`; sem descartar
+    o prefixo, o rotulo da figura viraria o caminho inteiro."""
+    from src.plots import partes_do_run, rotulo_do_run
+
+    assert partes_do_run("structural_gold__bm25") == ("structural_gold", "bm25")
+    assert partes_do_run("20260906-0515_bm25/structural_gold__bm25") == ("structural_gold", "bm25")
+    assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] == "dense-bge_m3"
+    assert rotulo_do_run("20260906-0515_bm25/structural_gold__bm25") == "estrutural (ouro)"

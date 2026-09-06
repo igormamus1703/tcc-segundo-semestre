@@ -155,6 +155,23 @@ def _titulo(fig, texto: str, ctx: dict, y: float = 1.02) -> None:
 
 # --- utilidades ----------------------------------------------------------------
 
+def partes_do_run(nome: str) -> tuple[str, str]:
+    """`<rodada>/`?`estrategia__retriever[__agregacao]` -> (estrategia, retriever).
+
+    O prefixo de rodada aparece quando `src.evaluate --incluir` desambigua runs
+    de mesmo nome vindos de rodadas diferentes; sem descartá-lo aqui, o rótulo
+    da figura viraria o caminho inteiro.
+    """
+    sem_rodada = nome.split("/")[-1]
+    partes = sem_rodada.split("__")
+    return partes[0], (partes[1] if len(partes) > 1 else "")
+
+
+def rotulo_do_run(nome: str) -> str:
+    est, _ = partes_do_run(nome)
+    return ROTULOS.get(est, est)
+
+
 def ler_csv(path: Path) -> list[dict]:
     if not path.is_file():
         return []
@@ -188,14 +205,15 @@ def fig_principal(rows: list[dict], destino: Path, ctx: dict) -> None:
         return
     metricas = ["ndcg@10", "mrr@10", "map@10", "recall@100"]
     retrievers = sorted({r["retriever"] for r in rows})
-    estrategias = sorted({r["estrategia"] for r in rows})
+    estrategias = sorted({r["estrategia"].split("/")[-1] for r in rows})
 
     fig, axes = plt.subplots(1, len(metricas), figsize=(4.2 * len(metricas), 4.4))
     largura = 0.8 / max(len(retrievers), 1)
     for ax, met in zip(axes, metricas):
         for i, ret in enumerate(retrievers):
             for j, est in enumerate(estrategias):
-                achado = [r for r in rows if r["estrategia"] == est and r["retriever"] == ret]
+                achado = [r for r in rows
+                          if r["estrategia"].split("/")[-1] == est and r["retriever"] == ret]
                 if not achado:
                     continue
                 v = float(achado[0][met])
@@ -233,7 +251,7 @@ def fig_recorte(rows: list[dict], destino: Path, ctx: dict, nome: str, titulo: s
     fig, ax = plt.subplots(figsize=(2.1 * len(valores) + 4, 4.6))
     largura = 0.8 / max(len(runs), 1)
     for i, run in enumerate(runs):
-        est = run.split("__")[0]
+        est, _ = partes_do_run(run)
         medias, erros, pos = [], [], []
         for j, val in enumerate(valores):
             achado = [r for r in rows if r["run"] == run and r["valor"] == val]
@@ -286,7 +304,7 @@ def fig_secoes(rows: list[dict], destino: Path, ctx: dict) -> None:
                         fontsize=7.5, color="white")
         fundo = [f + v for f, v in zip(fundo, vals)]
     ax.set_yticks(range(len(runs)))
-    ax.set_yticklabels([ROTULOS.get(r.split("__")[0], r.split("__")[0]) for r in runs])
+    ax.set_yticklabels([rotulo_do_run(r) for r in runs])
     ax.set_xlim(0, 1)
     ax.set_xlabel(f"fração dos chunks vencedores no top-{top_k} de cada consulta")
     ax.legend(frameon=False, ncol=5, fontsize=8.5, loc="lower center",
@@ -321,7 +339,7 @@ def fig_significancia(rows: list[dict], destino: Path, ctx: dict) -> None:
                 marca = " *" if m[i, j] < 0.05 else ""
                 ax.text(j, i, f"{m[i, j]:.3f}{marca}", ha="center", va="center",
                         fontsize=8, color="#111")
-    rot = [ROTULOS.get(r.split("__")[0], r) for r in runs]
+    rot = [rotulo_do_run(r) for r in runs]
     ax.set_xticks(range(len(runs)), rot, rotation=40, ha="right", fontsize=8)
     ax.set_yticks(range(len(runs)), rot, fontsize=8)
     fig.colorbar(im, ax=ax, shrink=0.75, label="p-valor")
