@@ -5,7 +5,7 @@
 **Corpus:** 12.880 acórdãos · 150 consultas · 2.219 pares de qrel
 
 > ⚠️ Estes números valem para o corpus de 12.880 documentos. Se a equipe decidir
-> mudar o corpus ([08-decisoes-pendentes.md](08-decisoes-pendentes.md), item 1),
+> mudar o corpus ([08-decisoes-pendentes.md](../08-decisoes-pendentes.md), item 1),
 > tudo aqui precisa ser refeito.
 
 ## Tabela principal

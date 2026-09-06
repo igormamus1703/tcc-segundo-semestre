@@ -1,60 +1,43 @@
 # docsleo — caderno de bordo do Leonardo Marques
 
-Registro **completo** do que foi feito, decidido e medido neste projeto, na
-minha frente de trabalho. Não é documentação de código (essa vive nos
-`README.md` do repo) — é o **histórico de decisões e evidências**, escrito
-para virar matéria-prima das seções de Metodologia, Resultados e Discussão
-do artigo final.
+Registro do que eu fiz, decidi e medi neste projeto. Não é documentação de
+código (essa vive nos `README.md` do repo) — é o **histórico de decisões e
+evidências**, escrito para virar matéria-prima das seções de Metodologia,
+Resultados e Discussão do artigo final.
 
-Regra que sigo aqui: **toda decisão registrada tem que dizer (a) qual era a
-alternativa, (b) qual evidência decidiu, e (c) o que muda no artigo se a
-decisão for revertida.** Decisão sem evidência anotada é decisão que vamos
-ter que redescobrir em novembro, na semana da entrega.
+> O padrão de trabalho da equipe (branch → teste → merge → anotar) está no
+> [README.md da raiz do repositório](../README.md#fluxo-de-trabalho-obrigatório).
+> Esta pasta é a minha instância desse padrão.
 
----
+Regra que sigo aqui: **toda decisão registrada diz (a) qual era a alternativa,
+(b) qual evidência decidiu e (c) o que muda no artigo se ela for revertida.**
+Decisão sem evidência anotada é decisão que vamos ter de redescobrir em
+novembro, na semana da entrega.
 
-## Convenção da equipe — vale para todos, não só para mim
+## Organização
 
-> **Cada participante do projeto mantém a sua própria pasta de resultados com
-> anotações em `.md`, e anota tudo lá: o que fez, o que decidiu, o que mediu,
-> o que deu errado e por quê.**
+```
+docsleo/
+└── branches/
+    └── <nome-da-branch>/        uma pasta por branch de trabalho
+        ├── README.md            o que a branch faz + checklist de merge
+        ├── NN-*.md              decisões, achados e execução
+        ├── testes/              estado da suíte e o que cada teste trava
+        └── resultados/          números medidos, por retriever
+```
 
-Pastas por participante (mesma estrutura, um dono cada):
+## Branches
 
-| Participante | Pasta |
+| Branch | Assunto | Status |
+|---|---|---|
+| [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | 🟡 em teste |
+
+## Atalhos para o que mais importa
+
+| Se você quer... | Vá em |
 |---|---|
-| Leonardo Marques | `docsleo/` |
-| João Vitor Manfrim | `docsjoao/` |
-| Felipe Ribas | `docsfelipe/` |
-| Igor Mamus | `docsigor/` |
-
-Por que isso importa, concretamente: o número **113.827 documentos** entrou no
-nosso artigo e no nosso pôster, e só descobrimos que ele não corresponde mais
-ao que o código produz porque fomos ler a mensagem de um commit de agosto (ver
-[02-achado-corpus.md](02-achado-corpus.md)). Se a decisão de filtrar o corpus
-tivesse sido anotada em `.md` quando foi tomada, o artigo nunca teria saído com
-o número errado. **Anotar não é burocracia — é o que impede a banca de achar
-antes da gente.**
-
-O que cada anotação precisa ter, no mínimo:
-- **data** e **quem fez**;
-- **o comando exato** que foi rodado (copiável, não parafraseado);
-- **o número que saiu** (com o arquivo de artefato que o comprova);
-- **a decisão tomada** e a alternativa descartada;
-- **o que ainda está em aberto**.
-
----
-
-## Índice
-
-| Doc | Conteúdo |
-|---|---|
-| [01-ambiente-setup.md](01-ambiente-setup.md) | Como o ambiente foi montado nesta máquina, versões exatas, e o único passo manual obrigatório do projeto |
-| [02-achado-corpus.md](02-achado-corpus.md) | **Crítico:** o corpus do código (12.881) ≠ o corpus do artigo (113.827). Evidência, causa e as opções |
-| [03-referencias-verificadas.md](03-referencias-verificadas.md) | Verificação de todas as citações do artigo contra o arXiv — nenhuma citação fantasma |
-| [04-modelos-embedding.md](04-modelos-embedding.md) | Escolha do embedder via MTEB-BR; resolve o `PREENCHER` do `models.yaml` |
-| [05-diario-execucao.md](05-diario-execucao.md) | Diário cronológico: comandos rodados, saídas, tempos |
-| [06-implementacao-f4.md](06-implementacao-f4.md) | F4/F5 implementadas: decisões de projeto e as armadilhas de biblioteca encontradas |
-| [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) | **Tabela de substituição:** cada número do artigo × o valor medido. Nenhum número entra no texto final sem passar por aqui |
-| [08-decisoes-pendentes.md](08-decisoes-pendentes.md) | **Comece por aqui:** o que a equipe precisa decidir, por ordem de urgência, e o que dá para tocar em paralelo |
-| [09-resultados-bm25.md](09-resultados-bm25.md) | **Primeiro número:** BM25 nas 5 estratégias, significância, os três recortes e dois bugs corrigidos |
+| Entender o problema mais urgente do projeto | [02-achado-corpus.md](branches/leo-f4-indexacao-e-docs/02-achado-corpus.md) |
+| Saber quais números do artigo estão errados | [07-numeros-para-o-artigo.md](branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md) |
+| Saber o que precisa ser decidido pela equipe | [08-decisoes-pendentes.md](branches/leo-f4-indexacao-e-docs/08-decisoes-pendentes.md) |
+| Ver o primeiro nDCG@10 e os recortes | [resultados/](branches/leo-f4-indexacao-e-docs/resultados/) |
+| Montar o ambiente numa máquina nova | [01-ambiente-setup.md](branches/leo-f4-indexacao-e-docs/01-ambiente-setup.md) |

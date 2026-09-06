@@ -59,13 +59,16 @@ leitura completos.
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
-      JurisTCU remapeados. Gate passou: 97,9% match de docs, 99,2% qrels
-      preservados (`results/tables/eda_stats.json`, `join_report.json`).
+      JurisTCU remapeados. Gate passou: **98,7%** match de docs, **99,69%**
+      qrels preservados, **12.880** documentos
+      (`results/tables/eda_stats.json`, `join_report.json`).
 - [x] **F2 — Segmentador**: regras calibradas contra o texto real,
       validadas automaticamente contra os spans ouro do corpus inteiro —
-      92,7% de acurácia por caractere, 1,6% de fallback
+      **92,2%** de acurácia por caractere, **0,0%** de fallback
       (`results/tables/segmenter_validation.json`; curva de iteração
-      documentada no docstring de `src/segmenter/rules.py`).
+      documentada no docstring de `src/segmenter/rules.py`). As regras foram
+      calibradas sobre 113k acórdãos e mantêm a acurácia neste subconjunto
+      sem recalibração.
 - [x] **F3 — Chunkers**: `fixed` (2 configs), `recursive` e `structural`
       (`gold`/`pred`) — 5 estratégias, validadas ponta a ponta contra o
       corpus real (invariante `doc.text[start:end] == chunk.text` conferida,
@@ -84,7 +87,7 @@ leitura completos.
 
 > ⚠️ **Corpus:** o `eda_stats.json`/`segmenter_validation.json` versionados
 > foram regerados em 05/09 sobre o corpus que o `ingest.py` produz hoje
-> (**12.880** acórdãos, não 113.827 — ver `docsleo/02-achado-corpus.md`). A
+> (**12.880** acórdãos, não 113.827 — ver `docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A
 > escolha do corpus oficial ainda está pendente de decisão da equipe, e os
 > números do artigo dependem dela.
 
