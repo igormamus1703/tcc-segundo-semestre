@@ -16,6 +16,10 @@ param(
     [switch]$SomenteDenso,
     [switch]$SomenteBM25,
     [string]$Embedder = "",
+    # Orçamento do encode denso. Com 5 h saem structural_gold, structural_pred e
+    # recursive_default (~4,9 h); as duas fixas ficam para a noite seguinte e
+    # reaproveitam o cache. Passe 0 para não limitar (rodada completa, ~10 h).
+    [double]$MaxHoras = 5,
     [string]$Python = "C:\venvs\tcc-juris\Scripts\python.exe"
 )
 
@@ -89,8 +93,10 @@ if (-not $SomenteDenso) {
 
 # 2. Denso: a parte longa -------------------------------------------------------
 if (-not $SomenteBM25) {
-    Etapa "denso (5 estrategias, ~10 h)" {
-        & $Python -u -m src.run_experiments --strategy all --retriever dense @argsEmbedder
+    $argsTempo = @()
+    if ($MaxHoras -gt 0) { $argsTempo = @("--max-horas", $MaxHoras) }
+    Etapa "denso (orcamento: $MaxHoras h)" {
+        & $Python -u -m src.run_experiments --strategy all --retriever dense @argsEmbedder @argsTempo
     } | Out-Null
     Etapa "avaliacao do denso" {
         & $Python -u -m src.evaluate
