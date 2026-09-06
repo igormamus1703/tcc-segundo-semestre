@@ -187,3 +187,71 @@ def test_dense_cache_invalida_se_chunks_mudarem(chunks, monkeypatch, tmp_path):
     ids = json.loads((tmp_path / "chunk_ids_fake__model.json").read_text(encoding="utf-8"))
     assert ids == ["c1", "c2", "c9"]
     assert idx2.chunk_ids == ["c1", "c2", "c9"]
+
+
+# --- checkpoint do encode ---------------------------------------------------
+
+def test_encode_com_checkpoint_grava_e_retoma(chunks, monkeypatch, tmp_path):
+    """O encode do corpus leva ~10h. Uma queda na nona hora nao pode custar o
+    trabalho todo: cada bloco vai para o disco assim que fica pronto."""
+    chamadas = {"n": 0}
+
+    class Contando(FakeModel):
+        def encode(self, texts, **kw):
+            chamadas["n"] += 1
+            return super().encode(texts, **kw)
+
+    idx = DenseIndex("fake/model")
+    monkeypatch.setattr(idx, "_get_model", lambda: Contando())
+    idx.chunk_ids = [c.chunk_id for c in chunks]
+    textos = [c.text for c in chunks]
+
+    emb = idx.encode_com_checkpoint(textos, tmp_path, bloco=1, log=lambda *a: None)
+    assert emb.shape[0] == len(chunks)
+    assert chamadas["n"] == 3  # um encode por bloco
+    # ao terminar, o cache final existe e os parciais foram limpos
+    assert (tmp_path / "emb_fake__model.npy").exists()
+    assert not (tmp_path / "parcial_fake__model").exists()
+
+
+def test_checkpoint_retomado_nao_reencoda(chunks, monkeypatch, tmp_path):
+    class Contando(FakeModel):
+        chamadas = 0
+
+        def encode(self, texts, **kw):
+            Contando.chamadas += 1
+            return super().encode(texts, **kw)
+
+    # primeira passada: interrompida depois do primeiro bloco
+    idx = DenseIndex("fake/model")
+    monkeypatch.setattr(idx, "_get_model", lambda: Contando())
+    textos = [c.text for c in chunks]
+    partes = tmp_path / "parcial_fake__model"
+    partes.mkdir()
+    primeiro = idx.encode([textos[0]], "")
+    with (partes / "bloco_00000.npy.tmp").open("wb") as f:
+        np.save(f, primeiro)
+    (partes / "bloco_00000.npy.tmp").replace(partes / "bloco_00000.npy")
+    Contando.chamadas = 0
+
+    idx2 = DenseIndex("fake/model")
+    monkeypatch.setattr(idx2, "_get_model", lambda: Contando())
+    emb = idx2.encode_com_checkpoint(textos, tmp_path, bloco=1, log=lambda *a: None)
+    assert emb.shape[0] == 3
+    assert Contando.chamadas == 2  # o bloco 0 veio do checkpoint
+
+
+def test_checkpoint_descarta_bloco_truncado(chunks, monkeypatch, tmp_path):
+    """Bloco com tamanho errado (escrita interrompida) tem que ser refeito, nao
+    aceito — senao os embeddings ficariam desalinhados dos chunks."""
+    idx = DenseIndex("fake/model")
+    monkeypatch.setattr(idx, "_get_model", lambda: FakeModel())
+    partes = tmp_path / "parcial_fake__model"
+    partes.mkdir()
+    with (partes / "bloco_00000.npy").open("wb") as f:
+        np.save(f, np.zeros((5, 3), dtype="float32"))  # deveria ter 2 linhas
+
+    emb = idx.encode_com_checkpoint(
+        [c.text for c in chunks], tmp_path, bloco=2, log=lambda *a: None
+    )
+    assert emb.shape[0] == 3

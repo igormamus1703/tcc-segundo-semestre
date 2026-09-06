@@ -1,0 +1,51 @@
+{
+  "rotulo": "validacao_subcorpus",
+  "inicio": "2026-09-06T04:17:23",
+  "fim": null,
+  "duracao_s": 1.6,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold --retriever all --processed-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\subcorpus\\processed --queries C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\subcorpus\\queries.jsonl --label validacao_subcorpus",
+  "config": {
+    "estrategias": [
+      "structural_gold"
+    ],
+    "retrievers": [
+      "bm25",
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 30,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\subcorpus\\queries.jsonl",
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "a8b43bfb6340986276169723f6cce1804b1828ac",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": []
+}

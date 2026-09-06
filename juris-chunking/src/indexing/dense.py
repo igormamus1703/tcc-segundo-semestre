@@ -13,6 +13,7 @@ recalcula nada.
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -113,12 +114,73 @@ class DenseIndex:
         )
         return np.asarray(emb, dtype="float32")
 
+    def encode_com_checkpoint(
+        self,
+        texts: list[str],
+        cache_dir: Path,
+        bloco: int = 50_000,
+        show_progress: bool = False,
+        log=print,
+    ) -> np.ndarray:
+        """Encoda em blocos, gravando cada bloco em disco assim que fica pronto.
+
+        O encode do corpus inteiro leva ~10 h. Sem checkpoint, uma queda de
+        energia, um crash de driver ou um Ctrl+C na nona hora jogam fora o
+        trabalho todo. Gravando de bloco em bloco, a retomada custa no máximo
+        um bloco — e o `.npy` final só é escrito quando todos os blocos
+        existem, então um cache completo nunca representa um encode parcial.
+        """
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        stem = _safe_name(self.model_name)
+        partes_dir = cache_dir / f"parcial_{stem}"
+        partes_dir.mkdir(exist_ok=True)
+
+        n_blocos = (len(texts) + bloco - 1) // bloco
+        partes: list[np.ndarray] = []
+        for i in range(n_blocos):
+            parte_path = partes_dir / f"bloco_{i:05d}.npy"
+            ini, fim = i * bloco, min((i + 1) * bloco, len(texts))
+            if parte_path.exists():
+                arr = np.load(parte_path)
+                if arr.shape[0] == fim - ini:  # bloco íntegro
+                    partes.append(arr)
+                    log(f"    bloco {i+1}/{n_blocos} recuperado do checkpoint")
+                    continue
+                parte_path.unlink()  # bloco truncado por interrupção
+            t0 = time.time()
+            arr = self.encode(texts[ini:fim], self.passage_prefix, show_progress)
+            # grava em arquivo temporário e renomeia: se o processo morrer no
+            # meio da escrita, não fica um .npy pela metade parecendo íntegro.
+            # O np.save é chamado com um FILE OBJECT de propósito — recebendo um
+            # caminho, ele acrescenta ".npy" ao nome e o arquivo escrito não
+            # seria o que o rename procura.
+            tmp = parte_path.with_name(parte_path.name + ".tmp")
+            with tmp.open("wb") as f:
+                np.save(f, arr)
+            tmp.replace(parte_path)
+            partes.append(arr)
+            dt = time.time() - t0
+            restante = (n_blocos - i - 1) * dt
+            log(
+                f"    bloco {i+1}/{n_blocos} ({fim-ini:,} chunks) em {dt/60:.1f} min"
+                f" — faltam ~{restante/3600:.1f} h"
+            )
+
+        emb = np.vstack(partes)
+        self._save_cache(cache_dir, emb)
+        for p in partes_dir.glob("bloco_*.npy"):
+            p.unlink()
+        partes_dir.rmdir()
+        return emb
+
     # -- construção --
     def build(
         self,
         chunks: list[Chunk],
         cache_dir: Path | None = None,
         show_progress: bool = False,
+        bloco: int = 50_000,
+        log=print,
     ) -> None:
         """Indexa `chunks`, reaproveitando embeddings de `cache_dir` quando os
         chunk_ids cacheados batem exatamente com os atuais."""
@@ -129,9 +191,15 @@ class DenseIndex:
 
         emb = self._load_cache(cache_dir) if cache_dir else None
         if emb is None:
-            emb = self.encode([c.text for c in chunks], self.passage_prefix, show_progress)
+            textos = [c.text for c in chunks]
             if cache_dir:
-                self._save_cache(cache_dir, emb)
+                emb = self.encode_com_checkpoint(
+                    textos, cache_dir, bloco=bloco, show_progress=show_progress, log=log
+                )
+            else:
+                emb = self.encode(textos, self.passage_prefix, show_progress)
+        else:
+            log("    embeddings recuperados do cache (sem reencode)")
 
         import faiss
 

@@ -78,9 +78,11 @@ leitura completos.
 - [x] **F4 — Indexação + runs**: BM25 (`bm25s`) e denso
       (`sentence-transformers` + FAISS `IndexFlatIP`, com cache `.npy`),
       agregação chunk→doc e CLI `src/run_experiments.py` que grava os TREC
-      runs. `configs/models.yaml` resolvido: `pt_compact` =
-      `embeddinggemma-300m` (13º de 93 no MTEB-BR com 308M parâmetros) e
-      default sem gate = `multilingual-e5-base`.
+      runs, com pasta datada e manifesto por rodada (`results/README.md`).
+      Embedder default = **`BAAI/bge-m3`** (janela 1024): o
+      `multilingual-e5-base` truncaria 83% dos chunks e enviesaria a
+      comparação. O `embeddinggemma-300m` (13º de 93 no MTEB-BR) fica como
+      opção, mas é *gated*.
 - [x] **F5 — Avaliação, significância e recortes**: métricas via `ranx`,
       comparação pareada com correção para comparações múltiplas, bootstrap
       (IC 95%) e os três recortes. `python -m src.evaluate` gera as tabelas.
@@ -111,16 +113,29 @@ Smoke test da F4 antes de rodar o corpus inteiro:
 python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
 ```
 
-**Retriever denso — um passo manual, e só se quiser o modelo melhor.** O
-`pt_compact` (`google/embeddinggemma-300m`) é *gated* no Hugging Face: exige
-conta, aceite da licença Gemma e `hf auth login`. O **default do pipeline é o
-`multilingual_ref`** (`intfloat/multilingual-e5-base`, MIT, sem gate), então
-tudo roda ponta a ponta sem nenhum cadastro. Para usar o gated:
+**Retriever denso — precisa de GPU.** O encode das 2,2 M chunks leva ~10 h numa
+RTX 5060 (fp16) e **127 h em CPU**. O cache `.npy` faz o reencode ser
+desnecessário em rodadas seguintes.
+
+O default é o **`bge_m3`** (`BAAI/bge-m3`, Apache-2.0, **sem gate**), escolhido
+porque a janela de 1024 tokens acomoda todos os chunks: com o
+`multilingual-e5-base` (512) seriam 83% truncados e 37% do conteúdo descartado,
+e só a `fixed_512_256` caberia inteira — vantagem artificial que invalidaria a
+comparação.
+
+O `pt_compact` (`google/embeddinggemma-300m`, melhor colocado no MTEB-BR) é
+*gated*: exige conta, aceite da licença Gemma e `hf auth login`. **É o único
+passo manual do projeto**, e por isso não é o default.
 
 ```bash
-hf auth login
-python -m src.run_experiments --strategy all --retriever dense --embedder pt_compact
+python -m src.run_experiments --strategy all --retriever dense           # bge-m3
+hf auth login && python -m src.run_experiments --strategy all --retriever dense --embedder pt_compact
 ```
+
+Cada rodada cria `results/experiments/AAAAMMDD-HHMM_rotulo/` com
+`manifest.json` (commit, hardware, versões, tempos), `execucao.log`, `runs/` e
+`tables/`. O `python -m src.evaluate` sem argumentos avalia a rodada mais
+recente.
 
 ## Estrutura
 

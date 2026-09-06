@@ -4,16 +4,65 @@ Plano de execução do código, escrito para ser executado fase a fase (Sonnet 5
 Complementa o `plano_tecnico.md` (arquitetura e cronograma) e o **substitui onde
 houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
-**Status (24/08):** F0, F1, F2 e F3 concluídas. F1: gate passou (97,9% match de
-docs, 99,2% qrels preservados). F2: segmentador validado contra o corpus
-inteiro, 92,7% de acurácia por caractere (curva de iteração no docstring de
-`juris-chunking/src/segmenter/rules.py`). F3: 5 estratégias de chunking
+---
+
+## STATUS ATUAL — 06/09/2026
+
+**F0 a F5 implementadas. BM25 rodado ponta a ponta no corpus real. Falta o
+retriever denso, que roda em GPU.**
+
+| Fase | Estado | Evidência |
+|---|---|---|
+| F0 — Ambiente | ✅ | Python 3.13.7; `ranx`/numba rodam em 3.13, o fallback 3.11/3.12 **não foi necessário** |
+| F1 — Ingestão | ✅ | **12.880** docs, join 98,7%, qrels preservados 99,69% (`results/corpus/eda_stats.json`) |
+| F2 — Segmentador | ✅ | **92,2%** de acurácia por caractere, **0%** de fallback (`results/corpus/segmenter_validation.json`) |
+| F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
+| F4 — Indexação + runs | ✅ código; 🟡 execução | BM25 completo (`results/experiments/20260906-0215_bm25/`); denso pendente |
+| F5 — Avaliação | ✅ código; 🟡 execução | Tabelas, significância e os 3 recortes gerados para o BM25 |
+
+**Primeiro número da tabela (marco da Semana 7) — alcançado:** nDCG@10 de
+0,2412 a 0,2526 nas cinco estratégias com BM25. **Nenhuma diferença é
+estatisticamente significativa** (menor p = 0,097). Resultado nulo bem medido,
+que o `plano_tecnico.md` §7 já previa como desfecho legítimo.
+
+### O que falta, em ordem
+
+1. **🔴 Decidir o corpus oficial.** O artigo e o pôster dizem 113.827
+   documentos; o código produz 12.880. Não é bug — é uma mudança de escopo que
+   não foi propagada. **Bloqueia todos os números finais.** Análise completa em
+   `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
+2. **🟡 Rodar o retriever denso** (5 estratégias) — ~10 h de GPU com BGE-M3.
+3. Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`).
+4. Notebooks 01–03, que só consomem `results/`.
+5. Corrigir os números do artigo e do pôster (lista em
+   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`).
+
+### Decisões técnicas tomadas depois do plano original
+
+- **Embedder = `BAAI/bge-m3`**, não `multilingual-e5-base`. O e5 tem janela de
+  512 tokens e truncaria **83%** dos chunks, descartando **37%** do conteúdo —
+  e só a `fixed_512_256` caberia inteira, ganhando vantagem artificial. Com o
+  bge-m3 (janela 1024) o truncamento é **zero** em todas as estratégias.
+- **`results/` reorganizado**: `results/corpus/` para a caracterização do
+  corpus e `results/experiments/AAAAMMDD-HHMM_rotulo/` para cada rodada, com
+  `manifest.json` (commit, hardware, versões, tempos). Ver `results/README.md`.
+- **GPU**: `torch 2.14.0+cu130` (a RTX 5060 é Blackwell). O encode denso em CPU
+  levaria 127 h; em GPU, ~10 h.
+
+---
+
+**Status anterior (24/08):** F0, F1, F2 e F3 concluídas. F1: gate passou (97,9%
+match de docs, 99,2% qrels preservados). F2: segmentador validado contra o
+corpus inteiro, 92,7% de acurácia por caractere (curva de iteração no docstring
+de `juris-chunking/src/segmenter/rules.py`). F3: 5 estratégias de chunking
 implementadas e validadas ponta a ponta contra o corpus real (offsets
 conferidos, zero divergências); um bug real foi encontrado e corrigido no
 recursive (offset recovery nativo do LangChain assumia unidade errada para
-`chunk_overlap` — ver docstring de `src/chunkers/recursive.py`). Próxima:
-F4 — Indexação + runs. Ver `juris-chunking/README.md` para o status
-detalhado e como reproduzir.
+`chunk_overlap` — ver docstring de `src/chunkers/recursive.py`).
+
+> ⚠️ Os números deste parágrafo de 24/08 foram medidos sobre um corpus de
+> 113.827 documentos, que o código **não produz mais**. Os valores válidos são
+> os da tabela acima. Ver o achado de corpus citado no item 1.
 
 **Estado do código em 18/08:** o esqueleto de módulos em `juris-chunking/src/`
 (stubs com `NotImplementedError`) segue a arquitetura do `plano_tecnico.md` e
@@ -192,32 +241,51 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
   `structural_pred` (atualizar `configs/chunkers.yaml`).
 - Testes: invariante de offsets; não-cruzamento; propagação de rótulo; stride.
 
-### F4 — Indexação + runs (`src/indexing/`, `src/run_experiments.py`)
-- `lexical.py`: `bm25s` — lowercase + sem acentos + stopwords PT.
-- `dense.py`: `SentenceTransformer`, `normalize_embeddings=True`, lotes de 64,
-  `faiss.IndexFlatIP`, cache `.npy`; prefixos `query:`/`passage:` se e5.
-- `configs/models.yaml`: `pt_compact` = `intfloat/multilingual-e5-base` como
-  default executável (trocar por modelo PT do topo do MTEB-BR só após conferir
-  o paper). **Atenção ao volume**: corpus agora é de acórdãos íntegros —
-  estimar nº de chunks na F3; se o encode em CPU passar de ~6h, reduzir a 1
-  modelo denso e registrar a decisão.
-- `src/run_experiments.py`: para cada estratégia × retriever: top-2000 chunks →
-  agregação (`max_pooling` padrão; `sum_top_k(3)` sensibilidade) → top-1000
-  docs → run TREC. 10 runs principais (5 estratégias × 2 retrievers).
-- Smoke: `--limit-docs 500 --limit-queries 10` antes do corpus cheio; encode
-  denso em background.
-- Aceite ("primeiro número"): BM25 × 5 estratégias com nDCG@10.
+### F4 — Indexação + runs (`src/indexing/`, `src/run_experiments.py`) ✅ código; 🟡 denso pendente
+- `lexical.py`: `bm25s` — lowercase + sem acentos + stopwords PT (a mesma
+  normalização na indexação e na busca, em `text_norm.py`). ✅
+- `dense.py`: `SentenceTransformer` + `faiss.IndexFlatIP`,
+  `normalize_embeddings=True`, cache `.npy` invalidado pelo conjunto de
+  `chunk_id`; janela, precisão e device configuráveis. ✅
+- `src/run_experiments.py`: top-2000 chunks → agregação → top-1000 docs → run
+  TREC, com pasta datada e manifesto por rodada. ✅
+- **Aceite ("primeiro número") — ATINGIDO:** BM25 × 5 estratégias, nDCG@10 de
+  0,2412 a 0,2526 (`results/experiments/20260906-0215_bm25/`).
 
-### F5 — Avaliação, significância e recortes (`evaluate.py`, `analysis.py`)
+**Correções ao que este plano dizia, com base no que foi medido:**
+
+1. **O embedder não é o `multilingual-e5-base`.** A janela dele é de 512
+   tokens e truncaria 83% dos chunks (37% do conteúdo), e só a
+   `fixed_512_256` caberia inteira — vantagem artificial que invalidaria a
+   comparação. **Adotado o `BAAI/bge-m3`** (janela 1024, Apache-2.0, sem gate):
+   truncamento zero em todas as estratégias.
+2. **O `pt_compact` do MTEB-BR é o `google/embeddinggemma-300m`** (13º de 93
+   com 308M parâmetros), mas é **gated**: exige `hf auth login`. Por isso não é
+   o default — o pipeline tem que rodar sem passo manual.
+3. **O gargalo é a GPU, não a CPU.** Perfil: 100% do tempo é forward,
+   tokenização é 5,9%. Encode em CPU levaria 127 h; em GPU (RTX 5060, fp16),
+   ~10 h. `torch.compile`, TF32 e deduplicação de chunks foram testados e não
+   ajudam (0,99x, 0,99x e 0,4% de redundância).
+
+### F5 — Avaliação, significância e recortes (`evaluate.py`, `analysis.py`) ✅ código; 🟡 falta o denso
 - `evaluate.py`: `ranx` → nDCG@10, MRR@10, MAP@10, Recall@100;
-  `paired_significance` via `ranx.compare` (pareado, correção múltipla) →
-  `main_results.csv`, `significance.csv`.
-- `analysis.py`: `bootstrap_ci` (reamostrar queries, 10k, IC 95%); recorte por
-  tipo de consulta (`SOURCE`); por tamanho de doc (filtrar qrels por tercil de
-  `n_tokens` e reavaliar); por retriever (runs separadas).
-- Notebooks 01–03 por último, só consumindo `results/` — sem cálculo pesado.
-- Aceite: tabela final 5 estratégias × 2 retrievers com IC e significância +
-  três recortes em CSV.
+  `paired_significance` via `ranx.compare` (pareado, correção múltipla). ✅
+- `analysis.py`: `bootstrap_ci` (10k reamostragens de consultas, IC 95%) e os
+  três recortes. ✅
+- Notebooks 01–03: **pendentes**, e por último, só consumindo `results/`.
+- Aceite: falta a metade densa da tabela.
+
+**Duas armadilhas encontradas ao rodar (ambas silenciosas):**
+
+1. **O `ranx` lê os arquivos TREC com o encoding da plataforma**, e todo
+   doc_id acentuado virava mojibake (`plenário` → `plenÃ¡rio`). Como qrels e
+   runs sofriam a mesma corrupção, as métricas fechavam — só o cruzamento com
+   os tamanhos de documento falhava, e o recorte por tercil saía **vazio**.
+   Corrigido lendo os dois formatos em UTF-8.
+2. **Os tercis de tamanho não podem sair dos percentis do corpus.** Os
+   documentos relevantes são sistematicamente maiores que o acervo, e cortar
+   pelo corpus deu grupos de **3/67/80** consultas. Passou a cortar pelos
+   percentis da distribuição das consultas: 50/50/50.
 
 ---
 
@@ -248,18 +316,23 @@ consumiu parte. Regras para as sessões de execução:
 | CSVs anuais do TCU indisponíveis ou schema diferente em anos antigos | F1 valida schema por arquivo; gate residual de 90%; fallback: plano JurisTCU-cru (histórico git) |
 | Join < 90% (formatos de número/colegiado divergentes) | Normalizar chave (sem `.0`, sem acento); relatório de não-casados para inspeção |
 | Volume: 21 CSVs (possivelmente vários GB) no OneDrive | Baixar para `data/` com tmp+rename; se OneDrive travar, mover `data/` para fora da pasta sincronizada e apontar via config |
-| `ranx`/numba incompatível com Python 3.13 | Testar na F0; fallback venv 3.11/3.12 |
+| ~~`ranx`/numba incompatível com Python 3.13~~ | **Não se materializou** — tudo instala e roda em 3.13.7 (numba 0.67) |
 | Offsets token→char com UTF-8 (tiktoken) | Decodificar bytes acumulados; teste com acentos |
-| Encode denso lento (corpus agora é grande) | Cache `.npy`; smoke com subset; 1 modelo se necessário; rodar à noite |
+| Encode denso lento (corpus agora é grande) | **Confirmado e resolvido com GPU**: 127 h em CPU vs ~10 h na RTX 5060 (fp16). Cache `.npy` evita reencode; rodar à noite |
+| Janela do encoder menor que o chunk | **Materializou-se**: e5-base (512) truncaria 37% do conteúdo e enviesaria a comparação. Resolvido trocando para bge-m3 (1024) |
+| Números publicados divergirem do que o código produz | **Materializou-se**: artigo diz 113.827 docs, código produz 12.880. Ver o achado de corpus |
 | Relevância julgada no excerto, transferida ao acórdão | Discutir como limitação; é relevância em nível de documento (defensável) |
 
 ---
 
 ## 6. Definition of done global
 
-1. `join_report.json` com match ≥ 90% e qrels preservados ≥ 90%.
-2. `results/tables/segmenter_validation.json` — acurácia contra spans ouro no corpus inteiro.
-3. `results/tables/main_results.csv`: 5 estratégias × 2 retrievers × 4 métricas.
-4. `results/tables/significance.csv` com testes pareados corrigidos.
-5. `results/tables/slices_{query_type,doc_length,retriever}.csv`.
-6. `pytest` verde; README com comandos de reprodução atualizados.
+1. ✅ `join_report.json` com match ≥ 90% e qrels preservados ≥ 90% — **98,7% e 99,69%**.
+2. ✅ `results/corpus/segmenter_validation.json` — **92,2%** de acurácia, 0% de fallback.
+3. 🟡 `results/experiments/<rodada>/tables/main_results.csv`: 5 estratégias × 2
+   retrievers × 4 métricas — **metade pronta** (BM25); falta o denso.
+4. 🟡 `significance.csv` com testes pareados corrigidos — pronto para o BM25.
+5. 🟡 `slices_{query_type,doc_length,retriever}.csv` — prontos para o BM25.
+6. ✅ `pytest` verde (**98 testes**); READMEs de reprodução atualizados.
+7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
+   corrigidos de acordo.
