@@ -124,7 +124,7 @@ def write_chunks_top(
     path: Path,
     ranked: dict[str, list[tuple[str, float]]],
     vencedores: dict[str, dict[str, tuple[str, float]]],
-    por_id: dict[str, Chunk],
+    posicao: dict[str, tuple[str | None, int, int]],
     run_name: str,
     top_k: int = 50,
 ) -> int:
@@ -140,13 +140,14 @@ def write_chunks_top(
                 venc = vencedores.get(qid, {}).get(doc_id)
                 if not venc:
                     continue
-                chunk = por_id.get(venc[0])
-                if chunk is None:
+                pos = posicao.get(venc[0])
+                if pos is None:
                     continue
+                section, start, end = pos
                 f.write(json.dumps({
                     "run": run_name, "query_id": qid, "rank": rank,
-                    "doc_id": doc_id, "chunk_id": chunk.chunk_id,
-                    "section": chunk.section, "start": chunk.start, "end": chunk.end,
+                    "doc_id": doc_id, "chunk_id": venc[0],
+                    "section": section, "start": start, "end": end,
                     "score": round(float(score), 6),
                 }, ensure_ascii=False) + "\n")
                 n += 1
@@ -185,7 +186,13 @@ def run_one(
         retriever_tag = retriever
 
     chunk_to_doc = dict(zip(index.chunk_ids, index.doc_ids))
-    por_id = {c.chunk_id: c for c in chunks}
+    # Só os metadados de posição são necessários daqui em diante. Guardar os
+    # objetos Chunk inteiros manteria vivos ~1,7 GB de texto da estratégia
+    # fixed_512_256 durante a busca e a agregação, ao lado dos ~3,7 GB de
+    # embeddings e da cópia que o FAISS faz.
+    posicao = {c.chunk_id: (c.section, c.start, c.end) for c in chunks}
+    n_chunks = len(chunks)
+    del chunks
     agg_fn = AGGREGATIONS[aggregation]
 
     results = index.search_batch([q["text"] for q in queries], top_k=top_chunks)
@@ -211,11 +218,11 @@ def run_one(
 
     n_lines = write_trec_run(runs_dir / f"{run_name}.trec", ranked, run_name)
     write_chunks_top(runs_dir / f"{run_name}__chunks.jsonl", ranked, vencedores,
-                     por_id, run_name)
+                     posicao, run_name)
 
     return {
         "run": run_name,
-        "n_chunks": len(chunks),
+        "n_chunks": n_chunks,
         "n_queries": len(queries),
         "n_linhas_run": n_lines,
         "segundos": round(time.time() - t0, 1),
@@ -234,6 +241,10 @@ def main() -> None:
     parser.add_argument("--top-chunks", type=int, default=2000)
     parser.add_argument("--bloco", type=int, default=25_000,
                         help="Chunks por bloco de checkpoint no encode denso.")
+    parser.add_argument("--max-horas", type=float, default=None,
+                        help="Orcamento de tempo: nao INICIA uma estrategia nova depois "
+                             "disso. O que ficar de fora roda depois reaproveitando o "
+                             "cache, sem reencodar nada.")
     parser.add_argument("--top-docs", type=int, default=1000)
     parser.add_argument("--limit-queries", type=int, default=None, help="Smoke test.")
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
@@ -291,8 +302,34 @@ def main() -> None:
 
     with Experimento(rotulo, config=config) as exp:
         runs_dir = args.runs_dir or exp.runs_dir
+        inicio = time.time()
+        pulados: list[str] = []
+        taxa_chunks_s: float | None = None
         for retriever in retrievers:
             for strategy in strategies:
+                # Orçamento de tempo: numa rodada noturna, é melhor terminar 3
+                # estratégias e ter resultado do que começar a quarta e ser
+                # interrompido no meio. O que ficar de fora roda depois e
+                # reaproveita o cache — nada é reencodado.
+                #
+                # A decisão usa a duração ESTIMADA da próxima estratégia, não
+                # só o tempo já decorrido: começar às 4h55 uma etapa de 2h30
+                # estouraria um orçamento de 5h em metade do tempo de novo.
+                # A estimativa vem da taxa medida nas estratégias anteriores
+                # desta mesma rodada — nada de constante chutada.
+                #
+                # `is not None`, e não um teste de verdade: `--max-horas 0` é
+                # falsy e desligaria silenciosamente o próprio orçamento.
+                if args.max_horas is not None:
+                    decorrido = (time.time() - inicio) / 3600
+                    estimado = _estimar_horas(strategy, args.processed_dir, taxa_chunks_s)
+                    if decorrido + estimado > args.max_horas:
+                        pulados.append(f"{strategy}__{retriever}")
+                        exp.log(
+                            f"pulando {strategy}__{retriever}: estimados {estimado:.1f} h "
+                            f"nao cabem no orcamento ({decorrido:.1f}/{args.max_horas} h usados)"
+                        )
+                        continue
                 info = run_one(
                     strategy,
                     retriever,
@@ -307,11 +344,41 @@ def main() -> None:
                     log=exp.log,
                     bloco=args.bloco,
                 )
+                if info["segundos"] > 0:
+                    taxa_chunks_s = info["n_chunks"] / info["segundos"]
                 exp.registrar(info["run"], info)
                 exp.log(
                     f"{info['run']}: {info['n_chunks']:,} chunks, "
                     f"{info['n_linhas_run']:,} linhas, {info['segundos']}s"
+                    f"  [decorrido {(time.time()-inicio)/3600:.1f} h]"
                 )
+
+        if pulados:
+            exp.manifest["pulados_por_tempo"] = pulados
+            exp.log(f"orcamento de {args.max_horas} h atingido; nao iniciados: {pulados}")
+            exp.log("rode o mesmo comando depois: o cache evita reencodar o que ja foi feito")
+
+
+def _contar_chunks(strategy: str, processed_dir: Path) -> int:
+    """Conta as linhas do chunks.jsonl sem desserializar o JSON — precisa saber
+    o tamanho da etapa antes de decidir se ela cabe no orçamento."""
+    caminho = processed_dir / strategy / "chunks.jsonl"
+    if not caminho.is_file():
+        return 0
+    with caminho.open("rb") as f:
+        return sum(1 for _ in f)
+
+
+def _estimar_horas(strategy: str, processed_dir: Path, taxa_chunks_s: float | None) -> float:
+    """Duração estimada da estratégia, pela taxa medida nas anteriores.
+
+    Sem nenhuma etapa concluída ainda (a primeira da rodada), devolve 0: não há
+    base para estimar, e recusar a primeira etapa deixaria a rodada sem
+    nenhum resultado — que é pior do que estourar o orçamento.
+    """
+    if not taxa_chunks_s:
+        return 0.0
+    return _contar_chunks(strategy, processed_dir) / taxa_chunks_s / 3600
 
 
 def _rotulo_automatico(args, retrievers, models_cfg) -> str:

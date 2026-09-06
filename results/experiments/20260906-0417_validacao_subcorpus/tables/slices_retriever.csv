@@ -1,0 +1,3 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica,estrategia
+structural_gold__bm25,retriever,bm25,30,0.49281866923159495,0.4240066297496116,0.553423034650936,ndcg@10,structural_gold
+structural_gold__dense-bge_m3,retriever,dense-bge_m3,30,0.40315914545674564,0.324431499146887,0.4796161621910175,ndcg@10,structural_gold

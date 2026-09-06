@@ -1,0 +1,6 @@
+[04:50:17] experimento 20260906-0450_bm25_fixed_512_256-structural_gold
+[04:50:17]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[04:50:17]   commit: 1adfc85a (arvore suja) em leo/f4-indexacao-e-docs
+[04:50:17] orcamento de 0.0 h atingido; nao iniciados: ['fixed_512_256__bm25', 'structural_gold__bm25']
+[04:50:17] rode o mesmo comando depois: o cache evita reencodar o que ja foi feito
+[04:50:17] fim em 0.0 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0450_bm25_fixed_512_256-structural_gold

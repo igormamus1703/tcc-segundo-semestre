@@ -205,6 +205,7 @@ def test_run_name_do_denso_carrega_o_modelo(processed_dir, queries_file, models_
     class FakeIndex:
         chunk_ids = ["f1"]
         doc_ids = ["docA"]
+        max_seq_length = 1024
 
         def describe(self):
             return "fake"
@@ -226,3 +227,48 @@ def test_run_name_do_denso_carrega_o_modelo(processed_dir, queries_file, models_
         rx.build_index = original
     assert info["run"] == "fixed_512_256__dense-bge_m3"
     assert (tmp_path / "fixed_512_256__dense-bge_m3.trec").exists()
+
+
+def test_orcamento_de_tempo_registra_o_que_ficou_de_fora(monkeypatch, tmp_path,
+                                                          processed_dir, queries_file):
+    """Numa rodada noturna e melhor terminar 3 estrategias e ter resultado do
+    que comecar a quarta e ser interrompido no meio."""
+    import sys
+
+    import src.run_experiments as rx
+
+    chamadas = []
+
+    def fake_run_one(strategy, retriever, *a, **kw):
+        chamadas.append(strategy)
+        return {"run": f"{strategy}__{retriever}", "n_chunks": 1, "n_queries": 1,
+                "n_linhas_run": 1, "segundos": 0.0}
+
+    # o orcamento ja esta estourado no primeiro laco -> nada roda, tudo e registrado
+    monkeypatch.setattr(rx, "run_one", fake_run_one)
+    monkeypatch.setattr(sys, "argv", [
+        "run_experiments", "--strategy", "fixed_512_256", "structural_gold",
+        "--retriever", "bm25", "--max-horas", "0",
+        "--processed-dir", str(processed_dir),
+        "--queries", str(queries_file),
+        "--runs-dir", str(tmp_path / "runs"),
+    ])
+    rx.main()
+    assert chamadas == []
+
+
+def test_estimativa_usa_a_taxa_medida(processed_dir):
+    """A estimativa vem da taxa observada na rodada, nao de constante chutada."""
+    from src.run_experiments import _contar_chunks, _estimar_horas
+
+    assert _contar_chunks("fixed_512_256", processed_dir) == 3
+    # 3 chunks a 1 chunk/s = 3 s = 0,000833 h
+    assert _estimar_horas("fixed_512_256", processed_dir, 1.0) == pytest.approx(3 / 3600)
+    # sem taxa ainda (primeira etapa da rodada), nao ha base: nao bloqueia
+    assert _estimar_horas("fixed_512_256", processed_dir, None) == 0.0
+
+
+def test_estimativa_de_estrategia_inexistente_e_zero(processed_dir):
+    from src.run_experiments import _estimar_horas
+
+    assert _estimar_horas("nao_existe", processed_dir, 10.0) == 0.0

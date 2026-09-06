@@ -1,0 +1,6 @@
+[04:49:21] experimento 20260906-0449_bm25_fixed_512_256-structural_gold
+[04:49:21]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[04:49:21]   commit: 1adfc85a (arvore suja) em leo/f4-indexacao-e-docs
+[04:49:21] fixed_512_256__bm25: 1 chunks, 1 linhas, 0.0s  [decorrido 0.0 h]
+[04:49:21] structural_gold__bm25: 1 chunks, 1 linhas, 0.0s  [decorrido 0.0 h]
+[04:49:21] fim em 0.0 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0449_bm25_fixed_512_256-structural_gold

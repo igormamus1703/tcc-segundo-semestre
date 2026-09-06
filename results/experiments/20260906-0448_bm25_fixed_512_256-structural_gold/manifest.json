@@ -1,0 +1,63 @@
+{
+  "rotulo": "bm25_fixed_512_256-structural_gold",
+  "inicio": "2026-09-06T04:48:57",
+  "fim": "2026-09-06T04:48:58",
+  "duracao_s": 0.1,
+  "comando": "run_experiments --strategy fixed_512_256 structural_gold --retriever bm25 --max-horas 0 --processed-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\pytest-of-Marques\\pytest-1\\test_orcamento_de_tempo_regist0 --queries C:\\Users\\leomr\\AppData\\Local\\Temp\\pytest-of-Marques\\pytest-1\\test_orcamento_de_tempo_regist0\\queries.jsonl --runs-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\pytest-of-Marques\\pytest-1\\test_orcamento_de_tempo_regist0\\runs",
+  "config": {
+    "estrategias": [
+      "fixed_512_256",
+      "structural_gold"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 2,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\AppData\\Local\\Temp\\pytest-of-Marques\\pytest-1\\test_orcamento_de_tempo_regist0\\queries.jsonl"
+  },
+  "git": {
+    "commit": "1adfc85ab0359d3414a071ca48b279ee9d603bdc",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__bm25",
+      "run": "fixed_512_256__bm25",
+      "n_chunks": 1,
+      "n_queries": 1,
+      "n_linhas_run": 1,
+      "segundos": 0.0
+    },
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 1,
+      "n_queries": 1,
+      "n_linhas_run": 1,
+      "segundos": 0.0
+    }
+  ],
+  "erro": null
+}
