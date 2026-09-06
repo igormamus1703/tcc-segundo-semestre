@@ -96,26 +96,39 @@ desenhada para medir: a diferença entre as duas **é** o custo do erro de
 segmentação. Se as duas empatarem, mostramos que 92% de acurácia já é
 suficiente — que é um resultado interessante por si só.
 
-## Escala do experimento (medida, não estimada)
+## Escala do experimento — MEDIDA no corpus completo
 
-Smoke test com 300 documentos, extrapolado para os 12.880:
+`python -m src.chunkers.run --strategy all` sobre os 12.880 documentos:
 
-| Estratégia | Chunks/300 docs | Projeção (12.880 docs) |
-|---|---|---|
-| fixed_512_256 | 18.266 | ~784.000 |
-| fixed_1024_512 | 9.062 | ~389.000 |
-| recursive_default | 5.452 | ~234.000 |
-| structural_gold | 5.855 | ~251.000 |
-| structural_pred | 5.806 | ~249.000 |
-| **Total** | 44.441 | **~1,9 M chunks** |
+| Estratégia | Chunks | Chunks/doc | Tamanho em disco |
+|---|---|---|---|
+| fixed_512_256 | **907.914** | 70,5 | 1,7 GB |
+| fixed_1024_512 | **450.786** | 35,0 | 1,6 GB |
+| recursive_default | **270.070** | 21,0 | 869 MB |
+| structural_gold | **286.689** | 22,3 | 920 MB |
+| structural_pred | **285.308** | 22,2 | 921 MB |
+| **Total** | **2.200.767** | — | **6,0 GB** |
 
-Custo do encode denso (uma passada por todas as estratégias):
-- **CPU** (~25 chunks/s): ~21 h → roda de madrugada, com cache `.npy`.
-- **GPU T4 / Colab** (~300 chunks/s): ~1,8 h.
+> 📝 **Dado interessante para o artigo:** `structural_gold` (286.689) e
+> `structural_pred` (285.308) produzem quantidades de chunks quase idênticas —
+> diferença de **0,48%**. O segmentador, mesmo com 92,2% de acurácia, gera uma
+> granularidade praticamente igual à da estrutura ouro. Se as métricas de
+> recuperação também ficarem próximas, é evidência forte de que **não é preciso
+> ter a estrutura ouro** para colher o benefício do chunking estrutural — o que
+> é justamente o cenário realista de um pipeline em produção.
 
-Para comparação, no corpus de 113.827 documentos seriam ~12,2 M chunks:
-**~135 h (5,6 dias) de CPU**. É a diferença entre caber e não caber no
-cronograma.
+Também vale reparar que o `recursive_default` (270k) fica mais próximo das
+estratégias estruturais (~286k) do que das fixas — os três operam numa faixa de
+granularidade comparável, enquanto o `fixed_512_256` gera 3,4x mais chunks. Isso
+**é exatamente o controle que faltou no BR-TaxQA-R** (ver
+[03-referencias-verificadas.md](03-referencias-verificadas.md)).
+
+Custo do encode denso, agora com o número real de chunks:
+- **CPU** (~25 chunks/s): ~24 h → roda de madrugada, com cache `.npy`.
+- **GPU T4 / Colab** (~300 chunks/s): ~2 h.
+
+Para comparação, no corpus de 113.827 documentos seriam ~19,5 M chunks:
+**~9 dias de CPU**. É a diferença entre caber e não caber no cronograma.
 
 ## Correções de texto que não são numéricas
 

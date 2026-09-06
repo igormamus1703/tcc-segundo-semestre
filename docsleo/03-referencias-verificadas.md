@@ -44,22 +44,58 @@ são, na verdade, falhas de recuperação. **É esta a nossa justificativa para
 avaliar só recuperação e não geração** — se alguém na banca perguntar "por que
 vocês não avaliam a resposta final?", a resposta é essa citação.
 
-**4. `domingos2025brtaxqar` — atenção, nossa afirmação é forte demais.** O
-artigo diz que o BR-TaxQA-R traz *"mixed evidence regarding the benefit of
-structure-aware strategies"*, e o `plano_tecnico.md` chega a dizer que ele
-"contém a evidência contrária à hipótese de vocês". Ao verificar o abstract, o
-foco declarado do paper é a comparação entre o pipeline RAG próprio e
-ferramentas comerciais (ChatGPT, Perplexity) em relevância e correção factual;
-as conclusões específicas sobre qual estratégia de segmentação venceu **não
-aparecem no resumo**.
+**4. `domingos2025brtaxqar` — RESOLVIDO, e o achado é ótimo para nós.**
 
-> ⚠️ **Ação:** alguém precisa ler a seção de segmentação do PDF do BR-TaxQA-R e
-> confirmar o que exatamente foi medido, antes de mantermos a frase "evidência
-> contrária" / "mixed evidence". Se a comparação de chunking lá for
-> secundária ou não conclusiva, nossa motivação fica **mais forte**, não mais
-> fraca — mas precisamos descrever o achado deles com precisão. É a citação
-> mais provável de virar pergunta de banca, porque é a que sustenta o "gap"
-> que justifica nosso trabalho.
+Fui ao texto completo (arXiv HTML v1). O que o BR-TaxQA-R realmente comparou:
+
+| Estratégia | Parâmetros | Response Relevancy | Factual Correctness |
+|---|---|---|---|
+| Sliding-window | 2.048 tokens / stride 1.024 | **0,819** | **0,313** |
+| Recursive splitter | 1.000 **caracteres** / 100 de overlap, com separadores hierárquicos | 0,791 | 0,286 |
+
+Conclusão literal deles: *"simple sliding-window segmentation achieves good
+results, and that incorporating relevant jurisprudence further improves
+performance"*. A abordagem simples **superou** a que tentava explorar a
+estrutura hierárquica.
+
+**Ou seja: sim, é evidência contrária à nossa hipótese. A frase do artigo está
+correta e deve ficar.** Mas ao ler o detalhe aparecem três limitações
+metodológicas que são exatamente o espaço que o nosso trabalho ocupa — e isso
+precisa estar explícito na seção de Trabalhos Relacionados:
+
+1. **A comparação deles confunde estrutura com tamanho de chunk.** 2.048
+   *tokens* contra 1.000 *caracteres* (≈250 tokens) é uma diferença de ~8x na
+   granularidade. Não dá para saber se o sliding-window ganhou por ser
+   "estrutura-cego" ou simplesmente por ter 8x mais contexto por chunk. **Nós
+   controlamos isso**: as cinco estratégias são medidas com o mesmo tokenizador
+   (`cl100k_base`) e faixas de tamanho comparáveis (512/1024 tokens).
+
+2. **O "recursive com separadores hierárquicos" deles não é um chunker
+   estrutural.** É um splitter genérico com uma lista de separadores — não há
+   segmentador que identifique as macro-seções do documento e proíba o chunk de
+   cruzar fronteira. **Nós temos um segmentador de verdade, validado
+   (92,2% por caractere), e ainda a ablação `gold` vs `pred`** para separar o
+   efeito da estrutura do efeito do erro de segmentação. Essa ablação não
+   existe no trabalho deles.
+
+3. **Eles avaliam geração (RAGAS), nós avaliamos recuperação.** As métricas do
+   BR-TaxQA-R são Response Relevancy e Factual Correctness, medidas sobre a
+   resposta final — o que coloca o LLM gerador como variável de confusão entre
+   o chunking e o número reportado. Nós medimos nDCG@10 / MRR@10 / MAP@10 /
+   Recall@100 diretamente sobre a recuperação. E o Legal RAG Bench
+   (`butler2026legalragbench`) mostra que **a recuperação é o determinante
+   principal** do desempenho — logo, medi-la isoladamente é mais informativo,
+   não menos.
+
+> 💡 **Para a banca:** se perguntarem "o BR-TaxQA-R já não mostrou que chunking
+> estrutural não ajuda?", a resposta é: eles mostraram que um splitter genérico
+> com chunks 8x menores perde para uma janela deslizante grande, avaliando
+> geração. Isso não testa a hipótese estrutural — testa tamanho de chunk. É
+> justamente por isso que este trabalho existe.
+
+O parâmetro 2.048/1.024 deles também confirma a escolha do nosso
+`chunkers.yaml`: usamos 512/256 e 1024/512 para ter pontos de comparação
+próximos e abaixo do deles.
 
 ## Fontes
 
