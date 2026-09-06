@@ -167,9 +167,27 @@ def partes_do_run(nome: str) -> tuple[str, str]:
     return partes[0], (partes[1] if len(partes) > 1 else "")
 
 
-def rotulo_do_run(nome: str) -> str:
-    est, _ = partes_do_run(nome)
-    return ROTULOS.get(est, est)
+ROTULO_CURTO_RETRIEVER = {"bm25": "BM25"}
+
+
+def rotulo_do_run(nome: str, com_retriever: bool = False) -> str:
+    """Rótulo da estratégia, opcionalmente com o retriever.
+
+    Numa figura que cruza retrievers (`--incluir`), o rótulo precisa dizer
+    qual é qual: sem isso, "recursivo" apareceria duas vezes nos eixos, uma
+    para o BM25 e outra para o denso, e a matriz de p-valores viraria um
+    quebra-cabeça.
+    """
+    est, ret = partes_do_run(nome)
+    base = ROTULOS.get(est, est)
+    if not com_retriever or not ret:
+        return base
+    curto = ROTULO_CURTO_RETRIEVER.get(ret, ret.replace("dense-", "denso "))
+    return f"{base}\n{curto}"
+
+
+def mais_de_um_retriever(nomes: list[str]) -> bool:
+    return len({partes_do_run(n)[1] for n in nomes}) > 1
 
 
 def ler_csv(path: Path) -> list[dict]:
@@ -229,10 +247,16 @@ def fig_principal(rows: list[dict], destino: Path, ctx: dict) -> None:
     axes[0].set_ylabel("valor da métrica")
     if len(retrievers) > 1:
         from matplotlib.patches import Patch
-        axes[-1].legend(
-            handles=[Patch(facecolor="#888", hatch="" if i == 0 else "//", label=r)
+        # abaixo dos eixos: dentro do gráfico a legenda cobria as barras
+        fig.legend(
+            handles=[Patch(facecolor="#888", hatch="" if i == 0 else "//",
+                           label=ROTULO_CURTO_RETRIEVER.get(r, r.replace("dense-", "denso ")))
                      for i, r in enumerate(retrievers)],
-            loc="upper right", frameon=False, fontsize=8)
+            loc="lower center", bbox_to_anchor=(0.5, -0.30), ncol=len(retrievers),
+            frameon=False, fontsize=9)
+    if len(retrievers) > 1:
+        ctx = {**ctx, "retriever": " × ".join(
+            ROTULO_CURTO_RETRIEVER.get(r, r.replace("dense-", "denso ")) for r in retrievers)}
     _titulo(fig, "Estratégias de chunking — quatro métricas de recuperação", ctx, y=1.06)
     # rótulos rotacionados a 35° ocupam ~0.18 da altura abaixo do eixo
     _rodape(fig, ctx, y0=-0.22)
@@ -246,6 +270,7 @@ def fig_recorte(rows: list[dict], destino: Path, ctx: dict, nome: str, titulo: s
         return
     valores = ordem or sorted({r["valor"] for r in rows})
     runs = sorted({r["run"] for r in rows})
+    com_ret = mais_de_um_retriever(runs)
     n_por_valor = {v: next((r["n_queries"] for r in rows if r["valor"] == v), "?") for v in valores}
 
     fig, ax = plt.subplots(figsize=(2.1 * len(valores) + 4, 4.6))
@@ -264,7 +289,9 @@ def fig_recorte(rows: list[dict], destino: Path, ctx: dict, nome: str, titulo: s
             pos.append(j + i * largura)
         if not medias:
             continue
-        ax.bar(pos, medias, largura * 0.88, label=ROTULOS.get(est, est),
+        # na legenda o rótulo fica numa linha só; nos eixos é que a quebra ajuda
+        ax.bar(pos, medias, largura * 0.88,
+               label=rotulo_do_run(run, com_ret).replace("\n", " · "),
                color=CORES.get(est, "#888"), edgecolor="white", linewidth=0.7)
         ax.errorbar(pos, medias, yerr=list(zip(*erros)), fmt="none", ecolor="#333",
                     elinewidth=1.1, capsize=3)
@@ -304,7 +331,7 @@ def fig_secoes(rows: list[dict], destino: Path, ctx: dict) -> None:
                         fontsize=7.5, color="white")
         fundo = [f + v for f, v in zip(fundo, vals)]
     ax.set_yticks(range(len(runs)))
-    ax.set_yticklabels([rotulo_do_run(r) for r in runs])
+    ax.set_yticklabels([rotulo_do_run(r, mais_de_um_retriever(runs)) for r in runs])
     ax.set_xlim(0, 1)
     ax.set_xlabel(f"fração dos chunks vencedores no top-{top_k} de cada consulta")
     ax.legend(frameon=False, ncol=5, fontsize=8.5, loc="lower center",
@@ -339,7 +366,8 @@ def fig_significancia(rows: list[dict], destino: Path, ctx: dict) -> None:
                 marca = " *" if m[i, j] < 0.05 else ""
                 ax.text(j, i, f"{m[i, j]:.3f}{marca}", ha="center", va="center",
                         fontsize=8, color="#111")
-    rot = [rotulo_do_run(r) for r in runs]
+    com_ret = mais_de_um_retriever(runs)
+    rot = [rotulo_do_run(r, com_ret) for r in runs]
     ax.set_xticks(range(len(runs)), rot, rotation=40, ha="right", fontsize=8)
     ax.set_yticks(range(len(runs)), rot, fontsize=8)
     fig.colorbar(im, ax=ax, shrink=0.75, label="p-valor")
@@ -351,9 +379,15 @@ def fig_significancia(rows: list[dict], destino: Path, ctx: dict) -> None:
 
 # --- CLI --------------------------------------------------------------------------
 
-def gerar_figuras(exp: Path, destino: Path | None = None) -> Path:
+def gerar_figuras(exp: Path, destino: Path | None = None,
+                  tabelas: Path | None = None, rotulo_extra: str = "") -> Path:
     ctx = contexto_da_rodada(exp)
-    tabelas = exp / "tables"
+    if rotulo_extra:
+        # A rodada de origem continua sendo a mesma; o sufixo diz que a tabela
+        # cruza runs de mais de uma (`--incluir`), o que muda o que a figura
+        # mostra sem mudar de onde vieram os dados.
+        ctx["rodada"] = f"{ctx['rodada']}_{rotulo_extra}"
+    tabelas = tabelas or (exp / "tables")
     figuras = destino or (exp / "figuras")
     print(f"rodada: {ctx['rodada']}  ({ctx['data']}, {ctx['retriever']}, commit {ctx['commit']})")
     fig_principal(ler_csv(tabelas / "main_results.csv"), figuras, ctx)
@@ -379,6 +413,11 @@ def main() -> None:
     ap.add_argument("--experiment", type=Path, default=None)
     ap.add_argument("--destino", type=Path, default=None,
                     help="Pasta de saída (default: <experimento>/figuras/).")
+    ap.add_argument("--tables", type=Path, default=None,
+                    help="Pasta de tabelas (default: <experimento>/tables/). Use para "
+                         "figuras de uma avaliação feita com --incluir.")
+    ap.add_argument("--rotulo-extra", default="",
+                    help="Sufixo no nome dos arquivos, ex.: 'com_bm25'.")
     args = ap.parse_args()
 
     exp = args.experiment
@@ -388,7 +427,7 @@ def main() -> None:
         if not candidatos:
             raise SystemExit("nenhuma rodada com tabelas; rode `python -m src.evaluate` antes")
         exp = candidatos[0]
-    gerar_figuras(exp, args.destino)
+    gerar_figuras(exp, args.destino, args.tables, args.rotulo_extra)
 
 
 if __name__ == "__main__":

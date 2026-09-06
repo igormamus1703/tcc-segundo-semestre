@@ -406,3 +406,17 @@ def test_rotulo_da_figura_ignora_o_prefixo_de_rodada():
     assert partes_do_run("20260906-0515_bm25/structural_gold__bm25") == ("structural_gold", "bm25")
     assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] == "dense-bge_m3"
     assert rotulo_do_run("20260906-0515_bm25/structural_gold__bm25") == "estrutural (ouro)"
+
+
+def test_rotulo_distingue_retriever_quando_ha_mais_de_um():
+    """Numa figura que cruza BM25 e denso, 'recursivo' apareceria duas vezes
+    nos eixos sem o retriever no rotulo."""
+    from src.plots import mais_de_um_retriever, rotulo_do_run
+
+    so_bm25 = ["structural_gold__bm25", "recursive_default__bm25"]
+    misto = ["structural_gold__bm25", "structural_gold__dense-bge_m3"]
+    assert mais_de_um_retriever(so_bm25) is False
+    assert mais_de_um_retriever(misto) is True
+    assert rotulo_do_run("recursive_default__bm25", False) == "recursivo"
+    assert rotulo_do_run("recursive_default__bm25", True) == "recursivo\nBM25"
+    assert rotulo_do_run("recursive_default__dense-bge_m3", True) == "recursivo\ndenso bge_m3"

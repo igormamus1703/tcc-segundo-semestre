@@ -1,0 +1,79 @@
+{
+  "rotulo": "dense_bge_m3",
+  "inicio": "2026-09-06T10:46:51",
+  "fim": null,
+  "duracao_s": 36.5,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever dense",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "cd97fa08df260cddc517c0a16f0c10b99f71a7d6",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 12.1
+    },
+    {
+      "nome": "structural_pred__dense-bge_m3",
+      "run": "structural_pred__dense-bge_m3",
+      "n_chunks": 285308,
+      "n_queries": 150,
+      "n_linhas_run": 133266,
+      "segundos": 11.6
+    },
+    {
+      "nome": "recursive_default__dense-bge_m3",
+      "run": "recursive_default__dense-bge_m3",
+      "n_chunks": 270070,
+      "n_queries": 150,
+      "n_linhas_run": 134254,
+      "segundos": 11.7
+    }
+  ]
+}

@@ -13,3 +13,37 @@
 [07:04:40]     bloco 9/12 (25,000 chunks) em 8.7 min — faltam ~0.4 h
 [07:13:27]     bloco 10/12 (25,000 chunks) em 8.8 min — faltam ~0.3 h
 [07:22:13]     bloco 11/12 (25,000 chunks) em 8.8 min — faltam ~0.1 h
+[07:26:16]     bloco 12/12 (11,689 chunks) em 4.0 min — faltam ~0.0 h
+[07:26:23] structural_gold__dense-bge_m3: 286,689 chunks, 133,289 linhas, 5902.8s  [decorrido 1.6 h]
+[07:26:43]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[07:35:00]     bloco 1/12 (25,000 chunks) em 8.3 min — faltam ~1.5 h
+[07:43:22]     bloco 2/12 (25,000 chunks) em 8.4 min — faltam ~1.4 h
+[07:52:00]     bloco 3/12 (25,000 chunks) em 8.6 min — faltam ~1.3 h
+[08:00:38]     bloco 4/12 (25,000 chunks) em 8.6 min — faltam ~1.2 h
+[08:09:13]     bloco 5/12 (25,000 chunks) em 8.6 min — faltam ~1.0 h
+[08:17:45]     bloco 6/12 (25,000 chunks) em 8.5 min — faltam ~0.9 h
+[08:26:26]     bloco 7/12 (25,000 chunks) em 8.7 min — faltam ~0.7 h
+[08:35:03]     bloco 8/12 (25,000 chunks) em 8.6 min — faltam ~0.6 h
+[08:43:46]     bloco 9/12 (25,000 chunks) em 8.7 min — faltam ~0.4 h
+[08:52:33]     bloco 10/12 (25,000 chunks) em 8.8 min — faltam ~0.3 h
+[09:01:22]     bloco 11/12 (25,000 chunks) em 8.8 min — faltam ~0.1 h
+[09:04:56]     bloco 12/12 (10,308 chunks) em 3.6 min — faltam ~0.0 h
+[09:05:03] structural_pred__dense-bge_m3: 285,308 chunks, 133,266 linhas, 5914.1s  [decorrido 3.3 h]
+[09:05:25]   [recursive_default] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[09:14:25]     bloco 1/11 (25,000 chunks) em 9.0 min — faltam ~1.5 h
+[09:23:26]     bloco 2/11 (25,000 chunks) em 9.0 min — faltam ~1.4 h
+[09:32:31]     bloco 3/11 (25,000 chunks) em 9.1 min — faltam ~1.2 h
+[09:41:37]     bloco 4/11 (25,000 chunks) em 9.1 min — faltam ~1.1 h
+[09:50:43]     bloco 5/11 (25,000 chunks) em 9.1 min — faltam ~0.9 h
+[09:59:50]     bloco 6/11 (25,000 chunks) em 9.1 min — faltam ~0.8 h
+[10:09:03]     bloco 7/11 (25,000 chunks) em 9.2 min — faltam ~0.6 h
+[10:18:16]     bloco 8/11 (25,000 chunks) em 9.2 min — faltam ~0.5 h
+[10:27:30]     bloco 9/11 (25,000 chunks) em 9.2 min — faltam ~0.3 h
+[10:36:48]     bloco 10/11 (25,000 chunks) em 9.3 min — faltam ~0.2 h
+[10:44:12]     bloco 11/11 (20,070 chunks) em 7.4 min — faltam ~0.0 h
+[10:44:19] recursive_default__dense-bge_m3: 270,070 chunks, 134,254 linhas, 5948.8s  [decorrido 4.9 h]
+[10:44:20] pulando fixed_1024_512__dense: estimados 2.8 h nao cabem no orcamento (4.9/5.0 h usados)
+[10:44:21] pulando fixed_512_256__dense: estimados 5.6 h nao cabem no orcamento (4.9/5.0 h usados)
+[10:44:21] orcamento de 5.0 h atingido; nao iniciados: ['fixed_1024_512__dense', 'fixed_512_256__dense']
+[10:44:21] rode o mesmo comando depois: o cache evita reencodar o que ja foi feito
+[10:44:21] fim em 296.4 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260906-0547_dense_bge_m3
