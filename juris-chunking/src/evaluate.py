@@ -190,6 +190,18 @@ def load_doc_lengths(corpus_path: Path, cache_path: Path | None = None) -> dict[
     return lengths
 
 
+def _experimento_mais_recente(experiments_dir: Path) -> Path | None:
+    """A pasta datada mais recente que tenha runs. O nome começa com
+    `AAAAMMDD-HHMM`, então a ordem alfabética já é a cronológica."""
+    if not experiments_dir.is_dir():
+        return None
+    candidatos = [
+        d for d in sorted(experiments_dir.iterdir(), reverse=True)
+        if d.is_dir() and any((d / "runs").glob("*.trec"))
+    ]
+    return candidatos[0] if candidatos else None
+
+
 def _write_csv(path: Path, rows: list[dict]) -> None:
     import csv as _csv
 
@@ -214,23 +226,38 @@ def main() -> None:
     )
     from .ingest import INTERIM_DIR
 
-    repo_root = Path(__file__).resolve().parent.parent.parent
+    from .experiment import EXPERIMENTS_DIR
+
     parser = argparse.ArgumentParser(
-        description="Avalia os TREC runs e grava as tabelas de results/tables/."
+        description="Avalia os TREC runs de um experimento e grava as tabelas nele. "
+        "Sem --experiment nem --runs-dir, usa a rodada mais recente."
     )
-    parser.add_argument("--runs-dir", type=Path, default=repo_root / "results" / "runs")
-    parser.add_argument("--tables-dir", type=Path, default=repo_root / "results" / "tables")
+    parser.add_argument("--experiment", type=Path, default=None,
+                        help="Pasta em results/experiments/ (default: a mais recente).")
+    parser.add_argument("--runs-dir", type=Path, default=None)
+    parser.add_argument("--tables-dir", type=Path, default=None)
     parser.add_argument("--qrels", type=Path, default=INTERIM_DIR / "qrels.trec")
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
     parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl")
     parser.add_argument("--metric", default="ndcg@10", help="Métrica dos recortes/significância.")
     args = parser.parse_args()
 
-    run_paths = sorted(args.runs_dir.glob("*.trec"))
+    exp_dir = args.experiment or _experimento_mais_recente(EXPERIMENTS_DIR)
+    runs_dir = args.runs_dir or (exp_dir / "runs" if exp_dir else None)
+    tables_dir = args.tables_dir or (exp_dir / "tables" if exp_dir else None)
+    if runs_dir is None:
+        raise SystemExit(
+            f"nenhum experimento em {EXPERIMENTS_DIR} — rode "
+            "`python -m src.run_experiments` antes, ou passe --runs-dir"
+        )
+    args.tables_dir = tables_dir
+
+    run_paths = sorted(runs_dir.glob("*.trec"))
     if not run_paths:
         raise SystemExit(
-            f"nenhum run em {args.runs_dir} — rode `python -m src.run_experiments` antes"
+            f"nenhum run em {runs_dir} — rode `python -m src.run_experiments` antes"
         )
+    print(f"experimento: {runs_dir.parent.name}", flush=True)
     qrels = load_qrels(args.qrels)
     runs = [load_run(p) for p in run_paths]
     print(f"{len(runs)} runs, qrels de {args.qrels.name}", flush=True)

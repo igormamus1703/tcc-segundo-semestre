@@ -2,39 +2,64 @@
 # Nenhuma API paga (seção 3 do plano_tecnico.md) — só modelos abertos,
 # auto-hospedáveis, executados localmente.
 #
-# Os prefixos NÃO são decorativos: cada família de modelo foi treinada com um
-# formato de entrada específico para consulta e para passagem. Usar o prefixo
-# errado (ou nenhum) degrada a recuperação silenciosamente — o modelo não
-# reclama, só recupera pior. Por isso ficam aqui, versionados junto do hf_id.
+# Duas configurações NÃO são detalhe de performance, são de VALIDADE do
+# experimento, e por isso ficam versionadas aqui junto do hf_id:
+#
+# 1. `max_seq_length` — a janela precisa acomodar o maior chunk do desenho
+#    experimental (1024 tokens tiktoken ≈ 910 de subword). Com janela de 512,
+#    ~37% do conteúdo dos chunks grandes é descartado no encode e só a
+#    estratégia fixed_512_256 caberia inteira, ganhando vantagem artificial.
+#    Medição em docs/docsleo/.../10-escolha-do-embedder.md.
+# 2. `query_prefix` / `passage_prefix` — cada família foi treinada com um
+#    formato de entrada. Prefixo errado degrada a recuperação silenciosamente.
 
 embedders:
-  # Modelo compacto adaptado ao português.
-  # Justificativa (MTEB-BR, arXiv:2607.04581): com 308M parâmetros fica em 13º
-  # de 93 modelos, a 0,033 do líder — sendo que os líderes de recuperação têm
-  # 8-12B e seriam inviáveis no nosso orçamento de compute.
-  # ATENÇÃO: modelo GATED no Hugging Face. Exige conta, aceite da licença Gemma
-  # em https://huggingface.co/google/embeddinggemma-300m e `hf auth login`.
-  # É o ÚNICO passo manual do projeto (ver docsleo/04-modelos-embedding.md).
+  # DEFAULT do pipeline. Escolhido por ser o único candidato sem gate que
+  # acomoda os chunks de 1024 tokens sem truncar (janela nativa de 8192).
+  # XLM-R nativo no transformers — não exige `trust_remote_code`.
+  - name: bge_m3
+    hf_id: "BAAI/bge-m3"
+    query_prefix: ""
+    passage_prefix: ""
+    max_seq_length: 1024
+    batch_size: 32
+    dtype: auto        # fp16 na GPU, fp32 na CPU
+    gated: false
+    # Medido na RTX 5060: 47-102 chunks/s conforme o comprimento;
+    # 10,1 h para as 2.200.767 chunks das cinco estratégias, 0% de truncamento.
+
+  # Modelo compacto adaptado ao português, 13º de 93 no MTEB-BR
+  # (arXiv:2607.04581) com 308M parâmetros e janela de 2048.
+  # ATENÇÃO: GATED no Hugging Face — exige conta, aceite da licença Gemma em
+  # https://huggingface.co/google/embeddinggemma-300m e `hf auth login`.
+  # É o único passo manual do projeto; por isso não é o default.
   - name: pt_compact
     hf_id: "google/embeddinggemma-300m"
     query_prefix: "task: search result | query: "
     passage_prefix: "title: none | text: "
-    batch_size: 64
+    max_seq_length: 1024
+    batch_size: 32
+    dtype: auto
     gated: true
 
-  # Multilíngue forte de referência. Licença MIT, SEM gate: é o default
-  # executável, para o pipeline rodar ponta a ponta sem nenhum passo manual.
+  # Baseline multilíngue de referência. MIT, sem gate — mas a janela é de
+  # apenas 512 tokens, então NÃO serve para a comparação principal: truncaria
+  # 83% dos chunks e perderia 36% do conteúdo. Mantido para uma análise de
+  # sensibilidade "o que acontece quando a janela do encoder é pequena", que é
+  # uma limitação real de muitos pipelines RAG.
   - name: multilingual_ref
     hf_id: "intfloat/multilingual-e5-base"
     query_prefix: "query: "
     passage_prefix: "passage: "
-    batch_size: 64
+    max_seq_length: 512
+    batch_size: 32
+    dtype: auto
     gated: false
 
-  # Opcional: RoBERTaLexPT — só se houver fine-tune (é encoder MLM, não
-  # bi-encoder de recuperação; ver aviso na seção 3 do plano_tecnico.md).
-  # O mesmo aviso vale para o BERTimbau, que aparece bem no ranking GERAL do
-  # MTEB-BR mas não é um bi-encoder treinado para retrieval.
+  # Opcional: RoBERTaLexPT — só com fine-tune (é encoder MLM, não bi-encoder
+  # de recuperação; ver aviso na seção 3 do plano_tecnico.md). O mesmo vale
+  # para o BERTimbau, que vai bem no ranking GERAL do MTEB-BR mas não foi
+  # treinado para retrieval.
   # - name: robertalexpt
   #   hf_id: "PREENCHER"
 
@@ -47,9 +72,7 @@ lexical:
 
 dense:
   index: faiss.IndexFlatIP   # brute force, exato — sem erro de recall de ANN
-  # Default do pipeline: o modelo SEM gate, para que qualquer integrante da
-  # equipe consiga reproduzir sem criar conta no Hugging Face.
-  default_embedder: multilingual_ref
+  default_embedder: bge_m3
 
 aggregation:
   default: max_pooling

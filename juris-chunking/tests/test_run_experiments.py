@@ -163,3 +163,66 @@ def test_run_one_sum_top_k_gera_arquivo_com_sufixo(
     )
     assert info["run"] == "fixed_512_256__bm25__sum_top_k"
     assert (runs_dir / "fixed_512_256__bm25__sum_top_k.trec").exists()
+
+
+# --- configuração do denso (janela e precisão) ------------------------------
+
+def test_models_yaml_janela_acomoda_o_maior_chunk(models_cfg):
+    """A janela do encoder tem que caber o maior chunk do desenho experimental
+    (1024 tokens tiktoken ~ 910 de subword). Com 512, ~37% do conteudo dos
+    chunks grandes seria descartado e so o fixed_512_256 caberia inteiro,
+    ganhando vantagem artificial na comparacao."""
+    default = models_cfg["dense"]["default_embedder"]
+    cfg = next(e for e in models_cfg["embedders"] if e["name"] == default)
+    assert cfg["max_seq_length"] >= 1024
+
+
+def test_build_index_repassa_janela_e_dtype(models_cfg):
+    idx = build_index("dense", [], models_cfg, "bge_m3")
+    assert idx.max_seq_length == 1024
+    assert idx.dtype == "auto"
+
+
+def test_dense_resolve_dtype_por_dispositivo():
+    """fp16 acelera ~3x na GPU; na CPU e emulado e fica mais lento, entao la
+    o padrao continua fp32."""
+    import torch
+
+    from src.indexing.dense import DenseIndex
+
+    idx = DenseIndex("m", dtype="auto")
+    assert idx._resolve_dtype("cuda") is torch.float16
+    assert idx._resolve_dtype("cpu") is None
+    assert DenseIndex("m", dtype="fp32")._resolve_dtype("cuda") is None
+    assert DenseIndex("m", dtype="bf16")._resolve_dtype("cuda") is torch.bfloat16
+
+
+def test_run_name_do_denso_carrega_o_modelo(processed_dir, queries_file, models_cfg, tmp_path):
+    """Sem o nome do embedder no arquivo, rodar um segundo modelo
+    sobrescreveria o run do primeiro, sem aviso."""
+    import src.run_experiments as rx
+
+    class FakeIndex:
+        chunk_ids = ["f1"]
+        doc_ids = ["docA"]
+
+        def describe(self):
+            return "fake"
+
+        def build(self, chunks, cache_dir=None, show_progress=False):
+            pass
+
+        def search_batch(self, queries, top_k=100):
+            return [[("f1", 0.5)] for _ in queries]
+
+    original = rx.build_index
+    rx.build_index = lambda *a, **k: FakeIndex()
+    try:
+        info = rx.run_one(
+            "fixed_512_256", "dense", load_queries(queries_file), models_cfg,
+            embedder="bge_m3", processed_dir=processed_dir, runs_dir=tmp_path,
+        )
+    finally:
+        rx.build_index = original
+    assert info["run"] == "fixed_512_256__dense-bge_m3"
+    assert (tmp_path / "fixed_512_256__dense-bge_m3.trec").exists()

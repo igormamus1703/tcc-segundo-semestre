@@ -41,23 +41,65 @@ class DenseIndex:
         query_prefix: str = "",
         passage_prefix: str = "",
         batch_size: int = 64,
+        max_seq_length: int | None = None,
+        dtype: str = "auto",
+        device: str | None = None,
     ):
         self.model_name = model_name
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
         self.batch_size = batch_size
+        # A janela do modelo NÃO é detalhe de performance, é de validade: com
+        # 512 tokens, ~37% do conteúdo dos chunks de 1024 é descartado, e só a
+        # estratégia fixed_512_256 caberia inteira — o que lhe daria uma
+        # vantagem artificial na comparação. Ver o doc 10 do docsleo.
+        self.max_seq_length = max_seq_length
+        self.dtype = dtype
+        self.device = device
         self._model = None
         self._index = None
         self.chunk_ids: list[str] = []
         self.doc_ids: list[str] = []
 
     # -- modelo (carregado só quando precisa: importar torch custa segundos) --
+    def _resolve_device(self) -> str:
+        if self.device:
+            return self.device
+        import torch
+
+        return "cuda" if torch.cuda.is_available() else "cpu"
+
+    def _resolve_dtype(self, device: str):
+        """fp16 na GPU dá ~3x de velocidade sem perda mensurável de qualidade
+        para recuperação; na CPU o fp16 é emulado e fica mais LENTO, então lá
+        o padrão continua sendo fp32."""
+        import torch
+
+        if self.dtype == "auto":
+            return torch.float16 if device == "cuda" else None
+        return {"fp16": torch.float16, "bf16": torch.bfloat16, "fp32": None}[self.dtype]
+
     def _get_model(self):
         if self._model is None:
             from sentence_transformers import SentenceTransformer
 
-            self._model = SentenceTransformer(self.model_name)
+            device = self._resolve_device()
+            torch_dtype = self._resolve_dtype(device)
+            kwargs = {}
+            if torch_dtype is not None:
+                kwargs["model_kwargs"] = {"torch_dtype": torch_dtype}
+            self._model = SentenceTransformer(self.model_name, device=device, **kwargs)
+            if self.max_seq_length:
+                self._model.max_seq_length = self.max_seq_length
         return self._model
+
+    def describe(self) -> str:
+        """Uma linha com a configuração efetiva — vai para o log da rodada."""
+        m = self._get_model()
+        return (
+            f"{self.model_name} | device={self._resolve_device()} "
+            f"| dtype={self.dtype} | janela={m.max_seq_length} | batch={self.batch_size}"
+        )
 
     def encode(self, texts: list[str], prefix: str, show_progress: bool = False) -> np.ndarray:
         model = self._get_model()

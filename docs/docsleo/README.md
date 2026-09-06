@@ -6,7 +6,7 @@ evidências**, escrito para virar matéria-prima das seções de Metodologia,
 Resultados e Discussão do artigo final.
 
 > O padrão de trabalho da equipe (branch → teste → merge → anotar) está no
-> [README.md da raiz do repositório](../README.md#fluxo-de-trabalho-obrigatório).
+> [README.md da raiz do repositório](../../README.md#fluxo-de-trabalho-obrigatório).
 > Esta pasta é a minha instância desse padrão.
 
 Regra que sigo aqui: **toda decisão registrada diz (a) qual era a alternativa,

@@ -1,2 +1,7 @@
 data/*
 !data/README.md
+
+# Resultados: as TABELAS e os MANIFESTOS de cada experimento são versionados
+# (são o que sustenta os números do artigo); os arquivos TREC crus, não —
+# somam dezenas de MB por rodada e são regeneráveis pelo comando do manifesto.
+results/experiments/*/runs/

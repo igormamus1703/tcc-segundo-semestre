@@ -87,7 +87,7 @@ leitura completos.
 
 > ⚠️ **Corpus:** o `eda_stats.json`/`segmenter_validation.json` versionados
 > foram regerados em 05/09 sobre o corpus que o `ingest.py` produz hoje
-> (**12.880** acórdãos, não 113.827 — ver `docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A
+> (**12.880** acórdãos, não 113.827 — ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A
 > escolha do corpus oficial ainda está pendente de decisão da equipe, e os
 > números do artigo dependem dela.
 
