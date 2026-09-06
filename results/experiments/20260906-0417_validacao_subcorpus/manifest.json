@@ -2,7 +2,7 @@
   "rotulo": "validacao_subcorpus",
   "inicio": "2026-09-06T04:17:23",
   "fim": null,
-  "duracao_s": 1.6,
+  "duracao_s": 34.6,
   "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold --retriever all --processed-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\subcorpus\\processed --queries C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\subcorpus\\queries.jsonl --label validacao_subcorpus",
   "config": {
     "estrategias": [
@@ -47,5 +47,14 @@
     "gpu": "NVIDIA GeForce RTX 5060",
     "vram_gb": 8.0
   },
-  "etapas": []
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 43259,
+      "n_queries": 30,
+      "n_linhas_run": 16585,
+      "segundos": 32.8
+    }
+  ]
 }

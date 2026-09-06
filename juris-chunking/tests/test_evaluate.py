@@ -253,3 +253,92 @@ def test_query_terciles_ignora_consulta_sem_doc_conhecido():
     qrels = Qrels({"q0": {"d0": 3}, "q1": {"fantasma": 3}})
     tercil, _ = query_length_terciles(qrels, {"d0": 1000})
     assert "q0" in tercil and "q1" not in tercil
+
+
+# --- análise por seção do acórdão -------------------------------------------
+
+def test_section_of_span_escolhe_a_maior_sobreposicao():
+    from src.analysis import section_of_span
+
+    spans = [
+        {"section": "ementa", "start": 0, "end": 100},
+        {"section": "relatorio", "start": 100, "end": 1000},
+        {"section": "dispositivo", "start": 1000, "end": 1200},
+    ]
+    # chunk quase todo no relatorio, com uma ponta na ementa
+    assert section_of_span(90, 500, spans) == "relatorio"
+    assert section_of_span(0, 60, spans) == "ementa"
+    assert section_of_span(1050, 1200, spans) == "dispositivo"
+    # fora de qualquer span
+    assert section_of_span(5000, 6000, spans) is None
+
+
+def test_slice_by_section_usa_offset_nas_baselines():
+    """`fixed` e `recursive` devolvem section=None, mas o offset diz de onde o
+    chunk veio — é isso que permite a análise por seção também nas baselines."""
+    from src.analysis import slice_by_section
+
+    gold = {"docA": [
+        {"section": "ementa", "start": 0, "end": 100},
+        {"section": "relatorio", "start": 100, "end": 1000},
+    ]}
+    chunks_top = [
+        {"run": "fixed_512_256__bm25", "query_id": "1", "rank": 1, "doc_id": "docA",
+         "section": None, "start": 0, "end": 90},
+        {"run": "fixed_512_256__bm25", "query_id": "2", "rank": 1, "doc_id": "docA",
+         "section": None, "start": 200, "end": 900},
+        {"run": "fixed_512_256__bm25", "query_id": "3", "rank": 99, "doc_id": "docA",
+         "section": None, "start": 200, "end": 900},  # fora do top_k
+    ]
+    linhas = slice_by_section(chunks_top, gold, top_k=10)
+    por_secao = {l["valor"]: l for l in linhas}
+    assert por_secao["ementa"]["n_chunks"] == 1
+    assert por_secao["relatorio"]["n_chunks"] == 1
+    assert por_secao["ementa"]["fracao"] == 0.5
+
+
+def test_slice_by_section_respeita_rotulo_do_structural():
+    """Quando o chunker já rotula a seção, usamos o rótulo, sem remapear."""
+    from src.analysis import slice_by_section
+
+    chunks_top = [
+        {"run": "structural_gold__bm25", "query_id": "1", "rank": 1, "doc_id": "docA",
+         "section": "dispositivo", "start": 0, "end": 50},
+    ]
+    linhas = slice_by_section(chunks_top, {}, top_k=10)
+    assert linhas[0]["valor"] == "dispositivo"
+
+
+# --- poder estatístico ------------------------------------------------------
+
+def test_poder_detecta_efeito_grande(qrels, run_bom, run_ruim):
+    """Diferença grande e consistente tem que ficar acima do MDE."""
+    from src.analysis import poder_estatistico
+
+    r = poder_estatistico(qrels, run_bom, run_ruim)
+    assert r["n_queries"] == 20
+    assert r["diferenca_observada"] > 0
+    assert r["detectavel"] is True
+    assert r["mde"] < r["diferenca_observada"]
+
+
+def test_poder_aponta_falta_de_amostra_em_efeito_minusculo(qrels):
+    """Diferença minúscula: o teste tem que dizer que NÃO é detectável e
+    estimar quantas consultas seriam necessárias — que é a resposta honesta
+    para 'por que não deu significativo?'."""
+    from src.analysis import poder_estatistico
+
+    a = Run({f"q{i}": {f"d{i}": 0.9, f"x{i}": 0.10} for i in range(20)}, name="a")
+    b = Run({f"q{i}": ({f"d{i}": 0.9, f"x{i}": 0.10} if i else {f"x0": 0.9, "d0": 0.1})
+             for i in range(20)}, name="b")
+    r = poder_estatistico(qrels, a, b)
+    assert r["detectavel"] is False
+    assert r["n_necessario_para_detectar"] > r["n_queries"]
+
+
+def test_poder_exige_consultas_suficientes(qrels):
+    from src.analysis import poder_estatistico
+
+    um = Run({"q0": {"d0": 1.0}}, name="um")
+    with pytest.raises(ValueError):
+        poder_estatistico(Qrels({"q0": {"d0": 3}}), um, um)

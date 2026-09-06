@@ -190,6 +190,28 @@ def load_doc_lengths(corpus_path: Path, cache_path: Path | None = None) -> dict[
     return lengths
 
 
+def load_gold_spans(corpus_path: Path, cache_path: Path | None = None) -> dict[str, list[dict]]:
+    """{doc_id: [{section, start, end}, ...]} para o recorte por seção.
+
+    Lê o `corpus_docs.jsonl` uma vez e cacheia só os spans — o arquivo tem
+    780 MB por causa do texto dos acórdãos, e os spans somam poucos MB.
+    """
+    import json as _json
+
+    if cache_path is None:
+        cache_path = corpus_path.parent / "gold_spans.json"
+    if cache_path.exists():
+        return _json.loads(cache_path.read_text(encoding="utf-8"))
+
+    spans: dict[str, list[dict]] = {}
+    with corpus_path.open(encoding="utf-8") as f:
+        for line in f:
+            d = _json.loads(line)
+            spans[d["doc_id"]] = d.get("gold_spans", [])
+    cache_path.write_text(_json.dumps(spans), encoding="utf-8")
+    return spans
+
+
 def _experimento_mais_recente(experiments_dir: Path) -> Path | None:
     """A pasta datada mais recente que tenha runs. O nome começa com
     `AAAAMMDD-HHMM`, então a ordem alfabética já é a cronológica."""
@@ -222,7 +244,9 @@ def main() -> None:
     from .analysis import (
         slice_by_doc_length_tercile,
         slice_by_query_type,
+        poder_de_todos_os_pares,
         slice_by_retriever,
+        slice_by_section,
     )
     from .ingest import INTERIM_DIR
 
@@ -240,6 +264,8 @@ def main() -> None:
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
     parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl")
     parser.add_argument("--metric", default="ndcg@10", help="Métrica dos recortes/significância.")
+    parser.add_argument("--section-top-k", type=int, default=10,
+                        help="Profundidade do recorte por seção do acórdão.")
     args = parser.parse_args()
 
     exp_dir = args.experiment or _experimento_mais_recente(EXPERIMENTS_DIR)
@@ -275,6 +301,12 @@ def main() -> None:
         (args.tables_dir / "significance_report.txt").write_text(
             report_to_text(report), encoding="utf-8"
         )
+        # Sem isso, um resultado não significativo fica ambíguo entre "não há
+        # diferença" e "o teste não teria como vê-la".
+        _write_csv(
+            args.tables_dir / "power_analysis.csv",
+            poder_de_todos_os_pares(qrels, runs, args.metric),
+        )
 
     # 3. Recortes analíticos.
     if args.queries.exists():
@@ -299,6 +331,21 @@ def main() -> None:
         args.tables_dir / "slices_retriever.csv",
         slice_by_retriever(qrels, runs, args.metric),
     )
+
+    # 4. Recorte por seção do acórdão: de qual parte do documento veio o trecho
+    #    que fez cada documento ser recuperado. Vale para as baselines também,
+    #    via offset (plano_tecnico.md §1).
+    chunks_top = []
+    for p in sorted(runs_dir.glob("*__chunks.jsonl")):
+        with p.open(encoding="utf-8") as f:
+            chunks_top.extend(json.loads(line) for line in f)
+    if chunks_top and args.corpus.exists():
+        gold = load_gold_spans(args.corpus)
+        _write_csv(
+            args.tables_dir / "slices_section.csv",
+            slice_by_section(chunks_top, gold, top_k=args.section_top_k),
+        )
+
     print(f"tabelas gravadas em {args.tables_dir}")
 
 

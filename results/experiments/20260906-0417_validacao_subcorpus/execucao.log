@@ -1,3 +1,5 @@
 [04:17:25] experimento 20260906-0417_validacao_subcorpus
 [04:17:25]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
 [04:17:25]   commit: a8b43bfb (arvore suja) em leo/f4-indexacao-e-docs
+[04:17:58] structural_gold__bm25: 43,259 chunks, 16,585 linhas, 32.8s
+[04:18:06]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
