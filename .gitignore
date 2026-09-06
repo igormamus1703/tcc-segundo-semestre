@@ -5,3 +5,8 @@ data/*
 # (são o que sustenta os números do artigo); os arquivos TREC crus, não —
 # somam dezenas de MB por rodada e são regeneráveis pelo comando do manifesto.
 results/experiments/*/runs/
+
+# Log do script rodada_completa.ps1: redundante com o execucao.log que cada
+# experimento ja versiona, e sua criacao marcava a arvore como suja no
+# manifesto da propria rodada.
+results/logs/
