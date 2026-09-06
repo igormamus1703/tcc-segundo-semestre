@@ -123,12 +123,18 @@ granularidade comparável, enquanto o `fixed_512_256` gera 3,4x mais chunks. Iss
 **é exatamente o controle que faltou no BR-TaxQA-R** (ver
 [03-referencias-verificadas.md](03-referencias-verificadas.md)).
 
-Custo do encode denso, agora com o número real de chunks:
-- **CPU** (~25 chunks/s): ~24 h → roda de madrugada, com cache `.npy`.
-- **GPU T4 / Colab** (~300 chunks/s): ~2 h.
+Custo do encode denso — agora com a taxa **medida**, não estimada. Benchmark
+com `multilingual-e5-base` em CPU (10 threads torch, batch 64, chunks reais):
+**128 chunks em 26,7 s = 4,8 chunks/s**.
 
-Para comparação, no corpus de 113.827 documentos seriam ~19,5 M chunks:
-**~9 dias de CPU**. É a diferença entre caber e não caber no cronograma.
+| Cenário | Chunks | CPU (4,8/s) | GPU T4 (~300/s) |
+|---|---:|---|---|
+| Corpus 12.880, 5 estratégias | 2.200.767 | **127 h ≈ 5,3 dias** | ~2 h |
+| Corpus 113.827, 5 estratégias | ~19,5 M | ~47 dias | ~18 h |
+
+⚠️ **O retriever denso não roda em CPU dentro do cronograma.** Precisamos de
+GPU (Colab resolve) ou de reduzir o escopo do denso. Ver
+[08-decisoes-pendentes.md](08-decisoes-pendentes.md), item 1b.
 
 ## Correções de texto que não são numéricas
 

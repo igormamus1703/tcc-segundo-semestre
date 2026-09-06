@@ -66,6 +66,47 @@ recursivo de **1.000 caracteres** (~250 tokens), avaliando **geração** (RAGAS)
 
 ---
 
+## 🔴 1b. O retriever denso NÃO roda em CPU — precisamos de GPU
+
+**Medido, não estimado** (2026-09-06):
+
+```
+intfloat/multilingual-e5-base, CPU (10 threads torch), batch 64, chunks reais
+128 chunks em 26,7s  ->  4,8 chunks/s
+```
+
+Minha estimativa anterior era de ~25 chunks/s. **Errei por 5x.** Com a taxa
+real:
+
+| Cenário | Chunks | Tempo em CPU |
+|---|---:|---|
+| Corpus 12.880, as 5 estratégias | 2.200.767 | **127 h ≈ 5,3 dias** ❌ |
+| Só `structural_gold` + `fixed_1024_512` | 737.475 | 43 h |
+| Só `structural_gold` | 286.689 | 17 h |
+
+Numa GPU T4 (Colab) a mesma carga sai em ~2 h — a diferença é de ~60x.
+
+**Opções, em ordem de preferência:**
+
+1. **Rodar o encode no Colab com GPU** e trazer os `.npy` de volta. O cache já
+   está implementado (`emb_<modelo>.npy` + `chunk_ids_<modelo>.json` por
+   estratégia), então é só copiar os arquivos para `data/processed/<estrategia>/`
+   e o `run_experiments` os reaproveita sem reencodar. **É o caminho que
+   recomendo.**
+2. Alguém do time com GPU local roda e compartilha os `.npy`.
+3. Reduzir o escopo do denso para 2 ou 3 estratégias (o plano já prevê isso:
+   *"se o encode em CPU passar de ~6h, reduzir a 1 modelo denso e registrar a
+   decisão"* — `plano_implementacao.md` §F4). Perderíamos parte da comparação.
+4. Deixar 5,3 dias de CPU rodando. Só viável se ninguém precisar da máquina.
+
+- [ ] **Definir com o time: quem tem GPU, ou vamos de Colab?**
+
+> Isso também **reforça** a recomendação do corpus de 12.880 (item 1): com
+> 113.827 documentos seriam ~19,5 M chunks, ou seja, **~47 dias de CPU** /
+> ~18 h de GPU. Inviável de qualquer ângulo sem GPU dedicada.
+
+---
+
 ## 🟢 4. Execução (posso tocar sozinho)
 
 - [x] Ambiente, datasets (6 GB) e corpus montado
