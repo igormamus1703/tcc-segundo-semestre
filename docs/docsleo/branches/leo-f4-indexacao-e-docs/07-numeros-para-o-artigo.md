@@ -42,6 +42,57 @@ Todos medidos nesta branch. Os três primeiros são achados originais.
 | Significância (10 pares) | **nenhum p < 0,05** (menor: 0,097) | idem |
 | Consultas reais vs sintéticas | **0,139 vs 0,312** (2,2x) | idem |
 
+## 2b. RESULTADOS — a tabela principal do artigo
+
+Estado em 06/09/2026, 11h. **Parcial**: faltam as duas estratégias fixas no
+denso, rodando (`fixed_1024_512`, `fixed_512_256`).
+
+| Estratégia | BM25 nDCG@10 | Denso nDCG@10 |
+|---|---:|---:|
+| structural_pred | **0,2526** | 0,1912 |
+| structural_gold | 0,2521 | 0,1847 |
+| fixed_1024_512 | 0,2510 | *(rodando)* |
+| fixed_512_256 | 0,2486 | *(rodando)* |
+| recursive_default | 0,2412 | **0,1967** |
+
+Fontes: `results/experiments/20260906-0515_bm25/tables/main_results.csv` e
+`20260906-0547_dense_bge_m3/tables_com_bm25/main_results.csv`.
+
+### Os três resultados que o artigo pode afirmar
+
+**1. O BM25 supera o retriever denso, com significância forte.**
+
+| Comparação (mesma estratégia) | p | vitórias BM25 / empates / vitórias denso |
+|---|---:|---|
+| structural_gold | **0,000005** | 83 / 25 / 42 |
+| structural_pred | **0,000010** | 83 / 21 / 46 |
+| recursive_default | **0,002189** | 80 / 23 / 47 |
+
+É o **único** resultado significativo do trabalho, e é contraintuitivo. Coerente
+com `pereira2026jua` (baselines lexicais competitivas em RI jurídica em
+português) e com o JurisTCU, onde os modelos BERT-based foram os piores.
+
+**2. A estratégia de chunking não altera a recuperação — em nenhum retriever.**
+BM25: nenhum p < 0,05 entre as cinco (menor: 0,097). Denso: nenhum p < 0,05
+entre as três (menor: 0,213). Com análise de poder declarada: 150 consultas
+detectam diferenças a partir de ~0,016–0,022 em nDCG@10, e as diferenças
+observadas entre estratégias são de 0,001 a 0,012.
+
+**3. O erro do segmentador não custa desempenho.**
+`structural_gold` × `structural_pred`: p = 0,827 no BM25 e 0,283 no denso, com
+o **predito** à frente nos dois. 97 empates em 150 consultas no BM25. Um
+segmentador por regras com 92,2% de acurácia entrega o mesmo que a estrutura
+ouro — a conclusão prática mais útil do trabalho, e a ablação que o BR-TaxQA-R
+não tem.
+
+### Um achado que muda a redação da hipótese
+
+**A ordem das estratégias se inverte entre os retrievers.** O
+`recursive_default` é o pior dos cinco no BM25 e o melhor dos três no denso.
+As estruturais fazem o caminho contrário. Nenhuma dessas diferenças é
+significativa, mas a inversão é consistente e merece ser reportada — ela é
+evidência **contra** um efeito estável do chunking estrutural, não a favor.
+
 ## 3. Composição do corpus por seção (para refazer a Figura 2)
 
 Medido sobre 3.000 documentos, em fração de caracteres:

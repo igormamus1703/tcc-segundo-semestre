@@ -11,3 +11,4 @@
 [10:47:26]     embeddings recuperados do cache (sem reencode)
 [10:47:27] recursive_default__dense-bge_m3: 270,070 chunks, 134,254 linhas, 11.7s  [decorrido 0.0 h]
 [10:47:39]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[10:56:38]     bloco 1/19 (25,000 chunks) em 9.0 min — faltam ~2.7 h
