@@ -43,6 +43,7 @@ rodar o pipeline sobre o corpus real.
 | [resultados/03-previsao-denso.md](resultados/03-previsao-denso.md) | Previsão registrada antes de rodar, e o teste dela |
 | [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) | **Denso:** a ordem se inverte, e o BM25 vence com significância |
 | [resultados/05-filtragem-por-secao.md](resultados/05-filtragem-por-secao.md) | 🏆 **Descartar o relatório melhora o nDCG@10 em 16,9%** (p = 0,001) |
+| [resultados/06-final-5x2.md](resultados/06-final-5x2.md) | ⭐ **Resultado final:** 5 estratégias × 2 retrievers, com a inversão completa |
 
 ## Código entregue
 

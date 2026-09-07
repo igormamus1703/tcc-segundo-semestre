@@ -44,21 +44,20 @@ Todos medidos nesta branch. Os três primeiros são achados originais.
 
 ## 2b. RESULTADOS — a tabela principal do artigo
 
-Estado em 06/09/2026, 11h. **Parcial**: faltam as duas estratégias fixas no
-denso, rodando (`fixed_1024_512`, `fixed_512_256`).
+**COMPLETA** — 5 estratégias × 2 retrievers, 07/09/2026.
 
-| Estratégia | BM25 nDCG@10 | Denso nDCG@10 |
-|---|---:|---:|
-| structural_pred | **0,2526** | 0,1912 |
-| structural_gold | 0,2521 | 0,1847 |
-| fixed_1024_512 | 0,2510 | *(rodando)* |
-| fixed_512_256 | 0,2486 | *(rodando)* |
-| recursive_default | 0,2412 | **0,1967** |
+| Estratégia | BM25 nDCG@10 | Denso nDCG@10 | BM25 R@100 | Denso R@100 |
+|---|---:|---:|---:|---:|
+| structural_pred | **0,2526** | 0,1912 | **0,4863** | 0,4241 |
+| structural_gold | 0,2521 | 0,1847 | 0,4849 | 0,4220 |
+| fixed_1024_512 | 0,2510 | 0,2019 | 0,4861 | 0,4507 |
+| fixed_512_256 | 0,2486 | **0,2055** | 0,4709 | **0,4759** |
+| recursive_default | 0,2412 | 0,1967 | 0,4731 | 0,4283 |
 
-Fontes: `results/experiments/20260906-0515_bm25/tables/main_results.csv` e
-`20260906-0547_dense_bge_m3/tables_com_bm25/main_results.csv`.
+Fonte: `results/experiments/20260907-0125_dense_bge_m3/tables_com_bm25/`.
+Detalhe em [resultados/06-final-5x2.md](resultados/06-final-5x2.md).
 
-### Os três resultados que o artigo pode afirmar
+### Os quatro resultados que o artigo pode afirmar
 
 **1. O BM25 supera o retriever denso, com significância forte.**
 
@@ -66,17 +65,21 @@ Fontes: `results/experiments/20260906-0515_bm25/tables/main_results.csv` e
 |---|---:|---|
 | structural_gold | **0,000005** | 83 / 25 / 42 |
 | structural_pred | **0,000010** | 83 / 21 / 46 |
+| fixed_1024_512 | **0,000793** | 81 / 22 / 47 |
+| fixed_512_256 | **0,000854** | 75 / 23 / 52 |
 | recursive_default | **0,002189** | 80 / 23 / 47 |
 
-É o **único** resultado significativo do trabalho, e é contraintuitivo. Coerente
-com `pereira2026jua` (baselines lexicais competitivas em RI jurídica em
-português) e com o JurisTCU, onde os modelos BERT-based foram os piores.
+**Vale nas cinco estratégias**, e é contraintuitivo. Coerente com
+`pereira2026jua` (baselines lexicais competitivas em RI jurídica em português)
+e com o JurisTCU, onde os modelos BERT-based foram os piores.
 
 **2. A estratégia de chunking não altera a recuperação — em nenhum retriever.**
-BM25: nenhum p < 0,05 entre as cinco (menor: 0,097). Denso: nenhum p < 0,05
-entre as três (menor: 0,213). Com análise de poder declarada: 150 consultas
-detectam diferenças a partir de ~0,016–0,022 em nDCG@10, e as diferenças
-observadas entre estratégias são de 0,001 a 0,012.
+BM25: **0 de 10** pares com p < 0,05 (menor: 0,097). Denso: **1 de 10**
+(`fixed_512_256` × `structural_gold`, p = 0,0295) — e esse único, no limiar do
+poder do teste, aponta **contra** a hipótese, com o chunking fixo superando o
+estrutural. Com análise de poder declarada: 150 consultas detectam diferenças a
+partir de ~0,017–0,028 em nDCG@10, e as diferenças observadas entre estratégias
+vão de 0,001 a 0,021 — ou seja, quase todas **abaixo** do limiar de detecção.
 
 **3. O erro do segmentador não custa desempenho.**
 `structural_gold` × `structural_pred`: p = 0,827 no BM25 e 0,283 no denso, com
@@ -85,13 +88,28 @@ segmentador por regras com 92,2% de acurácia entrega o mesmo que a estrutura
 ouro — a conclusão prática mais útil do trabalho, e a ablação que o BR-TaxQA-R
 não tem.
 
+**4. Filtrar o relatório do índice melhora o nDCG@10 em 16,9%** (p = 0,001), e
+o ganho se mantém com os spans **preditos** (p = 0,017). Resultado exploratório
+que precisa ser reimplementado no pipeline antes de publicar — ver
+[resultados/05-filtragem-por-secao.md](resultados/05-filtragem-por-secao.md).
+
 ### Um achado que muda a redação da hipótese
 
-**A ordem das estratégias se inverte entre os retrievers.** O
-`recursive_default` é o pior dos cinco no BM25 e o melhor dos três no denso.
-As estruturais fazem o caminho contrário. Nenhuma dessas diferenças é
-significativa, mas a inversão é consistente e merece ser reportada — ela é
-evidência **contra** um efeito estável do chunking estrutural, não a favor.
+**A ordem das estratégias se inverte quase perfeitamente entre os retrievers:**
+
+| Posição | BM25 | Denso |
+|---|---|---|
+| 1º | structural_pred | **fixed_512_256** |
+| 2º | structural_gold | fixed_1024_512 |
+| 3º | fixed_1024_512 | recursive_default |
+| 4º | fixed_512_256 | structural_pred |
+| 5º | recursive_default | **structural_gold** |
+
+As duas estruturais são 1ª e 2ª no BM25 e **4ª e 5ª no denso**; as duas fixas
+fazem o caminho contrário. Nenhuma dessas diferenças é significativa (salvo uma,
+no limiar), mas a inversão é **sistemática** e merece ser reportada — é
+evidência **contra** um efeito estável do chunking estrutural, e mais forte do
+que um empate simples seria.
 
 ## 3. Composição do corpus por seção (para refazer a Figura 2)
 

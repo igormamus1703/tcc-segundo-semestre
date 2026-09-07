@@ -33,11 +33,12 @@ Leia, nesta ordem: **`PLANO.md`** (estado e próximos passos) →
 | structural_pred | **0,2526** | 0,1912 |
 | structural_gold | 0,2521 | 0,1847 |
 | fixed_1024_512 | 0,2510 | **0,2019** |
-| fixed_512_256 | 0,2486 | *(ver `results/`)* |
+| fixed_512_256 | 0,2486 | **0,2055** |
 | recursive_default | 0,2412 | 0,1967 |
 
-**A hipótese não se confirmou.** Zero de 16 pares de estratégias com p < 0,05,
-nos dois retrievers. A ordem ainda se inverte entre eles (estruturais lideram
+**A hipótese não se confirmou.** Um de 20 pares de estratégias com p < 0,05
+(`fixed_512_256` × `structural_gold` no denso, p = 0,030) — e esse único aponta
+**contra** a hipótese, com o chunking fixo superando o estrutural. A ordem ainda se inverte entre eles (estruturais lideram
 no BM25, ficam por último no denso), o que é evidência **contra** um efeito
 estável do chunking.
 
