@@ -1,0 +1,2 @@
+metric,run_a,run_b,p_value,significativo_p<0.05,wins_a,ties,losses_a
+ndcg@10,structural_gold__bm25,structural_gold__dense-bge_m3,0.01621913274579282,True,20,0,10

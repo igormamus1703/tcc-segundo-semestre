@@ -1,0 +1,5 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica,estrategia
+fixed_1024_512__dense-bge_m3,retriever,dense-bge_m3,150,0.20190728401110927,0.17040510642058296,0.23350928360575054,ndcg@10,fixed_1024_512
+recursive_default__dense-bge_m3,retriever,dense-bge_m3,150,0.19674010406009115,0.1663053210117153,0.22817119810006325,ndcg@10,recursive_default
+structural_gold__dense-bge_m3,retriever,dense-bge_m3,150,0.1847217349567792,0.15636859840128148,0.21371508825606023,ndcg@10,structural_gold
+structural_pred__dense-bge_m3,retriever,dense-bge_m3,150,0.19121864553833545,0.1618660690242839,0.22138776617206968,ndcg@10,structural_pred

@@ -95,7 +95,9 @@ TCU_DIR = DATA_ROOT / "tcu_acordaos"
 TCU_YEARS = range(2003, 2024)
 
 INTERIM_DIR = Path(__file__).resolve().parent.parent / "data" / "interim"
-RESULTS_TABLES_DIR = Path(__file__).resolve().parent.parent.parent / "results" / "tables"
+# Caracterizacao do corpus vive em results/corpus/ (estavel entre rodadas),
+# separada de results/experiments/ (uma pasta datada por rodada de busca).
+RESULTS_CORPUS_DIR = Path(__file__).resolve().parent.parent.parent / "results" / "corpus"
 
 # Ordem canônica de montagem do texto do acórdão -> rótulo Section (base.py).
 # Ver tabela da seção 0 do plano_implementacao.md.
@@ -428,8 +430,8 @@ def corpus_stats(interim_dir: Path = INTERIM_DIR) -> dict:
             s: round(c / n_docs, 4) if n_docs else 0.0 for s, c in section_presence.items()
         },
     }
-    RESULTS_TABLES_DIR.mkdir(parents=True, exist_ok=True)
-    with (RESULTS_TABLES_DIR / "eda_stats.json").open("w", encoding="utf-8") as f:
+    RESULTS_CORPUS_DIR.mkdir(parents=True, exist_ok=True)
+    with (RESULTS_CORPUS_DIR / "eda_stats.json").open("w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
     return stats
 

@@ -1,0 +1,86 @@
+{
+  "rotulo": "previsao_denso",
+  "inicio": "2026-09-06T05:03:30",
+  "fim": "2026-09-06T05:14:05",
+  "duracao_s": 634.4,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold fixed_1024_512 --retriever all --processed-dir C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\mini\\processed --queries C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\mini\\queries.jsonl --label previsao_denso",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "fixed_1024_512"
+    ],
+    "retrievers": [
+      "bm25",
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 25,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\AppData\\Local\\Temp\\claude\\mini\\queries.jsonl",
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "43dbb382535198b0f97814ff825abe4412aff2c2",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": false
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 10975,
+      "n_queries": 25,
+      "n_linhas_run": 7525,
+      "segundos": 4.4
+    },
+    {
+      "nome": "fixed_1024_512__bm25",
+      "run": "fixed_1024_512__bm25",
+      "n_chunks": 17452,
+      "n_queries": 25,
+      "n_linhas_run": 5994,
+      "segundos": 7.9
+    },
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 10975,
+      "n_queries": 25,
+      "n_linhas_run": 7418,
+      "segundos": 223.6
+    },
+    {
+      "nome": "fixed_1024_512__dense-bge_m3",
+      "run": "fixed_1024_512__dense-bge_m3",
+      "n_chunks": 17452,
+      "n_queries": 25,
+      "n_linhas_run": 6337,
+      "segundos": 397.5
+    }
+  ],
+  "erro": null
+}
