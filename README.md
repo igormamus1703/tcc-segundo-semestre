@@ -28,8 +28,9 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 | | |
 |---|---|
 | **Feito** | F0–F5 implementadas; corpus de 12.880 acórdãos; 2,2 M chunks; experimento 5 estratégias × 2 retrievers |
-| **Resposta à pergunta do TCC** | O chunking estrutural **não** melhora a recuperação — nenhuma diferença é significativa, em nenhum retriever |
-| **Resultado significativo** | **BM25 supera o retriever denso** (p < 0,001), o único resultado com significância |
+| **Resposta à pergunta do TCC** | O chunking estrutural **não** melhora a recuperação — 1 de 20 pares é significativo, e ele aponta *contra* a hipótese |
+| **Resultado mais sólido** | **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01) |
+| **Achado a desenvolver** | Descartar o relatório do índice melhora o nDCG@10 em **16,9%** (p = 0,001) |
 | **Bloqueio** | 🔴 Decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
 | **Testes** | 115 passando |
 

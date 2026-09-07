@@ -51,9 +51,44 @@ tempo.
 | 05:30 → 05:55 | `src/plots.py` com rodapé de contexto; docs reorganizados por rodada | Figuras autocontidas. [../../../../results/README.md](../../../../results/README.md) |
 | 05:55 | Rodada **parada e relançada** para partir de commit limpo | Perda: ~10 min do 1º bloco (sem checkpoint ainda) |
 
-## Em aberto ao fim da sessão 2
+## Fim da sessão 2
 
-- Rodada densa em execução (orçamento 5 h; `fixed_1024_512` e `fixed_512_256`
-  ficam para a noite seguinte, reaproveitando o cache).
-- **Decisão do corpus oficial** — bloqueia os números finais.
+A rodada densa de 5 h fechou **3 das 5 estratégias**
+(`20260906-0547_dense_bge_m3`): as duas estruturais e a `recursive_default`.
+As duas fixas ficaram para a sessão seguinte, reaproveitando o cache.
+
+---
+
+## 07/09/2026 — sessão 3: as duas fixas, a filtragem por seção, e o fechamento
+
+| Hora | O quê | Resultado |
+|---|---|---|
+| 00:40 | Rodada densa relançada para as duas fixas | Interrompida por **desligamento da máquina**, com 14 blocos já gravados |
+| 01:25 | Relançamento (`20260907-0125_dense_bge_m3`) | **Retomou do checkpoint sem reencodar** os 14 blocos — economizou ~1 h |
+| 01:25 → 03:04 | `fixed_512_256` no denso (907.914 chunks) | 99,2 min. **Experimento 5 × 2 completo** |
+| 03:10 | Avaliação cruzada (`evaluate --incluir 20260906-0515_bm25`) | 10 runs, 45 pares, **26 significativos**. [resultados/06-final-5x2.md](resultados/06-final-5x2.md) |
+| 03:20 | Figuras das duas rodadas (`src/plots.py`) | 10 figuras PDF+PNG, com rodapé de contexto |
+| 03:40 | **Experimento exploratório:** filtrar o índice FAISS por seção, reusando o cache | Descartar o relatório dá **+16,9% de nDCG@10** (p = 0,001), e vale com spans preditos (p = 0,017). [resultados/05-filtragem-por-secao.md](resultados/05-filtragem-por-secao.md) |
+| 04:10 | Revisão de todos os `.md` do repositório contra os números finais | Trechos escritos com o experimento ainda parcial corrigidos em 9 arquivos |
+| 04:30 | `pytest -q` e **merge** de `leo/f4-indexacao-e-docs` na `main` | Branch fechada |
+
+### A armadilha da sessão: significativo **e** abaixo do MDE
+
+O único par significativo entre estratégias (`fixed_512_256` ×
+`structural_gold` no denso, p = 0,0295) tem efeito de **0,0208**, enquanto o
+MDE para poder de 80% é **0,0265**. Não há contradição — o MDE é o efeito
+detectável *com 80% de poder*, e efeitos menores aparecem com poder inferior.
+Mas obriga a reportar o achado como **resultado de fronteira**, que precisa de
+replicação, e não como conclusão. Ficou registrado assim nos três documentos
+que o citam.
+
+## Em aberto ao fim da branch
+
+- **Decisão do corpus oficial** — bloqueia os números do artigo. É da equipe.
+- Reimplementar a **filtragem por seção** em `src/`, com testes, e rodar no
+  BM25 e nas outras estratégias — hoje é só exploratória, no denso.
+- Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`).
 - Notebooks 01–03.
+
+Os próximos passos completos, com responsáveis em aberto, estão no
+[PLANO.md](../../../../PLANO.md) da raiz.

@@ -28,26 +28,33 @@ ambos alcançados**, com semanas de antecedência.
 
 ### A resposta à pergunta de pesquisa
 
-**O chunking estrutural NÃO melhora a recuperação.** Nenhuma diferença entre
-estratégias é significativa, em nenhum dos dois retrievers: 10 pares no BM25 e
-6 no denso, **zero** com p < 0,05. Resultado nulo bem medido, que o
-`plano_tecnico.md` §7 já previa como desfecho legítimo.
+**O chunking estrutural NÃO melhora a recuperação.** De 20 pares entre
+estratégias, **1** tem p < 0,05: `fixed_512_256` × `structural_gold` no denso
+(p = 0,030) — e ele aponta **contra** a hipótese, com o chunking fixo superando
+o estrutural. No BM25, 0 de 10 (menor p = 0,097). Resultado nulo bem medido,
+que o `plano_tecnico.md` §7 já previa como desfecho legítimo.
 
-**O único resultado significativo é outro:** o BM25 supera o retriever denso
-com p < 0,001 nas quatro estratégias comparadas.
+**O resultado mais sólido é outro:** o BM25 supera o retriever denso nas
+**cinco** estratégias, com p entre 0,000005 e 0,002.
 
 | Estratégia | BM25 | Denso (bge-m3) |
 |---|---:|---:|
 | structural_pred | **0,2526** | 0,1912 |
 | structural_gold | 0,2521 | 0,1847 |
-| fixed_1024_512 | 0,2510 | **0,2019** |
-| fixed_512_256 | 0,2486 | *(última rodando)* |
+| fixed_1024_512 | 0,2510 | 0,2019 |
+| fixed_512_256 | 0,2486 | **0,2055** |
 | recursive_default | 0,2412 | 0,1967 |
 
-**A ordem se inverte entre os retrievers** — as estruturais lideram no BM25 e
-ficam por último no denso. Nenhuma dessas diferenças é significativa, mas a
-inversão é consistente e é evidência **contra** um efeito estável do chunking
-estrutural.
+**A ordem se inverte quase perfeitamente entre os retrievers** — as duas
+estruturais são 1ª e 2ª no BM25 e 4ª e 5ª no denso; as duas fixas fazem o
+caminho contrário. A inversão é sistemática e é evidência **contra** um efeito
+estável do chunking estrutural — mais forte do que um empate simples seria.
+
+**Uma intervenção que funcionou:** descartar o relatório do índice melhora o
+nDCG@10 em **16,9%** (p = 0,001), e o ganho se mantém com os spans preditos
+pelo segmentador (p = 0,017). É exploratório — precisa ser reimplementado em
+`src/` antes de ir para o artigo. Ver
+`docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md`.
 
 ### O que falta, em ordem
 

@@ -18,8 +18,9 @@ Três medições encadeadas, todas desta branch:
    agregação vêm do relatório, que tem 66,8% dos chunks e só 25,7% da
    relevância ([04-denso-parcial](04-denso-parcial.md)). Eles acham o termo
    **onde há mais texto, não onde há mais informação**.
-3. **A estratégia de chunking não muda isso** — nenhuma diferença significativa
-   em 16 pares testados.
+3. **A estratégia de chunking não muda isso** — 1 diferença significativa em
+   20 pares testados, e no limiar do poder do teste
+   ([06-final-5x2](06-final-5x2.md)).
 
 Daí a pergunta: **e se o problema não for *como cortar*, e sim *o que
 indexar*?**
@@ -55,9 +56,9 @@ chunks.**
 
 Duas leituras importantes:
 
-**1. O ganho é real.** Com p = 0,001 (ouro) e p = 0,017 (predito), é o segundo
-resultado significativo do trabalho — e o primeiro que representa uma
-*melhoria*, não uma comparação entre alternativas equivalentes.
+**1. O ganho é real.** Com p = 0,001 (ouro) e p = 0,017 (predito), é o único
+resultado do trabalho que representa uma *melhoria* — os demais são comparações
+entre alternativas equivalentes, ou o BM25 vencendo o denso.
 
 **2. Funciona com o nosso segmentador.** `sem relatório (ouro)` × `sem relatório
 (predito)` dá **p = 0,722**, com 47 empates em 150 consultas: as duas versões

@@ -261,7 +261,10 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 06/09 | Embedder escolhido pela **janela de contexto**, não pelo ranking | [05-modelos-embedding](docs/docsleo/branches/leo-f4-indexacao-e-docs/05-modelos-embedding.md) |
 | 06/09 | **Achado:** 72% da relevância está na fundamentação (22,8% do texto) | [03-analise-do-dominio](docs/docsleo/branches/leo-f4-indexacao-e-docs/03-analise-do-dominio.md) |
 | 06/09 | BM25 nas 5 estratégias — primeiro número | [resultados/01-bm25](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/01-bm25.md) |
-| 06/09 | Denso: a ordem inverte, e o BM25 vence com significância | [resultados/04-denso-parcial](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/04-denso-parcial.md) |
+| 06/09 | Denso, 3 de 5: a ordem inverte, e o BM25 vence com significância | [resultados/04-denso-parcial](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/04-denso-parcial.md) |
+| 07/09 | **Achado:** descartar o relatório do índice dá +16,9% de nDCG@10 (p = 0,001) | [resultados/05-filtragem-por-secao](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| 07/09 | **Experimento fechado:** 5 estratégias × 2 retrievers, com a inversão completa | [resultados/06-final-5x2](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
+| 07/09 | Branch `leo/f4-indexacao-e-docs` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f4-indexacao-e-docs/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram
 
