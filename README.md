@@ -19,19 +19,22 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 - **`docs/`** — caderno de bordo de cada integrante (`docs/docsleo/` etc.):
   decisões, achados e evidências que viram o texto do artigo.
 
-## Onde o projeto está (06/09/2026)
+> 📍 **Começando agora, ou voltando ao projeto?** Leia o **[PLANO.md](PLANO.md)**:
+> estado atual, o que já foi feito, o que falta e quem decide o quê. Este README
+> cobre o *como trabalhar*; o PLANO cobre o *o que fazer*.
+
+## Onde o projeto está (07/09/2026)
 
 | | |
 |---|---|
-| **Feito** | F0–F5 implementadas; corpus montado (12.880 acórdãos); segmentador validado (92,2%, 0% de fallback); 2,2 M chunks nas 5 estratégias; **BM25 rodado ponta a ponta** |
-| **Primeiro número** | nDCG@10 de 0,2412 a 0,2526 — **nenhuma diferença significativa** (menor p = 0,097) |
-| **Rodando agora** | Retriever denso (BGE-M3 em GPU, ~10 h) |
+| **Feito** | F0–F5 implementadas; corpus de 12.880 acórdãos; 2,2 M chunks; experimento 5 estratégias × 2 retrievers |
+| **Resposta à pergunta do TCC** | O chunking estrutural **não** melhora a recuperação — nenhuma diferença é significativa, em nenhum retriever |
+| **Resultado significativo** | **BM25 supera o retriever denso** (p < 0,001), o único resultado com significância |
 | **Bloqueio** | 🔴 Decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
-| **Testes** | 98 passando |
+| **Testes** | 115 passando |
 
-O detalhamento fase a fase está em `plano_implementacao.md` (tabela de status
-no topo). O que precisa de decisão da equipe está em
-`docs/docsleo/branches/leo-f4-indexacao-e-docs/08-decisoes-pendentes.md`.
+Detalhes, próximos passos e o que cada um pode pegar: **[PLANO.md](PLANO.md)**.
+O status fase a fase está em `plano_implementacao.md`.
 
 ## Para quem está entrando no projeto agora
 

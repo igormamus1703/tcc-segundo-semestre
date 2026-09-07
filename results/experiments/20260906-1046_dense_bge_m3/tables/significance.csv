@@ -1,0 +1,7 @@
+metric,run_a,run_b,p_value,significativo_p<0.05,wins_a,ties,losses_a
+ndcg@10,fixed_1024_512__dense-bge_m3,recursive_default__dense-bge_m3,0.5894574943668667,False,51,38,61
+ndcg@10,fixed_1024_512__dense-bge_m3,structural_gold__dense-bge_m3,0.08431462604904338,False,71,32,47
+ndcg@10,fixed_1024_512__dense-bge_m3,structural_pred__dense-bge_m3,0.28981580332506335,False,67,29,54
+ndcg@10,recursive_default__dense-bge_m3,structural_gold__dense-bge_m3,0.21282872971579558,False,60,33,57
+ndcg@10,recursive_default__dense-bge_m3,structural_pred__dense-bge_m3,0.5841432013856238,False,60,33,57
+ndcg@10,structural_gold__dense-bge_m3,structural_pred__dense-bge_m3,0.28267956839222147,False,47,48,55
