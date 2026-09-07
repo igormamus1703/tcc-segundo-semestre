@@ -1,6 +1,6 @@
 # Branch `leo/f4-indexacao-e-docs`
 
-**Autor:** Leonardo Marques · **Aberta em:** 2026-09-05 · **Status:** 🟡 rodada final em execução
+**Autor:** Leonardo Marques · **Aberta em:** 2026-09-05 · **Fechada em:** 2026-09-07 · **Status:** ✅ concluída, mergeada na `main`
 
 Implementa as fases **F4 (indexação e runs)** e **F5 (avaliação, significância e
 recortes)**, que estavam como stubs, e documenta os achados que surgiram ao
@@ -12,7 +12,7 @@ rodar o pipeline sobre o corpus real.
 |---|---|
 | O problema mais urgente do projeto | [02-achado-corpus.md](02-achado-corpus.md) — o artigo diz 113.827 documentos, o código produz 12.880 |
 | O achado mais interessante | [03-analise-do-dominio.md](03-analise-do-dominio.md) — 72% da relevância está em 22,8% do texto |
-| O resultado mais forte | [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) — BM25 vence o denso com p < 0,01 |
+| O resultado final | [resultados/06-final-5x2.md](resultados/06-final-5x2.md) — 5 estratégias × 2 retrievers, e o BM25 vence o denso nas cinco |
 | O que precisa ser decidido | [08-decisoes-pendentes.md](08-decisoes-pendentes.md) |
 | Os números para corrigir no artigo | [07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md) |
 
@@ -41,7 +41,7 @@ rodar o pipeline sobre o corpus real.
 | [resultados/01-bm25.md](resultados/01-bm25.md) | Primeiro número: BM25 nas 5 estratégias, com gráficos |
 | [resultados/02-benchmark-gpu.md](resultados/02-benchmark-gpu.md) | Custo do encode, escolha de precisão e o que NÃO acelerou |
 | [resultados/03-previsao-denso.md](resultados/03-previsao-denso.md) | Previsão registrada antes de rodar, e o teste dela |
-| [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) | **Denso:** a ordem se inverte, e o BM25 vence com significância |
+| [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) | Denso, 3 de 5 estratégias — registro parcial, **superado** pelo 06 |
 | [resultados/05-filtragem-por-secao.md](resultados/05-filtragem-por-secao.md) | 🏆 **Descartar o relatório melhora o nDCG@10 em 16,9%** (p = 0,001) |
 | [resultados/06-final-5x2.md](resultados/06-final-5x2.md) | ⭐ **Resultado final:** 5 estratégias × 2 retrievers, com a inversão completa |
 
@@ -58,9 +58,9 @@ rodar o pipeline sobre o corpus real.
 | Figuras do artigo | `src/plots.py` |
 | Rodada completa em um comando | `scripts/rodada_completa.ps1` |
 
-## Testes: 110 passando
+## Testes: 115 passando
 
-Eram **39** antes desta branch. Os 71 novos existem sobretudo para travar
+Eram **39** antes desta branch. Os 76 novos existem sobretudo para travar
 **erros silenciosos** — os que não levantam exceção, só pioram o número ou
 esvaziam uma tabela:
 
@@ -82,14 +82,21 @@ teste que criava pastas na `results/experiments/` de verdade.
 
 ## Checklist para o merge
 
-- [x] `pytest` verde (110)
+- [x] `pytest` verde (115)
 - [x] Pipeline rodado ponta a ponta no corpus real (ingest → chunkers → BM25 → avaliação)
 - [x] Artefatos regenerados e versionados
-- [x] Documentação e figuras
+- [x] Documentação e figuras (10 figuras, com rodapé de contexto)
 - [x] Rodada densa, 3 de 5 estratégias (`20260906-0547_dense_bge_m3`)
-- [ ] Duas estratégias fixas no denso (em execução)
+- [x] Duas estratégias fixas no denso (`20260907-0125_dense_bge_m3`) — **experimento 5 × 2 completo**
+- [x] Avaliação cruzada BM25 × denso, com significância e poder
+- [x] Merge na `main` — 07/09/2026
 - [ ] **Revisão do Igor** — sobretudo a questão do corpus, porque muda o artigo
-- [ ] Merge
+
+> O merge foi feito com a revisão do Igor ainda pendente **de propósito**: a
+> branch só acrescenta código e documentação e não altera as fases dele, e
+> segurá-la na prateleira atrasaria quem for continuar. A decisão do corpus
+> continua aberta, registrada em
+> [08-decisoes-pendentes.md](08-decisoes-pendentes.md).
 
 ## Pontos de atenção para quem revisar
 

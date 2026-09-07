@@ -117,14 +117,15 @@ Numa GPU T4 (Colab) a mesma carga sai em ~2 h — a diferença é de ~60x.
 ## 🟢 4. Execução (posso tocar sozinho)
 
 - [x] Ambiente, datasets (6 GB) e corpus montado
-- [x] F4 e F5 implementadas, **110 testes** passando
+- [x] F4 e F5 implementadas, **115 testes** passando
 - [x] Chunking do corpus completo: 2.200.767 chunks nas 5 estratégias
 - [x] Runs BM25 (5 estratégias) → **primeiro nDCG@10**, reproduzido idêntico em 2 rodadas
 - [x] Tabelas: `main_results.csv`, `significance.csv`, `power_analysis.csv`, os 4 recortes
 - [x] Figuras autocontidas (`src/plots.py`)
 - [x] GPU resolvida: RTX 5060 + `torch cu130`, bge-m3 fp16, ~10 h para o denso completo
 - [x] Runs densos, 3 de 5 (`20260906-0547_dense_bge_m3`, 4,94 h) — **BM25 vence o denso com p < 0,01**
-- [ ] Runs densos das duas estratégias fixas — em execução, reaproveitando o cache
+- [x] Runs densos das duas fixas (`20260907-0125_dense_bge_m3`) — **experimento 5 × 2 fechado**
+- [x] Filtragem por seção: **+16,9% de nDCG@10** (p = 0,001), exploratório
 - [ ] Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`)
 - [ ] Notebooks 01–03 (só consomem `results/`)
 

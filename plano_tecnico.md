@@ -10,10 +10,11 @@ Documento interno da equipe. Não é o entregável do professor.
 > conflito.
 >
 > Em resumo: **F0–F5 concluídas e o experimento rodado nos dois retrievers**.
-> A hipótese **não se confirmou** — nenhuma diferença entre estratégias de
-> chunking é significativa. O único resultado significativo é que o **BM25
-> supera o retriever denso** (p < 0,001). Duas escolhas deste documento mudaram
-> por medição — o embedder e o cronograma —, e estão marcadas abaixo.
+> A hipótese **não se confirmou** — 1 de 20 pares entre estratégias tem
+> p < 0,05, e ele aponta *contra* a hipótese. O resultado mais sólido é que o
+> **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01). Duas
+> escolhas deste documento mudaram por medição — o embedder e o cronograma —,
+> e estão marcadas abaixo.
 
 ---
 
