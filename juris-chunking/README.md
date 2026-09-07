@@ -55,7 +55,11 @@ leitura completos.
    pytest
    ```
 
-## Status (ver `plano_implementacao.md` seção 3 para os critérios de cada fase)
+## Status (ver `PLANO.md` na raiz para o panorama e os próximos passos)
+
+**F0–F5 concluídas.** O experimento foi rodado nos dois retrievers: nenhuma
+diferença entre estratégias de chunking é significativa; o BM25 supera o
+retriever denso com p < 0,001.
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
@@ -87,11 +91,11 @@ leitura completos.
       comparação pareada com correção para comparações múltiplas, bootstrap
       (IC 95%) e os três recortes. `python -m src.evaluate` gera as tabelas.
 
-> ⚠️ **Corpus:** o `eda_stats.json`/`segmenter_validation.json` versionados
-> foram regerados em 05/09 sobre o corpus que o `ingest.py` produz hoje
-> (**12.880** acórdãos, não 113.827 — ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A
-> escolha do corpus oficial ainda está pendente de decisão da equipe, e os
-> números do artigo dependem dela.
+> ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
+> corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
+> `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A escolha
+> do corpus oficial segue pendente de decisão da equipe, e **todos** os números
+> do artigo dependem dela.
 
 ## Uso
 

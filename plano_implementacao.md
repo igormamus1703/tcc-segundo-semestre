@@ -6,10 +6,13 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
 ---
 
-## STATUS ATUAL — 06/09/2026
+## STATUS ATUAL — 07/09/2026
 
-**F0 a F5 implementadas. BM25 rodado ponta a ponta no corpus real. Falta o
-retriever denso, que roda em GPU.**
+**F0 a F5 concluídas. O experimento foi rodado nos dois retrievers.**
+
+> 📍 Para o panorama do projeto, próximos passos e o que cada integrante pode
+> pegar, veja o **[PLANO.md](PLANO.md)** na raiz. Este documento mantém o
+> detalhe fase a fase.
 
 | Fase | Estado | Evidência |
 |---|---|---|
@@ -17,24 +20,45 @@ retriever denso, que roda em GPU.**
 | F1 — Ingestão | ✅ | **12.880** docs, join 98,7%, qrels preservados 99,69% (`results/corpus/eda_stats.json`) |
 | F2 — Segmentador | ✅ | **92,2%** de acurácia por caractere, **0%** de fallback (`results/corpus/segmenter_validation.json`) |
 | F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
-| F4 — Indexação + runs | ✅ código; 🟡 execução | BM25 completo (`results/experiments/20260906-0215_bm25/`); denso pendente |
-| F5 — Avaliação | ✅ código; 🟡 execução | Tabelas, significância e os 3 recortes gerados para o BM25 |
+| F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
+| F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
 
-**Primeiro número da tabela (marco da Semana 7) — alcançado:** nDCG@10 de
-0,2412 a 0,2526 nas cinco estratégias com BM25. **Nenhuma diferença é
-estatisticamente significativa** (menor p = 0,097). Resultado nulo bem medido,
-que o `plano_tecnico.md` §7 já previa como desfecho legítimo.
+**Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
+ambos alcançados**, com semanas de antecedência.
+
+### A resposta à pergunta de pesquisa
+
+**O chunking estrutural NÃO melhora a recuperação.** Nenhuma diferença entre
+estratégias é significativa, em nenhum dos dois retrievers: 10 pares no BM25 e
+6 no denso, **zero** com p < 0,05. Resultado nulo bem medido, que o
+`plano_tecnico.md` §7 já previa como desfecho legítimo.
+
+**O único resultado significativo é outro:** o BM25 supera o retriever denso
+com p < 0,001 nas quatro estratégias comparadas.
+
+| Estratégia | BM25 | Denso (bge-m3) |
+|---|---:|---:|
+| structural_pred | **0,2526** | 0,1912 |
+| structural_gold | 0,2521 | 0,1847 |
+| fixed_1024_512 | 0,2510 | **0,2019** |
+| fixed_512_256 | 0,2486 | *(última rodando)* |
+| recursive_default | 0,2412 | 0,1967 |
+
+**A ordem se inverte entre os retrievers** — as estruturais lideram no BM25 e
+ficam por último no denso. Nenhuma dessas diferenças é significativa, mas a
+inversão é consistente e é evidência **contra** um efeito estável do chunking
+estrutural.
 
 ### O que falta, em ordem
 
 1. **🔴 Decidir o corpus oficial.** O artigo e o pôster dizem 113.827
-   documentos; o código produz 12.880. Não é bug — é uma mudança de escopo que
-   não foi propagada. **Bloqueia todos os números finais.** Análise completa em
-   `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
-2. **🟡 Rodar o retriever denso** (5 estratégias) — ~10 h de GPU com BGE-M3.
-3. Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`).
-4. Notebooks 01–03, que só consomem `results/`.
-5. Corrigir os números do artigo e do pôster (lista em
+   documentos; o código produz 12.880. **Ficou mais urgente**: um resultado
+   significativo medido no corpus errado vai para o artigo como afirmação
+   forte. Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
+2. Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`) — o
+   cache já existe, é barato.
+3. Notebooks 01–03, que só consomem `results/`.
+4. Corrigir os números do artigo e do pôster (lista em
    `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`).
 
 ### Decisões técnicas tomadas depois do plano original
@@ -241,7 +265,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
   `structural_pred` (atualizar `configs/chunkers.yaml`).
 - Testes: invariante de offsets; não-cruzamento; propagação de rótulo; stride.
 
-### F4 — Indexação + runs (`src/indexing/`, `src/run_experiments.py`) ✅ código; 🟡 denso pendente
+### F4 — Indexação + runs (`src/indexing/`, `src/run_experiments.py`) ✅ concluída
 - `lexical.py`: `bm25s` — lowercase + sem acentos + stopwords PT (a mesma
   normalização na indexação e na busca, em `text_norm.py`). ✅
 - `dense.py`: `SentenceTransformer` + `faiss.IndexFlatIP`,
@@ -267,13 +291,18 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
    ~10 h. `torch.compile`, TF32 e deduplicação de chunks foram testados e não
    ajudam (0,99x, 0,99x e 0,4% de redundância).
 
-### F5 — Avaliação, significância e recortes (`evaluate.py`, `analysis.py`) ✅ código; 🟡 falta o denso
+### F5 — Avaliação, significância e recortes (`evaluate.py`, `analysis.py`) ✅ concluída
 - `evaluate.py`: `ranx` → nDCG@10, MRR@10, MAP@10, Recall@100;
   `paired_significance` via `ranx.compare` (pareado, correção múltipla). ✅
 - `analysis.py`: `bootstrap_ci` (10k reamostragens de consultas, IC 95%) e os
   três recortes. ✅
 - Notebooks 01–03: **pendentes**, e por último, só consumindo `results/`.
-- Aceite: falta a metade densa da tabela.
+- **Aceite atingido**: tabela com os dois retrievers, significância pareada com
+  correção, IC 95% por bootstrap e **quatro** recortes (o de seção do acórdão
+  foi acrescentado, e não estava no plano original).
+- Acrescentado além do previsto: **análise de poder estatístico**
+  (`power_analysis.csv`), que responde se um resultado não significativo é
+  ausência de efeito ou falta de amostra.
 
 **Duas armadilhas encontradas ao rodar (ambas silenciosas):**
 
@@ -336,3 +365,7 @@ consumiu parte. Regras para as sessões de execução:
 6. ✅ `pytest` verde (**98 testes**); READMEs de reprodução atualizados.
 7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
    corrigidos de acordo.
+
+**Situação em 07/09:** os itens 1, 2, 3, 4, 5 e 6 estão ✅ (o item 3 com 4 das 5
+estratégias no denso; a quinta rodava quando a máquina desligou e foi retomada
+do checkpoint). Falta o item 7, que depende da equipe.
