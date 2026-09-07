@@ -13,3 +13,18 @@
 [01:26:44]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [01:26:46]     embeddings recuperados do cache (sem reencode)
 [01:26:50] fixed_1024_512__dense-bge_m3: 450,786 chunks, 114,234 linhas, 26.0s  [decorrido 0.0 h]
+[01:27:13]   [fixed_512_256] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[01:27:13]     bloco 1/37 recuperado do checkpoint
+[01:27:13]     bloco 2/37 recuperado do checkpoint
+[01:27:13]     bloco 3/37 recuperado do checkpoint
+[01:27:13]     bloco 4/37 recuperado do checkpoint
+[01:27:13]     bloco 5/37 recuperado do checkpoint
+[01:27:13]     bloco 6/37 recuperado do checkpoint
+[01:27:13]     bloco 7/37 recuperado do checkpoint
+[01:27:13]     bloco 8/37 recuperado do checkpoint
+[01:27:14]     bloco 9/37 recuperado do checkpoint
+[01:27:14]     bloco 10/37 recuperado do checkpoint
+[01:27:14]     bloco 11/37 recuperado do checkpoint
+[01:27:14]     bloco 12/37 recuperado do checkpoint
+[01:27:14]     bloco 13/37 recuperado do checkpoint
+[01:27:14]     bloco 14/37 recuperado do checkpoint

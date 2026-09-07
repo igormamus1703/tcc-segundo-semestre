@@ -2,15 +2,18 @@
 
 Documento interno da equipe. Não é o entregável do professor.
 
-> **Status em 06/09/2026 — leia antes de usar este documento.**
+> **Status em 07/09/2026 — leia antes de usar este documento.**
 > Este é o plano de referência (arquitetura, stack, cronograma) e **não é
-> atualizado a cada execução**. Para saber o que está feito e o que falta, veja
-> o **`plano_implementacao.md`**, que tem a tabela de status e substitui este
-> documento onde houver conflito.
+> atualizado a cada execução**. Para o panorama e os próximos passos, veja o
+> **`PLANO.md`** na raiz; para o detalhe fase a fase, o
+> **`plano_implementacao.md`**, que substitui este documento onde houver
+> conflito.
 >
-> Em resumo: F0–F5 implementadas, BM25 rodado no corpus real (primeiro número
-> obtido), retriever denso pendente. Duas escolhas deste documento mudaram por
-> medição — o embedder e o cronograma —, e estão marcadas abaixo.
+> Em resumo: **F0–F5 concluídas e o experimento rodado nos dois retrievers**.
+> A hipótese **não se confirmou** — nenhuma diferença entre estratégias de
+> chunking é significativa. O único resultado significativo é que o **BM25
+> supera o retriever denso** (p < 0,001). Duas escolhas deste documento mudaram
+> por medição — o embedder e o cronograma —, e estão marcadas abaixo.
 
 ---
 
@@ -187,11 +190,11 @@ Não use API paga. Custo, reprodutibilidade e o fato de que a nota não sobe por
 (tabela fechada). Se algum atrasar mais de uma semana, corte escopo — comece pelo
 segundo modelo de embedding, que é o mais dispensável.
 
-> **Situação real em 06/09:** os três primeiros marcos vieram **adiantados**.
-> Viabilidade decidida em 18/08 (Semana 1), F0–F3 fechadas em 24/08, e o
-> **primeiro número saiu em 06/09** — o marco previsto para a Semana 7.
-> O gargalo deixou de ser código: hoje são (a) a decisão do corpus oficial,
-> que é da equipe, e (b) ~10 h de GPU para o encode denso.
+> **Situação real em 07/09:** os marcos vieram **muito adiantados**.
+> Viabilidade decidida em 18/08 (Semana 1), F0–F3 fechadas em 24/08, o
+> **primeiro número em 06/09** (marco da Semana 7) e a **tabela fechada nos dois
+> retrievers em 07/09** (marco da Semana 11). O gargalo deixou de ser código ou
+> compute: é a **decisão do corpus oficial**, que é da equipe, e a redação.
 
 **Fora de escopo, explicitamente:** ColBERT / late interaction, fine-tuning de
 retriever, avaliação de geração (RAGAS), rotulagem retórica em nível de sentença.
@@ -289,6 +292,21 @@ O TCC é bem-sucedido se, ao final, existir:
 3. Testes de significância pareados — não só médias.
 4. Três recortes analíticos respondendo "sob quais condições".
 5. Repositório reprodutível.
+
+> **Situação em 07/09 — os cinco critérios estão atendidos:**
+> 1. ✅ Segmentador com **92,2%** de acurácia por caractere e **0%** de fallback,
+>    validado contra os spans ouro de todo o corpus.
+> 2. ✅ Tabela com **5** estratégias × 2 retrievers (o plano pedia 3) e quatro
+>    métricas.
+> 3. ✅ Significância pareada com correção para comparações múltiplas —
+>    **mais** análise de poder estatístico, que não estava previsto.
+> 4. ✅ **Quatro** recortes: tipo de consulta, tamanho de documento, retriever e
+>    seção do acórdão (este último não estava previsto).
+> 5. ✅ Cada rodada gera manifesto com commit, hardware, versões e tempos; o
+>    BM25 foi reproduzido idêntico em duas execuções independentes.
+>
+> A hipótese não se confirmou, o que o §7 já previa: *"Nada disso exige que a
+> hipótese se confirme."*
 
 **Nada disso exige que a hipótese se confirme.** Um resultado nulo bem medido,
 com recortes que mostram onde cada estratégia ganha, é um TCC completo.
