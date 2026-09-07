@@ -41,5 +41,6 @@ docsleo/
 | Saber o que precisa ser decidido pela equipe | [08-decisoes-pendentes.md](branches/leo-f4-indexacao-e-docs/08-decisoes-pendentes.md) |
 | Ver o primeiro nDCG@10 e os recortes | [resultados/](branches/leo-f4-indexacao-e-docs/resultados/) |
 | Ver o resultado do retriever denso | [resultados/04-denso-parcial.md](branches/leo-f4-indexacao-e-docs/resultados/04-denso-parcial.md) |
+| Ver o achado mais promissor | [resultados/05-filtragem-por-secao.md](branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
 | Entender o domínio: onde está a relevância no acórdão | [03-analise-do-dominio.md](branches/leo-f4-indexacao-e-docs/03-analise-do-dominio.md) |
 | Montar o ambiente numa máquina nova | [01-ambiente-setup.md](branches/leo-f4-indexacao-e-docs/01-ambiente-setup.md) |

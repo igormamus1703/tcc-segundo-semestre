@@ -18,7 +18,7 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 | **Fases** | F0–F5 **implementadas**; experimento 5 estratégias × 2 retrievers rodado |
 | **Testes** | 115 passando |
 | **Resposta curta à pergunta** | **Não melhora.** Nenhuma diferença entre estratégias é significativa, em nenhum dos dois retrievers |
-| **Resultado significativo** | **BM25 supera o retriever denso** (p < 0,001) — o único resultado com significância do trabalho |
+| **Resultados significativos** | **1.** BM25 supera o retriever denso (p < 0,001). **2.** Descartar o relatório do índice melhora o nDCG@10 em **16,9%** (p = 0,001) |
 | **Bloqueio nº 1** | 🔴 A equipe precisa decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
 
 ### A tabela principal (nDCG@10)
@@ -96,6 +96,27 @@ no fim de cada lista.
       cache já existe; **bom primeiro item para quem for pegar o projeto**
 - [ ] Opcional: rodar com o `embeddinggemma-300m` (exige `hf auth login`) para
       ter um segundo modelo denso
+
+### 3.1b 🏆 A frente mais promissora: filtragem por seção
+
+Testado em 07/09 e **funcionou**: descartar os chunks do relatório melhora o
+nDCG@10 em **16,9%** (p = 0,001) usando um terço do índice, e o ganho se mantém
+com os spans **preditos** pelo segmentador (p = 0,017), não só com a estrutura
+ouro. Detalhe em
+[resultados/05-filtragem-por-secao.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md).
+
+Foi exploratório, fora do `src/`. Para virar resultado do artigo:
+
+- [ ] Reimplementar no pipeline como opção de indexação (`--secoes ...`), com testes
+- [ ] Rodar no **BM25** — só testamos no denso
+- [ ] Testar a variante **ponderada** (peso por seção em vez de corte binário),
+      que talvez preserve o Recall@100, hoje 7% menor
+- [ ] Efeito por tipo de consulta, sobretudo nas consultas reais de log
+- [ ] Bootstrap de IC 95% e análise de poder
+
+> Isto reformula a pergunta do trabalho de *"como cortar o documento?"*
+> (resposta: tanto faz) para **"qual parte do documento indexar?"** — que tem
+> resposta, com mecanismo medido antes da intervenção.
 
 ### 3.2 Análise e escrita
 

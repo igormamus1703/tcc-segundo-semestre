@@ -41,7 +41,8 @@ rodar o pipeline sobre o corpus real.
 | [resultados/01-bm25.md](resultados/01-bm25.md) | Primeiro número: BM25 nas 5 estratégias, com gráficos |
 | [resultados/02-benchmark-gpu.md](resultados/02-benchmark-gpu.md) | Custo do encode, escolha de precisão e o que NÃO acelerou |
 | [resultados/03-previsao-denso.md](resultados/03-previsao-denso.md) | Previsão registrada antes de rodar, e o teste dela |
-| [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) | **Denso (3 de 5):** a ordem se inverte, e o BM25 vence com significância |
+| [resultados/04-denso-parcial.md](resultados/04-denso-parcial.md) | **Denso:** a ordem se inverte, e o BM25 vence com significância |
+| [resultados/05-filtragem-por-secao.md](resultados/05-filtragem-por-secao.md) | 🏆 **Descartar o relatório melhora o nDCG@10 em 16,9%** (p = 0,001) |
 
 ## Código entregue
 
