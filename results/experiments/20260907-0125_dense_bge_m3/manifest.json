@@ -1,8 +1,8 @@
 {
   "rotulo": "dense_bge_m3",
   "inicio": "2026-09-07T01:25:25",
-  "fim": null,
-  "duracao_s": 85.0,
+  "fim": "2026-09-07T03:04:19",
+  "duracao_s": 5934.3,
   "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever dense",
   "config": {
     "estrategias": [
@@ -82,6 +82,88 @@
       "n_queries": 150,
       "n_linhas_run": 114234,
       "segundos": 26.0
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3",
+      "run": "fixed_512_256__dense-bge_m3",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 108254,
+      "segundos": 5848.9
     }
-  ]
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-07T03:06:34",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      },
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      }
+    },
+    "melhor_run": "structural_pred__bm25",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 45,
+      "pares_p_menor_0_05": 26,
+      "menor_p": 0.0
+    }
+  }
 }

@@ -15,7 +15,7 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 |---|---|
 | **Pergunta** | Chunking que respeita as macro-seções do acórdão melhora a recuperação, comparado a chunking fixo/recursivo? Sob quais condições? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
-| **Fases** | F0–F5 **implementadas**; experimento 5 estratégias × 2 retrievers rodado |
+| **Fases** | F0–F5 concluídas; **experimento 5 × 2 completo** |
 | **Testes** | 115 passando |
 | **Resposta curta à pergunta** | **Não melhora.** Nenhuma diferença entre estratégias é significativa, em nenhum dos dois retrievers |
 | **Resultados significativos** | **1.** BM25 supera o retriever denso (p < 0,001). **2.** Descartar o relatório do índice melhora o nDCG@10 em **16,9%** (p = 0,001) |
@@ -27,8 +27,8 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 |---|---:|---:|
 | structural_pred | **0,2526** | 0,1912 |
 | structural_gold | 0,2521 | 0,1847 |
-| fixed_1024_512 | 0,2510 | **0,2019** |
-| fixed_512_256 | 0,2486 | *(rodando)* |
+| fixed_1024_512 | 0,2510 | 0,2019 |
+| fixed_512_256 | 0,2486 | **0,2055** |
 | recursive_default | 0,2412 | 0,1967 |
 
 **A ordem se inverte entre os retrievers**: as estruturais lideram no BM25 e
@@ -90,7 +90,7 @@ no fim de cada lista.
 - [x] Chunking: 2.200.767 chunks nas 5 estratégias — *Leo, 05/09*
 - [x] BM25 nas 5 estratégias, reproduzido idêntico em duas rodadas — *Leo, 06/09*
 - [x] Denso nas 4 primeiras estratégias — *Leo, 06/09*
-- [ ] Denso na `fixed_512_256` — **em execução**, retomando do checkpoint
+- [x] Denso na `fixed_512_256` — *Leo, 07/09*. **Experimento completo: 5 × 2**
 - [ ] Análise de sensibilidade da agregação: `sum_top_k` vs `max_pooling`
       (`python -m src.run_experiments --aggregation sum_top_k`) — barato, o
       cache já existe; **bom primeiro item para quem for pegar o projeto**
