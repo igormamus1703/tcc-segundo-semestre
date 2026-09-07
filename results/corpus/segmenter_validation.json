@@ -1,0 +1,37 @@
+{
+  "n_docs": 12880,
+  "acuracia_char_global": 0.9222,
+  "fallback_rate": 0.0,
+  "por_secao": {
+    "dispositivo": {
+      "cobertura": 0.987,
+      "precisao": 0.7428,
+      "gold_chars": 33267049,
+      "predicted_chars": 44198810
+    },
+    "ementa": {
+      "cobertura": 0.9362,
+      "precisao": 0.5022,
+      "gold_chars": 6460092,
+      "predicted_chars": 12042252
+    },
+    "fundamentacao": {
+      "cobertura": 0.9109,
+      "precisao": 0.9644,
+      "gold_chars": 182947380,
+      "predicted_chars": 172790305
+    },
+    "indefinido": {
+      "cobertura": 0.0,
+      "precisao": 0.0,
+      "gold_chars": 0,
+      "predicted_chars": 28069470
+    },
+    "relatorio": {
+      "cobertura": 0.9218,
+      "precisao": 0.9825,
+      "gold_chars": 556053532,
+      "predicted_chars": 521706058
+    }
+  }
+}

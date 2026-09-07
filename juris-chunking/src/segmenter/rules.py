@@ -33,7 +33,7 @@ Curva de iteração — `python -m src.segmenter.validate` no corpus inteiro
 | v4 (+ "Por registrar as [...]", prefixo numerado "2. Adoto...") | 0.9249 | boilerplate comum antes do verbo principal |
 | v5 final (+ "Inicialmente,", `Tratam-se`, `Incorporo a este relatório`, `Examinam-se`, `Aprecia-se`) | **0.9271** | cauda longa de variantes de abertura; ganho marginal — convergiu |
 
-Resultado final por seção (`results/tables/segmenter_validation.json`):
+Resultado final por seção (`results/corpus/segmenter_validation.json`):
 cobertura/precisão de `relatorio` 0.928/0.981, `fundamentacao`
 0.907/0.952, `dispositivo` 0.989/0.790, `ementa` 0.935/0.561.
 `fallback_rate` (doc inteiro "indefinido") = 1.64%.

@@ -1,0 +1,6 @@
+#    Model                              NDCG@10
+---  -------------------------------  ---------
+a    fixed_1024_512__dense-bge_m3         0.202
+b    recursive_default__dense-bge_m3      0.197
+c    structural_gold__dense-bge_m3        0.185
+d    structural_pred__dense-bge_m3        0.191

@@ -1,0 +1,169 @@
+{
+  "rotulo": "dense_bge_m3",
+  "inicio": "2026-09-07T01:25:25",
+  "fim": "2026-09-07T03:04:19",
+  "duracao_s": 5934.3,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever dense",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "00f8d573427279efd9749389b57e70cd04c16770",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 20.5
+    },
+    {
+      "nome": "structural_pred__dense-bge_m3",
+      "run": "structural_pred__dense-bge_m3",
+      "n_chunks": 285308,
+      "n_queries": 150,
+      "n_linhas_run": 133266,
+      "segundos": 18.6
+    },
+    {
+      "nome": "recursive_default__dense-bge_m3",
+      "run": "recursive_default__dense-bge_m3",
+      "n_chunks": 270070,
+      "n_queries": 150,
+      "n_linhas_run": 134254,
+      "segundos": 18.0
+    },
+    {
+      "nome": "fixed_1024_512__dense-bge_m3",
+      "run": "fixed_1024_512__dense-bge_m3",
+      "n_chunks": 450786,
+      "n_queries": 150,
+      "n_linhas_run": 114234,
+      "segundos": 26.0
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3",
+      "run": "fixed_512_256__dense-bge_m3",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 108254,
+      "segundos": 5848.9
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-07T03:06:34",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      },
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      }
+    },
+    "melhor_run": "structural_pred__bm25",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 45,
+      "pares_p_menor_0_05": 26,
+      "menor_p": 0.0
+    }
+  }
+}

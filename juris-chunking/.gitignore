@@ -2,8 +2,6 @@ data/interim/*
 !data/interim/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-results/runs/*
-!results/runs/.gitkeep
 
 # python
 __pycache__/

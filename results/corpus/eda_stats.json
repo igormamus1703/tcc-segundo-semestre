@@ -1,0 +1,15 @@
+{
+  "n_docs": 12880,
+  "tokens_por_doc": {
+    "mediana": 11426,
+    "p90": 38390,
+    "p99": 105313,
+    "media": 18174.0
+  },
+  "presenca_secao": {
+    "ementa": 0.9987,
+    "relatorio": 0.9998,
+    "fundamentacao": 0.9988,
+    "dispositivo": 1.0
+  }
+}

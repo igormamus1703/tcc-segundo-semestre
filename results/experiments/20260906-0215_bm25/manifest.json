@@ -1,0 +1,103 @@
+{
+  "rotulo": "bm25",
+  "inicio": "2026-09-06T02:15:00",
+  "fim": "2026-09-06T02:34:00",
+  "duracao_s": 1516.6,
+  "comando": "python -m src.run_experiments --strategy all --retriever bm25",
+  "reconstruido_retroativamente": true,
+  "observacao": "Rodada anterior ao src/experiment.py; manifesto remontado a partir do log da execucao e dos artefatos. As rodadas seguintes geram este arquivo sozinhas.",
+  "config": {
+    "estrategias": [
+      "fixed_1024_512",
+      "fixed_512_256",
+      "recursive_default",
+      "structural_gold",
+      "structural_pred"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "corpus": "data/interim/queries.jsonl"
+  },
+  "corpus": {
+    "n_docs": 12880,
+    "n_qrel_pares": 2219,
+    "mediana_tokens_doc": 11426,
+    "join_match": 0.987,
+    "qrels_preservados": 0.9969
+  },
+  "git": {
+    "commit": "43d0ffb",
+    "branch": "leo/f4-indexacao-e-docs",
+    "sujo": false
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cpu",
+    "bm25s": "0.3.11",
+    "ranx": "0.3.21",
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel i5-13400",
+    "gpu": null,
+    "observacao": "BM25 e CPU-only; a GPU so entra no retriever denso"
+  },
+  "etapas": [
+    {
+      "nome": "fixed_1024_512__bm25",
+      "run": "fixed_1024_512__bm25",
+      "n_chunks": 450786,
+      "n_queries": 150,
+      "n_linhas_run": 85377,
+      "segundos": 396.4
+    },
+    {
+      "nome": "fixed_512_256__bm25",
+      "run": "fixed_512_256__bm25",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 82653,
+      "segundos": 426.7
+    },
+    {
+      "nome": "recursive_default__bm25",
+      "run": "recursive_default__bm25",
+      "n_chunks": 270070,
+      "n_queries": 150,
+      "n_linhas_run": 120681,
+      "segundos": 223.4
+    },
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 117959,
+      "segundos": 235.1
+    },
+    {
+      "nome": "structural_pred__bm25",
+      "run": "structural_pred__bm25",
+      "n_chunks": 285308,
+      "n_queries": 150,
+      "n_linhas_run": 117984,
+      "segundos": 235.0
+    }
+  ],
+  "resultados_resumo": {
+    "metrica": "ndcg@10",
+    "structural_pred": 0.2526,
+    "structural_gold": 0.2521,
+    "fixed_1024_512": 0.251,
+    "fixed_512_256": 0.2486,
+    "recursive_default": 0.2412,
+    "significancia": "nenhum par com p < 0.05 (menor p = 0.097)"
+  }
+}
