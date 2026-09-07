@@ -22,7 +22,8 @@ estava pronto.
 | `configs/models.yaml` | resolvido o `PREENCHER`; prefixos declarados por modelo |
 | `tests/test_indexing.py`, `test_evaluate.py`, `test_run_experiments.py` | **novos** — 42 testes |
 
-Total: `pytest` passou de 39 para **110 testes**, todos verdes. (Este documento
+Total: `pytest` passou de 39 para **110 testes** nesta etapa, e chegou a **115**
+ao fim da branch. (Este documento
 descreve a implementação inicial; o que veio depois — checkpoint do encode,
 orçamento de tempo, rastreabilidade das rodadas e figuras — está no
 [09-diario-execucao.md](09-diario-execucao.md) e nos documentos de resultados.)
