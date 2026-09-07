@@ -192,7 +192,8 @@ Invariante em todo o pipeline: `doc.text[start:end] == chunk.text`.
 - `juris-chunking/data/processed/{estrategia}/chunks.jsonl` — campos do dataclass `Chunk`.
 - `juris-chunking/data/processed/{estrategia}/emb_{modelo}.npy` + `chunk_ids.json` — cache de embeddings.
 - `results/runs/{estrategia}__{retriever}[__{agregacao}].trec` — TREC run: `qid Q0 docid rank score nome`.
-- `results/tables/` — `eda_stats.json`, `segmenter_validation.json`, `main_results.csv`, `significance.csv`, `slices_*.csv`.
+- `results/corpus/` — `eda_stats.json`, `segmenter_validation.json` (caracterização do corpus; muda só quando o corpus muda).
+- `results/experiments/<AAAAMMDD-HHMM>_<rótulo>/` — uma pasta por rodada, com `manifest.json` (commit, hardware, versões, tempos), `execucao.log`, `runs/*.trec`, `runs/*__chunks.jsonl`, `tables/*.csv` e `figuras/*.pdf|png`. **Este layout substitui o `results/tables/` plano descrito acima**, que existia quando o plano foi escrito; ver `results/README.md`.
 - Tokenizer único: **tiktoken `cl100k_base`** (wrapper em `src/tokenization.py`).
 
 ---
@@ -224,7 +225,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
     preservadas; senão, parar e discutir.
   - `corpus_stats()` → tokens/doc (mediana, p90, p99) do NOVO corpus, presença
     de cada seção (fração de docs com RELATORIO, VOTO etc. não vazios),
-    cobertura dos qrels → `results/tables/eda_stats.json`.
+    cobertura dos qrels → `results/corpus/eda_stats.json`.
 - Testes: `normalize_html` (fixtures com tag de citação, entidades, `<p>`);
   normalização de chave de join; remapeamento de qrel com máximo por par.
 - Aceite: `python -m src.ingest` ponta a ponta; conferir 2–3 docs no olho e o
@@ -241,7 +242,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
   doc inteiro `indefinido`; reportar `fallback_rate`.
 - `validate.py`: **validação automática contra `gold_spans`** de todo o corpus —
   acurácia por caractere + precisão/cobertura por seção →
-  `results/tables/segmenter_validation.json`. Amostra manual: 20 docs só para
+  `results/corpus/segmenter_validation.json`. Amostra manual: 20 docs só para
   sanidade da montagem (não 80 — o gabarito agora é derivado das colunas).
 - Testes: docs sintéticos (todas as seções; só voto+acórdão; sem marcador).
 - Aceite: `python -m src.segmenter.validate` imprime acurácia global e por

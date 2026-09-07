@@ -65,11 +65,11 @@ retriever denso com p < 0,001.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
       JurisTCU remapeados. Gate passou: **98,7%** match de docs, **99,69%**
       qrels preservados, **12.880** documentos
-      (`results/tables/eda_stats.json`, `join_report.json`).
+      (`results/corpus/eda_stats.json`, `join_report.json`).
 - [x] **F2 — Segmentador**: regras calibradas contra o texto real,
       validadas automaticamente contra os spans ouro do corpus inteiro —
       **92,2%** de acurácia por caractere, **0,0%** de fallback
-      (`results/tables/segmenter_validation.json`; curva de iteração
+      (`results/corpus/segmenter_validation.json`; curva de iteração
       documentada no docstring de `src/segmenter/rules.py`). As regras foram
       calibradas sobre 113k acórdãos e mantêm a acurácia neste subconjunto
       sem recalibração.
@@ -89,7 +89,10 @@ retriever denso com p < 0,001.
       opção, mas é *gated*.
 - [x] **F5 — Avaliação, significância e recortes**: métricas via `ranx`,
       comparação pareada com correção para comparações múltiplas, bootstrap
-      (IC 95%) e os três recortes. `python -m src.evaluate` gera as tabelas.
+      (IC 95%), análise de poder estatístico e **quatro** recortes (tipo de
+      consulta, tamanho de documento, retriever e seção do acórdão).
+      `python -m src.evaluate` gera as tabelas e `python -m src.plots` as
+      figuras.
 
 > ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
 > corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
@@ -107,7 +110,8 @@ python -m src.chunkers.run --strategy all --limit-docs 500  # smoke test
 python -m src.chunkers.run --strategy all                   # corpus inteiro
 python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
 python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
-python -m src.evaluate                # F5: gera results/tables/*.csv
+python -m src.evaluate                # F5: tabelas da rodada mais recente
+python -m src.plots                   # F5: figuras (PDF + PNG)
 pytest                                # roda a suíte de testes
 ```
 
