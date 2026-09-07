@@ -12,3 +12,37 @@
 [10:47:27] recursive_default__dense-bge_m3: 270,070 chunks, 134,254 linhas, 11.7s  [decorrido 0.0 h]
 [10:47:39]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [10:56:38]     bloco 1/19 (25,000 chunks) em 9.0 min — faltam ~2.7 h
+[11:05:40]     bloco 2/19 (25,000 chunks) em 9.0 min — faltam ~2.6 h
+[11:14:44]     bloco 3/19 (25,000 chunks) em 9.1 min — faltam ~2.4 h
+[11:24:01]     bloco 4/19 (25,000 chunks) em 9.3 min — faltam ~2.3 h
+[11:33:31]     bloco 5/19 (25,000 chunks) em 9.5 min — faltam ~2.2 h
+[11:42:58]     bloco 6/19 (25,000 chunks) em 9.5 min — faltam ~2.0 h
+[11:52:28]     bloco 7/19 (25,000 chunks) em 9.5 min — faltam ~1.9 h
+[12:01:57]     bloco 8/19 (25,000 chunks) em 9.5 min — faltam ~1.7 h
+[12:11:26]     bloco 9/19 (25,000 chunks) em 9.5 min — faltam ~1.6 h
+[12:20:55]     bloco 10/19 (25,000 chunks) em 9.5 min — faltam ~1.4 h
+[12:30:27]     bloco 11/19 (25,000 chunks) em 9.5 min — faltam ~1.3 h
+[12:39:56]     bloco 12/19 (25,000 chunks) em 9.5 min — faltam ~1.1 h
+[12:49:28]     bloco 13/19 (25,000 chunks) em 9.5 min — faltam ~1.0 h
+[12:59:09]     bloco 14/19 (25,000 chunks) em 9.7 min — faltam ~0.8 h
+[13:08:53]     bloco 15/19 (25,000 chunks) em 9.7 min — faltam ~0.6 h
+[13:18:38]     bloco 16/19 (25,000 chunks) em 9.7 min — faltam ~0.5 h
+[13:28:20]     bloco 17/19 (25,000 chunks) em 9.7 min — faltam ~0.3 h
+[13:38:05]     bloco 18/19 (25,000 chunks) em 9.7 min — faltam ~0.2 h
+[13:38:23]     bloco 19/19 (786 chunks) em 0.3 min — faltam ~0.0 h
+[13:38:43] fixed_1024_512__dense-bge_m3: 450,786 chunks, 114,234 linhas, 10276.1s  [decorrido 2.9 h]
+[13:39:07]   [fixed_512_256] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[13:43:49]     bloco 1/37 (25,000 chunks) em 4.7 min — faltam ~2.8 h
+[13:48:19]     bloco 2/37 (25,000 chunks) em 4.5 min — faltam ~2.6 h
+[13:52:45]     bloco 3/37 (25,000 chunks) em 4.4 min — faltam ~2.5 h
+[13:57:10]     bloco 4/37 (25,000 chunks) em 4.4 min — faltam ~2.4 h
+[14:01:36]     bloco 5/37 (25,000 chunks) em 4.4 min — faltam ~2.4 h
+[14:06:03]     bloco 6/37 (25,000 chunks) em 4.4 min — faltam ~2.3 h
+[14:10:32]     bloco 7/37 (25,000 chunks) em 4.5 min — faltam ~2.2 h
+[14:15:02]     bloco 8/37 (25,000 chunks) em 4.5 min — faltam ~2.2 h
+[14:19:32]     bloco 9/37 (25,000 chunks) em 4.5 min — faltam ~2.1 h
+[14:24:04]     bloco 10/37 (25,000 chunks) em 4.5 min — faltam ~2.0 h
+[14:28:34]     bloco 11/37 (25,000 chunks) em 4.5 min — faltam ~2.0 h
+[14:33:10]     bloco 12/37 (25,000 chunks) em 4.6 min — faltam ~1.9 h
+[14:37:45]     bloco 13/37 (25,000 chunks) em 4.6 min — faltam ~1.8 h
+[14:42:17]     bloco 14/37 (25,000 chunks) em 4.5 min — faltam ~1.7 h

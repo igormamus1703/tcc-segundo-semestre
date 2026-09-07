@@ -1,0 +1,15 @@
+[01:25:27] experimento 20260907-0125_dense_bge_m3
+[01:25:27]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[01:25:27]   commit: 00f8d573 (arvore suja) em leo/f4-indexacao-e-docs
+[01:25:42]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[01:25:44]     embeddings recuperados do cache (sem reencode)
+[01:25:47] structural_gold__dense-bge_m3: 286,689 chunks, 133,289 linhas, 20.5s  [decorrido 0.0 h]
+[01:26:02]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[01:26:03]     embeddings recuperados do cache (sem reencode)
+[01:26:06] structural_pred__dense-bge_m3: 285,308 chunks, 133,266 linhas, 18.6s  [decorrido 0.0 h]
+[01:26:20]   [recursive_default] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[01:26:21]     embeddings recuperados do cache (sem reencode)
+[01:26:24] recursive_default__dense-bge_m3: 270,070 chunks, 134,254 linhas, 18.0s  [decorrido 0.0 h]
+[01:26:44]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[01:26:46]     embeddings recuperados do cache (sem reencode)
+[01:26:50] fixed_1024_512__dense-bge_m3: 450,786 chunks, 114,234 linhas, 26.0s  [decorrido 0.0 h]
