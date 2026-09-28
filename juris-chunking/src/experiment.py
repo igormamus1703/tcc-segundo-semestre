@@ -151,6 +151,48 @@ class Experimento:
         _atualizar_indice()
 
 
+def rotulo_da_pasta(nome: str) -> str:
+    """`20260906-0515_bm25` -> `bm25`. O carimbo é tudo antes do 1º `_`."""
+    return nome.split("_", 1)[1] if "_" in nome else nome
+
+
+def ultima_rodada(
+    rotulo: str, raiz: Path | None = None, exato: bool = True
+) -> Path | None:
+    """A rodada mais recente com este rótulo, ou None.
+
+    Existe para o `rodada_completa.ps1` encadear etapas: a F6 precisa apontar
+    para as rodadas de BM25 e densa que acabaram de ser criadas, e o nome
+    delas carrega data e hora. Procurar pelo rótulo é mais robusto do que o
+    script tentar adivinhar o carimbo — se uma etapa for pulada ou repetida, a
+    busca continua achando a rodada certa.
+
+    **O casamento é EXATO por padrão, e isso não é detalhe.** A primeira versão
+    usava substring, e `"bm25"` passou a casar com `cv_fusao_bm25_denso`,
+    enquanto `"dense"` casava com `dense_peso_rel0.5`: o script encadearia a
+    F6 a partir de rodadas derivadas em vez das de base, e o erro só
+    apareceria como um número estranho na tabela final. `exato=False` existe
+    para uso interativo, onde quem lê a saída confere o que veio.
+
+    Só considera pastas que **têm runs**: uma rodada que abortou antes de
+    gravar qualquer `.trec` não serve como entrada para a etapa seguinte, e
+    devolvê-la faria o erro aparecer duas etapas adiante.
+    """
+    base = raiz or EXPERIMENTS_DIR
+    if not base.is_dir():
+        return None
+    # O nome começa com AAAAMMDD-HHMM, então a ordem alfabética é a cronológica.
+    for d in sorted(base.iterdir(), reverse=True):
+        if not d.is_dir():
+            continue
+        casa = rotulo_da_pasta(d.name) == rotulo if exato else rotulo in d.name
+        if not casa:
+            continue
+        if any((d / "runs").glob("*.trec")):
+            return d
+    return None
+
+
 def _atualizar_indice() -> None:
     """Reescreve `results/experiments/INDICE.md` a partir dos manifestos —
     a lista sempre reflete o que está no disco, sem edição manual."""
@@ -191,3 +233,26 @@ def _atualizar_indice() -> None:
             f"| {melhor_txt} | {sig_txt} |"
         )
     (EXPERIMENTS_DIR / "INDICE.md").write_text("\n".join(linhas) + "\n", encoding="utf-8")
+
+
+if __name__ == "__main__":
+    # `python -m src.experiment --ultima bm25` imprime o caminho da rodada mais
+    # recente com esse rotulo. E o que o rodada_completa.ps1 usa para encadear
+    # as etapas da F6 sem adivinhar carimbos de data.
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Utilitarios das rodadas.")
+    ap.add_argument("--ultima", metavar="ROTULO", default=None,
+                    help="Imprime a rodada mais recente com este rotulo EXATO "
+                         "(o rotulo e o nome da pasta sem o carimbo de data).")
+    ap.add_argument("--contendo", action="store_true",
+                    help="Afrouxa para casamento por substring. So para uso "
+                         "interativo: num script, 'bm25' casaria tambem com "
+                         "'cv_fusao_bm25_denso'.")
+    _args = ap.parse_args()
+    if _args.ultima is None:
+        ap.error("nada a fazer: use --ultima")
+    _d = ultima_rodada(_args.ultima, exato=not _args.contendo)
+    if _d is None:
+        raise SystemExit(f"nenhuma rodada com runs e rotulo {_args.ultima!r}")
+    print(_d)

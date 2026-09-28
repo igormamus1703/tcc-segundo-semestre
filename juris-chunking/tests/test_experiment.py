@@ -68,3 +68,65 @@ def test_log_tem_horario(tmp_path):
     conteudo = exp.log_path.read_text(encoding="utf-8")
     assert "mensagem de teste" in conteudo
     assert re.search(r"\[\d{2}:\d{2}:\d{2}\]", conteudo)
+
+
+# --- localizar a rodada mais recente (encadeamento de etapas) ---------------
+
+def _rodada(base, nome, com_runs=True):
+    d = base / nome
+    (d / "runs").mkdir(parents=True)
+    if com_runs:
+        (d / "runs" / "x__bm25.trec").write_text("1 Q0 d 1 1.0 x\n", encoding="utf-8")
+    return d
+
+
+def test_ultima_rodada_pega_a_mais_recente_do_rotulo(tmp_path):
+    from src.experiment import ultima_rodada
+
+    _rodada(tmp_path, "20260101-1000_bm25")
+    esperada = _rodada(tmp_path, "20260201-1000_bm25")
+    _rodada(tmp_path, "20260301-1000_dense_bge_m3")
+    assert ultima_rodada("bm25", raiz=tmp_path) == esperada
+
+
+def test_ultima_rodada_nao_casa_rodada_derivada(tmp_path):
+    """BUG REAL (28/09): com casamento por substring, 'bm25' pegava
+    'cv_fusao_bm25_denso' e 'dense' pegava 'dense_peso_rel0.5'. O script
+    encadearia a F6 a partir de uma rodada derivada, e o erro so apareceria
+    como um numero estranho na tabela final."""
+    from src.experiment import ultima_rodada
+
+    base = _rodada(tmp_path, "20260101-1000_bm25")
+    _rodada(tmp_path, "20260301-1000_cv_fusao_bm25_denso")
+    _rodada(tmp_path, "20260301-1100_bm25_sec_sem_relatorio")
+    assert ultima_rodada("bm25", raiz=tmp_path) == base
+
+    denso = _rodada(tmp_path, "20260102-1000_dense_bge_m3")
+    _rodada(tmp_path, "20260302-1000_dense_peso_rel0.5")
+    assert ultima_rodada("dense_bge_m3", raiz=tmp_path) == denso
+
+
+def test_ultima_rodada_aceita_substring_quando_pedido(tmp_path):
+    from src.experiment import ultima_rodada
+
+    _rodada(tmp_path, "20260101-1000_bm25")
+    derivada = _rodada(tmp_path, "20260301-1000_cv_fusao_bm25_denso")
+    assert ultima_rodada("bm25", raiz=tmp_path, exato=False) == derivada
+
+
+def test_ultima_rodada_ignora_rodada_sem_runs(tmp_path):
+    """Uma rodada que abortou antes de gravar qualquer .trec nao serve de
+    entrada para a etapa seguinte; devolve-la faria o erro aparecer duas
+    etapas adiante."""
+    from src.experiment import ultima_rodada
+
+    boa = _rodada(tmp_path, "20260101-1000_bm25")
+    _rodada(tmp_path, "20260201-1000_bm25", com_runs=False)
+    assert ultima_rodada("bm25", raiz=tmp_path) == boa
+
+
+def test_ultima_rodada_sem_casar_devolve_none(tmp_path):
+    from src.experiment import ultima_rodada
+
+    _rodada(tmp_path, "20260101-1000_bm25")
+    assert ultima_rodada("inexistente", raiz=tmp_path) is None

@@ -152,3 +152,59 @@ def test_teste_pareado_conta_vitorias_empates_e_derrotas():
     t = r.teste_pareado()
     assert (t["vitorias"], t["empates"], t["derrotas"]) == (1, 1, 1)
     assert np.isfinite(t["p_value"])
+
+
+# --- selecao de CONFIGURACAO por CV -----------------------------------------
+
+def candidatos_sinteticos(n_queries=20):
+    """Tres configuracoes: uma boa, uma ruim e uma que so parece boa por acaso
+    num subconjunto pequeno de consultas."""
+    qrels = qrels_sinteticos(n_queries)
+    bom, ruim, sortudo = {}, {}, {}
+    for i in range(n_queries):
+        certo, errado = f"d{i}", f"x{i}"
+        bom[f"q{i}"] = {certo: 2.0, errado: 1.0}
+        ruim[f"q{i}"] = {errado: 2.0, certo: 1.0}
+        # acerta so nas 3 primeiras consultas
+        sortudo[f"q{i}"] = {certo: 2.0, errado: 1.0} if i < 3 else {errado: 2.0, certo: 1.0}
+    return qrels, {"bom": bom, "ruim": ruim, "sortudo": sortudo}
+
+
+def test_selecao_escolhe_a_configuracao_boa_e_mede_fora_dela():
+    from src.tuning import selecao_por_cv
+
+    qrels, cands = candidatos_sinteticos(20)
+    r = selecao_por_cv(qrels, cands, baseline="ruim", n_folds=5)
+    assert r.escolha_estavel and set(r.escolhidas) == {"bom"}
+    assert r.media > r.media_baseline
+    assert r.teste_pareado()["p_value"] < 0.05
+
+
+def test_selecao_nao_premia_quem_so_acerta_no_treino():
+    """O ponto do metodo: uma configuracao que parece boa por acaso nao pode
+    levar credito nas consultas que nao participaram da escolha."""
+    from src.tuning import selecao_por_cv
+
+    qrels, cands = candidatos_sinteticos(20)
+    del cands["bom"]  # sobram 'ruim' e 'sortudo'
+    r = selecao_por_cv(qrels, cands, baseline="ruim", n_folds=5)
+    # 'sortudo' so ganha em 3 de 20 consultas: mesmo se escolhido em alguma
+    # dobra, o ganho medido fora dela e pequeno.
+    assert r.ganho_relativo < 0.30
+
+
+def test_selecao_pontua_cada_consulta_uma_vez_so():
+    from src.tuning import selecao_por_cv
+
+    qrels, cands = candidatos_sinteticos(20)
+    r = selecao_por_cv(qrels, cands, baseline="ruim", n_folds=5)
+    assert len(r.scores_teste) == 20
+    assert set(r.scores_teste) == set(r.scores_baseline)
+
+
+def test_selecao_recusa_baseline_fora_dos_candidatos():
+    from src.tuning import selecao_por_cv
+
+    qrels, cands = candidatos_sinteticos(20)
+    with pytest.raises(ValueError, match="baseline"):
+        selecao_por_cv(qrels, cands, baseline="inexistente")

@@ -30,6 +30,7 @@ rankings com peso igual.
 | Por que acreditamos nele | [resultados/02-controle-aleatorio.md](resultados/02-controle-aleatorio.md) — o controle que separa "estrutura" de "índice menor" |
 | Por que o número é honesto | [02-metodologia-cv.md](02-metodologia-cv.md) — o peso da fusão não foi escolhido no conjunto de teste; e a melhor configuração nem peso tem |
 | O erro que quase passou | [03-empate-de-score.md](03-empate-de-score.md) — o mesmo arquivo dava 0,1322 e 0,1336 |
+| Se dá para confiar nos números | [04-auditoria-de-validade.md](04-auditoria-de-validade.md) — dez ameaças testadas, nove descartadas, uma declarada |
 | O que **não** funcionou | [resultados/05-negativos.md](resultados/05-negativos.md) |
 
 ## Documentos
@@ -40,6 +41,7 @@ rankings com peso igual.
 | [01-implementacao-f6.md](01-implementacao-f6.md) | Como as três intervenções entraram no pipeline, e as armadilhas |
 | [02-metodologia-cv.md](02-metodologia-cv.md) | Validação cruzada por consulta: por que, e o que ela custou |
 | [03-empate-de-score.md](03-empate-de-score.md) | ⚠️ O bug dos empates: por que o mesmo arquivo dava dois números, e o que mudou depois da correção |
+| [04-auditoria-de-validade.md](04-auditoria-de-validade.md) | ⭐ **Dez ameaças ao resultado, testadas uma a uma** — inclusive a circularidade, e a limitação que fica |
 
 ### Resultados
 | Doc | Assunto |
@@ -56,11 +58,14 @@ rankings com peso igual.
 |---|---|
 | Recorte e ponderação por macro-seção, e o controle aleatório pareado | `src/sections.py` |
 | Fusão de rankings (RRF e soma normalizada) | `src/fusion.py` |
-| Escolha do peso da fusão por validação cruzada | `src/tuning.py` |
+| Escolha do peso da fusão por validação cruzada | `src/tuning.py` (`validacao_cruzada`) |
+| Escolha de **configuração** por CV (qual seção indexar) | `src/tuning.py` (`selecao_por_cv`) |
+| Encadeamento de etapas pelo rótulo exato da rodada | `src/experiment.py` (`ultima_rodada`) |
 | Cache de embeddings servindo **subconjunto** de chunks | `src/indexing/dense.py` |
 | `--secoes`, `--pesos`, `--amostra-igual-a` no orquestrador | `src/run_experiments.py` |
 | `--runs`: tabela de comparação a partir de runs avulsos | `src/evaluate.py` |
 | Figura de progressão de condições | `src/plots.py` (`fig_condicoes`) |
+| Etapa F6 no script de rodada completa | `scripts/rodada_completa.ps1` |
 
 ## Testes: 182 passando
 
@@ -112,6 +117,8 @@ Todas em `results/experiments/`, com manifesto, log e figuras.
 | `20260928-1707_bm25_sec_sumtopk` | Sensibilidade da agregação (`sum_top_k`) |
 | `20260928-1635_fusao_rrf-k60` | RRF sem peso — **negativo**, mantido como registro |
 | `20260928-1657_dense_peso_rel0.2` / `-1658_…0.5` / `-1701_sanidade_peso098` | Ponderação — **negativo** |
+| `20260928-18xx_aud_sec_*` (8 rodadas) | **Auditoria:** dose-resposta em 10 recortes de seção |
+| `20260928-19xx_aud_controle_seed*` (2 rodadas) | **Auditoria:** o controle com outras duas sementes |
 
 ## Checklist para o merge
 
@@ -127,6 +134,9 @@ Todas em `results/experiments/`, com manifesto, log e figuras.
 - [x] Sensibilidade da agregação (`sum_top_k`) — item aberto desde a F5
 - [x] Figuras regeneradas por `src.plots`, com rodapé de contexto
 - [x] Bug dos empates corrigido e **todas as tabelas regeradas** depois dele
+- [x] **Auditoria de validade**: dose-resposta em 10 recortes, nDCG reimplementado
+      do zero, controle em 3 sementes, e a escolha da seção validada por CV
+      ([04-auditoria-de-validade.md](04-auditoria-de-validade.md))
 - [ ] **Revisão da equipe** — ver "Pontos de atenção"
 - [ ] Merge na `main` — **aguardando aprovação**
 

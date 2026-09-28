@@ -180,6 +180,110 @@ def validacao_cruzada(
     return resultado
 
 
+@dataclass
+class ResultadoSelecao:
+    """Escolha de uma CONFIGURAÇÃO (não de um peso) por validação cruzada."""
+
+    metric: str
+    n_folds: int
+    escolhidas: list[str] = field(default_factory=list)
+    scores_teste: dict[str, float] = field(default_factory=dict)
+    scores_baseline: dict[str, float] = field(default_factory=dict)
+    baseline: str = ""
+
+    @property
+    def media(self) -> float:
+        return float(np.mean(list(self.scores_teste.values())))
+
+    @property
+    def media_baseline(self) -> float:
+        return float(np.mean(list(self.scores_baseline.values())))
+
+    @property
+    def ganho_relativo(self) -> float:
+        b = self.media_baseline
+        return (self.media - b) / b if b else 0.0
+
+    @property
+    def escolha_estavel(self) -> bool:
+        return len(set(self.escolhidas)) == 1
+
+    def teste_pareado(self) -> dict:
+        from scipy import stats
+
+        qids = sorted(set(self.scores_teste) & set(self.scores_baseline))
+        a = np.array([self.scores_teste[q] for q in qids])
+        b = np.array([self.scores_baseline[q] for q in qids])
+        difs = a - b
+        return {
+            "n_queries": len(qids),
+            "p_value": float(stats.ttest_rel(a, b).pvalue),
+            "vitorias": int((difs > 0).sum()),
+            "empates": int((difs == 0).sum()),
+            "derrotas": int((difs < 0).sum()),
+        }
+
+
+def selecao_por_cv(
+    qrels: Qrels,
+    candidatos: dict[str, Ranking],
+    baseline: str,
+    n_folds: int = 5,
+    seed: int = 42,
+    metric: str = "ndcg@10",
+) -> ResultadoSelecao:
+    """Escolhe *qual configuração usar* nas dobras de treino e mede na de teste.
+
+    Existe para responder a uma crítica específica, e séria, ao resultado do
+    recorte por seção: **a decisão de descartar o relatório foi tomada olhando
+    os dados de relevância** — a estatística "72% da relevância está na
+    fundamentação" vem de localizar os excertos julgados relevantes dentro dos
+    acórdãos, que são os mesmos julgamentos usados na avaliação.
+
+    Isso não é ajuste de parâmetro por varredura (o recorte tem justificativa
+    de domínio anterior à medição), mas também não é independente. A pergunta
+    que fica é: *se tivéssemos decidido com menos consultas, decidiríamos o
+    mesmo, e o ganho valeria nas consultas que não participaram da decisão?*
+
+    Aqui a escolha entre as configurações candidatas é feita **só com as
+    consultas de treino**, e o número reportado vem só das de teste. Se o ganho
+    sobrevive, a decisão generaliza entre consultas — que é o que este corpus
+    permite testar. **Generalização para outra coleção continua fora de
+    alcance, e segue como limitação declarada.**
+    """
+    if baseline not in candidatos:
+        raise ValueError(f"baseline {baseline!r} nao esta entre os candidatos")
+    if len(candidatos) < 2:
+        raise ValueError("selecao precisa de ao menos duas configuracoes")
+
+    qids = sorted(set(qrels.to_dict()).intersection(*(set(r) for r in candidatos.values())))
+    if len(qids) < n_folds:
+        raise ValueError(f"{len(qids)} consultas nao dao {n_folds} dobras")
+
+    # Pontuar uma vez por candidato, e recortar por dobra depois: avaliar cada
+    # candidato em cada dobra multiplicaria o trabalho por `n_folds` sem mudar
+    # nada, já que a pontuação de uma consulta não depende das outras.
+    por_candidato = {
+        nome: _pontuar(qrels, ranking, set(qids), metric)
+        for nome, ranking in candidatos.items()
+    }
+
+    resultado = ResultadoSelecao(metric=metric, n_folds=n_folds, baseline=baseline)
+    todas = dobras(qids, n_folds, seed)
+    for i, teste in enumerate(todas):
+        treino = [q for j, d in enumerate(todas) if j != i for q in d]
+        medias = {
+            nome: float(np.mean([s[q] for q in treino])) for nome, s in por_candidato.items()
+        }
+        # Desempate por nome, para a escolha ser determinística.
+        melhor = min(medias, key=lambda n: (-medias[n], n))
+        resultado.escolhidas.append(melhor)
+        for q in teste:
+            resultado.scores_teste[q] = por_candidato[melhor][q]
+            resultado.scores_baseline[q] = por_candidato[baseline][q]
+    return resultado
+
+
 # --- CLI --------------------------------------------------------------------
 
 def _runs_por_estrategia(exp_dir: Path) -> dict[str, Path]:

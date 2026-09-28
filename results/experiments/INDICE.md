@@ -5,6 +5,16 @@ Não editar à mão.
 
 | Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |
 |---|---|---|---|---|---|---|---|
+| [`20260928-1909_aud_controle_seed2026`](20260928-1909_aud_controle_seed2026/) | 2026-09-28T19:09:44 | 1 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1908_aud_controle_seed7`](20260928-1908_aud_controle_seed7/) | 2026-09-28T19:08:25 | 1 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1903_aud_sec_sem-dispositivo`](20260928-1903_aud_sec_sem-dispositivo/) | 2026-09-28T19:03:49 | 4 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1859_aud_sec_sem-ementa`](20260928-1859_aud_sec_sem-ementa/) | 2026-09-28T18:59:58 | 4 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1856_aud_sec_sem-fundamentacao`](20260928-1856_aud_sec_sem-fundamentacao/) | 2026-09-28T18:56:57 | 3 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1855_aud_sec_fundamentacao_ementa`](20260928-1855_aud_sec_fundamentacao_ementa/) | 2026-09-28T18:55:48 | 1 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1855_aud_sec_ementa`](20260928-1855_aud_sec_ementa/) | 2026-09-28T18:55:02 | 0 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1855_aud_sec_dispositivo`](20260928-1855_aud_sec_dispositivo/) | 2026-09-28T18:55:21 | 0 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1850_aud_sec_relatorio`](20260928-1850_aud_sec_relatorio/) | 2026-09-28T18:50:44 | 4 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20260928-1848_aud_sec_fundamentacao`](20260928-1848_aud_sec_fundamentacao/) | 2026-09-28T18:48:18 | 2 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
 | [`20260928-1822_f6_tabela_principal`](20260928-1822_f6_tabela_principal/) | 2026-09-28T18:22:51 | 0 min | `99032025` | NVIDIA GeForce RTX 5060 | 0 | 0.3215 (`fixed_512_256__soma_norm`) | 23/28 |
 | [`20260928-1758_cv_fusao_sec_sem_relatorio`](20260928-1758_cv_fusao_sec_sem_relatorio/) | 2026-09-28T17:58:45 | 9 min | `99032025` | NVIDIA GeForce RTX 5060 | 10 | — | — |
 | [`20260928-1751_cv_fusao_bm25_denso`](20260928-1751_cv_fusao_bm25_denso/) | 2026-09-28T17:51:14 | 7 min | `99032025` | NVIDIA GeForce RTX 5060 | 10 | — | — |

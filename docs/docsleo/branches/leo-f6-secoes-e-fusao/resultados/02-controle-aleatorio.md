@@ -88,13 +88,33 @@ Isso encadeia com o que a F5 já tinha medido, na ordem certa:
 "identificamos um mecanismo, previmos uma intervenção e ela se confirmou contra
 um controle".
 
-## O que o controle não cobre
+## O que o controle não cobre — e o que a auditoria respondeu depois
 
-Ele descarta a explicação "índice menor". Não descarta uma explicação
-intermediária: *qualquer* corte que remova texto de baixa densidade informativa
-funcionaria, e o relatório é só o maior bloco desse tipo no acórdão. Essa
-hipótese é compatível com o nosso resultado e **seria uma contribuição ainda
-maior** se confirmada — testá-la exigiria um critério de densidade independente
-da estrutura (comprimento de sentença, densidade de termos jurídicos, etc.), e
-fica registrado como trabalho futuro em
+Ele descarta a explicação "índice menor". Não descartava, sozinho, uma
+explicação intermediária: *qualquer* corte que remova texto de baixa densidade
+informativa funcionaria, e o relatório é só o maior bloco desse tipo no
+acórdão.
+
+**A auditoria de 28/09 testou isso, e a hipótese intermediária é a certa.**
+Rodando dez recortes diferentes
+([../04-auditoria-de-validade.md](../04-auditoria-de-validade.md), §6), o
+efeito acompanha a **concentração de relevância** da seção, não o fato de ela
+ser o relatório:
+
+| recorte | relevância na seção afetada | Δ nDCG@10 |
+|---|---|---:|
+| sem ementa | 0,4% | −0,1% |
+| sem dispositivo | 1,8% | +0,2% |
+| sem relatório | 25,7% | **+16,8%** |
+| sem fundamentação | 72,0% | **−17,5%** |
+
+Remover seções pobres **e pequenas** não faz nada; remover a seção rica custa
+caro. A formulação correta do achado não é *"o relatório é ruim"*, é
+**"indexe a parte do documento onde a relevância se concentra"** — e no
+acórdão essa parte é a fundamentação. É uma afirmação mais geral, e mais útil
+para quem for aplicar isto a outro gênero documental.
+
+O que continua em aberto é a versão *sem estrutura* dessa ideia: um critério
+de densidade que não dependa de segmentar o documento (comprimento de
+sentença, densidade de termos jurídicos). Fica como trabalho futuro em
 [../README.md](../README.md).

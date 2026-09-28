@@ -2,19 +2,30 @@
 
 Documento interno da equipe. Não é o entregável do professor.
 
-> **Status em 07/09/2026 — leia antes de usar este documento.**
+> **Status em 28/09/2026 — leia antes de usar este documento.**
 > Este é o plano de referência (arquitetura, stack, cronograma) e **não é
 > atualizado a cada execução**. Para o panorama e os próximos passos, veja o
 > **`PLANO.md`** na raiz; para o detalhe fase a fase, o
 > **`plano_implementacao.md`**, que substitui este documento onde houver
 > conflito.
 >
-> Em resumo: **F0–F5 concluídas e o experimento rodado nos dois retrievers**.
+> Em resumo: **F0–F5 concluídas** e o experimento rodado nos dois retrievers.
 > A hipótese **não se confirmou** — 1 de 20 pares entre estratégias tem
-> p < 0,05, e ele aponta *contra* a hipótese. O resultado mais sólido é que o
-> **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01). Duas
-> escolhas deste documento mudaram por medição — o embedder e o cronograma —,
-> e estão marcadas abaixo.
+> p < 0,05, e ele aponta *contra* a hipótese. O resultado mais sólido da F5 é
+> que o **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01).
+>
+> **F6 (28/09), na branch `leo/f6-secoes-e-fusao`, ainda não mergeada.** Ela
+> acrescenta uma fase que não estava neste plano e **muda a pergunta do
+> trabalho**: de *"como cortar o documento?"* (resposta nula, e ela se
+> sustentou) para *"qual parte do documento indexar?"* — a fundamentação; o
+> relatório atrapalha. Descartar o relatório do índice sobe o nDCG@10 de
+> 11% a 17% no BM25 (as cinco estratégias, p entre 0,00025 e 0,003), e a
+> melhor configuração chega a **0,3215 contra 0,2486 do baseline (+29,3%)**.
+> Ver `RESULTADOS-F6.md` na raiz.
+>
+> Três escolhas deste documento mudaram por medição — o embedder, o
+> cronograma e a própria lista de estágios do pipeline —, e estão marcadas
+> abaixo.
 
 ---
 
@@ -43,10 +54,16 @@ juris-chunking/
 │   │   └── structural.py      # respeita fronteiras das macro-seções
 │   ├── indexing/
 │   │   ├── lexical.py         # BM25
-│   │   └── dense.py           # sentence-transformers + FAISS
+│   │   └── dense.py           # sentence-transformers + FAISS (+ cache por subconjunto, F6)
 │   ├── retrieval.py           # busca + agregação chunk->documento
 │   ├── evaluate.py            # nDCG@10, MRR@10, MAP@10, Recall@100
-│   └── analysis.py            # bootstrap, testes pareados, recortes
+│   ├── analysis.py            # bootstrap, testes pareados, recortes
+│   ├── sections.py            # F6: recorte/ponderação por macro-seção + controle
+│   ├── fusion.py              # F6: fusão de rankings (RRF, soma normalizada)
+│   ├── tuning.py              # F6: escolha de configuração por validação cruzada
+│   ├── experiment.py          # rastreabilidade: pasta datada + manifesto + log
+│   ├── plots.py               # figuras do artigo, com rodapé de contexto
+│   └── run_experiments.py     # orquestrador das rodadas
 ├── notebooks/
 │   ├── 01_eda_corpus.ipynb
 │   ├── 02_validacao_segmentador.ipynb
@@ -284,6 +301,44 @@ Ambos: EDA na semana 3, e ambos precisam saber explicar a tabela final.
 
 ---
 
+## 6-bis. O estágio que não estava no plano: seleção de conteúdo (F6)
+
+O pipeline original tem cinco estágios: ingestão → segmentação → chunking →
+indexação → avaliação. A F6 acrescenta um **sexto**, que roda entre a
+segmentação e a indexação:
+
+```
+segmentação → [SELEÇÃO DE CONTEÚDO] → chunking → indexação
+                      │
+                      ├─ recorte binário   (--secoes): só indexa as seções pedidas
+                      ├─ ponderação        (--pesos):  desconta o score por seção
+                      └─ controle pareado  (--amostra-igual-a): mesmo tamanho, sorteado
+```
+
+E um estágio opcional depois da recuperação:
+
+```
+indexação → busca → [FUSÃO DE RANKINGS] → agregação chunk→documento → avaliação
+                            │
+                            ├─ RRF (posição) e soma normalizada (magnitude)
+                            └─ peso por validação cruzada, ou peso igual (sem parâmetro)
+```
+
+Por que não estava no plano: ele nasceu de uma **medição** da F5 — a
+fundamentação ocupa 22,8% do texto e concentra 72,0% da relevância, mas os
+retrievers recuperam 65–74% pelo relatório. O plano original supunha que a
+variável interessante era *o tamanho do chunk*; a medição mostrou que é *que
+parte do documento entra no índice*.
+
+**Contrato do novo estágio.** A seção de um chunk é resolvida pelo rótulo
+quando ele existe (estratégias estruturais) e pelo **offset** contra os spans
+do documento quando não existe (estratégias fixa e recursiva). É isso que faz
+a seleção de conteúdo valer para as cinco estratégias, e não só para as duas
+que conhecem a estrutura — e é uma extensão natural do contrato `Chunk` da
+§1, que já previa o offset para exatamente este tipo de análise.
+
+---
+
 ## 7. Critérios de sucesso
 
 O TCC é bem-sucedido se, ao final, existir:
@@ -308,6 +363,24 @@ O TCC é bem-sucedido se, ao final, existir:
 >
 > A hipótese não se confirmou, o que o §7 já previa: *"Nada disso exige que a
 > hipótese se confirme."*
+>
+> **Atualização de 28/09 (F6).** Os cinco critérios continuam atendidos, e
+> três foram superados:
+> - critério 2: a tabela principal passou a ter **oito condições**
+>   experimentais, não só estratégia × retriever;
+> - critério 3: além da significância pareada com correção e da análise de
+>   poder, a F6 acrescentou **um controle pareado** (índice do mesmo tamanho,
+>   sorteado) e **validação cruzada por consulta** para escolher configuração
+>   sem usar o conjunto de avaliação;
+> - critério 5: a suíte foi de 115 para **182 testes**, e a avaliação é
+>   byte-idêntica ao ser reexecutada.
+>
+> E o trabalho deixou de depender de um resultado nulo: **a segunda pergunta,
+> derivada da primeira, tem resposta positiva e significativa** (+29,3% de
+> nDCG@10).
 
 **Nada disso exige que a hipótese se confirme.** Um resultado nulo bem medido,
-com recortes que mostram onde cada estratégia ganha, é um TCC completo.
+com recortes que mostram onde cada estratégia ganha, é um TCC completo. O que
+a F6 mostrou é que um resultado nulo bem medido também **rende uma pergunta
+melhor**: foi medindo *por que* o chunking não importava que descobrimos o que
+importa.
