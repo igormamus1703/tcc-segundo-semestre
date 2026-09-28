@@ -405,8 +405,14 @@ def test_rotulo_da_figura_ignora_o_prefixo_de_rodada():
 
     assert partes_do_run("structural_gold__bm25") == ("structural_gold", "bm25")
     assert partes_do_run("20260906-0515_bm25/structural_gold__bm25") == ("structural_gold", "bm25")
-    assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] == "dense-bge_m3"
     assert rotulo_do_run("20260906-0515_bm25/structural_gold__bm25") == "estrutural (ouro)"
+    # A agregacao NAO e mais descartada (mudanca da F6). Ela era, e por isso
+    # dois runs da mesma estrategia com agregacoes diferentes caiam na mesma
+    # barra e um sumia da figura. O prefixo de rodada continua descartado
+    # porque ele nao distingue condicao nenhuma — so desempata nome de arquivo.
+    # Os demais casos estao em tests/test_plots.py.
+    assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] != \
+        partes_do_run("fixed_512_256__dense-bge_m3")[1]
 
 
 def test_rotulo_distingue_retriever_quando_ha_mais_de_um():
@@ -457,3 +463,12 @@ def test_parse_run_name_preserva_prefixo_de_rodada():
     campos = parse_run_name("20260906-0215_bm25/structural_gold__bm25")
     assert campos["rodada"] == "20260906-0215_bm25"
     assert campos["estrategia"] == "structural_gold"
+
+
+def test_parse_run_name_aceita_prefixo_de_rodada_com_hifen_duplo():
+    """`--runs` desambigua nomes iguais prefixando a rodada; '/' nao vale em
+    nome de arquivo, entao o separador la e '--'."""
+    campos = parse_run_name("20260928-1653_cv_fusao_sec--fixed_512_256__cv-soma_norm")
+    assert campos["rodada"] == "20260928-1653_cv_fusao_sec"
+    assert campos["estrategia"] == "fixed_512_256"
+    assert campos["retriever"] == "cv-soma_norm"

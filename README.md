@@ -13,6 +13,8 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 - **`juris-chunking/`** — todo o código do pipeline (ingestão, segmentador,
   chunkers, indexação, avaliação). Ver `juris-chunking/README.md` para o
   setup e o status de cada fase.
+- **`RESULTADOS-F6.md`** — o que avançou em 28/09, com as tabelas e a
+  argumentação, escrito para levar à orientação.
 - **`results/`** — resultados medidos: `corpus/` (caracterização do corpus) e
   `experiments/AAAAMMDD-HHMM_rotulo/` (uma pasta por rodada, com manifesto de
   reprodutibilidade). Ver `results/README.md`.
@@ -23,17 +25,20 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 > estado atual, o que já foi feito, o que falta e quem decide o quê. Este README
 > cobre o *como trabalhar*; o PLANO cobre o *o que fazer*.
 
-## Onde o projeto está (07/09/2026)
+## Onde o projeto está (28/09/2026)
 
 | | |
 |---|---|
-| **Feito** | F0–F5 implementadas; corpus de 12.880 acórdãos; 2,2 M chunks; experimento 5 estratégias × 2 retrievers |
-| **Resposta à pergunta do TCC** | O chunking estrutural **não** melhora a recuperação — 1 de 20 pares é significativo, e ele aponta *contra* a hipótese |
-| **Resultado mais sólido** | **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01) |
-| **Achado a desenvolver** | Descartar o relatório do índice melhora o nDCG@10 em **16,9%** (p = 0,001) |
+| **Feito** | F0–F5 implementadas e mergeadas; **F6 pronta, em revisão** (branch `leo/f6-secoes-e-fusao`) |
+| **Resposta à pergunta original** | O chunking estrutural **não** melhora a recuperação — e o empate se confirmou num segundo ponto de operação |
+| **Resposta à pergunta derivada** | **Qual parte indexar importa muito:** descartar o relatório melhora o nDCG@10 em 11–17% no BM25, nas cinco estratégias |
+| **Melhor configuração** | recorte por seção + fusão BM25/denso: **nDCG@10 = 0,3160 contra 0,2486** — +27,1%, p < 0,00001, com as quatro métricas subindo |
+| **Por que acreditamos** | Controle pareado: descartar o **mesmo número** de chunks ao acaso **piora** o resultado |
 | **Bloqueio** | 🔴 Decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
-| **Testes** | 115 passando |
+| **Testes** | 175 passando |
 
+Resumo dos resultados novos, escrito para apresentar:
+**[RESULTADOS-F6.md](RESULTADOS-F6.md)**.
 Detalhes, próximos passos e o que cada um pode pegar: **[PLANO.md](PLANO.md)**.
 O status fase a fase está em `plano_implementacao.md`.
 

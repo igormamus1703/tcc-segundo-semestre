@@ -57,9 +57,12 @@ leitura completos.
 
 ## Status (ver `PLANO.md` na raiz para o panorama e os próximos passos)
 
-**F0–F5 concluídas.** O experimento foi rodado nos dois retrievers: nenhuma
-diferença entre estratégias de chunking é significativa; o BM25 supera o
-retriever denso com p < 0,001.
+**F0–F5 concluídas e mergeadas. F6 pronta, em revisão** (branch
+`leo/f6-secoes-e-fusao`). Nenhuma diferença entre estratégias de chunking é
+significativa; o BM25 supera o retriever denso com p < 0,001; e **descartar o
+relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
+0,2486 para 0,3160** (+27,1%, p < 0,00001). Ver
+[`RESULTADOS-F6.md`](../RESULTADOS-F6.md) na raiz.
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
@@ -93,6 +96,13 @@ retriever denso com p < 0,001.
       consulta, tamanho de documento, retriever e seção do acórdão).
       `python -m src.evaluate` gera as tabelas e `python -m src.plots` as
       figuras.
+- [x] **F6 — Recorte por seção e fusão híbrida** (🟡 não mergeada):
+      `src/sections.py` (recorte `--secoes`, ponderação `--pesos` e o controle
+      pareado `--amostra-igual-a`), `src/fusion.py` (RRF e soma normalizada
+      sobre os runs TREC existentes) e `src/tuning.py` (peso da fusão por
+      validação cruzada por consulta). O cache de embeddings passou a servir
+      **subconjuntos** de chunks, o que faz o recorte no denso custar 4 min em
+      vez de 10 h de GPU.
 
 > ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
 > corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
@@ -112,8 +122,39 @@ python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
 python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
 python -m src.evaluate                # F5: tabelas da rodada mais recente
 python -m src.plots                   # F5: figuras (PDF + PNG)
-pytest                                # roda a suíte de testes
+pytest                                # roda a suite de testes (175)
 ```
+
+### F6 — recorte por seção, controle e fusão
+
+```bash
+# indexa tudo menos o relatorio (vale para as cinco estrategias)
+python -m src.run_experiments --strategy all --retriever bm25 --secoes sem:relatorio
+
+# o CONTROLE: mesmo numero de chunks, sorteados. Se este tambem melhorasse,
+# o ganho seria do tamanho do indice e nao da estrutura do acordao.
+python -m src.run_experiments --strategy all --retriever bm25 --amostra-igual-a sem:relatorio
+
+# funde BM25 + denso a partir dos runs que ja existem (segundos de CPU)
+python -m src.fusion --experimentos <rodada-bm25> <rodada-densa> --metodo rrf
+
+# escolhe o peso da fusao por validacao cruzada por consulta
+python -m src.tuning --bm25 <rodada-bm25> --denso <rodada-densa>
+
+# tabela de comparacao a partir de runs avulsos, e a figura de condicoes
+python -m src.evaluate --label comparacao --runs a.trec b.trec c.trec
+python -m src.plots --experiment <rodada> --referencia <run-baseline>
+```
+
+> `--secoes sem:relatorio` e `--secoes=-relatorio` dizem a mesma coisa. A
+> segunda forma **só** funciona com o `=` colado: solta, o argparse lê
+> `-relatorio` como uma opção e aborta com "expected one argument".
+
+**O recorte é barato no denso** porque `DenseIndex._load_cache` passou a
+aceitar um **subconjunto** dos chunks cacheados, selecionando as linhas por id
+com `mmap`. Com recorte ativo o cache é **somente leitura**: sem essa trava,
+indexar um recorte de uma estratégia ainda não encodada gravaria um cache
+parcial por cima do encode completo de 10 h.
 
 Smoke test da F4 antes de rodar o corpus inteiro:
 

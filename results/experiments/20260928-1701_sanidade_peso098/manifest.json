@@ -1,0 +1,122 @@
+{
+  "rotulo": "sanidade_peso098",
+  "inicio": "2026-09-28T17:01:33",
+  "fim": "2026-09-28T17:01:46",
+  "duracao_s": 13.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold --retriever dense --pesos relatorio=0.98 --label sanidade_peso098",
+  "config": {
+    "estrategias": [
+      "structural_gold"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": null,
+    "pesos_por_secao": {
+      "relatorio": 0.98
+    },
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "73a908ef1ef61bbca96f1d6ed0522515640b6209",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3__peso-rel0.98",
+      "run": "structural_gold__dense-bge_m3__peso-rel0.98",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 12.8,
+      "pesos": {
+        "por_secao": {
+          "relatorio": 0.98
+        },
+        "n_chunks_ponderados": 191389
+      }
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-28T17:02:03",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "structural_gold__dense-bge_m3__peso-rel0.98": {
+        "ndcg@10": 0.199,
+        "mrr@10": 0.4038,
+        "map@10": 0.0783,
+        "recall@100": 0.4247
+      },
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      }
+    },
+    "melhor_run": "fixed_512_256__dense-bge_m3",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 15,
+      "pares_p_menor_0_05": 2,
+      "menor_p": 0.0002
+    }
+  }
+}

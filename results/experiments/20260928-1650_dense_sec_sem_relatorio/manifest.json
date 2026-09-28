@@ -1,0 +1,255 @@
+{
+  "rotulo": "dense_sec_sem_relatorio",
+  "inicio": "2026-09-28T16:50:36",
+  "fim": "2026-09-28T16:52:07",
+  "duracao_s": 90.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever dense --secoes sem:relatorio --label dense_sec_sem_relatorio",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "pesos_por_secao": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "289fc486a8025fb7580b5c6b2fb467cc8c9aae0b",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3__sec-sem_relatorio",
+      "run": "structural_gold__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 95300,
+      "n_queries": 150,
+      "n_linhas_run": 148896,
+      "segundos": 16.6,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 286689,
+        "chunks_depois": 95300,
+        "fracao_mantida": 0.3324,
+        "distribuicao": {
+          "ementa": 12893,
+          "relatorio": 191389,
+          "fundamentacao": 64629,
+          "dispositivo": 17778
+        }
+      }
+    },
+    {
+      "nome": "structural_pred__dense-bge_m3__sec-sem_relatorio",
+      "run": "structural_pred__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 96219,
+      "n_queries": 150,
+      "n_linhas_run": 148224,
+      "segundos": 14.8,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 285308,
+        "chunks_depois": 96219,
+        "fracao_mantida": 0.3372,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    },
+    {
+      "nome": "recursive_default__dense-bge_m3__sec-sem_relatorio",
+      "run": "recursive_default__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 78548,
+      "n_queries": 150,
+      "n_linhas_run": 149153,
+      "segundos": 13.9,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 270070,
+        "chunks_depois": 78548,
+        "fracao_mantida": 0.2908,
+        "distribuicao": {
+          "relatorio": 191522,
+          "fundamentacao": 61804,
+          "dispositivo": 16298,
+          "ementa": 446
+        }
+      }
+    },
+    {
+      "nome": "fixed_1024_512__dense-bge_m3__sec-sem_relatorio",
+      "run": "fixed_1024_512__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 126392,
+      "n_queries": 150,
+      "n_linhas_run": 137617,
+      "segundos": 19.2,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 450786,
+        "chunks_depois": 126392,
+        "fracao_mantida": 0.2804,
+        "distribuicao": {
+          "relatorio": 324394,
+          "fundamentacao": 106798,
+          "dispositivo": 19242,
+          "ementa": 352
+        }
+      }
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3__sec-sem_relatorio",
+      "run": "fixed_512_256__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 254234,
+      "n_queries": 150,
+      "n_linhas_run": 130290,
+      "segundos": 24.9,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 907914,
+        "chunks_depois": 254234,
+        "fracao_mantida": 0.28,
+        "distribuicao": {
+          "ementa": 2445,
+          "relatorio": 653680,
+          "fundamentacao": 209952,
+          "dispositivo": 41837
+        }
+      }
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-28T16:53:08",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2292,
+        "mrr@10": 0.4727,
+        "map@10": 0.0967,
+        "recall@100": 0.4189
+      },
+      "fixed_512_256__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2627,
+        "mrr@10": 0.519,
+        "map@10": 0.1112,
+        "recall@100": 0.4564
+      },
+      "recursive_default__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2351,
+        "mrr@10": 0.4906,
+        "map@10": 0.0974,
+        "recall@100": 0.3932
+      },
+      "structural_gold__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2167,
+        "mrr@10": 0.4463,
+        "map@10": 0.0881,
+        "recall@100": 0.3928
+      },
+      "structural_pred__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2147,
+        "mrr@10": 0.443,
+        "map@10": 0.0873,
+        "recall@100": 0.3795
+      },
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      }
+    },
+    "melhor_run": "fixed_512_256__dense-bge_m3__sec-sem_relatorio",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 45,
+      "pares_p_menor_0_05": 24,
+      "menor_p": 0.0
+    }
+  }
+}

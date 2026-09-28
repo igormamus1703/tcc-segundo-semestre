@@ -5,7 +5,7 @@ codar ou escrever. Atualize **acrescentando**, não apagando: a seção
 [Histórico](#histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
 e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
-**Última atualização:** 07/09/2026 · por Leonardo Marques
+**Última atualização:** 28/09/2026 · por Leonardo Marques
 
 ---
 
@@ -13,15 +13,17 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
 | | |
 |---|---|
-| **Pergunta** | Chunking que respeita as macro-seções do acórdão melhora a recuperação, comparado a chunking fixo/recursivo? Sob quais condições? |
+| **Pergunta 1 (original)** | Chunking que respeita as macro-seções do acórdão melhora a recuperação, comparado a chunking fixo/recursivo? |
+| **Pergunta 2 (derivada, 28/09)** | Se *como* cortar não importa, **qual parte** do documento indexar? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
-| **Fases** | F0–F5 concluídas; **experimento 5 × 2 completo** |
-| **Testes** | 115 passando |
-| **Resposta curta à pergunta** | **Não melhora.** Nenhuma diferença entre estratégias é significativa, em nenhum dos dois retrievers |
-| **Resultados significativos** | **1.** BM25 supera o retriever denso (p < 0,001). **2.** Descartar o relatório do índice melhora o nDCG@10 em **16,9%** (p = 0,001) |
+| **Fases** | F0–F5 concluídas; **F6 (recorte por seção + fusão híbrida) em revisão** na branch `leo/f6-secoes-e-fusao` |
+| **Testes** | 175 passando |
+| **Resposta à pergunta 1** | **Não melhora.** Nenhuma diferença entre estratégias é significativa — e isso agora vale em **dois** pontos de operação diferentes |
+| **Resposta à pergunta 2** | **A fundamentação. O relatório atrapalha.** Descartá-lo do índice melhora o nDCG@10 em 11–17% no BM25 e 12–28% no denso, nas cinco estratégias |
+| **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3160**, contra 0,2486 do baseline — **+27,1%**, p < 0,00001 |
 | **Bloqueio nº 1** | 🔴 A equipe precisa decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
 
-### A tabela principal (nDCG@10)
+### A tabela principal (nDCG@10), índice completo — F5
 
 | Estratégia | BM25 | Denso (bge-m3) |
 |---|---:|---:|
@@ -35,6 +37,34 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 ficam por último no denso. Nenhuma dessas diferenças é significativa — mas a
 inversão é consistente, e é evidência **contra** um efeito estável do chunking
 estrutural.
+
+### A tabela nova (nDCG@10), sem o relatório no índice — F6, 28/09
+
+| Estratégia | BM25 | Δ | Denso | Δ | **controle: −67% aleatório** |
+|---|---:|---:|---:|---:|---:|
+| **fixed_512_256** | **0,2904** | +16,8% | **0,2627** | +27,8% | 0,2260 (−9,1%) |
+| structural_gold | 0,2835 | +12,4% | 0,2167 | +17,3% | 0,2177 (−13,6%) |
+| structural_pred | 0,2835 | +12,3% | 0,2147 | +12,3% | 0,2210 (−12,5%) |
+| fixed_1024_512 | 0,2790 | +11,2% | 0,2292 | +13,5% | 0,2305 (−8,2%) |
+| recursive_default | 0,2764 | +14,6% | 0,2351 | +19,5% | 0,2006 (−16,8%) |
+
+As cinco melhoram, todas significativas no BM25 (p = 0,00025 a 0,003). **A
+coluna do controle é o que sustenta o achado:** um índice do mesmo tamanho,
+sorteado ao acaso, **piora** — então o ganho vem da estrutura do acórdão, não
+de ter um índice menor.
+
+### A configuração recomendada
+
+| | nDCG@10 | MRR@10 | MAP@10 | Recall@100 |
+|---|---:|---:|---:|---:|
+| BM25, índice completo (baseline F5) | 0,2486 | 0,5186 | 0,0963 | 0,4709 |
+| **sem o relatório + fusão com o denso** | **0,3160** | **0,6058** | **0,1330** | **0,5259** |
+| | **+27,1%** | **+16,8%** | **+38,1%** | **+11,7%** |
+
+`fixed_512_256`, p < 0,00001 com Bonferroni sobre 21 pares, peso da fusão
+escolhido por validação cruzada. **Nenhuma métrica piora.** Detalhe em
+[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/)
+e resumo para apresentação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
 ---
 
@@ -77,6 +107,21 @@ A hipótese não se confirmou. Isso **não** é um problema para o TCC — o
 completo". Mas a equipe precisa decidir como a Introdução e a Conclusão vão
 tratar isso. Sugestão em [§4](#4-o-que-o-artigo-pode-afirmar).
 
+**Atualização de 28/09:** a decisão ficou mais fácil. Com a F6, o trabalho tem
+um resultado nulo bem medido **e** uma intervenção que melhora o nDCG@10 em
+27%. A sugestão é enquadrar assim: a pergunta sobre *granularidade* do chunk
+tem resposta nula e bem medida; a pergunta sobre *seleção de conteúdo* — que
+nasceu da primeira — tem resposta positiva e significativa. O trabalho não
+"deu errado e a gente achou outra coisa": a segunda pergunta só existe porque
+a primeira foi respondida com cuidado.
+
+### 🟠 DECISÃO 4 — Aprovar o merge da branch `leo/f6-secoes-e-fusao` (nova)
+
+A branch está pronta, com 175 testes verdes e todos os artefatos, mas **não
+foi mergeada**. Ela muda a tese do artigo, então a equipe precisa olhar antes.
+Checklist de revisão e pontos de atenção no
+[README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md).
+
 ---
 
 ## 3. Próximos passos, por frente
@@ -91,32 +136,57 @@ no fim de cada lista.
 - [x] BM25 nas 5 estratégias, reproduzido idêntico em duas rodadas — *Leo, 06/09*
 - [x] Denso nas 4 primeiras estratégias — *Leo, 06/09*
 - [x] Denso na `fixed_512_256` — *Leo, 07/09*. **Experimento completo: 5 × 2**
-- [ ] Análise de sensibilidade da agregação: `sum_top_k` vs `max_pooling`
-      (`python -m src.run_experiments --aggregation sum_top_k`) — barato, o
-      cache já existe; **bom primeiro item para quem for pegar o projeto**
+- [x] Análise de sensibilidade da agregação: `sum_top_k` vs `max_pooling` —
+      *Leo, 28/09*. O `max_pooling` ganha em 4 de 5; o default fica, agora com
+      evidência. Rodada `20260928-1707_bm25_sec_sumtopk`
 - [ ] Opcional: rodar com o `embeddinggemma-300m` (exige `hf auth login`) para
       ter um segundo modelo denso
 
-### 3.1b 🏆 A frente mais promissora: filtragem por seção
+### 3.1b ✅ A frente mais promissora, agora fechada: filtragem por seção
 
-Testado em 07/09 e **funcionou**: descartar os chunks do relatório melhora o
-nDCG@10 em **16,9%** (p = 0,001) usando um terço do índice, e o ganho se mantém
-com os spans **preditos** pelo segmentador (p = 0,017), não só com a estrutura
-ouro. Detalhe em
-[resultados/05-filtragem-por-secao.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md).
+**Concluída em 28/09** na branch `leo/f6-secoes-e-fusao`. O que era um script
+exploratório virou opção de pipeline, rodou nos dois retrievers e nas cinco
+estratégias, e passou por um controle.
 
-Foi exploratório, fora do `src/`. Para virar resultado do artigo:
+- [x] Reimplementar no pipeline como opção de indexação (`--secoes ...`), com
+      testes — *Leo, 28/09*. Reproduz o exploratório: 95.300 chunks, idêntico
+- [x] Rodar no **BM25** — *Leo, 28/09*. **+11,2% a +16,8%, as cinco
+      significativas** (p = 0,00025 a 0,003)
+- [x] Rodar nas **cinco** estratégias, não só nas estruturais — *Leo, 28/09*.
+      Nas fixas/recursiva a seção vem do offset do chunk
+- [x] Testar a variante **ponderada** — *Leo, 28/09*. **Negativa:** satura no
+      corte binário e não preserva o recall. Descartada, com o motivo medido
+- [x] Efeito por tipo de consulta — *Leo, 28/09*. **+24,1% nas consultas reais
+      de log**, +25,7% e +30,1% nas sintéticas: o ganho não vem das fáceis
+- [x] Bootstrap de IC 95% e análise de poder — *Leo, 28/09*
+- [x] 🆕 **Controle pareado por amostra aleatória** — *Leo, 28/09*. Não estava
+      previsto e é o item mais importante da lista: descartar 2/3 do índice ao
+      acaso **piora** o nDCG@10; escolhendo o relatório, melhora. Mesmo tamanho
+      de índice, efeitos opostos
+- [x] 🆕 **Fusão híbrida BM25 + denso**, com peso por validação cruzada —
+      *Leo, 28/09*. +4,4% a +8,7%, e **soma com o recorte**: 0,3160 na melhor
+      configuração
 
-- [ ] Reimplementar no pipeline como opção de indexação (`--secoes ...`), com testes
-- [ ] Rodar no **BM25** — só testamos no denso
-- [ ] Testar a variante **ponderada** (peso por seção em vez de corte binário),
-      que talvez preserve o Recall@100, hoje 7% menor
-- [ ] Efeito por tipo de consulta, sobretudo nas consultas reais de log
-- [ ] Bootstrap de IC 95% e análise de poder
+> A pergunta do trabalho deixa de ser só *"como cortar o documento?"*
+> (resposta medida: tanto faz) e ganha uma segunda metade com resposta:
+> **"qual parte do documento indexar?"** — a fundamentação; o relatório
+> atrapalha. Mecanismo medido antes da intervenção, ganho significativo, e
+> controle que descarta a explicação trivial.
 
-> Isto reformula a pergunta do trabalho de *"como cortar o documento?"*
-> (resposta: tanto faz) para **"qual parte do documento indexar?"** — que tem
-> resposta, com mecanismo medido antes da intervenção.
+### 3.1c O que ficou aberto depois da F6
+
+- [ ] **Chunk com contexto de seção**: prefixar cada chunk com o nome da sua
+      seção antes de encodar (`"[voto] …"`). Exige reencode, ~10 h de GPU
+- [ ] **Reranking com cross-encoder** no top-100. Caro, mas é o que mais rende
+      em RI
+- [ ] **Expansão de consulta** (docT5query). O JurisTCU mediu +47%. Fora do
+      escopo declarado; é o item mais forte de trabalhos futuros
+- [ ] **Critério de densidade informativa** independente da estrutura (tamanho
+      de sentença, densidade de termos jurídicos). É a única explicação
+      alternativa que o controle aleatório não descarta — e confirmá-la seria
+      uma contribuição maior ainda
+- [ ] Explicar por que o recorte **sobe** o Recall@100 no BM25 e **desce** no
+      denso. Há hipótese registrada, não há medição
 
 ### 3.2 Análise e escrita
 
@@ -142,7 +212,8 @@ Foi exploratório, fora do `src/`. Para virar resultado do artigo:
 
 ## 4. O que o artigo pode afirmar
 
-Três resultados sustentados por evidência, e um achado de domínio.
+Sete resultados sustentados por evidência. Os quatro primeiros são da F5; os
+três últimos, da F6 (28/09).
 
 **1. O BM25 supera o retriever denso, com significância forte.**
 
@@ -175,6 +246,33 @@ relevância. A posição mediana do trecho relevante é a **79%** do documento.
 Mas **ambos os retrievers recuperam predominantemente pelo relatório** (65–74%)
 — acham o termo onde há mais texto, não onde há mais relevância.
 
+**5. 🆕 Descartar o relatório do índice melhora a recuperação, nas cinco
+estratégias e nos dois retrievers.**
+BM25: +11,2% a +16,8% de nDCG@10, todas com p entre 0,00025 e 0,003. Denso:
++12,3% a +27,8%. O índice fica com 28–34% do tamanho. No BM25 o Recall@100
+**também sobe** (+1,8% a +6,0%); no denso cai (−4,1% a −10,5%), e essa
+diferença é limitação do denso, não do método. O ganho vale igual com os spans
+**preditos** pelo segmentador (`gold` × `pred`: p = 0,9886, 75 empates em 150).
+
+**6. 🆕 E não é por o índice ficar menor — é por *qual* parte sai.**
+Controle pareado: descartando o **mesmo número** de chunks, sorteados ao acaso,
+o nDCG@10 **cai** 8,2% a 16,8%. Mesmo tamanho de índice, efeitos de sinal
+oposto. É este controle que transforma a observação numa afirmação causal
+sobre a estrutura do acórdão.
+
+**7. 🆕 O retriever denso não é dispensável: é complementar.**
+Fundido ao BM25 com peso escolhido por **validação cruzada por consulta**
+(5 dobras), acrescenta 4,4% a 8,7% de nDCG@10 sobre o BM25 sozinho, em 7 de 10
+configurações com p < 0,05. Somado ao recorte, a melhor configuração chega a
+**0,3160 — +27,1% sobre o baseline**, com todas as quatro métricas subindo e o
+ganho se mantendo nos três tipos de consulta, inclusive nas reais de log
+(+24,1%).
+
+> **O que muda na tese.** O trabalho passa a ter duas perguntas, e as duas com
+> resposta: *como cortar o documento?* (tanto faz, e agora sabemos que o
+> empate vale em dois pontos de operação) e *qual parte indexar?* (a
+> fundamentação; o relatório atrapalha). A segunda nasceu da primeira.
+
 ---
 
 ## 5. Como rodar o projeto (do zero)
@@ -204,6 +302,11 @@ python -m src.run_experiments --strategy all --retriever bm25    # ~25 min
 python -m src.run_experiments --strategy all --retriever dense   # ~10 h de GPU
 python -m src.evaluate                                           # tabelas
 python -m src.plots                                              # figuras
+
+# 6. F6 — a configuracao recomendada (28/09)
+python -m src.run_experiments --strategy all --retriever bm25  --secoes sem:relatorio
+python -m src.run_experiments --strategy all --retriever dense --secoes sem:relatorio
+python -m src.tuning --bm25 <rodada-bm25-recortada> --denso <rodada-densa-recortada>
 ```
 
 Ou tudo de uma vez, com orçamento de tempo e log datado:
@@ -223,7 +326,8 @@ Hugging Face e `hf auth login`. O default (`bge-m3`) não exige nada.
 ## 6. Onde as coisas ficam
 
 ```
-├── PLANO.md                    ← você está aqui
+├── PLANO.md                    ← você está aqui (documento vivo)
+├── RESULTADOS-F6.md            resumo dos resultados novos, para apresentar
 ├── README.md                   fluxo de trabalho obrigatório da equipe
 ├── plano_tecnico.md            arquitetura, stack, cronograma (referência)
 ├── plano_implementacao.md      status fase a fase — "o que fazer agora"
@@ -265,6 +369,11 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 07/09 | **Achado:** descartar o relatório do índice dá +16,9% de nDCG@10 (p = 0,001) | [resultados/05-filtragem-por-secao](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
 | 07/09 | **Experimento fechado:** 5 estratégias × 2 retrievers, com a inversão completa | [resultados/06-final-5x2](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
 | 07/09 | Branch `leo/f4-indexacao-e-docs` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f4-indexacao-e-docs/README.md) |
+| 28/09 | **F6:** recorte por seção vira pipeline e roda no BM25 — **+11% a +17%, as cinco significativas** | [f6/resultados/01](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/01-recorte-por-secao.md) |
+| 28/09 | **Controle:** −67% aleatório **piora**; −67% escolhendo o relatório melhora | [f6/resultados/02](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
+| 28/09 | **Fusão BM25 + denso** com peso por validação cruzada: +4,4% a +8,7% | [f6/resultados/03](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/03-fusao-hibrida.md) |
+| 28/09 | **Configuração final: nDCG@10 = 0,3160 (+27,1%)**, todas as métricas sobem | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| 28/09 | Branch `leo/f6-secoes-e-fusao` **aberta, não mergeada** — aguarda revisão | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram
 
@@ -278,3 +387,6 @@ Para ninguém repetir:
 | Deduplicar chunks entre estratégias | 0,4% de redundância — não compensa |
 | Encode denso em CPU | 4,8 chunks/s → 127 h. Inviável |
 | `multilingual-e5-base` (janela 512) | Truncaria 83% dos chunks e enviesaria a comparação |
+| **Ponderar a seção** em vez de cortar (F6) | Satura no corte binário e **não** preserva o recall: o peso é aplicado depois do corte em `--top-chunks`, então o chunk descontado já ocupou vaga |
+| **RRF sem peso** para fundir BM25 + denso (F6) | p entre 0,206 e 0,906. Peso igual a um retriever 20% pior puxa a fusão para baixo tanto quanto o outro puxa para cima |
+| **`sum_top_k`** como agregação (F6) | Perde do `max_pooling` em 4 de 5 estratégias. Era análise de sensibilidade: cumpriu o papel de justificar o default |

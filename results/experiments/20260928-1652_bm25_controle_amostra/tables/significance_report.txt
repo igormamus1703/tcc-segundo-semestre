@@ -1,0 +1,17 @@
+#    Model                                       NDCG@10
+---  ------------------------------------------  ---------------
+a    fixed_1024_512__bm25__amostra-0.2804s42     0.231ᶜ
+b    fixed_512_256__bm25__amostra-0.2800s42      0.226ᶜ
+c    recursive_default__bm25__amostra-0.2908s42  0.201
+d    structural_gold__bm25__amostra-0.3324s42    0.218
+e    structural_pred__bm25__amostra-0.3372s42    0.221
+f    fixed_1024_512__bm25                        0.251ᵃᵇᶜᵈᵉ
+g    fixed_512_256__bm25                         0.249ᵇᶜᵈᵉ
+h    recursive_default__bm25                     0.241ᶜᵈᵉ
+i    structural_gold__bm25                       0.252ᵃᵇᶜᵈᵉ
+j    structural_pred__bm25                       0.253ᵃᵇᶜᵈᵉ
+k    fixed_1024_512__bm25__sec-sem_relatorio     0.279ᵃᵇᶜᵈᵉᶠᵍʰⁱʲ
+l    fixed_512_256__bm25__sec-sem_relatorio      0.290ᵃᵇᶜᵈᵉᶠᵍʰⁱʲ
+m    recursive_default__bm25__sec-sem_relatorio  0.276ᵃᵇᶜᵈᵉᶠᵍʰⁱʲ
+n    structural_gold__bm25__sec-sem_relatorio    0.283ᵃᵇᶜᵈᵉᶠᵍʰⁱʲ
+o    structural_pred__bm25__sec-sem_relatorio    0.284ᵃᵇᶜᵈᵉᶠᵍʰⁱʲ

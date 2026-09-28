@@ -1,0 +1,8 @@
+#    Model                                        NDCG@10
+---  -------------------------------------------  ---------
+a    structural_gold__dense-bge_m3__peso-rel0.98  0.199ᵉ
+b    fixed_1024_512__dense-bge_m3                 0.202
+c    fixed_512_256__dense-bge_m3                  0.206ᵉ
+d    recursive_default__dense-bge_m3              0.197
+e    structural_gold__dense-bge_m3                0.185
+f    structural_pred__dense-bge_m3                0.191

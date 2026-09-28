@@ -74,10 +74,14 @@ def parse_run_name(nome: str) -> dict[str, str]:
     coluna `agregacao` num deles. A tabela do artigo pivota por essas colunas,
     então errar aqui embaralha a tabela sem nenhum erro visível.
 
-    Um nome prefixado pela rodada (`20260906-0215_bm25/structural_gold__bm25`,
-    como `_desambiguar_nomes` produz) mantém o prefixo na coluna `rodada`.
+    Um nome prefixado pela rodada mantém o prefixo na coluna `rodada`, com os
+    dois separadores que o projeto produz: `/` vem de `_desambiguar_nomes`, e
+    `--` vem do `--runs`, que precisa de um separador válido em nome de
+    arquivo.
     """
     rodada, _, resto = nome.rpartition("/")
+    if not rodada and "--" in resto:
+        rodada, _, resto = resto.rpartition("--")
     partes = resto.split("__")
     campos = {
         "run": nome,
@@ -338,6 +342,12 @@ def main() -> None:
     parser.add_argument("--experiment", type=Path, default=None,
                         help="Pasta em results/experiments/ (default: a mais recente).")
     parser.add_argument("--runs-dir", type=Path, default=None)
+    parser.add_argument("--runs", type=Path, nargs="+", default=None, metavar="TREC",
+                        help="Arquivos .trec avulsos, de rodadas quaisquer, avaliados juntos "
+                             "numa rodada nova de comparacao. E o que produz a tabela "
+                             "principal do artigo: a significancia pareada com correcao de "
+                             "Bonferroni fica inutil quando se joga 35 runs nela, entao a "
+                             "tabela final compara um punhado de condicoes escolhidas.")
     parser.add_argument("--tables-dir", type=Path, default=None)
     parser.add_argument("--incluir", type=Path, nargs="+", default=None, metavar="RODADA",
                         help="Rodadas adicionais cujos runs entram na mesma avaliação. "
@@ -348,9 +358,48 @@ def main() -> None:
     parser.add_argument("--queries", type=Path, default=INTERIM_DIR / "queries.jsonl")
     parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl")
     parser.add_argument("--metric", default="ndcg@10", help="Métrica dos recortes/significância.")
+    parser.add_argument("--label", default=None, help="Rotulo da rodada criada por --runs.")
     parser.add_argument("--section-top-k", type=int, default=10,
                         help="Profundidade do recorte por seção do acórdão.")
     args = parser.parse_args()
+
+    # `--runs` monta uma rodada de COMPARAÇÃO: os .trec escolhidos são copiados
+    # para dentro dela antes de qualquer avaliação. Copiar, e não só apontar, é
+    # o que faz a pasta continuar respondendo "de onde veio este número?" daqui
+    # a três meses, mesmo que as rodadas de origem sejam reorganizadas.
+    if args.runs:
+        import shutil
+
+        from .experiment import Experimento
+
+        faltando = [p for p in args.runs if not p.is_file()]
+        if faltando:
+            raise SystemExit(f"run(s) inexistente(s): {faltando}")
+        comp = Experimento(args.label or "comparacao", config={
+            "tipo": "comparacao de runs selecionados",
+            "runs_de_origem": [str(p) for p in args.runs],
+        })
+        # Dois runs escolhidos podem ter o mesmo nome de arquivo vindo de
+        # rodadas diferentes — `fixed_512_256__cv-soma_norm.trec` existe tanto
+        # na fusão sobre o índice completo quanto na fusão sobre o recortado.
+        # Copiar os dois pelo nome faria o segundo apagar o primeiro, e a
+        # tabela sairia com uma linha a menos sem nenhum erro. Só quem colide
+        # recebe o prefixo da rodada, para os nomes comuns continuarem legíveis.
+        from collections import Counter
+
+        repetidos = {n for n, c in Counter(p.name for p in args.runs).items() if c > 1}
+        for p in args.runs:
+            rodada = p.parent.parent.name
+            destino = f"{rodada}--{p.name}" if p.name in repetidos else p.name
+            shutil.copy2(p, comp.runs_dir / destino)
+            aux = p.with_name(f"{p.stem}__chunks.jsonl")
+            if aux.is_file():
+                prefixo = f"{rodada}--" if p.name in repetidos else ""
+                shutil.copy2(aux, comp.runs_dir / f"{prefixo}{aux.name}")
+        comp.manifest["fim"] = None
+        comp._gravar_manifest()
+        args.experiment = comp.dir
+        print(f"comparacao em {comp.dir} ({len(args.runs)} runs copiados)", flush=True)
 
     exp_dir = args.experiment or _experimento_mais_recente(EXPERIMENTS_DIR)
     runs_dir = args.runs_dir or (exp_dir / "runs" if exp_dir else None)
