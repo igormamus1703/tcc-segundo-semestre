@@ -1,0 +1,6 @@
+[18:48:19] experimento 20260928-1848_aud_sec_fundamentacao
+[18:48:19]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:48:19]   commit: aa177710 em leo/f6-secoes-e-fusao
+[18:48:35]   [fixed_512_256] secoes ['fundamentacao']: 907,914 -> 209,952 chunks (23.1%)
+[18:50:26] fixed_512_256__bm25__sec-fund: 209,952 chunks, 112,420 linhas, 127.2s  [decorrido 0.0 h]
+[18:50:26] fim em 2.1 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1848_aud_sec_fundamentacao

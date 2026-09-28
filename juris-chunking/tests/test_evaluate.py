@@ -17,6 +17,7 @@ from src.evaluate import (
     load_qrels,
     load_run,
     paired_significance,
+    parse_run_name,
     significance_rows,
 )
 
@@ -404,8 +405,14 @@ def test_rotulo_da_figura_ignora_o_prefixo_de_rodada():
 
     assert partes_do_run("structural_gold__bm25") == ("structural_gold", "bm25")
     assert partes_do_run("20260906-0515_bm25/structural_gold__bm25") == ("structural_gold", "bm25")
-    assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] == "dense-bge_m3"
     assert rotulo_do_run("20260906-0515_bm25/structural_gold__bm25") == "estrutural (ouro)"
+    # A agregacao NAO e mais descartada (mudanca da F6). Ela era, e por isso
+    # dois runs da mesma estrategia com agregacoes diferentes caiam na mesma
+    # barra e um sumia da figura. O prefixo de rodada continua descartado
+    # porque ele nao distingue condicao nenhuma — so desempata nome de arquivo.
+    # Os demais casos estao em tests/test_plots.py.
+    assert partes_do_run("fixed_512_256__dense-bge_m3__sum_top_k")[1] != \
+        partes_do_run("fixed_512_256__dense-bge_m3")[1]
 
 
 def test_rotulo_distingue_retriever_quando_ha_mais_de_um():
@@ -420,3 +427,48 @@ def test_rotulo_distingue_retriever_quando_ha_mais_de_um():
     assert rotulo_do_run("recursive_default__bm25", False) == "recursivo"
     assert rotulo_do_run("recursive_default__bm25", True) == "recursivo\nBM25"
     assert rotulo_do_run("recursive_default__dense-bge_m3", True) == "recursivo\ndenso bge_m3"
+
+
+# --- F6: nomes de run com variante de secao ---------------------------------
+
+def test_parse_run_name_basico():
+    campos = parse_run_name("structural_gold__bm25")
+    assert campos["estrategia"] == "structural_gold"
+    assert campos["retriever"] == "bm25"
+    assert campos["agregacao"] == "max_pooling"
+    assert campos["secoes"] == "" and campos["pesos"] == ""
+
+
+def test_parse_run_name_le_variante_por_prefixo_e_nao_por_posicao():
+    """Com --aggregation e --secoes juntos, o recorte fica na 4a posicao; ler
+    por posicao poria 'sec-sem_relatorio' na coluna de agregacao e a tabela do
+    artigo sairia embaralhada, sem nenhum erro."""
+    a = parse_run_name("structural_gold__bm25__sec-sem_relatorio")
+    b = parse_run_name("structural_gold__bm25__sum_top_k__sec-sem_relatorio")
+    assert a["secoes"] == b["secoes"] == "sem_relatorio"
+    assert a["agregacao"] == "max_pooling"
+    assert b["agregacao"] == "sum_top_k"
+
+
+def test_parse_run_name_separa_peso_de_secao():
+    campos = parse_run_name("fixed_512_256__dense-bge_m3__peso-rel0.3")
+    assert campos["pesos"] == "rel0.3"
+    assert campos["secoes"] == ""
+    assert campos["retriever"] == "dense-bge_m3"
+
+
+def test_parse_run_name_preserva_prefixo_de_rodada():
+    """`_desambiguar_nomes` prefixa runs homonimos com a rodada; o prefixo nao
+    pode vazar para a coluna estrategia."""
+    campos = parse_run_name("20260906-0215_bm25/structural_gold__bm25")
+    assert campos["rodada"] == "20260906-0215_bm25"
+    assert campos["estrategia"] == "structural_gold"
+
+
+def test_parse_run_name_aceita_prefixo_de_rodada_com_hifen_duplo():
+    """`--runs` desambigua nomes iguais prefixando a rodada; '/' nao vale em
+    nome de arquivo, entao o separador la e '--'."""
+    campos = parse_run_name("20260928-1653_cv_fusao_sec--fixed_512_256__cv-soma_norm")
+    assert campos["rodada"] == "20260928-1653_cv_fusao_sec"
+    assert campos["estrategia"] == "fixed_512_256"
+    assert campos["retriever"] == "cv-soma_norm"

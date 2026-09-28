@@ -1,0 +1,31 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica
+fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.3620216970766016,0.3076165349949114,0.41516750975583827,ndcg@10
+fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.33445761287765663,0.2894931747380089,0.3777779351647328,ndcg@10
+fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.15398799080183076,0.11013519358276692,0.2019852425990635,ndcg@10
+fixed_512_256__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.37406921875751237,0.3200698846238469,0.42884901663800734,ndcg@10
+fixed_512_256__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3447951652894233,0.2934871951499004,0.39477926941045877,ndcg@10
+fixed_512_256__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.1437284246700375,0.09860428497920862,0.19230898593796597,ndcg@10
+recursive_default__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.3308660276724647,0.27612469622155705,0.3842010162320271,ndcg@10
+recursive_default__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.33060631901413695,0.2819271632098087,0.3782333021511953,ndcg@10
+recursive_default__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.13523537461664387,0.09035288090642815,0.18596973750167345,ndcg@10
+structural_gold__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.33893153925059977,0.2879792555842122,0.38978292137008186,ndcg@10
+structural_gold__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.32367681340317117,0.2762619709543279,0.37076036894782527,ndcg@10
+structural_gold__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.15499005436598945,0.10840113888348576,0.2075082685653313,ndcg@10
+structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.3336973109897157,0.2845473488311044,0.383257709325606,ndcg@10
+structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3111815093647452,0.26132459061060836,0.3610234587112251,ndcg@10
+structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.1504026982214928,0.10480308534587182,0.20031105659518314,ndcg@10
+fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3690742603820577,0.31652185767650504,0.4219231475478961,ndcg@10
+fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3222898428798296,0.2733558171468533,0.370627567104004,ndcg@10
+fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.145944184670705,0.10478227616473763,0.19129142662376047,ndcg@10
+fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3668814297494371,0.3162991687849952,0.4170643657181977,ndcg@10
+fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.34628418669691413,0.29418518985406183,0.39583068486783574,ndcg@10
+fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15471096607356508,0.10641070653984175,0.20724904541636094,ndcg@10
+recursive_default__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3617406372428895,0.31001755694570615,0.4128539639836435,ndcg@10
+recursive_default__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.319080226004325,0.2643879405671732,0.372399277137688,ndcg@10
+recursive_default__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.14848766515894338,0.10881522687747923,0.19246623412039274,ndcg@10
+structural_gold__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.36009941764905123,0.3095182007572164,0.41134308045167345,ndcg@10
+structural_gold__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.33693203317752335,0.28255566854394665,0.39074473916863406,ndcg@10
+structural_gold__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15345131915336854,0.10602286433616877,0.20553381146664912,ndcg@10
+structural_pred__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.35754310226923786,0.3077792608930781,0.4073972466707018,ndcg@10
+structural_pred__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3406093762562696,0.2875328990050241,0.39153480305745414,ndcg@10
+structural_pred__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15242064942277947,0.10782876444829756,0.20114038443651527,ndcg@10

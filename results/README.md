@@ -35,8 +35,25 @@ argumentos:
 | `20260906-2230_dense_bge_m3` | as 5 estratégias no denso com BGE-M3 |
 | `20260906-1830_dense_bge_m3_smoke10q` | smoke test, 10 consultas |
 | `20260907-0900_bm25_sum_top_k` | análise de sensibilidade da agregação |
+| `20260928-1638_bm25_sec_sem_relatorio` | F6: índice sem os chunks do relatório |
+| `20260928-1652_bm25_controle_amostra` | F6: controle — mesmo tamanho de índice, sorteado |
+| `20260928-1751_cv_fusao_bm25_denso` | F6: fusão com peso por validação cruzada |
+| `20260928-1728_fusao4_peso_igual` | F6: fusão das 4 condições com peso igual |
+| `20260928-1822_f6_tabela_principal` | F6: comparação de condições montada com `--runs` |
 
 Para forçar um nome: `--label meu_rotulo`.
+
+### Rodadas de comparação (`--runs`)
+
+`python -m src.evaluate --runs a.trec b.trec ... --label comparacao` cria uma
+rodada nova a partir de runs avulsos de rodadas quaisquer. Os `.trec` são
+**copiados** para dentro dela, não referenciados: a pasta continua respondendo
+"de onde veio este número?" mesmo que as rodadas de origem sejam
+reorganizadas, e o `manifest.json` guarda o caminho de origem de cada um.
+
+Serve para a tabela do artigo. A correção de Bonferroni divide o nível de
+significância pelo número de pares, então jogar 35 runs numa tabela só
+enterraria efeitos reais debaixo de comparações que ninguém pretende fazer.
 
 ## O que é versionado e o que não é
 

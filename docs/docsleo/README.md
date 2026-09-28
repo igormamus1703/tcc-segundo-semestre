@@ -30,7 +30,8 @@ docsleo/
 
 | Branch | Assunto | Status |
 |---|---|---|
-| [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | 🟡 em teste |
+| [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | ✅ mergeada em 07/09 |
+| [leo/f6-secoes-e-fusao](branches/leo-f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+29,3% de nDCG@10** | ✅ mergeada em 28/09 |
 
 ## Atalhos para o que mais importa
 
@@ -41,7 +42,10 @@ docsleo/
 | Saber o que precisa ser decidido pela equipe | [08-decisoes-pendentes.md](branches/leo-f4-indexacao-e-docs/08-decisoes-pendentes.md) |
 | Ver o primeiro nDCG@10 e os recortes | [resultados/](branches/leo-f4-indexacao-e-docs/resultados/) |
 | Ver o resultado do retriever denso | [resultados/06-final-5x2.md](branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
-| Ver o achado mais promissor | [resultados/05-filtragem-por-secao.md](branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| Ver o achado mais promissor (exploratório, 07/09) | [resultados/05-filtragem-por-secao.md](branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| **Ver o melhor resultado do trabalho** | [f6/resultados/04-tabela-principal.md](branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| **Saber por que ele é confiável** | [f6/resultados/02-controle-aleatorio.md](branches/leo-f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
+| Saber o que foi testado e descartado | [f6/resultados/05-negativos.md](branches/leo-f6-secoes-e-fusao/resultados/05-negativos.md) |
 | Ver o resultado final completo | [resultados/06-final-5x2.md](branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
 | Entender o domínio: onde está a relevância no acórdão | [03-analise-do-dominio.md](branches/leo-f4-indexacao-e-docs/03-analise-do-dominio.md) |
 | Montar o ambiente numa máquina nova | [01-ambiente-setup.md](branches/leo-f4-indexacao-e-docs/01-ambiente-setup.md) |

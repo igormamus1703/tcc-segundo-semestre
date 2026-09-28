@@ -1,0 +1,17 @@
+#    Model                            NDCG@10
+---  -------------------------------  ----------
+a    fixed_1024_512__rrf-k60          0.253ᵏˡᵐⁿᵒ
+b    fixed_512_256__rrf-k60           0.252ᵏˡᵐⁿᵒ
+c    recursive_default__rrf-k60       0.254ᵏˡᵐⁿᵒ
+d    structural_gold__rrf-k60         0.253ᵏˡᵐⁿᵒ
+e    structural_pred__rrf-k60         0.256ᵏˡᵐⁿᵒ
+f    fixed_1024_512__bm25             0.251ᵏˡᵐⁿᵒ
+g    fixed_512_256__bm25              0.249ᵏˡᵐⁿᵒ
+h    recursive_default__bm25          0.241ᵏˡᵐⁿᵒ
+i    structural_gold__bm25            0.252ᵏˡᵐⁿᵒ
+j    structural_pred__bm25            0.253ᵏˡᵐⁿᵒ
+k    fixed_1024_512__dense-bge_m3     0.202
+l    fixed_512_256__dense-bge_m3      0.206ⁿ
+m    recursive_default__dense-bge_m3  0.197
+n    structural_gold__dense-bge_m3    0.185
+o    structural_pred__dense-bge_m3    0.191

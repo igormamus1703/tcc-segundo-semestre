@@ -19,18 +19,47 @@ from ranx import Qrels, Run, evaluate
 def per_query_scores(qrels: Qrels, run: Run, metric: str = "ndcg@10") -> dict[str, float]:
     """{query_id: score} — a base de todo o resto deste módulo.
 
-    `make_comparable=True` não é opcional: sem ele o ranx aborta com
-    AssertionError quando o run não tem exatamente as mesmas consultas do
-    qrels — o que acontece de verdade sempre que alguma consulta não recupera
-    nenhum documento. Com ele, a consulta ausente entra valendo 0, que é a
-    leitura correta (não recuperar nada é falhar, não é "não se aplica").
+    `make_comparable` não é opcional: sem ele o ranx aborta com AssertionError
+    quando o run não tem exatamente as mesmas consultas do qrels — o que
+    acontece sempre que alguma consulta não recupera nada. Com ele, a consulta
+    ausente entra valendo 0, que é a leitura correta (não recuperar nada é
+    falhar, não é "não se aplica").
+
+    **EMPATES DE SCORE.** O BM25 empata com frequência (dois chunks com o
+    mesmo casamento dão exatamente o mesmo score), e quando o empate cai na
+    fronteira do corte — as posições 9 e 10, para nDCG@10 — o resultado da
+    consulta depende de *qual* dos empatados fica na frente. O ranx não fixa
+    esse desempate, e a ordem que ele usa muda conforme o objeto `Run` já ter
+    sido avaliado antes ou não: o mesmo arquivo TREC dava 0,1322 e 0,1336 no
+    recorte "consulta real de log", conforme a ordem das chamadas.
+
+    Era uma única consulta em 150 (a `6`, com o documento relevante empatado
+    na 9ª posição), o que mexia só nos recortes — a média global não denuncia,
+    porque o score da consulta entra na soma dos dois jeitos.
+
+    A correção é **desempatar por `doc_id`**, aqui, antes de entregar ao ranx.
+    A escolha é arbitrária, e é esse o ponto: precisa ser arbitrária e
+    **fixa**, para que o mesmo run dê o mesmo número em qualquer execução e
+    em qualquer ordem de chamada. Travado por `tests/test_analysis.py`.
     """
-    scores = evaluate(qrels, run, metric, return_mean=False, make_comparable=True)
-    # A ordem só bate DEPOIS da chamada acima: make_comparable normaliza o run
-    # in-place, preenchendo as consultas faltantes. Ler os ids antes daria um
-    # pareamento errado, silenciosamente.
-    query_ids = run.get_query_ids()
-    return {qid: float(s) for qid, s in zip(query_ids, np.asarray(scores).ravel())}
+    # Cópia primeiro: `make_comparable` mexe no objeto recebido, e uma função
+    # de leitura não deve alterar o run do chamador.
+    completo = Run(run.to_dict(), name=run.name).make_comparable(qrels)
+    canonico = Run(
+        {
+            qid: dict(sorted(docs.items(), key=lambda kv: (-kv[1], kv[0])))
+            for qid, docs in completo.to_dict().items()
+        },
+        name=run.name,
+    )
+    # Já está na ordem canônica; marcar como ordenado impede o ranx de
+    # reordenar e desfazer o desempate que acabamos de fixar.
+    canonico.sorted = True
+    scores = evaluate(qrels, canonico, metric, return_mean=False, make_comparable=False)
+    return {
+        qid: float(s)
+        for qid, s in zip(canonico.get_query_ids(), np.asarray(scores).ravel())
+    }
 
 
 def bootstrap_ci(
@@ -165,6 +194,8 @@ def poder_estatistico(
     metric: str = "ndcg@10",
     alpha: float = 0.05,
     poder: float = 0.80,
+    scores_a: dict[str, float] | None = None,
+    scores_b: dict[str, float] | None = None,
 ) -> dict:
     """Qual diferença seria detectável com o número de consultas que temos?
 
@@ -181,8 +212,10 @@ def poder_estatistico(
     """
     from scipy import stats
 
-    a = per_query_scores(qrels, run_a, metric)
-    b = per_query_scores(qrels, run_b, metric)
+    # Os scores podem vir prontos: numa tabela de 15 runs são 105 pares, e
+    # recalcular os dois lados em cada par faria 210 avaliações em vez de 15.
+    a = scores_a if scores_a is not None else per_query_scores(qrels, run_a, metric)
+    b = scores_b if scores_b is not None else per_query_scores(qrels, run_b, metric)
     qids = sorted(set(a) & set(b))
     difs = np.array([a[q] - b[q] for q in qids])
     n = len(difs)
@@ -217,11 +250,15 @@ def poder_estatistico(
 
 
 def poder_de_todos_os_pares(qrels: Qrels, runs: list[Run], metric: str = "ndcg@10") -> list[dict]:
+    # Um score por run, reaproveitado em todos os pares que o envolvem.
+    por_run = [per_query_scores(qrels, r, metric) for r in runs]
     linhas = []
     for i, a in enumerate(runs):
-        for b in runs[i + 1 :]:
+        for j_rel, b in enumerate(runs[i + 1 :]):
+            j = i + 1 + j_rel
             try:
-                linhas.append(poder_estatistico(qrels, a, b, metric))
+                linhas.append(poder_estatistico(
+                    qrels, a, b, metric, scores_a=por_run[i], scores_b=por_run[j]))
             except ValueError:
                 continue
     return linhas

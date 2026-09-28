@@ -1,0 +1,88 @@
+{
+  "rotulo": "dense_peso_rel0.5",
+  "inicio": "2026-09-28T16:58:12",
+  "fim": "2026-09-28T16:58:46",
+  "duracao_s": 34.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold fixed_512_256 --retriever dense --pesos relatorio=0.5 --label dense_peso_rel0.5",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": null,
+    "pesos_por_secao": {
+      "relatorio": 0.5
+    },
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "73a908ef1ef61bbca96f1d6ed0522515640b6209",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3__peso-rel0.5",
+      "run": "structural_gold__dense-bge_m3__peso-rel0.5",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 12.8,
+      "pesos": {
+        "por_secao": {
+          "relatorio": 0.5
+        },
+        "n_chunks_ponderados": 191389
+      }
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3__peso-rel0.5",
+      "run": "fixed_512_256__dense-bge_m3__peso-rel0.5",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 108254,
+      "segundos": 20.9,
+      "pesos": {
+        "por_secao": {
+          "relatorio": 0.5
+        },
+        "n_chunks_ponderados": 653680
+      }
+    }
+  ],
+  "erro": null
+}

@@ -6,9 +6,9 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
 ---
 
-## STATUS ATUAL — 07/09/2026
+## STATUS ATUAL — 28/09/2026
 
-**F0 a F5 concluídas. O experimento foi rodado nos dois retrievers.**
+**F0 a F6 concluídas e mergeadas na `main`.**
 
 > 📍 Para o panorama do projeto, próximos passos e o que cada integrante pode
 > pegar, veja o **[PLANO.md](PLANO.md)** na raiz. Este documento mantém o
@@ -22,9 +22,11 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 | F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
 | F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
 | F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
+| F6 — Recorte por seção + fusão | ✅ | **nDCG@10 0,2486 → 0,3215 (+29,3%)**, com controle pareado e sem hiperparâmetro (`20260928-1822_f6_tabela_principal`) |
 
 **Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
-ambos alcançados**, com semanas de antecedência.
+ambos alcançados**, com semanas de antecedência. A F6 não estava no plano
+original: nasceu do recorte analítico por seção que a F5 acrescentou.
 
 ### A resposta à pergunta de pesquisa
 
@@ -50,11 +52,24 @@ estruturais são 1ª e 2ª no BM25 e 4ª e 5ª no denso; as duas fixas fazem o
 caminho contrário. A inversão é sistemática e é evidência **contra** um efeito
 estável do chunking estrutural — mais forte do que um empate simples seria.
 
-**Uma intervenção que funcionou:** descartar o relatório do índice melhora o
-nDCG@10 em **16,9%** (p = 0,001), e o ganho se mantém com os spans preditos
-pelo segmentador (p = 0,017). É exploratório — precisa ser reimplementado em
-`src/` antes de ir para o artigo. Ver
-`docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md`.
+### A segunda pergunta, respondida pela F6 (28/09)
+
+O resultado nulo acima rendeu uma pergunta melhor: se *como* cortar não
+importa, **qual parte do documento indexar?** Descartar o relatório do índice
+melhora o nDCG@10 em **11,2% a 16,8% no BM25** (as cinco estratégias, p entre
+0,00025 e 0,003) e 12,3% a 27,8% no denso. Somado à fusão BM25 + denso, a
+melhor configuração chega a **0,3215 contra 0,2486 do baseline (+29,3%)**, com
+as quatro métricas subindo.
+
+O que sustenta a afirmação é o **controle pareado**: descartar o mesmo número
+de chunks, sorteados ao acaso, **piora** o nDCG@10 (−7% a −17%, em três
+sementes). Mesmo tamanho de índice, efeitos de sinal oposto.
+
+Auditado contra dez ameaças de validade em
+`docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md`,
+incluindo a circularidade (a decisão veio dos próprios rótulos de relevância;
+validada por CV, ganho honesto de +16,2%) e a limitação que fica (o JurisTCU
+julga excertos de jurisprudência, que saem do voto por construção).
 
 ### O que falta, em ordem
 
@@ -62,11 +77,14 @@ pelo segmentador (p = 0,017). É exploratório — precisa ser reimplementado em
    documentos; o código produz 12.880. **Ficou mais urgente**: um resultado
    significativo medido no corpus errado vai para o artigo como afirmação
    forte. Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
-2. Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`) — o
-   cache já existe, é barato.
+2. ~~Análise de sensibilidade da agregação~~ — **feita em 28/09**: o
+   `max_pooling` ganha do `sum_top_k` em 4 de 5 estratégias.
 3. Notebooks 01–03, que só consomem `results/`.
 4. Corrigir os números do artigo e do pôster (lista em
-   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`).
+   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
+   e reescrever Introdução, Resultados e Conclusão com as **duas** perguntas.
+5. Regerar as tabelas da F5: os recortes, IC 95% e análise de poder das
+   rodadas antigas foram calculados antes da correção do bug dos empates.
 
 ### Decisões técnicas tomadas depois do plano original
 
@@ -198,7 +216,14 @@ Invariante em todo o pipeline: `doc.text[start:end] == chunk.text`.
 - `data/interim/join_report.json` — taxa de match do join, docs sem acórdão, qrels perdidos.
 - `juris-chunking/data/processed/{estrategia}/chunks.jsonl` — campos do dataclass `Chunk`.
 - `juris-chunking/data/processed/{estrategia}/emb_{modelo}.npy` + `chunk_ids.json` — cache de embeddings.
-- `results/runs/{estrategia}__{retriever}[__{agregacao}].trec` — TREC run: `qid Q0 docid rank score nome`.
+- `results/runs/{estrategia}__{retriever}[__{agregacao}][__sec-…][__peso-…][__amostra-…].trec`
+  — TREC run: `qid Q0 docid rank score nome`. **Os sufixos da F6 fazem parte
+  do contrato:** toda variante que muda o número entra no nome, senão dois
+  runs da mesma estratégia e retriever com recortes diferentes gravam no mesmo
+  arquivo e o segundo apaga o primeiro sem aviso. As variantes são lidas por
+  **prefixo** (`sec-`, `peso-`, `amostra-`), nunca por posição — com
+  `--aggregation` e `--secoes` juntos a ordem muda, e ler por posição
+  colocaria o recorte na coluna de agregação da tabela.
 - `results/corpus/` — `eda_stats.json`, `segmenter_validation.json` (caracterização do corpus; muda só quando o corpus muda).
 - `results/experiments/<AAAAMMDD-HHMM>_<rótulo>/` — uma pasta por rodada, com `manifest.json` (commit, hardware, versões, tempos), `execucao.log`, `runs/*.trec`, `runs/*__chunks.jsonl`, `tables/*.csv` e `figuras/*.pdf|png`. **Este layout substitui o `results/tables/` plano descrito acima**, que existia quando o plano foi escrito; ver `results/README.md`.
 - Tokenizer único: **tiktoken `cl100k_base`** (wrapper em `src/tokenization.py`).
@@ -324,6 +349,52 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
    pelo corpus deu grupos de **3/67/80** consultas. Passou a cortar pelos
    percentis da distribuição das consultas: 50/50/50.
 
+### F6 — Recorte por seção e fusão híbrida (`sections.py`, `fusion.py`, `tuning.py`) 🟡 em revisão
+
+Fase **não prevista no plano original**. Nasceu de um achado da F5: a
+fundamentação ocupa 22,8% do texto e concentra 72,0% da relevância, mas os
+retrievers recuperam 65–74% pelo relatório.
+
+- `sections.py`: recorte do índice por macro-seção (`--secoes`), ponderação
+  por seção (`--pesos`) e o **controle pareado** por amostra aleatória
+  (`--amostra-igual-a`). A seção do chunk vem do rótulo quando existe e do
+  *offset* quando não — é o que faz o recorte valer nas cinco estratégias. ✅
+- `fusion.py`: RRF e soma normalizada sobre os runs TREC existentes. Não
+  reindexa nem reencoda nada. ✅
+- `tuning.py`: escolha do peso da fusão por **validação cruzada por
+  consulta**, 5 dobras, com run cruzado gravado como artefato. ✅
+- `indexing/dense.py`: o cache de embeddings passou a servir um **subconjunto**
+  dos chunks, selecionando linhas por id com `mmap`. É o que faz o recorte no
+  denso custar 4 minutos em vez de 10 h de GPU. Com recorte, o cache é
+  somente leitura. ✅
+- `plots.py`: figura de progressão de condições (`fig_condicoes`) e
+  agrupamento por condição experimental, não só por retriever. ✅
+
+**Aceite atingido:** as cinco estratégias nos dois retrievers, com controle,
+recorte por tipo de consulta, IC 95%, análise de poder e hiperparâmetro
+escolhido fora do conjunto de teste, e uma **auditoria de validade** com
+dez ameaças testadas. **191 testes** (eram 115).
+
+**Três bugs silenciosos encontrados em execução:**
+
+1. **Colisão de nome de run.** Dois runs escolhidos para a tabela principal
+   tinham o mesmo nome de arquivo, vindos de rodadas diferentes; o segundo
+   apagava o primeiro e a tabela saía com uma linha a menos. Detectado porque
+   o log dizia "7 runs copiados" e a avaliação dizia "6 runs".
+2. **Colapso de condições nas figuras.** `plots.partes_do_run` agrupava
+   "BM25 índice completo" e "BM25 sem relatório" na mesma barra, e uma das
+   duas sumia do gráfico. A figura não ficava incompleta — ficava **errada**.
+3. **Empate de score na fronteira da métrica.** O mesmo arquivo TREC dava
+   0,1322 e 0,1336 no mesmo recorte, conforme a ordem das chamadas: três
+   documentos empatavam nas posições 9–11 e um deles era relevante. O ranx não
+   fixa o desempate, e reordenar um run já ordenado permuta os empatados.
+   **Afeta todos os recortes, IC 95% e análise de poder do projeto, inclusive
+   os da F5.** Corrigido com desempate por `doc_id`; as tabelas da F6 foram
+   regeradas, as da F5 ainda não.
+
+Detalhe em
+[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+
 ---
 
 ## 4. Roteiro de execução com o Sonnet (controle de custo)
@@ -370,10 +441,20 @@ consumiu parte. Regras para as sessões de execução:
    retrievers × 4 métricas — **metade pronta** (BM25); falta o denso.
 4. 🟡 `significance.csv` com testes pareados corrigidos — pronto para o BM25.
 5. 🟡 `slices_{query_type,doc_length,retriever}.csv` — prontos para o BM25.
-6. ✅ `pytest` verde (**98 testes**); READMEs de reprodução atualizados.
+6. ✅ `pytest` verde (**191 testes** em 28/09; eram 98 quando esta lista foi
+   escrita); READMEs de reprodução atualizados.
 7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
    corrigidos de acordo.
 
 **Situação em 07/09:** os itens 1, 2, 3, 4, 5 e 6 estão ✅ (o item 3 com 4 das 5
 estratégias no denso; a quinta rodava quando a máquina desligou e foi retomada
 do checkpoint). Falta o item 7, que depende da equipe.
+
+**Situação em 28/09:** os itens 3, 4 e 5 estão ✅ completos (5 × 2 fechado
+desde 07/09, e a F6 acrescentou as mesmas tabelas para as condições novas). O
+item 7 **continua aberto** e continua dependendo da equipe — ficou mais
+urgente, porque agora há um resultado forte a publicar e ele está medido sobre
+o corpus de 12.880.
+
+**Item 8, novo:** a F6 foi mergeada em 28/09, mas a **revisão de conteúdo**
+pela equipe continua pendente — ela muda a tese do artigo.
