@@ -113,8 +113,8 @@ busca** — eles deixam de competir por vaga nos primeiros resultados.
 **+29% de nDCG@10, com p < 0,00001. E nenhuma métrica piora** — nem a
 cobertura, que é o que normalmente se sacrifica quando se ganha precisão.
 
-Traduzindo o que 0,2486 → 0,3215 quer dizer: em **95 das 150 consultas** o
-sistema novo entrega um top-10 melhor que o antigo; em 35 entrega pior; nas
+Traduzindo o que 0,2486 → 0,3215 quer dizer: em **100 das 150 consultas** o
+sistema novo entrega um top-10 melhor que o antigo; em 30 entrega pior; nas
 20 restantes empata. Não é uma média puxada por poucos casos extremos.
 
 São **duas** intervenções que se somam, porque atacam coisas diferentes:
