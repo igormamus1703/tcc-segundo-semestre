@@ -1,0 +1,257 @@
+{
+  "rotulo": "bm25_controle_amostra",
+  "inicio": "2026-09-28T16:52:53",
+  "fim": "2026-09-28T16:57:15",
+  "duracao_s": 262.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever bm25 --amostra-igual-a sem:relatorio --label bm25_controle_amostra",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": null,
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "amostra_seed": 42
+  },
+  "git": {
+    "commit": "289fc486a8025fb7580b5c6b2fb467cc8c9aae0b",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25__amostra-0.3324s42",
+      "run": "structural_gold__bm25__amostra-0.3324s42",
+      "n_chunks": 95300,
+      "n_queries": 150,
+      "n_linhas_run": 146380,
+      "segundos": 45.4,
+      "controle_amostra": {
+        "fracao": 0.332416,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 286689,
+        "chunks_depois": 95300
+      }
+    },
+    {
+      "nome": "structural_pred__bm25__amostra-0.3372s42",
+      "run": "structural_pred__bm25__amostra-0.3372s42",
+      "n_chunks": 96219,
+      "n_queries": 150,
+      "n_linhas_run": 146009,
+      "segundos": 43.9,
+      "controle_amostra": {
+        "fracao": 0.337246,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 285308,
+        "chunks_depois": 96219
+      }
+    },
+    {
+      "nome": "recursive_default__bm25__amostra-0.2908s42",
+      "run": "recursive_default__bm25__amostra-0.2908s42",
+      "n_chunks": 78548,
+      "n_queries": 150,
+      "n_linhas_run": 147823,
+      "segundos": 37.1,
+      "controle_amostra": {
+        "fracao": 0.290843,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 270070,
+        "chunks_depois": 78548
+      }
+    },
+    {
+      "nome": "fixed_1024_512__bm25__amostra-0.2804s42",
+      "run": "fixed_1024_512__bm25__amostra-0.2804s42",
+      "n_chunks": 126392,
+      "n_queries": 150,
+      "n_linhas_run": 137533,
+      "segundos": 64.7,
+      "controle_amostra": {
+        "fracao": 0.280381,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 450786,
+        "chunks_depois": 126392
+      }
+    },
+    {
+      "nome": "fixed_512_256__bm25__amostra-0.2800s42",
+      "run": "fixed_512_256__bm25__amostra-0.2800s42",
+      "n_chunks": 254234,
+      "n_queries": 150,
+      "n_linhas_run": 132190,
+      "segundos": 69.0,
+      "controle_amostra": {
+        "fracao": 0.28002,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 907914,
+        "chunks_depois": 254234
+      }
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-28T16:59:16",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__bm25__amostra-0.2804s42": {
+        "ndcg@10": 0.2305,
+        "mrr@10": 0.469,
+        "map@10": 0.0883,
+        "recall@100": 0.4441
+      },
+      "fixed_512_256__bm25__amostra-0.2800s42": {
+        "ndcg@10": 0.226,
+        "mrr@10": 0.4725,
+        "map@10": 0.0867,
+        "recall@100": 0.431
+      },
+      "recursive_default__bm25__amostra-0.2908s42": {
+        "ndcg@10": 0.2006,
+        "mrr@10": 0.4568,
+        "map@10": 0.0744,
+        "recall@100": 0.4062
+      },
+      "structural_gold__bm25__amostra-0.3324s42": {
+        "ndcg@10": 0.2177,
+        "mrr@10": 0.4717,
+        "map@10": 0.0803,
+        "recall@100": 0.4171
+      },
+      "structural_pred__bm25__amostra-0.3372s42": {
+        "ndcg@10": 0.221,
+        "mrr@10": 0.4634,
+        "map@10": 0.0858,
+        "recall@100": 0.4131
+      },
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      },
+      "fixed_1024_512__bm25__sec-sem_relatorio": {
+        "ndcg@10": 0.279,
+        "mrr@10": 0.5565,
+        "map@10": 0.1145,
+        "recall@100": 0.5077
+      },
+      "fixed_512_256__bm25__sec-sem_relatorio": {
+        "ndcg@10": 0.2904,
+        "mrr@10": 0.5889,
+        "map@10": 0.119,
+        "recall@100": 0.4993
+      },
+      "recursive_default__bm25__sec-sem_relatorio": {
+        "ndcg@10": 0.2764,
+        "mrr@10": 0.5526,
+        "map@10": 0.1118,
+        "recall@100": 0.4967
+      },
+      "structural_gold__bm25__sec-sem_relatorio": {
+        "ndcg@10": 0.2835,
+        "mrr@10": 0.5633,
+        "map@10": 0.1162,
+        "recall@100": 0.5045
+      },
+      "structural_pred__bm25__sec-sem_relatorio": {
+        "ndcg@10": 0.2835,
+        "mrr@10": 0.5642,
+        "map@10": 0.1153,
+        "recall@100": 0.4952
+      }
+    },
+    "melhor_run": "fixed_512_256__bm25__sec-sem_relatorio",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 105,
+      "pares_p_menor_0_05": 74,
+      "menor_p": 0.0
+    }
+  }
+}

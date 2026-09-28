@@ -1,0 +1,11 @@
+run,rodada,estrategia,retriever,agregacao,secoes,pesos,ndcg@10,mrr@10,map@10,recall@100
+fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio,,fixed_1024_512,bm25,sum_top_k,sem_relatorio,,0.2834891002520296,0.5767910052910054,0.11587000151523962,0.4816185666185667
+fixed_512_256__bm25__sum_top_k__sec-sem_relatorio,,fixed_512_256,bm25,sum_top_k,sem_relatorio,,0.28753093623899106,0.558994708994709,0.12042367958320338,0.49324830724830726
+recursive_default__bm25__sum_top_k__sec-sem_relatorio,,recursive_default,bm25,sum_top_k,sem_relatorio,,0.26556924043441515,0.5628941798941799,0.10955533076564822,0.42829413179413184
+structural_gold__bm25__sum_top_k__sec-sem_relatorio,,structural_gold,bm25,sum_top_k,sem_relatorio,,0.2725328023399201,0.5694708994708995,0.11051060688282911,0.4563296888296889
+structural_pred__bm25__sum_top_k__sec-sem_relatorio,,structural_pred,bm25,sum_top_k,sem_relatorio,,0.2650938395253179,0.5619973544973546,0.10836991585721743,0.4353688903688904
+fixed_1024_512__bm25__sec-sem_relatorio,,fixed_1024_512,bm25,max_pooling,sem_relatorio,,0.27900908552818443,0.5564867724867725,0.11454240790074124,0.5076886816886818
+fixed_512_256__bm25__sec-sem_relatorio,,fixed_512_256,bm25,max_pooling,sem_relatorio,,0.2903609065276972,0.5888756613756614,0.11896920840770046,0.49934373034373036
+recursive_default__bm25__sec-sem_relatorio,,recursive_default,bm25,max_pooling,sem_relatorio,,0.27643617613538596,0.5526164021164022,0.11184755603009573,0.49666672216672214
+structural_gold__bm25__sec-sem_relatorio,,structural_gold,bm25,max_pooling,sem_relatorio,,0.28345673989525355,0.5633201058201058,0.11624640663569233,0.50448556998557
+structural_pred__bm25__sec-sem_relatorio,,structural_pred,bm25,max_pooling,sem_relatorio,,0.28352437598276226,0.5641560846560846,0.11530337296448406,0.49522416472416475

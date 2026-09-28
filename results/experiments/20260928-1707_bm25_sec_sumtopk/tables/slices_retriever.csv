@@ -1,0 +1,11 @@
+run,recorte,valor,n_queries,media,ic95_inf,ic95_sup,metrica,estrategia
+fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio,retriever,bm25,150,0.2834891002520296,0.2517734674335968,0.31438837768228367,ndcg@10,fixed_1024_512
+fixed_512_256__bm25__sum_top_k__sec-sem_relatorio,retriever,bm25,150,0.28753093623899106,0.25292550224690746,0.32069732127273787,ndcg@10,fixed_512_256
+recursive_default__bm25__sum_top_k__sec-sem_relatorio,retriever,bm25,150,0.26556924043441515,0.23279078231950237,0.2978458535334145,ndcg@10,recursive_default
+structural_gold__bm25__sum_top_k__sec-sem_relatorio,retriever,bm25,150,0.2725328023399201,0.24037416002797105,0.3041784247871756,ndcg@10,structural_gold
+structural_pred__bm25__sum_top_k__sec-sem_relatorio,retriever,bm25,150,0.2650938395253179,0.23334149446642127,0.29615960526168994,ndcg@10,structural_pred
+fixed_1024_512__bm25__sec-sem_relatorio,retriever,bm25,150,0.27900908552818443,0.2469882894877523,0.3110094600148437,ndcg@10,fixed_1024_512
+fixed_512_256__bm25__sec-sem_relatorio,retriever,bm25,150,0.2896467567518857,0.2560539947048453,0.32228257878944233,ndcg@10,fixed_512_256
+recursive_default__bm25__sec-sem_relatorio,retriever,bm25,150,0.27643617613538596,0.24398519645552638,0.3089886719070073,ndcg@10,recursive_default
+structural_gold__bm25__sec-sem_relatorio,retriever,bm25,150,0.28345673989525355,0.24991998071581645,0.31699638794973517,ndcg@10,structural_gold
+structural_pred__bm25__sec-sem_relatorio,retriever,bm25,150,0.28352437598276226,0.25084119872244964,0.3160819188095053,ndcg@10,structural_pred

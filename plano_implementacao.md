@@ -6,9 +6,10 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
 ---
 
-## STATUS ATUAL — 07/09/2026
+## STATUS ATUAL — 28/09/2026
 
-**F0 a F5 concluídas. O experimento foi rodado nos dois retrievers.**
+**F0 a F5 concluídas e mergeadas. F6 concluída e em revisão** (branch
+`leo/f6-secoes-e-fusao`, não mergeada).
 
 > 📍 Para o panorama do projeto, próximos passos e o que cada integrante pode
 > pegar, veja o **[PLANO.md](PLANO.md)** na raiz. Este documento mantém o
@@ -22,9 +23,11 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 | F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
 | F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
 | F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
+| F6 — Recorte por seção + fusão | 🟡 pronta, não mergeada | **nDCG@10 0,2486 → 0,3160 (+27,1%)**, com controle pareado e peso por validação cruzada (`20260928-1705_f6_tabela_principal`) |
 
 **Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
-ambos alcançados**, com semanas de antecedência.
+ambos alcançados**, com semanas de antecedência. A F6 não estava no plano
+original: nasceu do recorte analítico por seção que a F5 acrescentou.
 
 ### A resposta à pergunta de pesquisa
 
@@ -324,6 +327,44 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
    pelo corpus deu grupos de **3/67/80** consultas. Passou a cortar pelos
    percentis da distribuição das consultas: 50/50/50.
 
+### F6 — Recorte por seção e fusão híbrida (`sections.py`, `fusion.py`, `tuning.py`) 🟡 em revisão
+
+Fase **não prevista no plano original**. Nasceu de um achado da F5: a
+fundamentação ocupa 22,8% do texto e concentra 72,0% da relevância, mas os
+retrievers recuperam 65–74% pelo relatório.
+
+- `sections.py`: recorte do índice por macro-seção (`--secoes`), ponderação
+  por seção (`--pesos`) e o **controle pareado** por amostra aleatória
+  (`--amostra-igual-a`). A seção do chunk vem do rótulo quando existe e do
+  *offset* quando não — é o que faz o recorte valer nas cinco estratégias. ✅
+- `fusion.py`: RRF e soma normalizada sobre os runs TREC existentes. Não
+  reindexa nem reencoda nada. ✅
+- `tuning.py`: escolha do peso da fusão por **validação cruzada por
+  consulta**, 5 dobras, com run cruzado gravado como artefato. ✅
+- `indexing/dense.py`: o cache de embeddings passou a servir um **subconjunto**
+  dos chunks, selecionando linhas por id com `mmap`. É o que faz o recorte no
+  denso custar 4 minutos em vez de 10 h de GPU. Com recorte, o cache é
+  somente leitura. ✅
+- `plots.py`: figura de progressão de condições (`fig_condicoes`) e
+  agrupamento por condição experimental, não só por retriever. ✅
+
+**Aceite atingido:** as cinco estratégias nos dois retrievers, com controle,
+recorte por tipo de consulta, IC 95%, análise de poder e hiperparâmetro
+escolhido fora do conjunto de teste. **175 testes** (eram 115).
+
+**Dois bugs silenciosos encontrados em execução:**
+
+1. **Colisão de nome de run.** Dois runs escolhidos para a tabela principal
+   tinham o mesmo nome de arquivo, vindos de rodadas diferentes; o segundo
+   apagava o primeiro e a tabela saía com uma linha a menos. Detectado porque
+   o log dizia "7 runs copiados" e a avaliação dizia "6 runs".
+2. **Colapso de condições nas figuras.** `plots.partes_do_run` agrupava
+   "BM25 índice completo" e "BM25 sem relatório" na mesma barra, e uma das
+   duas sumia do gráfico. A figura não ficava incompleta — ficava **errada**.
+
+Detalhe em
+[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+
 ---
 
 ## 4. Roteiro de execução com o Sonnet (controle de custo)
@@ -370,10 +411,20 @@ consumiu parte. Regras para as sessões de execução:
    retrievers × 4 métricas — **metade pronta** (BM25); falta o denso.
 4. 🟡 `significance.csv` com testes pareados corrigidos — pronto para o BM25.
 5. 🟡 `slices_{query_type,doc_length,retriever}.csv` — prontos para o BM25.
-6. ✅ `pytest` verde (**98 testes**); READMEs de reprodução atualizados.
+6. ✅ `pytest` verde (**175 testes** em 28/09; eram 98 quando esta lista foi
+   escrita); READMEs de reprodução atualizados.
 7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
    corrigidos de acordo.
 
 **Situação em 07/09:** os itens 1, 2, 3, 4, 5 e 6 estão ✅ (o item 3 com 4 das 5
 estratégias no denso; a quinta rodava quando a máquina desligou e foi retomada
 do checkpoint). Falta o item 7, que depende da equipe.
+
+**Situação em 28/09:** os itens 3, 4 e 5 estão ✅ completos (5 × 2 fechado
+desde 07/09, e a F6 acrescentou as mesmas tabelas para as condições novas). O
+item 7 **continua aberto** e continua dependendo da equipe — ficou mais
+urgente, porque agora há um resultado forte a publicar e ele está medido sobre
+o corpus de 12.880.
+
+**Item 8, novo:** aprovar o merge da branch `leo/f6-secoes-e-fusao`. Ela muda
+a tese do artigo, então não é decisão de um integrante.

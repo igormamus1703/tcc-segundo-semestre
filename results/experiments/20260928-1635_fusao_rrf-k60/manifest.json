@@ -1,0 +1,216 @@
+{
+  "rotulo": "fusao_rrf-k60",
+  "inicio": "2026-09-28T16:35:17",
+  "fim": "2026-09-28T16:35:27",
+  "duracao_s": 9.2,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\fusion.py --experimentos ../results/experiments/20260906-0515_bm25 ../results/experiments/20260907-0125_dense_bge_m3 --metodo rrf --k 60",
+  "config": {
+    "metodo": "rrf",
+    "k_rrf": 60,
+    "pesos": null,
+    "experimentos_fundidos": [
+      "..\\results\\experiments\\20260906-0515_bm25",
+      "..\\results\\experiments\\20260907-0125_dense_bge_m3"
+    ],
+    "top_docs": 1000,
+    "estrategias": [
+      "fixed_1024_512",
+      "fixed_512_256",
+      "recursive_default",
+      "structural_gold",
+      "structural_pred"
+    ]
+  },
+  "git": {
+    "commit": "289fc486a8025fb7580b5c6b2fb467cc8c9aae0b",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_1024_512__rrf-k60",
+      "fontes": [
+        "bm25",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "..\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "..\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\fixed_1024_512__dense-bge_m3.trec"
+      ],
+      "n_queries": 150,
+      "n_linhas_run": 136122
+    },
+    {
+      "nome": "fixed_512_256__rrf-k60",
+      "fontes": [
+        "bm25",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "..\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_512_256__bm25.trec",
+        "..\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec"
+      ],
+      "n_queries": 150,
+      "n_linhas_run": 130851
+    },
+    {
+      "nome": "recursive_default__rrf-k60",
+      "fontes": [
+        "bm25",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "..\\results\\experiments\\20260906-0515_bm25\\runs\\recursive_default__bm25.trec",
+        "..\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\recursive_default__dense-bge_m3.trec"
+      ],
+      "n_queries": 150,
+      "n_linhas_run": 147219
+    },
+    {
+      "nome": "structural_gold__rrf-k60",
+      "fontes": [
+        "bm25",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "..\\results\\experiments\\20260906-0515_bm25\\runs\\structural_gold__bm25.trec",
+        "..\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\structural_gold__dense-bge_m3.trec"
+      ],
+      "n_queries": 150,
+      "n_linhas_run": 146904
+    },
+    {
+      "nome": "structural_pred__rrf-k60",
+      "fontes": [
+        "bm25",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "..\\results\\experiments\\20260906-0515_bm25\\runs\\structural_pred__bm25.trec",
+        "..\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\structural_pred__dense-bge_m3.trec"
+      ],
+      "n_queries": 150,
+      "n_linhas_run": 146892
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-28T16:35:47",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_1024_512__rrf-k60": {
+        "ndcg@10": 0.2534,
+        "mrr@10": 0.4893,
+        "map@10": 0.1039,
+        "recall@100": 0.5156
+      },
+      "fixed_512_256__rrf-k60": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.4785,
+        "map@10": 0.1019,
+        "recall@100": 0.5201
+      },
+      "recursive_default__rrf-k60": {
+        "ndcg@10": 0.2535,
+        "mrr@10": 0.5019,
+        "map@10": 0.1012,
+        "recall@100": 0.4974
+      },
+      "structural_gold__rrf-k60": {
+        "ndcg@10": 0.2534,
+        "mrr@10": 0.4957,
+        "map@10": 0.1044,
+        "recall@100": 0.5008
+      },
+      "structural_pred__rrf-k60": {
+        "ndcg@10": 0.2555,
+        "mrr@10": 0.4895,
+        "map@10": 0.1063,
+        "recall@100": 0.5003
+      },
+      "fixed_1024_512__bm25": {
+        "ndcg@10": 0.251,
+        "mrr@10": 0.5061,
+        "map@10": 0.1013,
+        "recall@100": 0.4861
+      },
+      "fixed_512_256__bm25": {
+        "ndcg@10": 0.2486,
+        "mrr@10": 0.5186,
+        "map@10": 0.0963,
+        "recall@100": 0.4709
+      },
+      "recursive_default__bm25": {
+        "ndcg@10": 0.2412,
+        "mrr@10": 0.4731,
+        "map@10": 0.0931,
+        "recall@100": 0.4731
+      },
+      "structural_gold__bm25": {
+        "ndcg@10": 0.2521,
+        "mrr@10": 0.5068,
+        "map@10": 0.1024,
+        "recall@100": 0.4849
+      },
+      "structural_pred__bm25": {
+        "ndcg@10": 0.2526,
+        "mrr@10": 0.501,
+        "map@10": 0.1017,
+        "recall@100": 0.4863
+      },
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      }
+    },
+    "melhor_run": "structural_pred__rrf-k60",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 105,
+      "pares_p_menor_0_05": 51,
+      "menor_p": 0.0
+    }
+  }
+}

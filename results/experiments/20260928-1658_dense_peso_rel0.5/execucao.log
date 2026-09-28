@@ -1,0 +1,12 @@
+[16:58:12] experimento 20260928-1658_dense_peso_rel0.5
+[16:58:12]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:58:12]   commit: 73a908ef (arvore suja) em leo/f6-secoes-e-fusao
+[16:58:16]   [structural_gold] pesos {'relatorio': 0.5}: 191,389 chunks com peso != 1
+[16:58:22]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[16:58:23]     embeddings recuperados do cache (sem reencode)
+[16:58:25] structural_gold__dense-bge_m3__peso-rel0.5: 286,689 chunks, 133,289 linhas, 12.8s  [decorrido 0.0 h]
+[16:58:34]   [fixed_512_256] pesos {'relatorio': 0.5}: 653,680 chunks com peso != 1
+[16:58:39]   [fixed_512_256] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[16:58:42]     embeddings recuperados do cache (sem reencode)
+[16:58:46] fixed_512_256__dense-bge_m3__peso-rel0.5: 907,914 chunks, 108,254 linhas, 20.9s  [decorrido 0.0 h]
+[16:58:46] fim em 0.6 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1658_dense_peso_rel0.5

@@ -1,0 +1,185 @@
+{
+  "rotulo": "dense_peso_rel0.2",
+  "inicio": "2026-09-28T16:57:20",
+  "fim": "2026-09-28T16:57:59",
+  "duracao_s": 39.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold fixed_512_256 --retriever dense --pesos relatorio=0.2 --label dense_peso_rel0.2",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": null,
+    "pesos_por_secao": {
+      "relatorio": 0.2
+    },
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "73a908ef1ef61bbca96f1d6ed0522515640b6209",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3__peso-rel0.2",
+      "run": "structural_gold__dense-bge_m3__peso-rel0.2",
+      "n_chunks": 286689,
+      "n_queries": 150,
+      "n_linhas_run": 133289,
+      "segundos": 13.1,
+      "pesos": {
+        "por_secao": {
+          "relatorio": 0.2
+        },
+        "n_chunks_ponderados": 191389
+      }
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3__peso-rel0.2",
+      "run": "fixed_512_256__dense-bge_m3__peso-rel0.2",
+      "n_chunks": 907914,
+      "n_queries": 150,
+      "n_linhas_run": 108254,
+      "segundos": 25.5,
+      "pesos": {
+        "por_secao": {
+          "relatorio": 0.2
+        },
+        "n_chunks_ponderados": 653680
+      }
+    }
+  ],
+  "erro": null,
+  "avaliacao": {
+    "quando": "2026-09-28T17:00:21",
+    "metrica_principal": "ndcg@10",
+    "por_run": {
+      "fixed_512_256__dense-bge_m3__peso-rel0.2": {
+        "ndcg@10": 0.2627,
+        "mrr@10": 0.519,
+        "map@10": 0.1112,
+        "recall@100": 0.4558
+      },
+      "structural_gold__dense-bge_m3__peso-rel0.2": {
+        "ndcg@10": 0.2167,
+        "mrr@10": 0.4463,
+        "map@10": 0.0881,
+        "recall@100": 0.3928
+      },
+      "fixed_512_256__dense-bge_m3__peso-rel0.5": {
+        "ndcg@10": 0.2627,
+        "mrr@10": 0.519,
+        "map@10": 0.1112,
+        "recall@100": 0.4558
+      },
+      "structural_gold__dense-bge_m3__peso-rel0.5": {
+        "ndcg@10": 0.2167,
+        "mrr@10": 0.4463,
+        "map@10": 0.0881,
+        "recall@100": 0.3928
+      },
+      "fixed_1024_512__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2292,
+        "mrr@10": 0.4727,
+        "map@10": 0.0967,
+        "recall@100": 0.4189
+      },
+      "fixed_512_256__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2627,
+        "mrr@10": 0.519,
+        "map@10": 0.1112,
+        "recall@100": 0.4564
+      },
+      "recursive_default__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2351,
+        "mrr@10": 0.4906,
+        "map@10": 0.0974,
+        "recall@100": 0.3932
+      },
+      "structural_gold__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2167,
+        "mrr@10": 0.4463,
+        "map@10": 0.0881,
+        "recall@100": 0.3928
+      },
+      "structural_pred__dense-bge_m3__sec-sem_relatorio": {
+        "ndcg@10": 0.2147,
+        "mrr@10": 0.443,
+        "map@10": 0.0873,
+        "recall@100": 0.3795
+      },
+      "fixed_1024_512__dense-bge_m3": {
+        "ndcg@10": 0.2019,
+        "mrr@10": 0.4059,
+        "map@10": 0.0832,
+        "recall@100": 0.4507
+      },
+      "fixed_512_256__dense-bge_m3": {
+        "ndcg@10": 0.2055,
+        "mrr@10": 0.4042,
+        "map@10": 0.08,
+        "recall@100": 0.4759
+      },
+      "recursive_default__dense-bge_m3": {
+        "ndcg@10": 0.1967,
+        "mrr@10": 0.3809,
+        "map@10": 0.0799,
+        "recall@100": 0.4283
+      },
+      "structural_gold__dense-bge_m3": {
+        "ndcg@10": 0.1847,
+        "mrr@10": 0.3743,
+        "map@10": 0.0704,
+        "recall@100": 0.422
+      },
+      "structural_pred__dense-bge_m3": {
+        "ndcg@10": 0.1912,
+        "mrr@10": 0.3656,
+        "map@10": 0.0754,
+        "recall@100": 0.4241
+      }
+    },
+    "melhor_run": "fixed_512_256__dense-bge_m3__peso-rel0.2",
+    "significancia": {
+      "metrica": "ndcg@10",
+      "pares": 91,
+      "pares_p_menor_0_05": 52,
+      "menor_p": 0.0
+    }
+  }
+}
