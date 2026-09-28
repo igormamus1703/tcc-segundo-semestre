@@ -1,0 +1,77 @@
+{
+  "rotulo": "aud_sec_fundamentacao_ementa",
+  "inicio": "2026-09-28T18:55:48",
+  "fim": "2026-09-28T18:56:48",
+  "duracao_s": 59.7,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy fixed_512_256 --retriever bm25 --secoes fundamentacao,ementa --label aud_sec_fundamentacao_ementa",
+  "config": {
+    "estrategias": [
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 150,
+    "limite_queries": null,
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\queries.jsonl",
+    "secoes": [
+      "ementa",
+      "fundamentacao"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "aa1777106cef4884494f056b13f635284565310f",
+    "branch": "leo/f6-secoes-e-fusao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__bm25__sec-em+fund",
+      "run": "fixed_512_256__bm25__sec-em+fund",
+      "n_chunks": 212397,
+      "n_queries": 150,
+      "n_linhas_run": 112231,
+      "segundos": 59.4,
+      "recorte_secoes": {
+        "secoes": [
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 907914,
+        "chunks_depois": 212397,
+        "fracao_mantida": 0.2339,
+        "distribuicao": {
+          "ementa": 2445,
+          "relatorio": 653680,
+          "fundamentacao": 209952,
+          "dispositivo": 41837
+        }
+      }
+    }
+  ],
+  "erro": null
+}

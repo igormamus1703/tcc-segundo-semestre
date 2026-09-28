@@ -24,6 +24,7 @@ from pathlib import Path
 
 import yaml
 
+from . import sections as secoes_mod
 from .chunkers.base import Chunk
 from .chunkers.run import PROCESSED_DIR
 from .experiment import Experimento
@@ -167,9 +168,78 @@ def run_one(
     runs_dir: Path = RUNS_DIR,
     log=None,
     bloco: int = 25_000,
+    secoes: set[str] | None = None,
+    pesos: dict[str, float] | None = None,
+    spans_por_doc: dict[str, list[dict]] | None = None,
+    amostra: float | None = None,
+    amostra_seed: int = 42,
+    amostra_igual_a: set[str] | None = None,
 ) -> dict:
     t0 = time.time()
     chunks = load_chunks(strategy, processed_dir)
+
+    # F6 — recorte do índice por seção do acórdão. O filtro roda ANTES de
+    # construir o índice: é isso que faz o índice encolher (e o BM25 ficar mais
+    # rápido), em vez de só descartar resultados depois da busca. Filtrar
+    # depois daria outro número — os chunks descartados ainda teriam ocupado
+    # vagas no top-k da busca.
+    recorte_secoes: dict | None = None
+    if secoes:
+        spans = spans_por_doc or {}
+        antes = len(chunks)
+        chunks, contagem = secoes_mod.filtrar(chunks, secoes, spans)
+        if not chunks:
+            raise SystemExit(
+                f"{strategy}: o recorte {sorted(secoes)} nao deixou nenhum chunk "
+                f"(distribuicao real: {contagem})"
+            )
+        recorte_secoes = {
+            "secoes": sorted(secoes),
+            "chunks_antes": antes,
+            "chunks_depois": len(chunks),
+            "fracao_mantida": round(len(chunks) / antes, 4),
+            "distribuicao": contagem,
+        }
+        (log or print)(
+            f"  [{strategy}] secoes {sorted(secoes)}: {antes:,} -> {len(chunks):,} chunks "
+            f"({len(chunks)/antes:.1%})"
+        )
+
+    # Controle do recorte por secao: um indice do MESMO tamanho, mas sorteado.
+    # Se este tambem melhorar, o achado e sobre o tamanho do indice e nao sobre
+    # a estrutura do acordao.
+    controle_amostra: dict | None = None
+    if amostra is not None or amostra_igual_a:
+        antes = len(chunks)
+        # `--amostra-igual-a` casa o tamanho do indice com o que o recorte por
+        # secao produziria NESTA estrategia. A fracao equivalente varia de 28%
+        # (fixed_512_256) a 34% (structural_pred): passar um numero unico na
+        # linha de comando daria um controle desalinhado justamente onde a
+        # comparacao precisa ser exata.
+        if amostra_igual_a:
+            alvo, _ = secoes_mod.filtrar(chunks, amostra_igual_a, spans_por_doc or {})
+            fracao = len(alvo) / antes
+        else:
+            fracao = amostra
+        chunks = secoes_mod.amostra_aleatoria(chunks, fracao, seed=amostra_seed)
+        controle_amostra = {
+            "fracao": round(fracao, 6), "seed": amostra_seed,
+            "igual_a_secoes": sorted(amostra_igual_a) if amostra_igual_a else None,
+            "chunks_antes": antes, "chunks_depois": len(chunks),
+        }
+        (log or print)(
+            f"  [{strategy}] amostra aleatoria {fracao:.4f} (seed {amostra_seed}"
+            + (f", igualando {sorted(amostra_igual_a)}" if amostra_igual_a else "")
+            + f"): {antes:,} -> {len(chunks):,} chunks"
+        )
+
+    peso_do_chunk: dict[str, float] = {}
+    if pesos:
+        peso_do_chunk = secoes_mod.pesos_por_chunk(chunks, pesos, spans_por_doc or {})
+        (log or print)(
+            f"  [{strategy}] pesos {pesos}: {len(peso_do_chunk):,} chunks com peso != 1"
+        )
+
     index = build_index(retriever, chunks, models_cfg, embedder)
 
     # O nome do retriever no run carrega o modelo denso usado: sem isso, rodar
@@ -179,9 +249,12 @@ def run_one(
         retriever_tag = f"dense-{nome_embedder}"
         (log or print)(f"  [{strategy}] {index.describe()}")
         # Cache dos embeddings junto dos chunks da estratégia (contrato da
-        # secao 2 do plano_implementacao.md).
+        # secao 2 do plano_implementacao.md). Com recorte por seção, os chunks
+        # são um subconjunto: o cache é lido (e recortado) mas nunca escrito,
+        # para não substituir o encode completo de 10 h por um parcial.
         index.build(chunks, cache_dir=processed_dir / strategy,
-                    show_progress=False, log=log or print, bloco=bloco)
+                    show_progress=False, log=log or print, bloco=bloco,
+                    cache_somente_leitura=bool(secoes or controle_amostra))
     else:
         retriever_tag = retriever
 
@@ -197,7 +270,18 @@ def run_one(
 
     results = index.search_batch([q["text"] for q in queries], top_k=top_chunks)
 
+    # O nome do run carrega TODA variante que muda o número: agregação, corte
+    # por seção e ponderação. Dois runs da mesma estratégia e retriever com
+    # recortes diferentes gravariam no mesmo arquivo, e o segundo apagaria o
+    # primeiro sem aviso — que é o mesmo motivo de o modelo denso já estar no
+    # nome.
     suffix = "" if aggregation == "max_pooling" else f"__{aggregation}"
+    if secoes:
+        suffix += f"__sec-{secoes_mod.rotulo_secoes(secoes)}"
+    if pesos:
+        suffix += f"__peso-{secoes_mod.rotulo_pesos(pesos)}"
+    if controle_amostra:
+        suffix += f"__amostra-{controle_amostra['fracao']:.4f}s{amostra_seed}"
     run_name = f"{strategy}__{retriever_tag}{suffix}"
 
     ranked: dict[str, list[tuple[str, float]]] = {}
@@ -207,7 +291,23 @@ def run_one(
     # não carregam rótulo de seção, mas carregam offset.
     vencedores: dict[str, dict[str, tuple[str, float]]] = {}
     for q, hits in zip(queries, results):
-        scored = [(cid, chunk_to_doc[cid], score) for cid, score in hits]
+        # A ponderação por seção entra AQUI, entre a busca e a agregação: o
+        # score do chunk é multiplicado pelo peso da sua seção, e é o valor
+        # ponderado que disputa o max-pooling. Assim um trecho do relatório só
+        # ganha o documento se vencer mesmo depois do desconto.
+        #
+        # Limitação a declarar: o peso é aplicado DEPOIS do corte em
+        # `top_chunks`. Um chunk de peso alto que não entrou nos 2.000
+        # primeiros por score bruto continua de fora. Com 2.000 chunks por
+        # consulta e pesos que só descontam, o efeito é pequeno — mas é uma
+        # aproximação, e não uma reordenação exata do índice inteiro.
+        if peso_do_chunk:
+            scored = [
+                (cid, chunk_to_doc[cid], score * peso_do_chunk.get(cid, 1.0))
+                for cid, score in hits
+            ]
+        else:
+            scored = [(cid, chunk_to_doc[cid], score) for cid, score in hits]
         doc_scores = agg_fn(scored)
         ranked[q["query_id"]] = sorted(doc_scores.items(), key=lambda kv: -kv[1])[:top_docs]
         melhor: dict[str, tuple[str, float]] = {}
@@ -220,13 +320,20 @@ def run_one(
     write_chunks_top(runs_dir / f"{run_name}__chunks.jsonl", ranked, vencedores,
                      posicao, run_name)
 
-    return {
+    info = {
         "run": run_name,
         "n_chunks": n_chunks,
         "n_queries": len(queries),
         "n_linhas_run": n_lines,
         "segundos": round(time.time() - t0, 1),
     }
+    if recorte_secoes:
+        info["recorte_secoes"] = recorte_secoes
+    if pesos:
+        info["pesos"] = {"por_secao": pesos, "n_chunks_ponderados": len(peso_do_chunk)}
+    if controle_amostra:
+        info["controle_amostra"] = controle_amostra
+    return info
 
 
 def main() -> None:
@@ -238,6 +345,28 @@ def main() -> None:
     parser.add_argument("--retriever", default="bm25", choices=["bm25", "dense", "all"])
     parser.add_argument("--embedder", default=None, help="Nome em models.yaml (so para dense).")
     parser.add_argument("--aggregation", default="max_pooling", choices=list(AGGREGATIONS))
+    parser.add_argument("--secoes", default=None, metavar="LISTA",
+                        help="F6 — indexa so estas macro-secoes do acordao. Aceita a forma "
+                             "positiva ('ementa,fundamentacao,dispositivo') ou a negativa "
+                             "('sem:relatorio', ou '--secoes=-relatorio' colado, que o "
+                             "argparse senao le como opcao). "
+                             "Vale para as cinco estrategias: nas fixas/recursiva a secao "
+                             "vem do offset do chunk contra os spans do documento.")
+    parser.add_argument("--pesos", default=None, metavar="LISTA",
+                        help="F6 — em vez de cortar, pondera: 'relatorio=0.5' multiplica o "
+                             "score dos chunks do relatorio antes da agregacao. Preserva o "
+                             "recall que o corte binario sacrifica.")
+    parser.add_argument("--amostra", type=float, default=None, metavar="FRACAO",
+                        help="F6, CONTROLE — mantem uma fracao aleatoria dos chunks, em vez "
+                             "de recortar por secao. Serve para responder se o ganho do "
+                             "recorte vem da estrutura do acordao ou so de um indice menor.")
+    parser.add_argument("--amostra-igual-a", default=None, metavar="LISTA",
+                        help="F6, CONTROLE PAREADO — sorteia tantos chunks quantos o recorte "
+                             "por estas secoes deixaria, em cada estrategia. E o controle "
+                             "exato: mesmo tamanho de indice, sem respeitar a estrutura.")
+    parser.add_argument("--amostra-seed", type=int, default=42)
+    parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl",
+                        help="So usado por --secoes/--pesos, para ler os spans do documento.")
     parser.add_argument("--top-chunks", type=int, default=2000)
     parser.add_argument("--bloco", type=int, default=25_000,
                         help="Chunks por bloco de checkpoint no encode denso.")
@@ -258,6 +387,36 @@ def main() -> None:
     queries = load_queries(args.queries, args.limit_queries)
     if not queries:
         raise SystemExit(f"nenhuma consulta lida de {args.queries}")
+
+    # F6 — recorte/ponderação por seção. Os spans só são lidos se alguma das
+    # duas opções foi pedida: `load_gold_spans` varre um corpus_docs.jsonl de
+    # 780 MB na primeira vez, e uma rodada normal não precisa disso.
+    try:
+        secoes = secoes_mod.parse_secoes(args.secoes) if args.secoes else None
+        pesos = secoes_mod.parse_pesos(args.pesos) if args.pesos else None
+        amostra_igual_a = (
+            secoes_mod.parse_secoes(args.amostra_igual_a) if args.amostra_igual_a else None
+        )
+    except ValueError as e:
+        raise SystemExit(f"--secoes/--pesos/--amostra-igual-a: {e}") from None
+    if secoes and (amostra_igual_a or args.amostra):
+        raise SystemExit(
+            "--secoes com --amostra*: o controle aleatorio SUBSTITUI o recorte por secao, "
+            "nao se soma a ele. Rode as duas condicoes em rodadas separadas."
+        )
+    if secoes and pesos:
+        raise SystemExit(
+            "--secoes e --pesos juntos medem duas intervencoes ao mesmo tempo e "
+            "nenhuma das duas ficaria interpretavel. Rode uma de cada vez."
+        )
+    spans_por_doc: dict[str, list[dict]] = {}
+    if secoes or pesos or amostra_igual_a:
+        from .evaluate import load_gold_spans
+
+        if not args.corpus.exists():
+            raise SystemExit(f"--secoes/--pesos precisam de {args.corpus} (rode src.ingest)")
+        spans_por_doc = load_gold_spans(args.corpus)
+        print(f"spans de {len(spans_por_doc):,} documentos", flush=True)
 
     if args.strategy == ["all"]:
         # Ordem deliberada: as estrategias estruturais primeiro, porque sao as
@@ -293,6 +452,11 @@ def main() -> None:
         "n_queries": len(queries),
         "limite_queries": args.limit_queries,
         "corpus": str(args.queries),
+        "secoes": sorted(secoes) if secoes else None,
+        "pesos_por_secao": pesos,
+        "amostra_aleatoria": args.amostra,
+        "amostra_igual_a": sorted(amostra_igual_a) if amostra_igual_a else None,
+        "amostra_seed": args.amostra_seed if (args.amostra or amostra_igual_a) else None,
     }
     if "dense" in retrievers:
         nome = config["embedder"]
@@ -343,6 +507,12 @@ def main() -> None:
                     runs_dir=runs_dir,
                     log=exp.log,
                     bloco=args.bloco,
+                    secoes=secoes,
+                    pesos=pesos,
+                    spans_por_doc=spans_por_doc,
+                    amostra=args.amostra,
+                    amostra_seed=args.amostra_seed,
+                    amostra_igual_a=amostra_igual_a,
                 )
                 if info["segundos"] > 0:
                     taxa_chunks_s = info["n_chunks"] / info["segundos"]
@@ -392,6 +562,17 @@ def _rotulo_automatico(args, retrievers, models_cfg) -> str:
         partes.append(f"smoke{args.limit_queries}q")
     if args.aggregation != "max_pooling":
         partes.append(args.aggregation)
+    # A variante de seção precisa aparecer no NOME DA PASTA, não só no do run:
+    # é assim que o INDICE.md mostra de relance o que cada rodada testou.
+    if getattr(args, "secoes", None):
+        partes.append("sec-" + secoes_mod.rotulo_secoes(secoes_mod.parse_secoes(args.secoes)))
+    if getattr(args, "pesos", None):
+        partes.append("peso-" + secoes_mod.rotulo_pesos(secoes_mod.parse_pesos(args.pesos)))
+    if getattr(args, "amostra", None) is not None:
+        partes.append(f"amostra{args.amostra:.4f}")
+    if getattr(args, "amostra_igual_a", None):
+        partes.append("amostra-igual-" + secoes_mod.rotulo_secoes(
+            secoes_mod.parse_secoes(args.amostra_igual_a)))
     return "_".join(p for p in partes if p)
 
 

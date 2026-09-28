@@ -1,0 +1,15 @@
+[17:58:51] experimento 20260928-1758_cv_fusao_sec_sem_relatorio
+[17:58:51]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:58:51]   commit: 99032025 (arvore suja) em leo/f6-secoes-e-fusao
+[17:59:46] fixed_1024_512__cv-soma_norm: 0.2970 vs 0.2791 (+6.4%, p=0.0008) pesos=0.7|0.7|0.6|0.7|0.7
+[18:00:35] fixed_1024_512__cv-rrf: 0.2866 vs 0.2791 (+2.7%, p=0.1354) pesos=3|5|3|3|3
+[18:01:21] fixed_512_256__cv-soma_norm: 0.3160 vs 0.2893 (+9.2%, p=0.0001) pesos=0.6|0.6|0.6|0.7|0.6
+[18:02:08] fixed_512_256__cv-rrf: 0.3131 vs 0.2893 (+8.2%, p=0.0011) pesos=1.5|1.5|1.5|1.5|1.5
+[18:03:06] recursive_default__cv-soma_norm: 0.3006 vs 0.2764 (+8.7%, p=0.0004) pesos=0.7|0.7|0.6|0.7|0.6
+[18:04:04] recursive_default__cv-rrf: 0.2988 vs 0.2764 (+8.1%, p=0.0035) pesos=2|3|2|2|2
+[18:05:01] structural_gold__cv-soma_norm: 0.3025 vs 0.2835 (+6.7%, p=0.0002) pesos=0.8|0.8|0.8|0.8|0.8
+[18:05:59] structural_gold__cv-rrf: 0.2877 vs 0.2835 (+1.5%, p=0.5326) pesos=3|5|2|5|2
+[18:06:57] structural_pred__cv-soma_norm: 0.2902 vs 0.2835 (+2.3%, p=0.2277) pesos=0.7|0.8|0.8|0.7|0.7
+[18:07:54] structural_pred__cv-rrf: 0.2881 vs 0.2835 (+1.6%, p=0.3832) pesos=5|5|5|5|5
+[18:07:54] tabela em C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1758_cv_fusao_sec_sem_relatorio\tables\cv_fusao.csv
+[18:07:54] fim em 9.2 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1758_cv_fusao_sec_sem_relatorio

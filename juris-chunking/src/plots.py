@@ -155,19 +155,61 @@ def _titulo(fig, texto: str, ctx: dict, y: float = 1.02) -> None:
 
 # --- utilidades ----------------------------------------------------------------
 
+ROTULO_VARIANTE = {
+    "sem_relatorio": "sem relatório",
+    "completo": "índice completo",
+}
+
+
 def partes_do_run(nome: str) -> tuple[str, str]:
-    """`<rodada>/`?`estrategia__retriever[__agregacao]` -> (estrategia, retriever).
+    """`<rodada>/`?`estrategia__retriever[__variantes]` -> (estrategia, condição).
 
     O prefixo de rodada aparece quando `src.evaluate --incluir` desambigua runs
     de mesmo nome vindos de rodadas diferentes; sem descartá-lo aqui, o rótulo
-    da figura viraria o caminho inteiro.
+    da figura viraria o caminho inteiro. O `--runs` usa `--` em vez de `/`,
+    porque a barra não vale em nome de arquivo.
+
+    A segunda componente é a **condição experimental**, não só o retriever: as
+    variantes da F6 (`__sec-…`, `__peso-…`, `__amostra-…`) entram nela. Todas
+    as figuras agrupam por essa componente, então incluí-la aqui é o que faz o
+    BM25 do índice completo e o BM25 sem o relatório aparecerem como barras
+    distintas. Sem isso, as duas condições caem na mesma barra e uma delas
+    some do gráfico sem nenhum erro — a figura fica *errada*, não incompleta.
     """
     sem_rodada = nome.split("/")[-1]
+    # O prefixo `<rodada>--` do `--runs` só existe quando dois runs escolhidos
+    # tinham o MESMO nome de arquivo. Descartá-lo colapsaria de volta as duas
+    # condições que ele foi criado para separar — o mesmo bug, uma camada
+    # acima. Então ele entra no rótulo, sem o carimbo de data, que não
+    # distingue nada para quem lê a figura.
+    discriminador = ""
+    if "--" in sem_rodada and "__" in sem_rodada.split("--")[-1]:
+        rodada, _, sem_rodada = sem_rodada.rpartition("--")
+        _ts, _, resto = rodada.partition("_")
+        discriminador = " · " + (resto or rodada).replace("_", " ")
     partes = sem_rodada.split("__")
-    return partes[0], (partes[1] if len(partes) > 1 else "")
+    if len(partes) < 2:
+        return partes[0], discriminador.removeprefix(" · ")
+    condicao = partes[1] + discriminador
+    for p in partes[2:]:
+        if p.startswith("sec-"):
+            v = p[len("sec-"):]
+            condicao += f" · {ROTULO_VARIANTE.get(v, v)}"
+        elif p.startswith("peso-"):
+            condicao += f" · peso {p[len('peso-'):]}"
+        elif p.startswith("amostra-"):
+            condicao += " · amostra aleatória"
+        else:
+            condicao += f" · {p}"
+    return partes[0], condicao
 
 
 ROTULO_CURTO_RETRIEVER = {"bm25": "BM25"}
+
+# Com sete condicoes numa figura, alternar so entre dois estilos faria duas
+# barras diferentes ficarem visualmente identicas na legenda.
+_HACHURAS = ("", "//", "..", "xx", "\\\\", "++", "oo")
+_ALPHAS = (0.95, 0.65, 0.85, 0.55, 0.9, 0.6, 0.8)
 
 
 def rotulo_do_run(nome: str, com_retriever: bool = False) -> str:
@@ -222,22 +264,26 @@ def fig_principal(rows: list[dict], destino: Path, ctx: dict) -> None:
     if not rows:
         return
     metricas = ["ndcg@10", "mrr@10", "map@10", "recall@100"]
-    retrievers = sorted({r["retriever"] for r in rows})
-    estrategias = sorted({r["estrategia"].split("/")[-1] for r in rows})
+    # A condição vem de `partes_do_run`, não da coluna `retriever` do CSV: a
+    # coluna diz só "bm25", e o BM25 do índice completo e o BM25 sem o
+    # relatório colapsariam na mesma barra, escondendo justamente o efeito que
+    # a figura existe para mostrar.
+    condicao = {r["run"]: partes_do_run(r["run"]) for r in rows}
+    retrievers = sorted({c for _e, c in condicao.values()})
+    estrategias = sorted({e for e, _c in condicao.values()})
 
     fig, axes = plt.subplots(1, len(metricas), figsize=(4.2 * len(metricas), 4.4))
     largura = 0.8 / max(len(retrievers), 1)
     for ax, met in zip(axes, metricas):
         for i, ret in enumerate(retrievers):
             for j, est in enumerate(estrategias):
-                achado = [r for r in rows
-                          if r["estrategia"].split("/")[-1] == est and r["retriever"] == ret]
+                achado = [r for r in rows if condicao[r["run"]] == (est, ret)]
                 if not achado:
                     continue
                 v = float(achado[0][met])
                 x = j + i * largura
                 ax.bar(x, v, largura * 0.9, color=CORES.get(est, "#888"),
-                       alpha=0.9 if i == 0 else 0.6, hatch="" if i == 0 else "//",
+                       alpha=_ALPHAS[i % len(_ALPHAS)], hatch=_HACHURAS[i % len(_HACHURAS)],
                        edgecolor="white", linewidth=0.8)
                 ax.text(x, v, f"{v:.3f}", ha="center", va="bottom", fontsize=6.5, color="#333")
         ax.set_xticks([j + largura * (len(retrievers) - 1) / 2 for j in range(len(estrategias))])
@@ -249,11 +295,12 @@ def fig_principal(rows: list[dict], destino: Path, ctx: dict) -> None:
         from matplotlib.patches import Patch
         # abaixo dos eixos: dentro do gráfico a legenda cobria as barras
         fig.legend(
-            handles=[Patch(facecolor="#888", hatch="" if i == 0 else "//",
+            handles=[Patch(facecolor="#888", alpha=_ALPHAS[i % len(_ALPHAS)],
+                           hatch=_HACHURAS[i % len(_HACHURAS)],
                            label=ROTULO_CURTO_RETRIEVER.get(r, r.replace("dense-", "denso ")))
                      for i, r in enumerate(retrievers)],
-            loc="lower center", bbox_to_anchor=(0.5, -0.30), ncol=len(retrievers),
-            frameon=False, fontsize=9)
+            loc="lower center", bbox_to_anchor=(0.5, -0.30),
+            ncol=min(len(retrievers), 4), frameon=False, fontsize=8)
     if len(retrievers) > 1:
         ctx = {**ctx, "retriever": " × ".join(
             ROTULO_CURTO_RETRIEVER.get(r, r.replace("dense-", "denso ")) for r in retrievers)}
@@ -379,8 +426,65 @@ def fig_significancia(rows: list[dict], destino: Path, ctx: dict) -> None:
 
 # --- CLI --------------------------------------------------------------------------
 
+def fig_condicoes(rows: list[dict], destino: Path, ctx: dict, referencia: str | None = None
+                  ) -> None:
+    """Progressão de condições experimentais, em barras horizontais.
+
+    A `fig_principal` agrupa por estratégia e reserva uma barra vertical para
+    cada condição: ótima para 5 estratégias × 2 retrievers, ilegível para uma
+    estratégia × 7 condições, que é o formato da tabela principal da F6. Aqui
+    cada condição é uma linha, e o rótulo tem espaço para dizer o que ela é.
+
+    `referencia` é o run tomado como linha de base; a variação percentual
+    contra ele é impressa ao lado de cada barra, porque "0,3160" não diz nada
+    sozinho e "+27,1%" diz.
+    """
+    if len(rows) < 3:
+        return
+    metricas = ["ndcg@10", "mrr@10", "map@10", "recall@100"]
+    ordenado = sorted(rows, key=lambda r: float(r["ndcg@10"]))
+    base = None
+    if referencia:
+        base = next((r for r in rows if r["run"] == referencia), None)
+    if base is None:
+        base = ordenado[0]
+
+    rotulos = []
+    for r in ordenado:
+        est, cond = partes_do_run(r["run"])
+        rotulos.append(f"{ROTULOS.get(est, est)}\n{cond}")
+
+    altura = max(3.2, 0.62 * len(ordenado))
+    fig, axes = plt.subplots(1, len(metricas), figsize=(4.0 * len(metricas), altura),
+                             sharey=True)
+    y = range(len(ordenado))
+    for ax, met in zip(axes, metricas):
+        valores = [float(r[met]) for r in ordenado]
+        v_base = float(base[met])
+        ax.barh(list(y), valores, height=0.68,
+                color=["#6a994e" if v > v_base else ("#bc4749" if v < v_base else "#888")
+                       for v in valores],
+                alpha=0.85, edgecolor="white", linewidth=0.8)
+        limite = max(valores) * 1.34
+        for i, v in enumerate(valores):
+            delta = (v - v_base) / v_base * 100 if v_base else 0.0
+            txt = f"{v:.4f}" + (f"  ({delta:+.1f}%)" if ordenado[i] is not base else "  (base)")
+            ax.text(v + limite * 0.015, i, txt, va="center", fontsize=6.8, color="#333")
+        ax.axvline(v_base, color="#555", linestyle=":", linewidth=0.9)
+        ax.set_xlim(0, limite)
+        ax.set_title(met.upper())
+        _estilo(ax)
+    axes[0].set_yticks(list(y))
+    axes[0].set_yticklabels(rotulos, fontsize=7.5)
+    ctx = {**ctx, "retriever": "comparação de condições"}
+    _titulo(fig, "Efeito de cada intervenção sobre a recuperação", ctx, y=1.04)
+    _rodape(fig, ctx, extra="linha pontilhada = baseline", y0=-0.06)
+    _salvar(fig, destino, ctx, "condicoes")
+
+
 def gerar_figuras(exp: Path, destino: Path | None = None,
-                  tabelas: Path | None = None, rotulo_extra: str = "") -> Path:
+                  tabelas: Path | None = None, rotulo_extra: str = "",
+                  referencia: str | None = None) -> Path:
     ctx = contexto_da_rodada(exp)
     if rotulo_extra:
         # A rodada de origem continua sendo a mesma; o sufixo diz que a tabela
@@ -390,7 +494,9 @@ def gerar_figuras(exp: Path, destino: Path | None = None,
     tabelas = tabelas or (exp / "tables")
     figuras = destino or (exp / "figuras")
     print(f"rodada: {ctx['rodada']}  ({ctx['data']}, {ctx['retriever']}, commit {ctx['commit']})")
-    fig_principal(ler_csv(tabelas / "main_results.csv"), figuras, ctx)
+    principais = ler_csv(tabelas / "main_results.csv")
+    fig_principal(principais, figuras, ctx)
+    fig_condicoes(principais, figuras, ctx, referencia=referencia)
     fig_recorte(ler_csv(tabelas / "slices_query_type.csv"), figuras, ctx,
                 "recorte_tipo_consulta", "Desempenho por tipo de consulta do JurisTCU",
                 rotulos_x={"LLM": "pergunta (LLM)",
@@ -410,6 +516,9 @@ def main() -> None:
     from .experiment import EXPERIMENTS_DIR
 
     ap = argparse.ArgumentParser(description="Gera as figuras a partir das tabelas de uma rodada.")
+    ap.add_argument("--referencia", default=None,
+                    help="Nome do run tomado como baseline na figura de condicoes. "
+                         "Sem isso, o pior run vira a referencia, o que exagera o ganho.")
     ap.add_argument("--experiment", type=Path, default=None)
     ap.add_argument("--destino", type=Path, default=None,
                     help="Pasta de saída (default: <experimento>/figuras/).")
@@ -427,7 +536,7 @@ def main() -> None:
         if not candidatos:
             raise SystemExit("nenhuma rodada com tabelas; rode `python -m src.evaluate` antes")
         exp = candidatos[0]
-    gerar_figuras(exp, args.destino, args.tables, args.rotulo_extra)
+    gerar_figuras(exp, args.destino, args.tables, args.rotulo_extra, args.referencia)
 
 
 if __name__ == "__main__":

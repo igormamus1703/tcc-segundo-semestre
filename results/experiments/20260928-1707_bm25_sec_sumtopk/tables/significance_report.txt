@@ -1,0 +1,12 @@
+#    Model                                                  NDCG@10
+---  -----------------------------------------------------  ---------
+a    fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio     0.283ᶜᵉ
+b    fixed_512_256__bm25__sum_top_k__sec-sem_relatorio      0.288ᶜᵉ
+c    recursive_default__bm25__sum_top_k__sec-sem_relatorio  0.266
+d    structural_gold__bm25__sum_top_k__sec-sem_relatorio    0.273
+e    structural_pred__bm25__sum_top_k__sec-sem_relatorio    0.265
+f    fixed_1024_512__bm25__sec-sem_relatorio                0.279
+g    fixed_512_256__bm25__sec-sem_relatorio                 0.290ᶜᵉ
+h    recursive_default__bm25__sec-sem_relatorio             0.276
+i    structural_gold__bm25__sec-sem_relatorio               0.283
+j    structural_pred__bm25__sec-sem_relatorio               0.284ᵉ

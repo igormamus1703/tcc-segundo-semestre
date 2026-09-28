@@ -1,0 +1,10 @@
+[16:35:25] experimento 20260928-1635_fusao_rrf-k60
+[16:35:25]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:35:25]   commit: 289fc486 (arvore suja) em leo/f6-secoes-e-fusao
+[16:35:25] fixed_1024_512__rrf-k60: bm25 + dense-bge_m3 -> 136,122 linhas
+[16:35:26] fixed_512_256__rrf-k60: bm25 + dense-bge_m3 -> 130,851 linhas
+[16:35:26] recursive_default__rrf-k60: bm25 + dense-bge_m3 -> 147,219 linhas
+[16:35:26] structural_gold__rrf-k60: bm25 + dense-bge_m3 -> 146,904 linhas
+[16:35:27] structural_pred__rrf-k60: bm25 + dense-bge_m3 -> 146,892 linhas
+[16:35:27] avalie com: python -m src.evaluate --experiment C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1635_fusao_rrf-k60 --incluir ..\results\experiments\20260906-0515_bm25 ..\results\experiments\20260907-0125_dense_bge_m3
+[16:35:27] fim em 0.2 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1635_fusao_rrf-k60

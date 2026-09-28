@@ -121,3 +121,35 @@ baixados** para rodar o pipeline atual:
 
 - **Jurisprudências STJ** — [`celsowm/jurisprudencias_stj`](https://huggingface.co/datasets/celsowm/jurisprudencias_stj) — sem qrels.
 - **Brazilian Court Decisions** — [`joelniklaus/brazilian_court_decisions`](https://huggingface.co/datasets/joelniklaus/brazilian_court_decisions) — só ementas, sem qrels.
+
+---
+
+# `rodada_completa.ps1` — o experimento inteiro em um comando
+
+```powershell
+.\scripts\rodada_completa.ps1              # F4 + F5 + F6, com orçamento de 5 h no denso
+.\scripts\rodada_completa.ps1 -MaxHoras 0  # sem orçamento (rodada completa, ~10 h)
+.\scripts\rodada_completa.ps1 -PularF6     # só F4/F5
+.\scripts\rodada_completa.ps1 -SomenteBM25 # sem GPU
+```
+
+Três etapas, nesta ordem, e a ordem é deliberada:
+
+1. **BM25** (~25 min). Roda primeiro para haver resultado utilizável já na
+   primeira meia hora, mesmo que o denso falhe depois.
+2. **Denso** (~10 h, ou o que couber em `-MaxHoras`). Grava blocos em disco
+   conforme avança: se cair, rodar de novo retoma de onde parou.
+3. **F6 — seleção de conteúdo e fusão** (~15 min). É o resultado principal do
+   trabalho (nDCG@10 de 0,2486 para 0,3215) e é barata, porque o recorte por
+   seção no denso **recorta o cache de embeddings** em vez de reencodar.
+   Inclui o **controle pareado**, que não é opcional: sem ele o ganho do
+   recorte tem duas explicações possíveis e não se pode afirmar nenhuma.
+
+O script encadeia as etapas descobrindo as rodadas anteriores pelo **rótulo
+exato** (`python -m src.experiment --ultima bm25`). Casamento por substring
+não serve: `bm25` casaria também com `cv_fusao_bm25_denso`, e a F6 partiria da
+rodada errada.
+
+Cada etapa segue mesmo que a anterior falhe, e tudo vai para
+`results/logs/rodada_<carimbo>.log` (não versionado) além do `execucao.log` de
+cada rodada.

@@ -181,22 +181,34 @@ class DenseIndex:
         show_progress: bool = False,
         bloco: int = 50_000,
         log=print,
+        cache_somente_leitura: bool = False,
     ) -> None:
         """Indexa `chunks`, reaproveitando embeddings de `cache_dir` quando os
-        chunk_ids cacheados batem exatamente com os atuais."""
+        chunk_ids cacheados batem com os atuais (iguais ou subconjunto).
+
+        `cache_somente_leitura` protege o cache de 10 h de GPU quando os
+        chunks são um recorte da estratégia (`--secoes`): se o cache completo
+        ainda não existir, o encode do recorte acontece em memória e **não** é
+        gravado. Sem essa trava, indexar só a fundamentação de uma estratégia
+        ainda não encodada deixaria em `emb_*.npy` um cache com um terço dos
+        chunks, e a próxima rodada completa o rejeitaria — ou, pior, o aceitaria
+        como subconjunto ao contrário.
+        """
         if not chunks:
             raise ValueError("não dá para indexar uma lista vazia de chunks")
         self.chunk_ids = [c.chunk_id for c in chunks]
         self.doc_ids = [c.doc_id for c in chunks]
 
-        emb = self._load_cache(cache_dir) if cache_dir else None
+        emb = self._load_cache(cache_dir, log=log) if cache_dir else None
         if emb is None:
             textos = [c.text for c in chunks]
-            if cache_dir:
+            if cache_dir and not cache_somente_leitura:
                 emb = self.encode_com_checkpoint(
                     textos, cache_dir, bloco=bloco, show_progress=show_progress, log=log
                 )
             else:
+                if cache_somente_leitura:
+                    log("    sem cache para este recorte — encodando em memória, sem gravar")
                 emb = self.encode(textos, self.passage_prefix, show_progress)
         else:
             log("    embeddings recuperados do cache (sem reencode)")
@@ -210,17 +222,38 @@ class DenseIndex:
         stem = _safe_name(self.model_name)
         return cache_dir / f"emb_{stem}.npy", cache_dir / f"chunk_ids_{stem}.json"
 
-    def _load_cache(self, cache_dir: Path) -> np.ndarray | None:
+    def _load_cache(self, cache_dir: Path, log=print) -> np.ndarray | None:
         emb_path, ids_path = self._cache_paths(cache_dir)
         if not (emb_path.exists() and ids_path.exists()):
             return None
         cached_ids = json.loads(ids_path.read_text(encoding="utf-8"))
-        # Só reaproveita se o conjunto de chunks for exatamente o mesmo — senão
-        # o embedding da posição i não corresponde ao chunk da posição i, e o
+        # Caminho normal: o conjunto de chunks é exatamente o mesmo. A
+        # igualdade é de LISTA, não de conjunto — se a ordem mudasse, o
+        # embedding da posição i não corresponderia ao chunk da posição i e o
         # resultado sairia errado sem nenhum erro visível.
-        if cached_ids != self.chunk_ids:
-            return None
-        return np.load(emb_path).astype("float32")
+        if cached_ids == self.chunk_ids:
+            return np.load(emb_path).astype("float32")
+
+        # Caminho da F6: os chunks pedidos são um SUBCONJUNTO dos cacheados.
+        # É o que acontece ao indexar só algumas seções do acórdão
+        # (`--secoes`): os embeddings já existem, custaram ~10 h de GPU, e
+        # reencodá-los para jogar dois terços fora seria absurdo. Selecionamos
+        # as linhas pelo id, na ordem de `self.chunk_ids`, que é a ordem que a
+        # busca vai usar para traduzir índice do FAISS de volta em chunk_id.
+        posicao = {cid: i for i, cid in enumerate(cached_ids)}
+        try:
+            linhas = [posicao[cid] for cid in self.chunk_ids]
+        except KeyError:
+            return None  # chunk novo, que o cache não tem: reencodar tudo
+        emb = np.load(emb_path, mmap_mode="r")
+        # `mmap_mode` + indexação por lista devolve uma cópia só das linhas
+        # pedidas: filtrar 95 mil de 3,7 GB não traz os 3,7 GB para a RAM.
+        recorte = np.asarray(emb[linhas], dtype="float32")
+        log(
+            f"    embeddings do cache, recortados: {len(linhas):,} de "
+            f"{len(cached_ids):,} chunks (sem reencode)"
+        )
+        return recorte
 
     def _save_cache(self, cache_dir: Path, emb: np.ndarray) -> None:
         cache_dir.mkdir(parents=True, exist_ok=True)
