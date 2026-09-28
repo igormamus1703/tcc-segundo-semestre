@@ -64,22 +64,50 @@ def evaluate_run(qrels: Qrels, run: Run, metrics=DEFAULT_METRICS) -> dict[str, f
     return {metrics[0]: float(scores)}
 
 
+def parse_run_name(nome: str) -> dict[str, str]:
+    """Quebra `{estrategia}__{retriever}[__{variantes}]` nas colunas da tabela.
+
+    As variantes da F6 são identificadas por PREFIXO (`sec-`, `peso-`), não
+    por posição: `structural_gold__bm25__sec-sem_relatorio` e
+    `structural_gold__bm25__sum_top_k__sec-sem_relatorio` têm o recorte em
+    posições diferentes, e ler por posição colocaria `sec-sem_relatorio` na
+    coluna `agregacao` num deles. A tabela do artigo pivota por essas colunas,
+    então errar aqui embaralha a tabela sem nenhum erro visível.
+
+    Um nome prefixado pela rodada (`20260906-0215_bm25/structural_gold__bm25`,
+    como `_desambiguar_nomes` produz) mantém o prefixo na coluna `rodada`.
+    """
+    rodada, _, resto = nome.rpartition("/")
+    partes = resto.split("__")
+    campos = {
+        "run": nome,
+        "rodada": rodada,
+        "estrategia": partes[0] if partes else resto,
+        "retriever": partes[1] if len(partes) > 1 else "",
+        "agregacao": "max_pooling",
+        "secoes": "",
+        "pesos": "",
+    }
+    for p in partes[2:]:
+        if p.startswith("sec-"):
+            campos["secoes"] = p[len("sec-"):]
+        elif p.startswith("peso-"):
+            campos["pesos"] = p[len("peso-"):]
+        else:
+            campos["agregacao"] = p
+    return campos
+
+
 def evaluate_runs(qrels: Qrels, runs: list[Run], metrics=DEFAULT_METRICS) -> list[dict]:
     """Uma linha por run, pronta para virar `main_results.csv`.
 
-    O nome do run segue a convenção de arquivo da F4
-    (`{estrategia}__{retriever}[__{agregacao}]`) e é quebrado em colunas para
-    a tabela do artigo poder ser pivotada por estratégia x retriever.
+    O nome do run segue a convenção de arquivo da F4/F6
+    (`{estrategia}__{retriever}[__{agregacao}][__sec-…][__peso-…]`) e é
+    quebrado em colunas para a tabela do artigo poder ser pivotada.
     """
     rows = []
     for run in runs:
-        parts = run.name.split("__")
-        row = {
-            "run": run.name,
-            "estrategia": parts[0] if parts else run.name,
-            "retriever": parts[1] if len(parts) > 1 else "",
-            "agregacao": parts[2] if len(parts) > 2 else "max_pooling",
-        }
+        row = parse_run_name(run.name)
         row.update(evaluate_run(qrels, run, metrics))
         rows.append(row)
     return rows

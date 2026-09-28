@@ -255,3 +255,78 @@ def test_checkpoint_descarta_bloco_truncado(chunks, monkeypatch, tmp_path):
         [c.text for c in chunks], tmp_path, bloco=2, log=lambda *a: None
     )
     assert emb.shape[0] == 3
+
+
+# --- F6: cache reaproveitado por SUBCONJUNTO --------------------------------
+
+def test_cache_serve_um_subconjunto_dos_chunks(chunks, monkeypatch, tmp_path):
+    """Indexar so algumas secoes do acordao usa um SUBCONJUNTO dos chunks da
+    estrategia. Os embeddings ja existem e custaram ~10 h de GPU: reencodar
+    para jogar dois tercos fora seria absurdo."""
+    chamadas = {"n": 0}
+
+    class Contando(FakeModel):
+        def encode(self, texts, **kw):
+            chamadas["n"] += 1
+            return super().encode(texts, **kw)
+
+    completo = DenseIndex("fake/model")
+    monkeypatch.setattr(completo, "_get_model", lambda: Contando())
+    completo.build(chunks, cache_dir=tmp_path)
+    assert chamadas["n"] == 1
+
+    recorte = DenseIndex("fake/model")
+    monkeypatch.setattr(recorte, "_get_model", lambda: Contando())
+    recorte.build([chunks[0], chunks[2]], cache_dir=tmp_path)
+    assert chamadas["n"] == 1  # nao reencodou nada
+    assert recorte.chunk_ids == ["c1", "c3"]
+
+
+def test_subconjunto_do_cache_sai_na_ordem_dos_chunks_pedidos(chunks, monkeypatch, tmp_path):
+    """O alinhamento e o risco silencioso: a linha i da matriz tem de ser o
+    chunk i da lista pedida. Fora de ordem, a busca devolve o chunk_id errado
+    para cada resultado, e nenhuma excecao e levantada."""
+    completo = DenseIndex("fake/model")
+    monkeypatch.setattr(completo, "_get_model", lambda: FakeModel())
+    completo.build(chunks, cache_dir=tmp_path)
+
+    invertido = DenseIndex("fake/model")
+    monkeypatch.setattr(invertido, "_get_model", lambda: FakeModel())
+    invertido.build([chunks[2], chunks[0]], cache_dir=tmp_path)
+
+    esperado = FakeModel().encode([chunks[2].text, chunks[0].text])
+    obtido = invertido._load_cache(tmp_path, log=lambda *a: None)
+    assert np.allclose(obtido, esperado)
+
+
+def test_cache_somente_leitura_nao_grava_recorte_por_cima_do_completo(
+    chunks, monkeypatch, tmp_path
+):
+    """Sem essa trava, indexar so a fundamentacao de uma estrategia ainda nao
+    encodada deixaria em emb_*.npy um cache com um terco dos chunks."""
+    idx = DenseIndex("fake/model")
+    monkeypatch.setattr(idx, "_get_model", lambda: FakeModel())
+    idx.build(chunks[:2], cache_dir=tmp_path, cache_somente_leitura=True)
+    assert not (tmp_path / "emb_fake__model.npy").exists()
+    assert idx.search("contas", top_k=1)  # mas o indice funciona
+
+
+def test_chunk_ausente_do_cache_forca_reencode(chunks, monkeypatch, tmp_path):
+    """Subconjunto e aceito; conjunto com chunk NOVO, nao — nesse caso nao ha
+    embedding para ele, e aproveitar o cache deixaria uma linha errada."""
+    chamadas = {"n": 0}
+
+    class Contando(FakeModel):
+        def encode(self, texts, **kw):
+            chamadas["n"] += 1
+            return super().encode(texts, **kw)
+
+    idx1 = DenseIndex("fake/model")
+    monkeypatch.setattr(idx1, "_get_model", lambda: Contando())
+    idx1.build(chunks, cache_dir=tmp_path)
+
+    novos = [chunks[0], Chunk("c99", "docZ", "Texto inedito", None, 0, 13)]
+    idx2 = DenseIndex("fake/model")
+    monkeypatch.setattr(idx2, "_get_model", lambda: Contando())
+    idx2.build(novos, cache_dir=tmp_path)
+    assert chamadas["n"] > 1
