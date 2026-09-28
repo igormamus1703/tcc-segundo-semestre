@@ -273,6 +273,97 @@ do mecanismo que descrevemos no passo 2.
 
 ---
 
+## 7-bis. Tentamos derrubar o próprio resultado
+
+Antes de propor o merge, atacamos o resultado pelos pontos onde ele é mais
+frágil. Dez ameaças, testadas uma a uma. O detalhe está em
+[`docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md`](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md);
+aqui vão as três que mais importam.
+
+### a) O efeito segue o mecanismo previsto? (dez recortes diferentes)
+
+Se a explicação está certa — *o ganho vem de tirar do índice a parte pobre em
+conteúdo relevante* —, o efeito de cada recorte tem de acompanhar a
+concentração de relevância daquela seção, medida **antes** da intervenção.
+
+| Recorte | relevância na seção afetada | nDCG@10 | Δ |
+|---|---|---:|---:|
+| **sem relatório** | remove 25,7% da relevância e 72% do texto | **0,2904** | **+16,8%** |
+| fundamentação + ementa | mantém 72,4% da relevância | 0,2792 | +12,3% |
+| só fundamentação | mantém 72,0% da relevância | 0,2739 | +10,2% |
+| sem dispositivo | remove 1,8% da relevância | 0,2490 | +0,2% |
+| *completo (baseline)* | — | *0,2486* | — |
+| sem ementa | remove 0,4% da relevância | 0,2484 | −0,1% |
+| **sem fundamentação** | remove **72%** da relevância | 0,2050 | **−17,5%** |
+| **só relatório** | 72% do texto, 25,7% da relevância | 0,1950 | **−21,5%** |
+
+Três coisas que este teste mostra e a tabela principal não mostrava:
+
+1. **Remover seções pequenas e irrelevantes não faz nada** (−0,1%, +0,2%). O
+   método não é "cortar por cortar".
+2. **Remover a fundamentação custa −17,5%**, quase o simétrico do ganho de
+   remover o relatório. O efeito acompanha a relevância, não o tamanho.
+3. **Indexar só o relatório — 72% do texto — é 21,5% pior do que indexar
+   tudo.** Esse texto não é apenas inútil: ele **atrapalha**, gerando
+   casamentos que empurram os documentos certos para fora do top-10.
+
+Isso também corrige a formulação do achado. Não é *"o relatório é ruim"*, é
+**"indexe a parte do documento onde a relevância se concentra"** — que é uma
+afirmação mais geral e mais útil para outros gêneros de documento.
+
+### b) A crítica séria: decidimos olhando o gabarito
+
+**O problema, sem maquiagem.** A estatística que motivou tudo — *72% da
+relevância está na fundamentação* — foi obtida localizando os excertos
+julgados relevantes dentro dos acórdãos. São os mesmos julgamentos que
+definem o gabarito da avaliação. Ou seja: escolhemos o que indexar olhando o
+gabarito e depois medimos contra ele.
+
+**O teste.** Tratamos *"qual seção indexar"* como um hiperparâmetro com 10
+candidatos e o escolhemos por **validação cruzada por consulta**: a escolha é
+feita com 4/5 das consultas e o número vem do 1/5 que não participou dela.
+
+```
+escolhida em cada uma das 5 dobras : sem relatório  (escolha estável)
+nDCG@10 medido FORA da escolha     : 0,2893
+nDCG@10 do baseline                : 0,2490
+ganho honesto                      : +16,2%   (p = 0,000275)
+```
+
+Contra +16,8% medido dentro da amostra. **A perda por generalização é de 0,6
+ponto percentual** — a decisão não está superajustada às nossas 150 consultas.
+
+### c) Os números são mesmo esses?
+
+- Reexecutar a avaliação produz tabelas **byte-idênticas**.
+- Reimplementei o nDCG@10 **do zero**, sem a biblioteca: 0,2490 contra 0,2486;
+  0,3215 contra 0,3215. Não é artefato de biblioteca.
+- Com ganho exponencial em vez de linear, o ganho vai de +16,5% para +16,9%.
+  Não depende da variante da métrica.
+- O controle aleatório foi repetido com três sementes: −7,1%, −9,1%, −15,4%.
+  Sempre negativo, sempre muito longe dos +16,8% do recorte.
+- O ganho não é "recuperar mais fundo": o controle recupera **mais**
+  documentos por consulta (mediana 920 contra 739) e é o pior de todos.
+
+### A limitação que fica, e que precisa estar no texto
+
+O JurisTCU julga relevância sobre **excertos de jurisprudência** — trechos que
+a própria equipe do TCU seleciona para representar teses jurídicas. Teses
+saem do voto, por construção do gênero. Então o benchmark define relevância de
+um jeito que já favorece a fundamentação.
+
+Isso não invalida nenhum número, mas **escopa a conclusão**: ela vale para a
+tarefa "encontrar o acórdão que firma determinada tese", que é a tarefa real
+de quem consulta jurisprudência. Não se pode afirmar que o relatório seja
+inútil para outras buscas — quem procura um fato do caso concreto (uma
+empresa, um valor, uma data) provavelmente o acharia justamente lá.
+
+Sugestão de frase para o artigo: *"Os resultados são condicionais à noção de
+relevância do JurisTCU, que julga excertos de jurisprudência. Para consultas
+dirigidas a fatos do caso concreto, a conclusão pode não se transferir."*
+
+---
+
 ## 8. Estado do trabalho e o que precisa de decisão
 
 **Feito:** código no pipeline com **182 testes** passando (eram 115), onze

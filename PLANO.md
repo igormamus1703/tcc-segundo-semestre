@@ -17,7 +17,7 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 | **Pergunta 2 (derivada, 28/09)** | Se *como* cortar não importa, **qual parte** do documento indexar? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
 | **Fases** | F0–F5 concluídas; **F6 (recorte por seção + fusão híbrida) em revisão** na branch `leo/f6-secoes-e-fusao` |
-| **Testes** | 182 passando |
+| **Testes** | 182 passando · resultado auditado contra 10 ameaças de validade |
 | **Resposta à pergunta 1** | **Não melhora.** Nenhuma diferença entre estratégias é significativa — e isso agora vale em **dois** pontos de operação diferentes |
 | **Resposta à pergunta 2** | **A fundamentação. O relatório atrapalha.** Descartá-lo do índice melhora o nDCG@10 em 11–17% no BM25 e 12–28% no denso, nas cinco estratégias |
 | **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3215**, contra 0,2486 do baseline — **+29,3%**, p < 0,00001, e **sem hiperparâmetro** |
@@ -188,9 +188,13 @@ estratégias, e passou por um controle.
 - [ ] **Expansão de consulta** (docT5query). O JurisTCU mediu +47%. Fora do
       escopo declarado; é o item mais forte de trabalhos futuros
 - [ ] **Critério de densidade informativa** independente da estrutura (tamanho
-      de sentença, densidade de termos jurídicos). É a única explicação
-      alternativa que o controle aleatório não descarta — e confirmá-la seria
-      uma contribuição maior ainda
+      de sentença, densidade de termos jurídicos). A auditoria mostrou que o
+      efeito acompanha a **densidade de relevância**, e não o relatório em si;
+      falta a versão que não precisa segmentar o documento. Seria a
+      contribuição mais geral do trabalho
+- [ ] **Consultas dirigidas a fatos do caso concreto**, para testar se o
+      recorte inverte de sinal nelas. É a limitação do §4 da auditoria, e não
+      dá para testar com o JurisTCU como ele é
 - [ ] Explicar por que o recorte **sobe** o Recall@100 no BM25 e **desce** no
       denso. Há hipótese registrada, não há medição
 
@@ -276,10 +280,29 @@ cinco estratégias, com todas as métricas subindo e **sem nenhum
 hiperparâmetro**. Mantém-se nos três tipos de consulta, inclusive nas reais de
 log (+18,2%).
 
+**8. 🆕 O efeito segue a concentração de relevância, e a decisão generaliza.**
+Dez recortes de seção testados: remover seções pobres **e pequenas** não faz
+nada (ementa −0,1%, dispositivo +0,2%); remover a fundamentação custa −17,5%;
+e indexar **só** o relatório — 72% do texto — é 21,5% **pior** que indexar
+tudo. A formulação correta do achado é *"indexe a parte do documento onde a
+relevância se concentra"*, não *"o relatório é ruim"*.
+
+E a decisão de qual seção indexar, que foi tomada olhando os rótulos de
+relevância, foi validada por **validação cruzada por consulta** sobre 10
+candidatos: as cinco dobras escolheram a mesma configuração, e o ganho medido
+**fora** da escolha é **+16,2%** (p = 0,000275) contra +16,8% medido dentro.
+
 > **O que muda na tese.** O trabalho passa a ter duas perguntas, e as duas com
 > resposta: *como cortar o documento?* (tanto faz, e agora sabemos que o
 > empate vale em dois pontos de operação) e *qual parte indexar?* (a
 > fundamentação; o relatório atrapalha). A segunda nasceu da primeira.
+
+> ⚠️ **Limitação a declarar no artigo.** O JurisTCU julga relevância sobre
+> excertos de jurisprudência, que representam teses jurídicas e saem do voto
+> por construção do gênero. A conclusão vale para a tarefa *"encontrar o
+> acórdão que firma determinada tese"*; **não** se pode afirmar que o
+> relatório seja inútil para quem busca fatos do caso concreto. Detalhe em
+> [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) §10.
 
 ---
 
@@ -382,6 +405,7 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 28/09 | **Fusão BM25 + denso** com peso por validação cruzada: +4,4% a +8,7% | [f6/resultados/03](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/03-fusao-hibrida.md) |
 | 28/09 | **Configuração final: nDCG@10 = 0,3215 (+29,3%)**, todas as métricas sobem, sem hiperparâmetro | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
 | 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md) |
+| 28/09 | **Auditoria de validade:** 10 ameaças testadas — dose-resposta, nDCG reimplementado do zero, controle em 3 sementes, escolha da seção por CV | [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) |
 | 28/09 | Branch `leo/f6-secoes-e-fusao` **aberta, não mergeada** — aguarda revisão | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram

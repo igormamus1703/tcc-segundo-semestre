@@ -201,7 +201,14 @@ Invariante em todo o pipeline: `doc.text[start:end] == chunk.text`.
 - `data/interim/join_report.json` — taxa de match do join, docs sem acórdão, qrels perdidos.
 - `juris-chunking/data/processed/{estrategia}/chunks.jsonl` — campos do dataclass `Chunk`.
 - `juris-chunking/data/processed/{estrategia}/emb_{modelo}.npy` + `chunk_ids.json` — cache de embeddings.
-- `results/runs/{estrategia}__{retriever}[__{agregacao}].trec` — TREC run: `qid Q0 docid rank score nome`.
+- `results/runs/{estrategia}__{retriever}[__{agregacao}][__sec-…][__peso-…][__amostra-…].trec`
+  — TREC run: `qid Q0 docid rank score nome`. **Os sufixos da F6 fazem parte
+  do contrato:** toda variante que muda o número entra no nome, senão dois
+  runs da mesma estratégia e retriever com recortes diferentes gravam no mesmo
+  arquivo e o segundo apaga o primeiro sem aviso. As variantes são lidas por
+  **prefixo** (`sec-`, `peso-`, `amostra-`), nunca por posição — com
+  `--aggregation` e `--secoes` juntos a ordem muda, e ler por posição
+  colocaria o recorte na coluna de agregação da tabela.
 - `results/corpus/` — `eda_stats.json`, `segmenter_validation.json` (caracterização do corpus; muda só quando o corpus muda).
 - `results/experiments/<AAAAMMDD-HHMM>_<rótulo>/` — uma pasta por rodada, com `manifest.json` (commit, hardware, versões, tempos), `execucao.log`, `runs/*.trec`, `runs/*__chunks.jsonl`, `tables/*.csv` e `figuras/*.pdf|png`. **Este layout substitui o `results/tables/` plano descrito acima**, que existia quando o plano foi escrito; ver `results/README.md`.
 - Tokenizer único: **tiktoken `cl100k_base`** (wrapper em `src/tokenization.py`).

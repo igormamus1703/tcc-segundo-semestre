@@ -40,7 +40,7 @@
   },
   "etapas": [],
   "avaliacao": {
-    "quando": "2026-09-28T18:23:03",
+    "quando": "2026-09-28T18:49:06",
     "metrica_principal": "ndcg@10",
     "por_run": {
       "20260928-1751_cv_fusao_bm25_denso--fixed_512_256__cv-soma_norm": {

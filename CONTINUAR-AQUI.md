@@ -92,7 +92,22 @@ recortados, com um terço do tamanho.
    `docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/05-negativos.md` —
    leia antes de tentar de novo.
 
-6. **182 testes** (eram 115). Três bugs reais foram achados em execução, e os
+6. **O resultado foi auditado contra 10 ameaças de validade**
+   (`04-auditoria-de-validade.md`). As três que mais importam:
+   - **dose-resposta**: o efeito acompanha a concentração de relevância da
+     seção. Remover a ementa (0,4% da relevância) não faz nada; remover a
+     fundamentação (72%) custa −17,5%; indexar **só** o relatório — 72% do
+     texto — é 21,5% pior que indexar tudo;
+   - **circularidade**: a decisão de cortar o relatório veio dos próprios
+     rótulos de relevância. Testada por CV sobre 10 candidatos: as 5 dobras
+     escolhem a mesma configuração e o ganho **fora** da escolha é +16,2%
+     (p = 0,000275);
+   - ⚠️ **a limitação que fica**: o JurisTCU julga excertos de jurisprudência,
+     que saem do voto por construção. A conclusão vale para "achar o acórdão
+     que firma uma tese"; para quem busca fatos do caso concreto, pode
+     inverter. **Isso precisa estar no artigo.**
+
+7. **182 testes** (eram 115). Três bugs reais foram achados em execução, e os
    três produziam resultado plausível e errado: uma colisão de nome de run que
    apagava uma linha da tabela; um colapso de condições que fazia a figura
    mostrar menos barras do que condições; e — o mais sério — **empate de score
@@ -135,7 +150,8 @@ números a corrigir continuam listados em
 
 | Ideia | Custo | Por que vale |
 |---|---|---|
-| **Densidade informativa** sem usar a estrutura (tamanho de sentença, densidade de termos jurídicos) | médio | É a única explicação alternativa que o controle aleatório **não** descarta. Confirmá-la seria contribuição maior ainda |
+| **Densidade informativa** sem usar a estrutura (tamanho de sentença, densidade de termos jurídicos) | médio | A auditoria mostrou que o efeito acompanha a densidade de relevância, não o relatório em si; falta a versão que dispensa segmentar. É a contribuição mais geral possível |
+| **Consultas dirigidas a fatos do caso concreto** | alto | Testaria se o recorte inverte de sinal. É a limitação do §10 da auditoria, e não dá para testar com o JurisTCU como ele é |
 | Explicar o recall subir no BM25 e cair no denso | baixo | Hipótese registrada, medição não feita. É uma pergunta que a banca vai fazer |
 | **Chunk com prefixo de seção** (`"[voto] …"`) | ~10 h GPU | Exige reencode |
 | **Reranking com cross-encoder** no top-100 | alto | O que mais rende em RI |

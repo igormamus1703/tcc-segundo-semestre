@@ -1,0 +1,6 @@
+[18:50:44] experimento 20260928-1850_aud_sec_relatorio
+[18:50:44]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:50:44]   commit: aa177710 (arvore suja) em leo/f6-secoes-e-fusao
+[18:51:04]   [fixed_512_256] secoes ['relatorio']: 907,914 -> 653,680 chunks (72.0%)
+[18:54:52] fixed_512_256__bm25__sec-rel: 653,680 chunks, 89,997 linhas, 248.1s  [decorrido 0.1 h]
+[18:54:52] fim em 4.1 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1850_aud_sec_relatorio

@@ -1,0 +1,6 @@
+[19:08:25] experimento 20260928-1908_aud_controle_seed7
+[19:08:25]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[19:08:25]   commit: aa177710 (arvore suja) em leo/f6-secoes-e-fusao
+[19:08:34]   [fixed_512_256] amostra aleatoria 0.2800 (seed 7, igualando ['dispositivo', 'ementa', 'fundamentacao']): 907,914 -> 254,234 chunks
+[19:09:35] fixed_512_256__bm25__amostra-0.2800s7: 254,234 chunks, 132,103 linhas, 69.9s  [decorrido 0.0 h]
+[19:09:35] fim em 1.2 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20260928-1908_aud_controle_seed7
