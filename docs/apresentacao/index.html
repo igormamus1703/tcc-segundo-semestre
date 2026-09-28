@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Onde buscar dentro de um acórdão</title>
+<meta name="description" content="Resultados do TCC sobre recuperação de informação em acórdãos do TCU: qual parte do documento indexar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --plano:        #f4f2ee;
+  --superficie:   #faf9f7;
+  --superficie-2: #efece6;
+  --tinta:        #16161c;
+  --tinta-2:      #55545e;
+  --tinta-3:      #86858e;
+  --linha:        #e0ddd4;
+  --regua:        #c8c5bb;
+  --melhor:       #2a78d6;
+  --pior:         #e34948;
+  --base:         #b9b7b0;
+  --serie-a:      #2a78d6;
+  --serie-b:      #eb6834;
+  --realce:       #1c5cab;
+  --grade:        #e6e3db;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --plano:        #0e0f12;
+    --superficie:   #17181c;
+    --superficie-2: #202126;
+    --tinta:        #f5f4f1;
+    --tinta-2:      #b8b6b0;
+    --tinta-3:      #8b8a92;
+    --linha:        #2a2b30;
+    --regua:        #3a3b41;
+    --melhor:       #3987e5;
+    --pior:         #e66767;
+    --base:         #6b6a66;
+    --serie-a:      #3987e5;
+    --serie-b:      #d95926;
+    --realce:       #86b6ef;
+    --grade:        #26272c;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plano:        #0e0f12;
+  --superficie:   #17181c;
+  --superficie-2: #202126;
+  --tinta:        #f5f4f1;
+  --tinta-2:      #b8b6b0;
+  --tinta-3:      #8b8a92;
+  --linha:        #2a2b30;
+  --regua:        #3a3b41;
+  --melhor:       #3987e5;
+  --pior:         #e66767;
+  --base:         #6b6a66;
+  --serie-a:      #3987e5;
+  --serie-b:      #d95926;
+  --realce:       #86b6ef;
+  --grade:        #26272c;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--plano);
+  color:var(--tinta);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  padding-inline:16px;
+  padding-block:0;
+}
+.pagina{max-width:1080px;margin:0 auto}
+.leitura{max-width:68ch}
+
+/* ---------- cabeçalho ---------- */
+header.capa{padding-block:56px 40px;border-bottom:1px solid var(--linha)}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-3);margin:0 0 18px;
+}
+h1{
+  font-family:Spectral,Georgia,"Times New Roman",serif;
+  font-weight:600;font-size:clamp(2rem,5.5vw,3.1rem);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance;
+}
+.subtitulo{font-size:1.1rem;color:var(--tinta-2);margin:0;max-width:60ch}
+.assinatura{
+  margin-top:28px;font-size:.85rem;color:var(--tinta-3);
+  display:flex;flex-wrap:wrap;gap:6px 18px;
+}
+
+/* ---------- destaque numérico ---------- */
+.destaque{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--linha);border:1px solid var(--linha);
+  margin-block:40px;border-radius:3px;overflow:hidden;
+}
+.kpi{background:var(--superficie);padding:20px 18px}
+.kpi .rotulo{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta-3);display:block;margin-bottom:8px;
+}
+.kpi .valor{
+  font-family:Spectral,Georgia,serif;font-size:2.1rem;font-weight:600;
+  line-height:1;display:block;font-variant-numeric:tabular-nums;
+}
+.kpi .nota{font-size:.82rem;color:var(--tinta-2);display:block;margin-top:6px}
+.kpi.principal{background:var(--superficie-2)}
+.kpi.principal .valor{color:var(--realce)}
+
+/* ---------- seções ---------- */
+section{padding-block:44px;border-top:1px solid var(--linha)}
+section:first-of-type{border-top:none}
+.passo{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-3);margin:0 0 10px;
+}
+.passo b{color:var(--realce);font-weight:500}
+h2{
+  font-family:Spectral,Georgia,serif;font-weight:600;
+  font-size:clamp(1.45rem,3.4vw,2rem);line-height:1.2;letter-spacing:-.01em;
+  margin:0 0 18px;text-wrap:balance;
+}
+h3{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-weight:600;
+  font-size:1rem;margin:32px 0 10px;letter-spacing:.005em;
+}
+p{margin:0 0 16px}
+.leitura p:last-child{margin-bottom:0}
+strong{font-weight:600}
+em{font-style:italic}
+.solta{color:var(--tinta-2)}
+
+/* ---------- gráficos ---------- */
+figure{
+  margin:32px 0 0;padding:22px 20px 18px;
+  background:var(--superficie);border:1px solid var(--linha);border-radius:3px;
+}
+figcaption{margin-bottom:18px}
+.fig-titulo{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-weight:600;font-size:.98rem;margin:0 0 4px;
+}
+.fig-sub{font-size:.85rem;color:var(--tinta-2);margin:0;max-width:62ch}
+.legenda{
+  display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 14px;
+  font-size:.82rem;color:var(--tinta-2);
+}
+.legenda span{display:inline-flex;align-items:center;gap:7px}
+.swatch{width:11px;height:11px;border-radius:2px;flex:none}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:"IBM Plex Sans",system-ui,sans-serif}
+.fig-nota{
+  margin:14px 0 0;font-size:.8rem;color:var(--tinta-3);
+  padding-top:12px;border-top:1px solid var(--linha);
+}
+
+/* ---------- caixa de citação / pergunta ---------- */
+.pergunta{
+  margin:28px 0;padding:18px 22px;background:var(--superficie-2);
+  border-left:3px solid var(--regua);border-radius:0 3px 3px 0;
+}
+.pergunta p{
+  margin:0;font-family:Spectral,Georgia,serif;font-size:1.08rem;
+  font-style:italic;color:var(--tinta-2);
+}
+
+/* ---------- tabela ---------- */
+.rolagem{overflow-x:auto;margin-top:22px}
+table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:520px}
+caption{text-align:left;font-size:.85rem;color:var(--tinta-2);margin-bottom:10px}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--linha)}
+th:first-child,td:first-child{text-align:left}
+thead th{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--tinta-3);font-weight:500;border-bottom:1px solid var(--regua);
+}
+tbody td{font-variant-numeric:tabular-nums}
+tbody tr.base td{color:var(--tinta-2)}
+tbody tr.topo td{font-weight:600}
+
+/* ---------- rodapé ---------- */
+footer{
+  padding-block:36px 56px;border-top:1px solid var(--linha);
+  font-size:.85rem;color:var(--tinta-3);
+}
+footer a{color:var(--realce)}
+code{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em;
+  background:var(--superficie-2);padding:1px 5px;border-radius:3px;
+}
+a:focus-visible,button:focus-visible{outline:2px solid var(--realce);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){
+  .kpi .valor{font-size:1.75rem}
+  figure{padding:18px 14px 14px}
+}
+</style>
+</head>
+<body>
+<div class="pagina">
+
+<header class="capa">
+  <p class="eyebrow">TCC · Recuperação de informação jurídica · PUCPR</p>
+  <h1>Onde buscar dentro de um acórdão</h1>
+  <p class="subtitulo">
+    Um acórdão do TCU tem 25 páginas. Descobrimos que indexar <em>menos</em> do
+    documento — a parte certa — encontra mais.
+  </p>
+  <div class="assinatura">
+    <span>Leonardo Marques</span><span>28 de setembro de 2026</span>
+    <span>12.880 acórdãos · 150 consultas · 2.219 julgamentos de relevância</span>
+  </div>
+</header>
+
+<div class="destaque">
+  <div class="kpi">
+    <span class="rotulo">Antes</span>
+    <span class="valor">0,2486</span>
+    <span class="nota">nDCG@10 do BM25 com o acórdão inteiro no índice</span>
+  </div>
+  <div class="kpi principal">
+    <span class="rotulo">Depois</span>
+    <span class="valor">0,3215</span>
+    <span class="nota">+29,3% · p &lt; 0,00001</span>
+  </div>
+  <div class="kpi">
+    <span class="rotulo">Índice</span>
+    <span class="valor">⅓</span>
+    <span class="nota">do tamanho original, na configuração mais enxuta</span>
+  </div>
+  <div class="kpi">
+    <span class="rotulo">Consultas</span>
+    <span class="valor">100</span>
+    <span class="nota">das 150 melhoraram · 20 empataram · 30 pioraram</span>
+  </div>
+</div>
+
+<section>
+  <div class="leitura">
+    <p class="passo"><b>1</b> · O problema</p>
+    <h2>Documento grande não entra inteiro num índice de busca</h2>
+    <p>
+      Um advogado precisa achar decisões do Tribunal de Contas da União sobre,
+      digamos, responsabilidade de gestor em licitação irregular. Essas decisões
+      — os <strong>acórdãos</strong> — têm <strong>11 mil tokens de mediana</strong>,
+      algo como 25 páginas.
+    </p>
+    <p>
+      Nenhum sistema de busca indexa um documento desse tamanho inteiro: seria como
+      resumir um livro numa palavra-chave. A técnica padrão é <strong>fatiar</strong> —
+      cortar o documento em pedaços, indexar os pedaços, e devolver o documento
+      inteiro quando um pedaço casa com a busca. É o mesmo princípio do índice
+      remissivo no fim de um livro, que aponta a página, não o livro.
+    </p>
+    <p>
+      <strong>A pergunta original do TCC era sobre esse corte.</strong> O acórdão tem
+      quatro partes fixas — ementa, relatório, fundamentação e dispositivo. Cortar
+      respeitando essa estrutura recupera melhor do que cortar a cada 512 palavras,
+      sem olhar o conteúdo?
+    </p>
+    <p>
+      Testamos 5 formas de cortar × 2 buscadores. <strong>Deu empate.</strong> Nenhuma
+      é significativamente melhor que outra. Não é um fracasso — responder “não faz
+      diferença” com medição cuidadosa é um resultado. Mas, sozinho, rende pouca
+      discussão.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="leitura">
+    <p class="passo"><b>2</b> · A descoberta</p>
+    <h2>A relevância mora numa parte; os buscadores procuram na outra</h2>
+    <p>
+      Fomos investigar <em>por que</em> não fazia diferença, e medimos duas coisas.
+    </p>
+    <p>
+      Primeiro, localizamos dentro de cada acórdão os trechos que os especialistas do
+      TCU julgaram relevantes. O resultado é uma desproporção grande: o
+      <strong>relatório</strong> — que só recapitula o histórico do caso e as alegações
+      das partes — ocupa 70% do texto e carrega 26% da relevância. A
+      <strong>fundamentação</strong>, o voto onde o ministro raciocina e firma a tese
+      jurídica, é o inverso.
+    </p>
+  </div>
+
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">O acórdão é 70% histórico do caso e 23% raciocínio jurídico —
+        mas é o raciocínio que importa</p>
+      <p class="fig-sub">Participação de cada macro-seção no texto do corpus e nos
+        trechos julgados relevantes pelos avaliadores do JurisTCU.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--serie-a)"></i> % do texto do acórdão</span>
+      <span><i class="swatch" style="background:var(--serie-b)"></i> % da relevância julgada</span>
+    </div>
+    <div id="g-secoes"></div>
+    <p class="fig-nota">
+      A fundamentação concentra <strong>3,2×</strong> mais relevância do que o tamanho
+      dela sugeriria. Faz sentido no gênero: ninguém consulta jurisprudência para saber
+      o histórico processual de um caso.
+    </p>
+  </figure>
+
+  <div class="leitura">
+    <p style="margin-top:28px">
+      Segundo, olhamos de onde vinha o pedaço que fazia cada documento ser encontrado.
+      <strong>Em 65% a 74% das vezes, era o relatório.</strong>
+    </p>
+    <p>
+      Ou seja: o buscador acha a palavra <strong>onde há mais texto</strong>, não onde há
+      mais informação. É como procurar uma citação numa biblioteca e sempre cair no
+      livro mais grosso, só porque ele tem mais páginas para sortear.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="leitura">
+    <p class="passo"><b>3</b> · A intervenção</p>
+    <h2>E se a gente simplesmente tirar o relatório do índice?</h2>
+    <p>
+      Vale ser preciso sobre o que isso significa: <strong>o documento continua inteiro
+      para o usuário</strong>. O que muda é que os pedaços vindos do relatório não entram
+      na busca — eles deixam de competir por vaga nos primeiros resultados.
+    </p>
+    <p>
+      Funcionou. E funcionou de novo quando combinamos os rankings dos dois buscadores,
+      o clássico (BM25, que casa palavras) e o de IA (que entende significado). Os dois
+      erram em lugares <em>diferentes</em>, então juntá-los recupera o que cada um sozinho
+      perdia.
+    </p>
+  </div>
+
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Duas intervenções que se somam</p>
+      <p class="fig-sub">nDCG@10 — a nota do buscador, de 0 a 1: dos 10 primeiros
+        resultados, quantos eram relevantes e quão no topo ficaram. A linha cinza é
+        onde estávamos.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--melhor)"></i> melhor que a linha de base</span>
+      <span><i class="swatch" style="background:var(--base)"></i> linha de base</span>
+      <span><i class="swatch" style="background:var(--pior)"></i> pior</span>
+    </div>
+    <div id="g-progressao"></div>
+    <p class="fig-nota">
+      Estratégia <code>fixo 512/256</code>, 150 consultas. Passe o mouse sobre as barras
+      para o detalhe de cada condição. Todas as diferenças contra a linha de base são
+      significativas com correção de Bonferroni sobre 28 comparações, com
+      <strong>uma exceção</strong>: “fusão, índice completo” fica em p&nbsp;=&nbsp;0,081 —
+      fundir sem cortar não basta.
+    </p>
+  </figure>
+
+  <div class="leitura">
+    <p style="margin-top:28px">
+      A configuração campeã tem um detalhe de que gosto: ela combina quatro rankings
+      com <strong>peso igual</strong>. Não tem nenhum parâmetro para ajustar — o que
+      elimina a acusação de que ficamos mexendo em botões até o número subir.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="leitura">
+    <p class="passo"><b>4</b> · A prova</p>
+    <h2>Não é porque o índice ficou menor</h2>
+  </div>
+
+  <div class="pergunta leitura">
+    <p>“Vocês jogaram fora dois terços do índice e melhorou. Não é só porque sobrou
+      menos coisa para atrapalhar?”</p>
+  </div>
+
+  <div class="leitura">
+    <p>
+      É a pergunta certa, e se fosse esse o mecanismo o trabalho não teria contribuição
+      nenhuma: qualquer um encolhe um índice sorteando pedaços, sem precisar de
+      segmentador nenhum.
+    </p>
+    <p>
+      Então rodamos o <strong>controle</strong>: descartamos exatamente o mesmo número de
+      pedaços — 254.234, o número exato que o corte por seção deixa de fora — mas
+      escolhidos <strong>ao acaso</strong>.
+    </p>
+  </div>
+
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Mesmo tamanho de índice, efeitos de sinal oposto</p>
+      <p class="fig-sub">Jogar coisa fora ao acaso <em>piora</em>, como o bom senso manda.
+        A única razão de jogar fora dois terços e <em>melhorar</em> é que os dois terços
+        descartados eram sistematicamente os menos úteis.</p>
+    </figcaption>
+    <div id="g-controle"></div>
+    <p class="fig-nota">
+      O sorteio foi repetido com três sementes diferentes (−7,1%, −9,1%, −15,4%):
+      sempre negativo. E o controle é o que recupera <em>mais</em> documentos por
+      consulta — mediana de 920 contra 739 do recorte —, então o ganho também não vem
+      de “enxergar mais fundo”.
+    </p>
+  </figure>
+
+  <div class="leitura">
+    <h3>O efeito segue exatamente o mecanismo previsto</h3>
+    <p>
+      Se a explicação está certa, o efeito de cada corte tem de acompanhar
+      <strong>quanta relevância</strong> aquela seção carrega. Testamos dez cortes.
+    </p>
+  </div>
+
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Remover uma seção pobre não faz nada; remover a rica custa caro</p>
+      <p class="fig-sub">Variação do nDCG@10 em relação ao índice completo. Ao lado de cada
+        barra, quanta relevância havia na seção afetada.</p>
+    </figcaption>
+    <div id="g-dose"></div>
+    <p class="fig-nota">
+      A leitura mais forte é a última linha: <strong>indexar só o relatório — 72% do texto
+      do acórdão — é 21,5% pior do que indexar o acórdão inteiro.</strong> Aquele texto não
+      é apenas inútil, ele atrapalha: gera casamentos de palavra que empurram os
+      documentos certos para fora do top&nbsp;10.
+    </p>
+  </figure>
+
+  <div class="leitura">
+    <h3>A crítica mais séria, e como respondemos</h3>
+    <p>
+      A decisão de cortar o relatório veio da estatística dos 72%. Mas essa estatística
+      foi calculada <strong>usando os próprios julgamentos de relevância</strong> que
+      depois usamos para avaliar. Olhamos o gabarito para decidir o que fazer, e depois
+      nos medimos contra o mesmo gabarito. <strong>Isso é circular</strong>, e um
+      avaliador atento vai apontar.
+    </p>
+    <p>
+      Então tratamos “qual seção indexar” como uma escolha a ser validada, com
+      10 candidatos, usando <strong>validação cruzada</strong>: dividimos as 150 consultas
+      em 5 grupos, escolhemos a configuração com 4 grupos e medimos no 5º, que
+      <em>não participou da escolha</em>. Repetimos 5 vezes.
+    </p>
+    <p>
+      As cinco rodadas escolheram a mesma configuração sozinhas. O ganho medido
+      <strong>fora</strong> da escolha foi de <strong>+16,2%</strong> (p = 0,000275),
+      contra +16,8% medido dentro dela. A diferença entre decidir olhando e decidir
+      às cegas é de <strong>0,6 ponto percentual</strong> — a decisão generaliza.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="leitura">
+    <p class="passo"><b>5</b> · O limite</p>
+    <h2>Até onde essa conclusão vale</h2>
+    <p>
+      O JurisTCU julga relevância sobre <strong>excertos de jurisprudência</strong> —
+      trechos que a própria equipe do TCU seleciona para representar teses jurídicas. E
+      tese jurídica sai do voto, por construção do gênero.
+    </p>
+    <p>
+      Então o benchmark já define relevância de um jeito que favorece a fundamentação.
+      Isso <strong>não invalida nenhum número</strong>, mas <strong>limita o alcance</strong>:
+      a conclusão vale para a tarefa <em>“achar o acórdão que firma determinada tese”</em>,
+      que é a tarefa real de quem consulta jurisprudência e é para isso que o TCU mantém
+      a base.
+    </p>
+    <p>
+      O que <em>não</em> podemos afirmar é que o relatório seja inútil em qualquer busca.
+      Quem procura um <strong>fato do caso concreto</strong> — o nome de uma empresa, um
+      valor, uma data — provavelmente vai encontrá-lo justamente lá, e para esse tipo de
+      consulta o corte poderia até piorar.
+    </p>
+    <p class="solta">
+      Preferimos dizer isso antes que perguntem. É uma limitação de escopo, não um
+      defeito de método.
+    </p>
+
+    <h3>E o ganho não vem das consultas fáceis</h3>
+    <p>
+      O JurisTCU tem três tipos de consulta. As reais, tiradas do log de busca do TCU,
+      são de longe as mais difíceis — e o ganho se mantém nas três.
+    </p>
+  </div>
+
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">O ganho aparece nos três tipos de consulta</p>
+      <p class="fig-sub">nDCG@10 por tipo de consulta, 50 consultas em cada grupo.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--base)"></i> BM25, acórdão inteiro</span>
+      <span><i class="swatch" style="background:var(--melhor)"></i> configuração final</span>
+    </div>
+    <div id="g-tipos"></div>
+    <p class="fig-nota">
+      As consultas reais são as mais difíceis para todo mundo (nota de 0,13 contra 0,32
+      das sintéticas) e as menos parecidas com o que o método foi desenhado para atacar.
+      O ganho ali é menor, mas está lá.
+    </p>
+  </figure>
+</section>
+
+<section>
+  <div class="leitura">
+    <p class="passo">Conclusão</p>
+    <h2>Uma pergunta nula que rendeu uma pergunta melhor</h2>
+    <p>
+      O trabalho começou perguntando <em>“como cortar o documento?”</em> e a resposta foi
+      “tanto faz”. Mas investigar <em>por que</em> tanto faz levou a uma pergunta melhor —
+      <em>“qual parte do documento indexar?”</em> — e essa tem resposta: <strong>a parte
+      onde a relevância se concentra</strong>. No acórdão, é a fundamentação.
+    </p>
+    <p>
+      E o resultado nulo não foi derrubado: refizemos a comparação entre as cinco formas
+      de cortar <em>dentro</em> da nova condição, 16% acima em desempenho, e continuou
+      empate. Um empate que se repete em dois pontos de operação diferentes é evidência
+      mais forte do que um empate medido uma vez só.
+    </p>
+    <p>
+      Do lado prático, o mais útil: isso funciona com um <strong>segmentador automático
+      simples</strong>, de 92% de acerto — não precisa da estrutura oficial do TCU
+      (p = 0,99, com 75 empates em 150 consultas entre as duas versões). Ou seja, dá para
+      aplicar em qualquer acervo jurídico.
+    </p>
+  </div>
+
+  <div class="rolagem">
+    <table>
+      <caption>Todos os números da tabela principal · estratégia <code>fixo 512/256</code>,
+        150 consultas, 2.219 julgamentos de relevância</caption>
+      <thead>
+        <tr>
+          <th scope="col">Configuração</th>
+          <th scope="col">nDCG@10</th>
+          <th scope="col">MRR@10</th>
+          <th scope="col">MAP@10</th>
+          <th scope="col">Recall@100</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="topo"><td>Fusão de 4 rankings, peso igual</td><td>0,3215</td><td>0,6000</td><td>0,1402</td><td>0,5479</td></tr>
+        <tr><td>Sem o relatório + fusão (peso por CV)</td><td>0,3160</td><td>0,6058</td><td>0,1330</td><td>0,5259</td></tr>
+        <tr><td>BM25, sem o relatório</td><td>0,2904</td><td>0,5889</td><td>0,1190</td><td>0,4993</td></tr>
+        <tr><td>Buscador denso, sem o relatório</td><td>0,2627</td><td>0,5190</td><td>0,1112</td><td>0,4564</td></tr>
+        <tr><td>Fusão, índice completo</td><td>0,2606</td><td>0,4988</td><td>0,1038</td><td>0,5037</td></tr>
+        <tr class="base"><td>BM25, acórdão inteiro <em>(linha de base)</em></td><td>0,2486</td><td>0,5186</td><td>0,0963</td><td>0,4709</td></tr>
+        <tr><td>BM25, −67% ao acaso <em>(controle)</em></td><td>0,2260</td><td>0,4725</td><td>0,0867</td><td>0,4310</td></tr>
+        <tr><td>Buscador denso, acórdão inteiro</td><td>0,2055</td><td>0,4042</td><td>0,0800</td><td>0,4759</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="leitura">
+  <p>
+    Todos os números saem de arquivos versionados em <code>results/experiments/</code>,
+    cada rodada com manifesto (commit, hardware, versões), log e figuras. A avaliação é
+    reprodutível: reexecutá-la produz tabelas byte a byte idênticas. O detalhe técnico,
+    incluindo a auditoria de validade com dez ameaças testadas, está em
+    <code>docs/docsleo/branches/leo-f6-secoes-e-fusao/</code>; o resumo escrito para a
+    orientação, em <code>RESULTADOS-F6.md</code>.
+  </p>
+  <p>
+    Leonardo Marques · João Vitor Manfrim · Felipe Ribas · Igor Mamus — PUCPR, 2026.
+  </p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+
+  function el(nome, attrs, texto) {
+    var n = document.createElementNS(NS, nome);
+    for (var k in attrs) if (attrs[k] !== null) n.setAttribute(k, attrs[k]);
+    if (texto !== undefined) n.textContent = texto;
+    return n;
+  }
+
+  // Barra horizontal com a ponta arredondada e a base quadrada: um rect com rx
+  // arredonda os dois lados, entao um segundo rect sem raio "quadra" de novo o
+  // lado que encosta na linha de base.
+  function barra(pai, x, y, larg, alt, cor, raio) {
+    var g = el("g", null);
+    var r = Math.min(raio, Math.max(0, larg));
+    if (larg >= 0) {
+      g.appendChild(el("rect", {x: x, y: y, width: Math.max(larg, 0.5), height: alt,
+                                rx: r, fill: cor}));
+      if (larg > r) g.appendChild(el("rect", {x: x, y: y, width: r, height: alt, fill: cor}));
+    } else {
+      g.appendChild(el("rect", {x: x + larg, y: y, width: Math.max(-larg, 0.5), height: alt,
+                                rx: Math.min(raio, -larg), fill: cor}));
+      if (-larg > raio) g.appendChild(el("rect", {x: x - raio, y: y, width: raio, height: alt, fill: cor}));
+    }
+    pai.appendChild(g);
+    return g;
+  }
+
+  function fmt(v, casas) {
+    return v.toFixed(casas === undefined ? 4 : casas).replace(".", ",");
+  }
+  function pct(v) {
+    return (v > 0 ? "+" : "−") + Math.abs(v).toFixed(1).replace(".", ",") + "%";
+  }
+
+  var LARG = 720, ROTULO = 176, PAD_DIR = 96, ALT_BARRA = 18, GAP = 2;
+  var FIM = LARG - PAD_DIR;
+
+  function svgBase(altura) {
+    var s = el("svg", {viewBox: "0 0 " + LARG + " " + altura, role: "img"});
+    return s;
+  }
+
+  function rotuloY(s, texto, y, cor, tam) {
+    var t = el("text", {x: ROTULO - 12, y: y, "text-anchor": "end",
+                        "dominant-baseline": "middle",
+                        "font-size": tam || 12.5, fill: cor || "var(--tinta-2)"}, texto);
+    s.appendChild(t);
+    return t;
+  }
+
+  /* ---------- 1. grupos: % do texto x % da relevancia ---------- */
+  function grafSecoes() {
+    var dados = [
+      {nome: "fundamentação", texto: 22.8, rel: 72.0, obs: "o voto do relator: onde a tese jurídica é firmada"},
+      {nome: "relatório",     texto: 69.9, rel: 25.7, obs: "histórico do caso e alegações das partes"},
+      {nome: "dispositivo",   texto: 6.0,  rel: 1.8,  obs: "a decisão: multas, prazos, determinações"},
+      {nome: "ementa",        texto: 1.3,  rel: 0.4,  obs: "o resumo de poucas linhas no topo"}
+    ];
+    var alturaLinha = ALT_BARRA * 2 + GAP + 22;
+    var topo = 24, altura = topo + dados.length * alturaLinha + 26;
+    var s = svgBase(altura);
+    s.appendChild(el("title", null, "Participação de cada seção no texto e na relevância"));
+    var escala = function (v) { return (v / 80) * (FIM - ROTULO); };
+
+    [0, 20, 40, 60, 80].forEach(function (v) {
+      var x = ROTULO + escala(v);
+      s.appendChild(el("line", {x1: x, y1: topo - 8, x2: x, y2: altura - 26,
+                                stroke: "var(--grade)", "stroke-width": 1}));
+      s.appendChild(el("text", {x: x, y: altura - 10, "text-anchor": "middle",
+                                "font-size": 11, fill: "var(--tinta-3)"}, v + "%"));
+    });
+
+    dados.forEach(function (d, i) {
+      var y = topo + i * alturaLinha;
+      rotuloY(s, d.nome, y + ALT_BARRA + GAP / 2, "var(--tinta)", 13);
+      [["texto", "var(--serie-a)", d.texto, "do texto"],
+       ["rel", "var(--serie-b)", d.rel, "da relevância"]].forEach(function (p, j) {
+        var yy = y + j * (ALT_BARRA + GAP);
+        var g = barra(s, ROTULO, yy, escala(p[2]), ALT_BARRA, p[1], 4);
+        g.appendChild(el("title", null, d.nome + " — " + fmt(p[2], 1) + "% " + p[3] + ". " + d.obs));
+        s.appendChild(el("text", {x: ROTULO + escala(p[2]) + 8, y: yy + ALT_BARRA / 2,
+                                  "dominant-baseline": "middle", "font-size": 11.5,
+                                  fill: "var(--tinta-2)"}, fmt(p[2], 1) + "%"));
+      });
+    });
+    document.getElementById("g-secoes").appendChild(s);
+  }
+
+  /* ---------- 2 e 3. barras contra uma linha de base ---------- */
+  function grafBase(alvo, dados, base, max, opts) {
+    opts = opts || {};
+    var alturaLinha = ALT_BARRA + 20;
+    var topo = 26, altura = topo + dados.length * alturaLinha + 26;
+    var s = svgBase(altura);
+    s.appendChild(el("title", null, opts.titulo || "Comparação de nDCG@10"));
+    var escala = function (v) { return (v / max) * (FIM - ROTULO); };
+
+    var ticks = opts.ticks || [0, 0.1, 0.2, 0.3];
+    ticks.forEach(function (v) {
+      var x = ROTULO + escala(v);
+      s.appendChild(el("line", {x1: x, y1: topo - 10, x2: x, y2: altura - 26,
+                                stroke: "var(--grade)", "stroke-width": 1}));
+      s.appendChild(el("text", {x: x, y: altura - 10, "text-anchor": "middle",
+                                "font-size": 11, fill: "var(--tinta-3)"}, fmt(v, 1)));
+    });
+
+    // régua da linha de base
+    var xb = ROTULO + escala(base);
+    s.appendChild(el("line", {x1: xb, y1: topo - 14, x2: xb, y2: altura - 26,
+                              stroke: "var(--regua)", "stroke-width": 1.5,
+                              "stroke-dasharray": "3 3"}));
+    s.appendChild(el("text", {x: xb, y: topo - 19, "text-anchor": "middle",
+                              "font-size": 10.5, fill: "var(--tinta-3)"}, "onde estávamos"));
+
+    dados.forEach(function (d, i) {
+      var y = topo + i * alturaLinha;
+      var cor = d.base ? "var(--base)" : (d.v > base ? "var(--melhor)" : "var(--pior)");
+      rotuloY(s, d.nome, y + ALT_BARRA / 2, d.base ? "var(--tinta-2)" : "var(--tinta)", 12.5);
+      var g = barra(s, ROTULO, y, escala(d.v), ALT_BARRA, cor, 4);
+      g.appendChild(el("title", null, d.nome + " — nDCG@10 " + fmt(d.v) +
+        (d.base ? " (linha de base)" : " · " + pct((d.v - base) / base * 100)) +
+        (d.obs ? ". " + d.obs : "")));
+      var txt = fmt(d.v) + (d.base ? "" : "  " + pct((d.v - base) / base * 100));
+      s.appendChild(el("text", {x: ROTULO + escala(d.v) + 8, y: y + ALT_BARRA / 2,
+                                "dominant-baseline": "middle", "font-size": 11.5,
+                                "font-weight": d.destaque ? 600 : 400,
+                                fill: d.destaque ? "var(--realce)" : "var(--tinta-2)"}, txt));
+    });
+    document.getElementById(alvo).appendChild(s);
+  }
+
+  /* ---------- 4. divergente, centrado no zero ---------- */
+  function grafDose() {
+    var dados = [
+      {nome: "sem o relatório",      d: 16.8, rel: "25,7% da relevância ali", v: 0.2904},
+      {nome: "fundamentação + ementa", d: 12.3, rel: "mantém 72,4%", v: 0.2792},
+      {nome: "só a fundamentação",   d: 10.2, rel: "mantém 72,0%", v: 0.2739},
+      {nome: "sem o dispositivo",    d: 0.2,  rel: "1,8% da relevância ali", v: 0.2490},
+      {nome: "sem a ementa",         d: -0.1, rel: "0,4% da relevância ali", v: 0.2484},
+      {nome: "sem a fundamentação",  d: -17.5, rel: "72,0% da relevância ali", v: 0.2050},
+      {nome: "só o relatório",       d: -21.5, rel: "72% do texto, 26% da relevância", v: 0.1950}
+    ];
+    var alturaLinha = ALT_BARRA + 20;
+    var topo = 26, altura = topo + dados.length * alturaLinha + 28;
+    var s = svgBase(altura);
+    s.appendChild(el("title", null, "Variação do nDCG@10 por recorte de seção"));
+
+    var esq = ROTULO, dir = LARG - 150, meio = esq + (dir - esq) * (25 / 45);
+    var escala = function (v) { return (v / 25) * (dir - meio); };
+
+    [-20, -10, 0, 10, 20].forEach(function (v) {
+      var x = meio + escala(v);
+      s.appendChild(el("line", {x1: x, y1: topo - 10, x2: x, y2: altura - 28,
+                                stroke: v === 0 ? "var(--regua)" : "var(--grade)",
+                                "stroke-width": v === 0 ? 1.5 : 1}));
+      s.appendChild(el("text", {x: x, y: altura - 12, "text-anchor": "middle",
+                                "font-size": 11, fill: "var(--tinta-3)"},
+                                (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v) + "%"));
+    });
+
+    dados.forEach(function (d, i) {
+      var y = topo + i * alturaLinha;
+      var cor = d.d > 0.5 ? "var(--melhor)" : (d.d < -0.5 ? "var(--pior)" : "var(--base)");
+      rotuloY(s, d.nome, y + ALT_BARRA / 2, "var(--tinta)", 12.5);
+      var g = barra(s, meio, y, escala(d.d), ALT_BARRA, cor, 4);
+      g.appendChild(el("title", null, d.nome + " — nDCG@10 " + fmt(d.v) + " · " +
+                                      pct(d.d) + " · " + d.rel));
+      var fim = meio + escala(d.d);
+      var folga = Math.abs(d.d) < 1 ? 14 : 8;   // barra quase nula: o rotulo encostaria no eixo
+      s.appendChild(el("text", {x: d.d >= 0 ? fim + folga : fim - folga, y: y + ALT_BARRA / 2,
+                                "text-anchor": d.d >= 0 ? "start" : "end",
+                                "dominant-baseline": "middle", "font-size": 11.5,
+                                fill: "var(--tinta-2)"}, pct(d.d)));
+      s.appendChild(el("text", {x: LARG - 4, y: y + ALT_BARRA / 2, "text-anchor": "end",
+                                "dominant-baseline": "middle", "font-size": 10.5,
+                                fill: "var(--tinta-3)"}, d.rel));
+    });
+    document.getElementById("g-dose").appendChild(s);
+  }
+
+  /* ---------- 5. agrupado por tipo de consulta ---------- */
+  function grafTipos() {
+    var dados = [
+      {nome: "pergunta sintética", a: 0.3214, b: 0.4166},
+      {nome: "expressão sintética", a: 0.2920, b: 0.3900},
+      {nome: "consulta real de log", a: 0.1335, b: 0.1578}
+    ];
+    var alturaLinha = ALT_BARRA * 2 + GAP + 22;
+    var topo = 20, altura = topo + dados.length * alturaLinha + 26;
+    var s = svgBase(altura);
+    s.appendChild(el("title", null, "nDCG@10 por tipo de consulta"));
+    var max = 0.45;
+    var escala = function (v) { return (v / max) * (FIM - ROTULO); };
+
+    [0, 0.1, 0.2, 0.3, 0.4].forEach(function (v) {
+      var x = ROTULO + escala(v);
+      s.appendChild(el("line", {x1: x, y1: topo - 8, x2: x, y2: altura - 26,
+                                stroke: "var(--grade)", "stroke-width": 1}));
+      s.appendChild(el("text", {x: x, y: altura - 10, "text-anchor": "middle",
+                                "font-size": 11, fill: "var(--tinta-3)"}, fmt(v, 1)));
+    });
+
+    dados.forEach(function (d, i) {
+      var y = topo + i * alturaLinha;
+      rotuloY(s, d.nome, y + ALT_BARRA + GAP / 2, "var(--tinta)", 12.5);
+      [["BM25, acórdão inteiro", "var(--base)", d.a],
+       ["configuração final", "var(--melhor)", d.b]].forEach(function (p, j) {
+        var yy = y + j * (ALT_BARRA + GAP);
+        var g = barra(s, ROTULO, yy, escala(p[2]), ALT_BARRA, p[1], 4);
+        g.appendChild(el("title", null, d.nome + " — " + p[0] + ": nDCG@10 " + fmt(p[2])));
+        s.appendChild(el("text", {x: ROTULO + escala(p[2]) + 8, y: yy + ALT_BARRA / 2,
+                                  "dominant-baseline": "middle", "font-size": 11.5,
+                                  fill: "var(--tinta-2)"}, fmt(p[2])));
+      });
+      var ganho = (d.b - d.a) / d.a * 100;
+      s.appendChild(el("text", {x: LARG - 4, y: y + ALT_BARRA + GAP / 2, "text-anchor": "end",
+                                "dominant-baseline": "middle", "font-size": 11.5,
+                                "font-weight": 600, fill: "var(--realce)"}, pct(ganho)));
+    });
+    document.getElementById("g-tipos").appendChild(s);
+  }
+
+  grafSecoes();
+  grafBase("g-progressao", [
+    {nome: "fusão de 4 rankings", v: 0.3215, destaque: true,
+     obs: "BM25 e denso, cada um com e sem o relatório. Sem hiperparâmetro."},
+    {nome: "sem relatório + fusão", v: 0.3160,
+     obs: "dois índices com um terço do tamanho, duas buscas por consulta."},
+    {nome: "BM25 sem o relatório", v: 0.2904,
+     obs: "um índice só, com um terço do tamanho."},
+    {nome: "denso sem o relatório", v: 0.2627, obs: "o buscador de IA, com o mesmo corte."},
+    {nome: "fusão, índice completo", v: 0.2606, obs: "fundir sem cortar rende pouco: p = 0,081."},
+    {nome: "BM25, acórdão inteiro", v: 0.2486, base: true, obs: "onde o trabalho estava."},
+    {nome: "buscador denso sozinho", v: 0.2055, obs: "o BM25 vence o denso em todas as estratégias."}
+  ], 0.2486, 0.36, {titulo: "Progressão das configurações"});
+
+  grafBase("g-controle", [
+    {nome: "−67% escolhendo o relatório", v: 0.2904, destaque: true,
+     obs: "254.234 pedaços fora, escolhidos pela seção."},
+    {nome: "acórdão inteiro", v: 0.2486, base: true, obs: "907.914 pedaços no índice."},
+    {nome: "−67% sorteados ao acaso", v: 0.2260,
+     obs: "os mesmos 254.234 pedaços fora, escolhidos por sorteio (semente 42)."}
+  ], 0.2486, 0.36, {titulo: "O controle: mesmo tamanho de índice, escolhas diferentes"});
+
+  grafDose();
+  grafTipos();
+})();
+</script>
+</body>
+</html>

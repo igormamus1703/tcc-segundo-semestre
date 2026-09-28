@@ -38,7 +38,9 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 | **Testes** | 191 passando |
 
 Resumo dos resultados novos, escrito para apresentar:
-**[RESULTADOS-F6.md](RESULTADOS-F6.md)**.
+**[RESULTADOS-F6.md](RESULTADOS-F6.md)** — e a mesma coisa com gráficos, para
+abrir no navegador e mostrar para alguém:
+**[docs/apresentacao/index.html](docs/apresentacao/index.html)**.
 Detalhes, próximos passos e o que cada um pode pegar: **[PLANO.md](PLANO.md)**.
 O status fase a fase está em `plano_implementacao.md`.
 
