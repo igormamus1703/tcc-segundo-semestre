@@ -177,7 +177,7 @@
   ],
   "erro": null,
   "avaliacao": {
-    "quando": "2026-09-28T17:12:42",
+    "quando": "2026-09-28T18:18:54",
     "metrica_principal": "ndcg@10",
     "por_run": {
       "fixed_1024_512__bm25__sum_top_k__sec-sem_relatorio": {

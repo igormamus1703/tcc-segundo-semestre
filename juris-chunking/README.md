@@ -61,7 +61,7 @@ leitura completos.
 `leo/f6-secoes-e-fusao`). Nenhuma diferença entre estratégias de chunking é
 significativa; o BM25 supera o retriever denso com p < 0,001; e **descartar o
 relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
-0,2486 para 0,3160** (+27,1%, p < 0,00001). Ver
+0,2486 para 0,3215** (+29,3%, p < 0,00001). Ver
 [`RESULTADOS-F6.md`](../RESULTADOS-F6.md) na raiz.
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
@@ -122,7 +122,7 @@ python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
 python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
 python -m src.evaluate                # F5: tabelas da rodada mais recente
 python -m src.plots                   # F5: figuras (PDF + PNG)
-pytest                                # roda a suite de testes (175)
+pytest                                # roda a suite de testes (182)
 ```
 
 ### F6 — recorte por seção, controle e fusão

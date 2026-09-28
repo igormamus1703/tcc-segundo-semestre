@@ -14,18 +14,18 @@ structural_gold__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,
 structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,LLM,50,0.3336973109897157,0.2845473488311044,0.383257709325606,ndcg@10
 structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3111815093647452,0.26132459061060836,0.3610234587112251,ndcg@10
 structural_pred__bm25__sum_top_k__sec-sem_relatorio,tipo_consulta,search log,50,0.1504026982214928,0.10480308534587182,0.20031105659518314,ndcg@10
-fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.36888968150129814,0.3163607508209238,0.4218030041438316,ndcg@10
-fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.32219339041255035,0.2732474048888462,0.3705365491076678,ndcg@10
+fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3690742603820577,0.31652185767650504,0.4219231475478961,ndcg@10
+fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3222898428798296,0.2733558171468533,0.370627567104004,ndcg@10
 fixed_1024_512__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.145944184670705,0.10478227616473763,0.19129142662376047,ndcg@10
 fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3668814297494371,0.3162991687849952,0.4170643657181977,ndcg@10
-fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.347347874432655,0.2953862869231841,0.3967153698668543,ndcg@10
+fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.34628418669691413,0.29418518985406183,0.39583068486783574,ndcg@10
 fixed_512_256__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15471096607356508,0.10641070653984175,0.20724904541636094,ndcg@10
 recursive_default__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.3617406372428895,0.31001755694570615,0.4128539639836435,ndcg@10
 recursive_default__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.319080226004325,0.2643879405671732,0.372399277137688,ndcg@10
 recursive_default__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.14848766515894338,0.10881522687747923,0.19246623412039274,ndcg@10
 structural_gold__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.36009941764905123,0.3095182007572164,0.41134308045167345,ndcg@10
-structural_gold__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3370013412059294,0.2827121439527016,0.3908123144963301,ndcg@10
-structural_gold__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15326946083078,0.10595908206503435,0.20530192020758103,ndcg@10
+structural_gold__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.33693203317752335,0.28255566854394665,0.39074473916863406,ndcg@10
+structural_gold__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15345131915336854,0.10602286433616877,0.20553381146664912,ndcg@10
 structural_pred__bm25__sec-sem_relatorio,tipo_consulta,LLM,50,0.35754310226923786,0.3077792608930781,0.4073972466707018,ndcg@10
 structural_pred__bm25__sec-sem_relatorio,tipo_consulta,expression from LLM question,50,0.3406093762562696,0.2875328990050241,0.39153480305745414,ndcg@10
 structural_pred__bm25__sec-sem_relatorio,tipo_consulta,search log,50,0.15242064942277947,0.10782876444829756,0.20114038443651527,ndcg@10

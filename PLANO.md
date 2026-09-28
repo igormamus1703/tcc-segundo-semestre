@@ -17,10 +17,10 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 | **Pergunta 2 (derivada, 28/09)** | Se *como* cortar não importa, **qual parte** do documento indexar? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
 | **Fases** | F0–F5 concluídas; **F6 (recorte por seção + fusão híbrida) em revisão** na branch `leo/f6-secoes-e-fusao` |
-| **Testes** | 175 passando |
+| **Testes** | 182 passando |
 | **Resposta à pergunta 1** | **Não melhora.** Nenhuma diferença entre estratégias é significativa — e isso agora vale em **dois** pontos de operação diferentes |
 | **Resposta à pergunta 2** | **A fundamentação. O relatório atrapalha.** Descartá-lo do índice melhora o nDCG@10 em 11–17% no BM25 e 12–28% no denso, nas cinco estratégias |
-| **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3160**, contra 0,2486 do baseline — **+27,1%**, p < 0,00001 |
+| **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3215**, contra 0,2486 do baseline — **+29,3%**, p < 0,00001, e **sem hiperparâmetro** |
 | **Bloqueio nº 1** | 🔴 A equipe precisa decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
 
 ### A tabela principal (nDCG@10), índice completo — F5
@@ -55,14 +55,20 @@ de ter um índice menor.
 
 ### A configuração recomendada
 
-| | nDCG@10 | MRR@10 | MAP@10 | Recall@100 |
-|---|---:|---:|---:|---:|
-| BM25, índice completo (baseline F5) | 0,2486 | 0,5186 | 0,0963 | 0,4709 |
-| **sem o relatório + fusão com o denso** | **0,3160** | **0,6058** | **0,1330** | **0,5259** |
-| | **+27,1%** | **+16,8%** | **+38,1%** | **+11,7%** |
+Três pontos na curva de custo × qualidade, e o artigo deve apresentar os três:
 
-`fixed_512_256`, p < 0,00001 com Bonferroni sobre 21 pares, peso da fusão
-escolhido por validação cruzada. **Nenhuma métrica piora.** Detalhe em
+| Configuração | nDCG@10 | MRR@10 | MAP@10 | R@100 | custo |
+|---|---:|---:|---:|---:|---|
+| BM25, índice completo (baseline F5) | 0,2486 | 0,5186 | 0,0963 | 0,4709 | — |
+| BM25 **sem o relatório** | 0,2904 | 0,5889 | 0,1190 | 0,4993 | **um** índice, 1/3 do tamanho |
+| sem o relatório **+ fusão (CV)** | 0,3160 | **0,6058** | 0,1330 | 0,5259 | dois índices de 1/3 |
+| **fusão das 4 condições, peso igual** | **0,3215** | 0,6000 | **0,1402** | **0,5479** | quatro buscas por consulta |
+| | **+29,3%** | +15,7% | **+45,6%** | **+16,4%** | |
+
+`fixed_512_256`, p < 0,00001 com Bonferroni sobre 28 pares. **Nenhuma métrica
+piora.** A melhor configuração funde quatro rankings com **peso igual** — ou
+seja, **não tem hiperparâmetro para ajustar**, e por isso dispensa a validação
+cruzada que a versão ponderada exige. As duas empatam (p = 0,338). Detalhe em
 [docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/)
 e resumo para apresentação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
@@ -117,7 +123,7 @@ a primeira foi respondida com cuidado.
 
 ### 🟠 DECISÃO 4 — Aprovar o merge da branch `leo/f6-secoes-e-fusao` (nova)
 
-A branch está pronta, com 175 testes verdes e todos os artefatos, mas **não
+A branch está pronta, com 182 testes verdes e todos os artefatos, mas **não
 foi mergeada**. Ela muda a tese do artigo, então a equipe precisa olhar antes.
 Checklist de revisão e pontos de atenção no
 [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md).
@@ -262,11 +268,13 @@ sobre a estrutura do acórdão.
 
 **7. 🆕 O retriever denso não é dispensável: é complementar.**
 Fundido ao BM25 com peso escolhido por **validação cruzada por consulta**
-(5 dobras), acrescenta 4,4% a 8,7% de nDCG@10 sobre o BM25 sozinho, em 7 de 10
-configurações com p < 0,05. Somado ao recorte, a melhor configuração chega a
-**0,3160 — +27,1% sobre o baseline**, com todas as quatro métricas subindo e o
-ganho se mantendo nos três tipos de consulta, inclusive nas reais de log
-(+24,1%).
+(5 dobras), acrescenta 4,4% a 8,6% de nDCG@10 sobre o BM25 sozinho, em 6 de 10
+configurações com p < 0,05. Melhor ainda: fundir as **quatro** condições
+(BM25 e denso, cada um com e sem o relatório) com **peso igual** chega a
+**0,3215 — +29,3% sobre o baseline**, e o ganho vai de +19,5% a +29,3% nas
+cinco estratégias, com todas as métricas subindo e **sem nenhum
+hiperparâmetro**. Mantém-se nos três tipos de consulta, inclusive nas reais de
+log (+18,2%).
 
 > **O que muda na tese.** O trabalho passa a ter duas perguntas, e as duas com
 > resposta: *como cortar o documento?* (tanto faz, e agora sabemos que o
@@ -372,7 +380,8 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 28/09 | **F6:** recorte por seção vira pipeline e roda no BM25 — **+11% a +17%, as cinco significativas** | [f6/resultados/01](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/01-recorte-por-secao.md) |
 | 28/09 | **Controle:** −67% aleatório **piora**; −67% escolhendo o relatório melhora | [f6/resultados/02](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
 | 28/09 | **Fusão BM25 + denso** com peso por validação cruzada: +4,4% a +8,7% | [f6/resultados/03](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/03-fusao-hibrida.md) |
-| 28/09 | **Configuração final: nDCG@10 = 0,3160 (+27,1%)**, todas as métricas sobem | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| 28/09 | **Configuração final: nDCG@10 = 0,3215 (+29,3%)**, todas as métricas sobem, sem hiperparâmetro | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md) |
 | 28/09 | Branch `leo/f6-secoes-e-fusao` **aberta, não mergeada** — aguarda revisão | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram

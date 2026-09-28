@@ -58,7 +58,7 @@ direções opostas.**
 | fixed_1024_512 | 0,2510 | 0,2305 (−8,2%) | **0,2790 (+11,2%)** |
 | fixed_512_256 | 0,2486 | 0,2260 (−9,1%) | **0,2904 (+16,8%)** |
 
-Na `fixed_512_256`, com correção de Bonferroni sobre 21 pares:
+Na `fixed_512_256`, com correção de Bonferroni sobre 28 pares:
 
 | Comparação | p | vitórias / empates / derrotas |
 |---|---:|---|

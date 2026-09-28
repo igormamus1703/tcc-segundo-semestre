@@ -174,7 +174,7 @@
   ],
   "erro": null,
   "avaliacao": {
-    "quando": "2026-09-28T16:49:05",
+    "quando": "2026-09-28T18:08:40",
     "metrica_principal": "ndcg@10",
     "por_run": {
       "fixed_1024_512__bm25__sec-sem_relatorio": {
