@@ -8,8 +8,7 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
 ## STATUS ATUAL — 28/09/2026
 
-**F0 a F5 concluídas e mergeadas. F6 concluída e em revisão** (branch
-`leo/f6-secoes-e-fusao`, não mergeada).
+**F0 a F6 concluídas e mergeadas na `main`.**
 
 > 📍 Para o panorama do projeto, próximos passos e o que cada integrante pode
 > pegar, veja o **[PLANO.md](PLANO.md)** na raiz. Este documento mantém o
@@ -23,7 +22,7 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 | F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
 | F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
 | F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
-| F6 — Recorte por seção + fusão | 🟡 pronta, não mergeada | **nDCG@10 0,2486 → 0,3215 (+29,3%)**, com controle pareado e sem hiperparâmetro (`20260928-1822_f6_tabela_principal`) |
+| F6 — Recorte por seção + fusão | ✅ | **nDCG@10 0,2486 → 0,3215 (+29,3%)**, com controle pareado e sem hiperparâmetro (`20260928-1822_f6_tabela_principal`) |
 
 **Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
 ambos alcançados**, com semanas de antecedência. A F6 não estava no plano
@@ -53,11 +52,24 @@ estruturais são 1ª e 2ª no BM25 e 4ª e 5ª no denso; as duas fixas fazem o
 caminho contrário. A inversão é sistemática e é evidência **contra** um efeito
 estável do chunking estrutural — mais forte do que um empate simples seria.
 
-**Uma intervenção que funcionou:** descartar o relatório do índice melhora o
-nDCG@10 em **16,9%** (p = 0,001), e o ganho se mantém com os spans preditos
-pelo segmentador (p = 0,017). É exploratório — precisa ser reimplementado em
-`src/` antes de ir para o artigo. Ver
-`docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md`.
+### A segunda pergunta, respondida pela F6 (28/09)
+
+O resultado nulo acima rendeu uma pergunta melhor: se *como* cortar não
+importa, **qual parte do documento indexar?** Descartar o relatório do índice
+melhora o nDCG@10 em **11,2% a 16,8% no BM25** (as cinco estratégias, p entre
+0,00025 e 0,003) e 12,3% a 27,8% no denso. Somado à fusão BM25 + denso, a
+melhor configuração chega a **0,3215 contra 0,2486 do baseline (+29,3%)**, com
+as quatro métricas subindo.
+
+O que sustenta a afirmação é o **controle pareado**: descartar o mesmo número
+de chunks, sorteados ao acaso, **piora** o nDCG@10 (−7% a −17%, em três
+sementes). Mesmo tamanho de índice, efeitos de sinal oposto.
+
+Auditado contra dez ameaças de validade em
+`docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md`,
+incluindo a circularidade (a decisão veio dos próprios rótulos de relevância;
+validada por CV, ganho honesto de +16,2%) e a limitação que fica (o JurisTCU
+julga excertos de jurisprudência, que saem do voto por construção).
 
 ### O que falta, em ordem
 
@@ -65,11 +77,14 @@ pelo segmentador (p = 0,017). É exploratório — precisa ser reimplementado em
    documentos; o código produz 12.880. **Ficou mais urgente**: um resultado
    significativo medido no corpus errado vai para o artigo como afirmação
    forte. Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
-2. Análise de sensibilidade da agregação (`sum_top_k` vs `max_pooling`) — o
-   cache já existe, é barato.
+2. ~~Análise de sensibilidade da agregação~~ — **feita em 28/09**: o
+   `max_pooling` ganha do `sum_top_k` em 4 de 5 estratégias.
 3. Notebooks 01–03, que só consomem `results/`.
 4. Corrigir os números do artigo e do pôster (lista em
-   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`).
+   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
+   e reescrever Introdução, Resultados e Conclusão com as **duas** perguntas.
+5. Regerar as tabelas da F5: os recortes, IC 95% e análise de poder das
+   rodadas antigas foram calculados antes da correção do bug dos empates.
 
 ### Decisões técnicas tomadas depois do plano original
 
@@ -357,7 +372,8 @@ retrievers recuperam 65–74% pelo relatório.
 
 **Aceite atingido:** as cinco estratégias nos dois retrievers, com controle,
 recorte por tipo de consulta, IC 95%, análise de poder e hiperparâmetro
-escolhido fora do conjunto de teste. **182 testes** (eram 115).
+escolhido fora do conjunto de teste, e uma **auditoria de validade** com
+dez ameaças testadas. **191 testes** (eram 115).
 
 **Três bugs silenciosos encontrados em execução:**
 
@@ -425,7 +441,7 @@ consumiu parte. Regras para as sessões de execução:
    retrievers × 4 métricas — **metade pronta** (BM25); falta o denso.
 4. 🟡 `significance.csv` com testes pareados corrigidos — pronto para o BM25.
 5. 🟡 `slices_{query_type,doc_length,retriever}.csv` — prontos para o BM25.
-6. ✅ `pytest` verde (**182 testes** em 28/09; eram 98 quando esta lista foi
+6. ✅ `pytest` verde (**191 testes** em 28/09; eram 98 quando esta lista foi
    escrita); READMEs de reprodução atualizados.
 7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
    corrigidos de acordo.
@@ -440,5 +456,5 @@ item 7 **continua aberto** e continua dependendo da equipe — ficou mais
 urgente, porque agora há um resultado forte a publicar e ele está medido sobre
 o corpus de 12.880.
 
-**Item 8, novo:** aprovar o merge da branch `leo/f6-secoes-e-fusao`. Ela muda
-a tese do artigo, então não é decisão de um integrante.
+**Item 8, novo:** a F6 foi mergeada em 28/09, mas a **revisão de conteúdo**
+pela equipe continua pendente — ela muda a tese do artigo.

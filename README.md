@@ -29,13 +29,13 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 
 | | |
 |---|---|
-| **Feito** | F0–F5 implementadas e mergeadas; **F6 pronta, em revisão** (branch `leo/f6-secoes-e-fusao`) |
+| **Feito** | F0–F6 implementadas e mergeadas na `main` |
 | **Resposta à pergunta original** | O chunking estrutural **não** melhora a recuperação — e o empate se confirmou num segundo ponto de operação |
 | **Resposta à pergunta derivada** | **Qual parte indexar importa muito:** descartar o relatório melhora o nDCG@10 em 11–17% no BM25, nas cinco estratégias |
 | **Melhor configuração** | recorte por seção + fusão BM25/denso: **nDCG@10 = 0,3215 contra 0,2486** — +29,3%, p < 0,00001, com as quatro métricas subindo e **sem hiperparâmetro** |
 | **Por que acreditamos** | Controle pareado: descartar o **mesmo número** de chunks ao acaso **piora** o resultado |
 | **Bloqueio** | 🔴 Decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
-| **Testes** | 182 passando |
+| **Testes** | 191 passando |
 
 Resumo dos resultados novos, escrito para apresentar:
 **[RESULTADOS-F6.md](RESULTADOS-F6.md)**.

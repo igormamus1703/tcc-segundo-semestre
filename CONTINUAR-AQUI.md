@@ -19,8 +19,8 @@ Corpus: **12.880 acórdãos íntegros do TCU** (2003–2023), com as 150 consult
 (`BAAI/bge-m3` em GPU). Cinco estratégias de chunking. Métricas: nDCG@10,
 MRR@10, MAP@10, Recall@100, com significância pareada e IC 95%.
 
-**F0–F5 concluídas e mergeadas.** **F6 concluída e NÃO mergeada**, na branch
-`leo/f6-secoes-e-fusao` — é onde está tudo o que é novo.
+**F0–F6 concluídas e mergeadas na `main`.** A F6 (28/09) é o que há de novo:
+recorte por seção, controle pareado e fusão híbrida.
 
 Leia, nesta ordem: **`PLANO.md`** (estado e próximos passos) →
 **`RESULTADOS-F6.md`** (o que mudou em 28/09, escrito para apresentar) →
@@ -107,7 +107,7 @@ recortados, com um terço do tamanho.
      que firma uma tese"; para quem busca fatos do caso concreto, pode
      inverter. **Isso precisa estar no artigo.**
 
-7. **182 testes** (eram 115). Três bugs reais foram achados em execução, e os
+7. **191 testes** (eram 115). Três bugs reais foram achados em execução, e os
    três produziam resultado plausível e errado: uma colisão de nome de run que
    apagava uma linha da tabela; um colapso de condições que fazia a figura
    mostrar menos barras do que condições; e — o mais sério — **empate de score
@@ -125,11 +125,12 @@ recortados, com um terço do tamanho.
 
 ## 4. O que fazer agora — em ordem de valor
 
-### 🔴 1. Passar a branch para a equipe e decidir o merge
+### 🔴 1. Passar a F6 para a equipe
 
-`leo/f6-secoes-e-fusao` está pronta e verde, mas **não foi mergeada**, porque
-muda a tese do artigo. Checklist e pontos de atenção no
-`docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md`.
+A branch `leo/f6-secoes-e-fusao` foi mergeada em 28/09, mas a **revisão de
+conteúdo** continua pendente: ela muda a tese do artigo. Checklist e pontos
+de atenção em `docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md`;
+resumo para a orientação em `RESULTADOS-F6.md`.
 
 ### 🔴 2. A decisão de corpus continua aberta
 
@@ -167,7 +168,7 @@ números a corrigir continuam listados em
 | GPU | RTX 5060 (8 GB) — encode a ~48 chunks/s com bge-m3 fp16 |
 | Dados | `C:\data\tcc-segundo-semestre` (junction), 6 GB |
 | Cache de embeddings | `juris-chunking/data/processed/<estrategia>/emb_*.npy` — **não apagar**, custou ~10 h de GPU |
-| Branch atual | `leo/f6-secoes-e-fusao` (não mergeada) |
+| Branch atual | `main` (a F6 foi mergeada em 28/09) |
 
 **O cache agora serve subconjuntos.** É o que faz o recorte por seção no denso
 custar **4 minutos** em vez de 10 h: `DenseIndex._load_cache` seleciona as
@@ -179,7 +180,7 @@ parcial nunca substituir o completo.
 
 ```bash
 cd juris-chunking
-pytest -q                                              # 182 testes
+pytest -q                                              # 191 testes
 
 # F4/F5 — as rodadas base
 python -m src.run_experiments --strategy all --retriever bm25
@@ -226,8 +227,6 @@ python -m src.plots --experiment <rodada> --referencia <run-baseline>
 
 Cole este arquivo e diga o que quer atacar. Três aberturas úteis:
 
-> "Retomando o TCC. Li o CONTINUAR-AQUI.md. A equipe aprovou a F6 — faça o
-> merge de `leo/f6-secoes-e-fusao` na `main` e atualize os `.md` da raiz."
 
 > "Retomando o TCC. Li o CONTINUAR-AQUI.md. Quero atacar o item 4 da §4: um
 > critério de densidade informativa que não use a estrutura do acórdão, para

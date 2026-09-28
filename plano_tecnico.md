@@ -14,7 +14,7 @@ Documento interno da equipe. Não é o entregável do professor.
 > p < 0,05, e ele aponta *contra* a hipótese. O resultado mais sólido da F5 é
 > que o **BM25 supera o retriever denso** nas cinco estratégias (p < 0,01).
 >
-> **F6 (28/09), na branch `leo/f6-secoes-e-fusao`, ainda não mergeada.** Ela
+> **F6 (28/09), mergeada na `main`.** Ela
 > acrescenta uma fase que não estava neste plano e **muda a pergunta do
 > trabalho**: de *"como cortar o documento?"* (resposta nula, e ela se
 > sustentou) para *"qual parte do documento indexar?"* — a fundamentação; o
@@ -372,7 +372,7 @@ O TCC é bem-sucedido se, ao final, existir:
 >   poder, a F6 acrescentou **um controle pareado** (índice do mesmo tamanho,
 >   sorteado) e **validação cruzada por consulta** para escolher configuração
 >   sem usar o conjunto de avaliação;
-> - critério 5: a suíte foi de 115 para **182 testes**, e a avaliação é
+> - critério 5: a suíte foi de 115 para **191 testes**, e a avaliação é
 >   byte-idêntica ao ser reexecutada.
 >
 > E o trabalho deixou de depender de um resultado nulo: **a segunda pergunta,
