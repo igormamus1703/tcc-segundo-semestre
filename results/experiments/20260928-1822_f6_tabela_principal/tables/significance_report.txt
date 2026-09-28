@@ -1,0 +1,10 @@
+#    Model                                                                  NDCG@10
+---  ---------------------------------------------------------------------  -----------
+a    20260928-1751_cv_fusao_bm25_denso--fixed_512_256__cv-soma_norm         0.261ᵈᶠ
+b    20260928-1758_cv_fusao_sec_sem_relatorio--fixed_512_256__cv-soma_norm  0.316ᵃᶜᵈᵉᶠᵍ
+c    fixed_512_256__bm25                                                    0.249ᵈᶠ
+d    fixed_512_256__bm25__amostra-0.2800s42                                 0.226
+e    fixed_512_256__bm25__sec-sem_relatorio                                 0.290ᵃᶜᵈᶠᵍ
+f    fixed_512_256__dense-bge_m3                                            0.206
+g    fixed_512_256__dense-bge_m3__sec-sem_relatorio                         0.263ᵈᶠ
+h    fixed_512_256__soma_norm                                               0.321ᵃᶜᵈᵉᶠᵍ

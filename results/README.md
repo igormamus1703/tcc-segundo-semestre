@@ -37,8 +37,9 @@ argumentos:
 | `20260907-0900_bm25_sum_top_k` | análise de sensibilidade da agregação |
 | `20260928-1638_bm25_sec_sem_relatorio` | F6: índice sem os chunks do relatório |
 | `20260928-1652_bm25_controle_amostra` | F6: controle — mesmo tamanho de índice, sorteado |
-| `20260928-1645_cv_fusao_bm25_denso` | F6: fusão com peso por validação cruzada |
-| `20260928-1705_f6_tabela_principal` | F6: comparação de condições montada com `--runs` |
+| `20260928-1751_cv_fusao_bm25_denso` | F6: fusão com peso por validação cruzada |
+| `20260928-1728_fusao4_peso_igual` | F6: fusão das 4 condições com peso igual |
+| `20260928-1822_f6_tabela_principal` | F6: comparação de condições montada com `--runs` |
 
 Para forçar um nome: `--label meu_rotulo`.
 

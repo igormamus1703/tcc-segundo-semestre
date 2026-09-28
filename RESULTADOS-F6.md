@@ -15,16 +15,16 @@ estratégia de chunking não muda a recuperação. Ficou, junto, uma pista
 exploratória — descartar o relatório do acórdão parecia melhorar as coisas.
 
 Nesta semana essa pista virou resultado. **A melhor configuração que temos
-agora recupera 27% melhor que a melhor configuração que tínhamos**, com
-p < 0,00001, sem piorar nenhuma das quatro métricas, usando um índice três
-vezes menor. E o resultado nulo original não foi derrubado — foi confirmado uma
-segunda vez, num ponto de operação diferente, o que o torna mais forte.
+agora recupera 29% melhor que a melhor configuração que tínhamos**, com
+p < 0,00001 e sem piorar nenhuma das quatro métricas. E o resultado nulo
+original não foi derrubado — foi confirmado uma segunda vez, num ponto de
+operação diferente, o que o torna mais forte.
 
 | | nDCG@10 | MRR@10 | MAP@10 | Recall@100 |
 |---|---:|---:|---:|---:|
 | Onde estávamos (BM25, índice completo) | 0,2486 | 0,5186 | 0,0963 | 0,4709 |
-| **Onde estamos** | **0,3160** | **0,6058** | **0,1330** | **0,5259** |
-| | **+27,1%** | **+16,8%** | **+38,1%** | **+11,7%** |
+| **Onde estamos** | **0,3215** | **0,6000** | **0,1402** | **0,5479** |
+| | **+29,3%** | **+15,7%** | **+45,6%** | **+16,4%** |
 
 ---
 
@@ -125,18 +125,18 @@ estratégias, com significância forte. A leitura fácil era "o denso não compe
 o custo de GPU".
 
 A leitura correta é outra: **o denso erra em lugares diferentes**. Combinando
-os dois rankings, com o BM25 pesando mais, ganha-se de 4,4% a 8,7% de nDCG@10
-sobre o BM25 sozinho — em 7 das 10 configurações testadas com p < 0,05.
+os dois rankings, com o BM25 pesando mais, ganha-se de 4,4% a 8,6% de nDCG@10
+sobre o BM25 sozinho — em 6 das 10 configurações testadas com p < 0,05.
 
 **E os dois ganhos se somam**, porque atacam coisas diferentes: o recorte muda
 *o que está no índice*, a fusão muda *como dois rankings se combinam*.
 
 | Estratégia | BM25 sem relatório | **+ fusão com o denso** | ganho | p |
 |---|---:|---:|---:|---:|
-| **fixo 512/256** | 0,2904 | **0,3160** | **+8,8%** | **0,0002** |
+| **fixo 512/256** | 0,2893 | **0,3160** | **+9,2%** | **0,0001** |
 | recursivo | 0,2764 | 0,3006 | +8,7% | **0,0004** |
 | estrutural (ouro) | 0,2835 | 0,3025 | +6,7% | **0,0002** |
-| fixo 1024/512 | 0,2790 | 0,2970 | +6,4% | **0,0007** |
+| fixo 1024/512 | 0,2791 | 0,2970 | +6,4% | **0,0008** |
 | estrutural (predito) | 0,2835 | 0,2902 | +2,3% | 0,228 |
 
 ### Um cuidado metodológico que vale mencionar na banca
@@ -150,20 +150,46 @@ divididas em 5 grupos; o peso é escolhido em 4 deles e aplicado no quinto, que
 não participou da escolha. Cada consulta é pontuada por um modelo que nunca a
 viu.
 
-O ganho aparente caía de 6,6–9,7% para **4,4–8,7%** depois da correção. **A
+O ganho aparente caía de 6,6–9,7% para **4,4–8,6%** depois da correção. **A
 diferença entre os dois números é exatamente o quanto vinha do ajuste** — e
 reportar essa conta é, por si, um ponto a favor do rigor do trabalho.
+
+### E a melhor configuração não tem parâmetro nenhum
+
+Testando combinações **mistas**, apareceu algo melhor e mais simples: fundir as
+**quatro** condições — BM25 e denso, cada um com e sem o relatório — com
+**peso igual**.
+
+| Estratégia | BM25 | fusão das 4 | ganho | Recall@100 | ganho |
+|---|---:|---:|---:|---:|---:|
+| **fixo 512/256** | 0,2486 | **0,3215** | **+29,3%** | 0,4709 → **0,5479** | **+16,4%** |
+| recursivo | 0,2412 | 0,3082 | +27,8% | 0,4731 → 0,5363 | +13,4% |
+| estrutural (ouro) | 0,2521 | 0,3065 | +21,6% | 0,4849 → 0,5349 | +10,3% |
+| fixo 1024/512 | 0,2510 | 0,3051 | +21,6% | 0,4861 → 0,5445 | +12,0% |
+| estrutural (predito) | 0,2526 | 0,3018 | +19,5% | 0,4863 → 0,5180 | +6,5% |
+
+**Peso igual significa zero graus de liberdade.** Não há o que ajustar, logo
+não há como ajustar no conjunto de teste, logo toda a ressalva do parágrafo
+anterior simplesmente não se aplica. Contra a versão ponderada por validação
+cruzada, a diferença não é significativa (p = 0,338) — as duas são
+equivalentes, e entre duas coisas equivalentes reporta-se a que não tem
+parâmetro.
+
+O preço é operacional: a fusão das quatro exige manter os **dois** índices
+(completo e recortado) e fazer quatro buscas por consulta. Por isso a tabela
+final apresenta **três** configurações, não uma.
 
 ---
 
 ## 5. A tabela final, com tudo junto
 
-Estratégia `fixo 512/256`, 150 consultas, correção de Bonferroni sobre 21
-comparações:
+Estratégia `fixo 512/256`, 150 consultas, correção de Bonferroni sobre 28
+comparações — **23 delas dão significativas**:
 
 | | nDCG@10 | MRR@10 | MAP@10 | Recall@100 |
 |---|---:|---:|---:|---:|
-| **recorte + fusão** | **0,3160** | **0,6058** | **0,1330** | **0,5259** |
+| **fusão das 4 condições** | **0,3215** | 0,6000 | **0,1402** | **0,5479** |
+| recorte + fusão (peso por CV) | 0,3160 | **0,6058** | 0,1330 | 0,5259 |
 | BM25, sem o relatório | 0,2904 | 0,5889 | 0,1190 | 0,4993 |
 | denso, sem o relatório | 0,2627 | 0,5190 | 0,1112 | 0,4564 |
 | fusão, índice completo | 0,2606 | 0,4988 | 0,1038 | 0,5037 |
@@ -171,7 +197,7 @@ comparações:
 | BM25, −67% ao acaso *(controle)* | 0,2260 | 0,4725 | 0,0867 | 0,4310 |
 | denso bge-m3 | 0,2055 | 0,4042 | 0,0800 | 0,4759 |
 
-Figura: `results/experiments/20260928-1705_f6_tabela_principal/figuras/…__condicoes.png`
+Figura: `results/experiments/20260928-1822_f6_tabela_principal/figuras/…__condicoes.png`
 
 **As quatro métricas sobem.** Não há trade-off a declarar — e havia: o teste
 exploratório da semana passada, feito só no buscador denso, tinha registrado
@@ -179,19 +205,30 @@ uma perda de 7% no Recall@100 como limitação do método. Rodando no BM25,
 descobrimos que a perda era limitação **do denso**, não do método: no BM25 o
 recall sobe.
 
+### Três configurações, não uma
+
+O artigo deve apresentar três pontos da curva custo × qualidade:
+
+| Se você quer... | Configuração | nDCG@10 | Custo |
+|---|---|---:|---|
+| o melhor custo-benefício | BM25, sem o relatório | 0,2904 (+16,8%) | **um** índice, com **1/3** do tamanho |
+| o melhor com índice enxuto | recorte + fusão | 0,3160 (+27,1%) | dois índices de 1/3, duas buscas |
+| o melhor resultado | fusão das 4, peso igual | **0,3215 (+29,3%)** | dois índices completos + dois recortados, quatro buscas |
+
 ### E o ganho não vem das consultas fáceis
 
 O JurisTCU tem três tipos de consulta. As reais, tiradas do log de busca do
 TCU, são de longe as mais difíceis:
 
-| Tipo de consulta (50 cada) | BM25 | configuração final | ganho |
+| Tipo de consulta (50 cada) | BM25 | fusão das 4 | ganho |
 |---|---:|---:|---:|
-| pergunta sintética (LLM) | 0,3214 | **0,4041** | **+25,7%** |
-| expressão sintética (LLM) | 0,2920 | **0,3799** | **+30,1%** |
-| **consulta real de usuário** | 0,1322 | **0,1640** | **+24,1%** |
+| pergunta sintética (LLM) | 0,3214 | **0,4166** | **+29,6%** |
+| expressão sintética (LLM) | 0,2920 | **0,3900** | **+33,6%** |
+| **consulta real de usuário** | 0,1335 | **0,1578** | **+18,2%** |
 
-Este é o recorte que costuma desmontar uma melhoria — e o ganho se mantém
-praticamente idêntico nos três grupos.
+Este é o recorte que costuma desmontar uma melhoria — e o ganho se mantém nos
+três grupos. Nas consultas reais ele é menor, e vale notar que ali a
+configuração do meio (recorte + fusão, 0,1640) supera a fusão das quatro.
 
 ---
 
@@ -238,14 +275,31 @@ do mecanismo que descrevemos no passo 2.
 
 ## 8. Estado do trabalho e o que precisa de decisão
 
-**Feito:** código no pipeline com **175 testes** passando (eram 115), nove
+**Feito:** código no pipeline com **182 testes** passando (eram 115), onze
 rodadas novas com manifesto e figuras, e a documentação completa da branch.
 
-**Dois bugs reais foram encontrados durante a execução**, e vale mencionar
-porque nenhum dos dois levantava erro — os dois produziam resultado plausível e
-errado: uma colisão de nome que apagava uma linha da tabela principal, e um
-agrupamento nas figuras que fazia duas condições diferentes virarem a mesma
-barra. Ambos estão travados por teste agora.
+**Três bugs reais foram encontrados durante a execução**, e vale mencionar
+porque nenhum dos três levantava erro — os três produziam resultado plausível e
+errado:
+
+1. uma colisão de nome que apagava uma linha da tabela principal;
+2. um agrupamento nas figuras que fazia duas condições diferentes virarem a
+   mesma barra;
+3. **empate de score na fronteira da métrica** — o mais sério. O mesmo arquivo
+   de resultados dava 0,1322 e 0,1336 no mesmo recorte, dependendo da ordem
+   das chamadas. Na consulta 6, três documentos empatam nas posições 9, 10 e
+   11 e um deles é relevante: se ele fica em 9 ou 10 a consulta vale 0,066, se
+   é empurrado para 11 vale 0. A biblioteca de avaliação não fixa esse
+   desempate. Passamos a desempatar por identificador do documento — critério
+   arbitrário, mas **fixo**, que é o que importa.
+
+Os três estão travados por teste. O terceiro tem uma consequência para o resto
+do trabalho: ele afeta os recortes, os intervalos de confiança e a análise de
+poder de **todas** as rodadas, inclusive as da etapa anterior. O efeito é de
+terceira casa decimal e nenhuma conclusão muda, mas as tabelas da etapa
+anterior precisam ser regeradas antes de qualquer número de recorte ir para o
+artigo. Vale também uma frase de limitação: **os valores por consulta dependem
+de um critério de desempate**, e o nosso está documentado.
 
 **Precisa de decisão da equipe / do orientador:**
 

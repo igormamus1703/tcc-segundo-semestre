@@ -180,7 +180,7 @@
   ],
   "erro": null,
   "avaliacao": {
-    "quando": "2026-09-28T16:53:08",
+    "quando": "2026-09-28T18:11:04",
     "metrica_principal": "ndcg@10",
     "por_run": {
       "fixed_1024_512__dense-bge_m3__sec-sem_relatorio": {

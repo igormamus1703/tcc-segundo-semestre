@@ -152,7 +152,7 @@
   ],
   "erro": null,
   "avaliacao": {
-    "quando": "2026-09-28T16:59:16",
+    "quando": "2026-09-28T18:13:48",
     "metrica_principal": "ndcg@10",
     "por_run": {
       "fixed_1024_512__bm25__amostra-0.2804s42": {

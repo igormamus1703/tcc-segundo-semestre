@@ -23,7 +23,7 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 | F3 — Chunkers | ✅ | **2.200.767** chunks nas 5 estratégias, invariante de offset conferida |
 | F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
 | F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
-| F6 — Recorte por seção + fusão | 🟡 pronta, não mergeada | **nDCG@10 0,2486 → 0,3160 (+27,1%)**, com controle pareado e peso por validação cruzada (`20260928-1705_f6_tabela_principal`) |
+| F6 — Recorte por seção + fusão | 🟡 pronta, não mergeada | **nDCG@10 0,2486 → 0,3215 (+29,3%)**, com controle pareado e sem hiperparâmetro (`20260928-1822_f6_tabela_principal`) |
 
 **Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
 ambos alcançados**, com semanas de antecedência. A F6 não estava no plano
@@ -350,9 +350,9 @@ retrievers recuperam 65–74% pelo relatório.
 
 **Aceite atingido:** as cinco estratégias nos dois retrievers, com controle,
 recorte por tipo de consulta, IC 95%, análise de poder e hiperparâmetro
-escolhido fora do conjunto de teste. **175 testes** (eram 115).
+escolhido fora do conjunto de teste. **182 testes** (eram 115).
 
-**Dois bugs silenciosos encontrados em execução:**
+**Três bugs silenciosos encontrados em execução:**
 
 1. **Colisão de nome de run.** Dois runs escolhidos para a tabela principal
    tinham o mesmo nome de arquivo, vindos de rodadas diferentes; o segundo
@@ -361,6 +361,13 @@ escolhido fora do conjunto de teste. **175 testes** (eram 115).
 2. **Colapso de condições nas figuras.** `plots.partes_do_run` agrupava
    "BM25 índice completo" e "BM25 sem relatório" na mesma barra, e uma das
    duas sumia do gráfico. A figura não ficava incompleta — ficava **errada**.
+3. **Empate de score na fronteira da métrica.** O mesmo arquivo TREC dava
+   0,1322 e 0,1336 no mesmo recorte, conforme a ordem das chamadas: três
+   documentos empatavam nas posições 9–11 e um deles era relevante. O ranx não
+   fixa o desempate, e reordenar um run já ordenado permuta os empatados.
+   **Afeta todos os recortes, IC 95% e análise de poder do projeto, inclusive
+   os da F5.** Corrigido com desempate por `doc_id`; as tabelas da F6 foram
+   regeradas, as da F5 ainda não.
 
 Detalhe em
 [docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
@@ -411,7 +418,7 @@ consumiu parte. Regras para as sessões de execução:
    retrievers × 4 métricas — **metade pronta** (BM25); falta o denso.
 4. 🟡 `significance.csv` com testes pareados corrigidos — pronto para o BM25.
 5. 🟡 `slices_{query_type,doc_length,retriever}.csv` — prontos para o BM25.
-6. ✅ `pytest` verde (**175 testes** em 28/09; eram 98 quando esta lista foi
+6. ✅ `pytest` verde (**182 testes** em 28/09; eram 98 quando esta lista foi
    escrita); READMEs de reprodução atualizados.
 7. ⬜ **Novo:** decisão do corpus oficial registrada, e números do artigo
    corrigidos de acordo.

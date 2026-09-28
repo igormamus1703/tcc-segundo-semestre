@@ -31,7 +31,7 @@ docsleo/
 | Branch | Assunto | Status |
 |---|---|---|
 | [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | ✅ mergeada em 07/09 |
-| [leo/f6-secoes-e-fusao](branches/leo-f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+27,1% de nDCG@10** | 🟡 pronta, **não mergeada** |
+| [leo/f6-secoes-e-fusao](branches/leo-f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+29,3% de nDCG@10** | 🟡 pronta, **não mergeada** |
 
 ## Atalhos para o que mais importa
 

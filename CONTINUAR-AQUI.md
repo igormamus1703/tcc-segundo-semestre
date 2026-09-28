@@ -53,11 +53,15 @@ desempenho absoluto é evidência bem mais forte que um empate medido uma vez.
 | BM25, índice completo (baseline) | 0,2486 | 0,5186 | 0,0963 | 0,4709 |
 | BM25, −67% **aleatório** (controle) | 0,2260 | 0,4725 | 0,0867 | 0,4310 |
 | BM25, **sem o relatório** | 0,2904 | 0,5889 | 0,1190 | 0,4993 |
-| **sem o relatório + fusão com o denso** | **0,3160** | **0,6058** | **0,1330** | **0,5259** |
+| sem o relatório **+ fusão (peso por CV)** | 0,3160 | **0,6058** | 0,1330 | 0,5259 |
+| **fusão das 4 condições, peso igual** | **0,3215** | 0,6000 | **0,1402** | **0,5479** |
 
-**+27,1% de nDCG@10, p < 0,00001**, com Bonferroni sobre 21 pares. As quatro
-métricas sobem. O peso da fusão foi escolhido por validação cruzada, não
-olhando o resultado.
+**+29,3% de nDCG@10, p < 0,00001**, com Bonferroni sobre 28 pares. As quatro
+métricas sobem. A melhor configuração funde quatro rankings com **peso
+igual** — não tem hiperparâmetro, logo não há como ajustar no conjunto de
+teste. A versão ponderada (0,3160) usa peso escolhido por validação cruzada e
+empata com ela (p = 0,338); a vantagem dela é precisar só dos índices
+recortados, com um terço do tamanho.
 
 ---
 
@@ -74,22 +78,33 @@ olhando o resultado.
    efeitos opostos: o ganho é da estrutura do acórdão.
 
 3. **Fusão BM25 + denso** (`src/fusion.py`, `src/tuning.py`). O denso não era
-   inútil, era complementar: +4,4% a +8,7% sobre o BM25, e **soma com o
+   inútil, era complementar: +4,4% a +8,6% sobre o BM25, e **soma com o
    recorte**. O peso sai de validação cruzada por consulta, com um teste que
-   espiona a seleção e proíbe a dobra de teste de participar dela.
+   espiona a seleção e proíbe a dobra de teste de participar dela. E a melhor
+   variante — fundir as **quatro** condições com peso igual — chega a +19,5% a
+   +29,3% nas cinco estratégias **sem hiperparâmetro nenhum**.
 
 4. **O ganho não vem das consultas fáceis.** Nas consultas reais de log (as
-   mais difíceis, nDCG de 0,13): **+24,1%**. Nas sintéticas: +25,7% e +30,1%.
+   mais difíceis, nDCG de 0,13): **+18,2%**. Nas sintéticas: +29,6% e +33,6%.
 
 5. **Três coisas foram testadas e descartadas**, com o motivo medido:
    ponderação por seção, RRF sem peso e `sum_top_k`. Estão em
    `docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/05-negativos.md` —
    leia antes de tentar de novo.
 
-6. **175 testes** (eram 115). Dois bugs reais foram achados em execução: uma
-   colisão de nome de run que apagava uma linha da tabela, e um colapso de
-   condições que fazia a figura mostrar menos barras do que condições. Os dois
-   produziam resultado plausível e errado.
+6. **182 testes** (eram 115). Três bugs reais foram achados em execução, e os
+   três produziam resultado plausível e errado: uma colisão de nome de run que
+   apagava uma linha da tabela; um colapso de condições que fazia a figura
+   mostrar menos barras do que condições; e — o mais sério — **empate de score
+   na fronteira da métrica**, que fazia o mesmo arquivo TREC dar dois valores
+   diferentes no mesmo recorte. Ver
+   `docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md`.
+
+   ⚠️ **O terceiro afeta a F5 também.** Os recortes, IC 95% e análise de poder
+   das rodadas antigas foram calculados com o bug. O efeito é de terceira casa
+   e nenhuma conclusão muda, mas **quem for citar um número de recorte da F5
+   no artigo deve regerar a tabela antes** (`python -m src.evaluate
+   --experiment <rodada>`).
 
 ---
 
@@ -148,7 +163,7 @@ parcial nunca substituir o completo.
 
 ```bash
 cd juris-chunking
-pytest -q                                              # 175 testes
+pytest -q                                              # 182 testes
 
 # F4/F5 — as rodadas base
 python -m src.run_experiments --strategy all --retriever bm25
@@ -160,6 +175,10 @@ python -m src.evaluate --incluir <outra-rodada>        # cruza BM25 e denso
 python -m src.run_experiments --strategy all --retriever bm25 --secoes sem:relatorio
 python -m src.run_experiments --strategy all --retriever bm25 --amostra-igual-a sem:relatorio
 python -m src.fusion --experimentos <bm25> <denso> --metodo rrf
+
+# a MELHOR configuracao: funde as 4 condicoes com peso igual, sem parametro
+python -m src.fusion --metodo soma_norm --label fusao4_peso_igual \
+    --experimentos <bm25> <bm25-sem-rel> <denso> <denso-sem-rel>
 python -m src.tuning  --bm25 <bm25> --denso <denso>    # peso por validacao cruzada
 
 # tabela do artigo, a partir de runs avulsos, e figuras
@@ -183,6 +202,7 @@ python -m src.plots --experiment <rodada> --referencia <run-baseline>
 | **Ponderar a seção** em vez de cortar | Satura no corte binário e não preserva o recall — o peso é aplicado depois do corte em `--top-chunks` |
 | **RRF sem peso** | p entre 0,206 e 0,906: peso igual a um retriever 20% pior anula o ganho |
 | **`sum_top_k`** | Perde do `max_pooling` em 4 de 5 estratégias |
+| **Confiar na ordem que o ranx devolve os scores por consulta** | Empates de score na fronteira do `@k` fazem o mesmo run dar números diferentes. `per_query_scores` desempata por `doc_id` antes de avaliar |
 
 ---
 
