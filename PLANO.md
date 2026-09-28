@@ -16,8 +16,8 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 | **Pergunta 1 (original)** | Chunking que respeita as macro-seções do acórdão melhora a recuperação, comparado a chunking fixo/recursivo? |
 | **Pergunta 2 (derivada, 28/09)** | Se *como* cortar não importa, **qual parte** do documento indexar? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
-| **Fases** | F0–F5 concluídas; **F6 (recorte por seção + fusão híbrida) em revisão** na branch `leo/f6-secoes-e-fusao` |
-| **Testes** | 182 passando · resultado auditado contra 10 ameaças de validade |
+| **Fases** | F0–F6 concluídas e mergeadas na `main` |
+| **Testes** | 191 passando · resultado auditado contra 10 ameaças de validade |
 | **Resposta à pergunta 1** | **Não melhora.** Nenhuma diferença entre estratégias é significativa — e isso agora vale em **dois** pontos de operação diferentes |
 | **Resposta à pergunta 2** | **A fundamentação. O relatório atrapalha.** Descartá-lo do índice melhora o nDCG@10 em 11–17% no BM25 e 12–28% no denso, nas cinco estratégias |
 | **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3215**, contra 0,2486 do baseline — **+29,3%**, p < 0,00001, e **sem hiperparâmetro** |
@@ -121,12 +121,17 @@ nasceu da primeira — tem resposta positiva e significativa. O trabalho não
 "deu errado e a gente achou outra coisa": a segunda pergunta só existe porque
 a primeira foi respondida com cuidado.
 
-### 🟠 DECISÃO 4 — Aprovar o merge da branch `leo/f6-secoes-e-fusao` (nova)
+### 🟠 DECISÃO 4 — Revisar a F6, já mergeada (nova)
 
-A branch está pronta, com 182 testes verdes e todos os artefatos, mas **não
-foi mergeada**. Ela muda a tese do artigo, então a equipe precisa olhar antes.
-Checklist de revisão e pontos de atenção no
-[README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md).
+A branch `leo/f6-secoes-e-fusao` foi **mergeada em 28/09** com 191 testes
+verdes, todos os artefatos e uma auditoria de validade. O merge seguiu o
+mesmo critério da branch anterior: ela só **acrescenta** módulos e rodadas,
+sem tocar em `ingest.py`, `segmenter/` ou `chunkers/`.
+
+**O que ainda precisa da equipe é a revisão do conteúdo**, não do código: a
+F6 muda a tese do artigo. Checklist e pontos de atenção no
+[README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md);
+resumo para a orientação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
 ---
 
@@ -406,7 +411,7 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 28/09 | **Configuração final: nDCG@10 = 0,3215 (+29,3%)**, todas as métricas sobem, sem hiperparâmetro | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
 | 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md) |
 | 28/09 | **Auditoria de validade:** 10 ameaças testadas — dose-resposta, nDCG reimplementado do zero, controle em 3 sementes, escolha da seção por CV | [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) |
-| 28/09 | Branch `leo/f6-secoes-e-fusao` **aberta, não mergeada** — aguarda revisão | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
+| 28/09 | Branch `leo/f6-secoes-e-fusao` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram
 

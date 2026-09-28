@@ -57,8 +57,7 @@ leitura completos.
 
 ## Status (ver `PLANO.md` na raiz para o panorama e os próximos passos)
 
-**F0–F5 concluídas e mergeadas. F6 pronta, em revisão** (branch
-`leo/f6-secoes-e-fusao`). Nenhuma diferença entre estratégias de chunking é
+**F0–F6 concluídas e mergeadas na `main`.** Nenhuma diferença entre estratégias de chunking é
 significativa; o BM25 supera o retriever denso com p < 0,001; e **descartar o
 relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
 0,2486 para 0,3215** (+29,3%, p < 0,00001). Ver
@@ -96,7 +95,7 @@ relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
       consulta, tamanho de documento, retriever e seção do acórdão).
       `python -m src.evaluate` gera as tabelas e `python -m src.plots` as
       figuras.
-- [x] **F6 — Recorte por seção e fusão híbrida** (🟡 não mergeada):
+- [x] **F6 — Recorte por seção e fusão híbrida**:
       `src/sections.py` (recorte `--secoes`, ponderação `--pesos` e o controle
       pareado `--amostra-igual-a`), `src/fusion.py` (RRF e soma normalizada
       sobre os runs TREC existentes) e `src/tuning.py` (peso da fusão por
@@ -122,7 +121,7 @@ python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
 python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
 python -m src.evaluate                # F5: tabelas da rodada mais recente
 python -m src.plots                   # F5: figuras (PDF + PNG)
-pytest                                # roda a suite de testes (182)
+pytest                                # roda a suite de testes (191)
 ```
 
 ### F6 — recorte por seção, controle e fusão

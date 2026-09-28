@@ -1,6 +1,6 @@
 # Branch `leo/f6-secoes-e-fusao`
 
-**Autor:** Leonardo Marques · **Aberta em:** 2026-09-28 · **Status:** 🟡 em revisão, **não mergeada**
+**Autor:** Leonardo Marques · **Aberta em:** 2026-09-28 · **Fechada em:** 2026-09-28 · **Status:** ✅ concluída, mergeada na `main`
 
 Transforma o achado exploratório da F4/F5 — *descartar o relatório do índice
 melhora a recuperação* — em resultado de pipeline, e acrescenta duas
@@ -67,9 +67,9 @@ rankings com peso igual.
 | Figura de progressão de condições | `src/plots.py` (`fig_condicoes`) |
 | Etapa F6 no script de rodada completa | `scripts/rodada_completa.ps1` |
 
-## Testes: 182 passando
+## Testes: 191 passando
 
-Eram **115** antes desta branch. Os 67 novos seguem a mesma regra das fases
+Eram **115** antes desta branch. Os 76 novos seguem a mesma regra das fases
 anteriores: travar o que **falha em silêncio**.
 
 - **alinhamento embedding × chunk** — o cache agora serve um subconjunto, e a
@@ -122,7 +122,7 @@ Todas em `results/experiments/`, com manifesto, log e figuras.
 
 ## Checklist para o merge
 
-- [x] `pytest` verde (182)
+- [x] `pytest` verde (191)
 - [x] Recorte por seção reimplementado em `src/`, com testes
 - [x] Rodado no **BM25** — era o buraco do achado exploratório
 - [x] Rodado nas **cinco** estratégias, não só nas estruturais
@@ -137,8 +137,16 @@ Todas em `results/experiments/`, com manifesto, log e figuras.
 - [x] **Auditoria de validade**: dose-resposta em 10 recortes, nDCG reimplementado
       do zero, controle em 3 sementes, e a escolha da seção validada por CV
       ([04-auditoria-de-validade.md](04-auditoria-de-validade.md))
-- [ ] **Revisão da equipe** — ver "Pontos de atenção"
-- [ ] Merge na `main` — **aguardando aprovação**
+- [x] **Auditoria de validade** antes de propor o merge (10 ameaças)
+- [x] Merge na `main` — 28/09/2026
+- [ ] **Revisão do Igor e do restante da equipe** — ver "Pontos de atenção"
+
+> O merge foi feito com a revisão da equipe ainda pendente, pelo mesmo
+> critério da branch anterior: a F6 só **acrescenta** módulos e rodadas, não
+> altera `ingest.py`, `segmenter/` nem `chunkers/`, e segurá-la na prateleira
+> atrasaria a correção do artigo. As duas decisões que dependem da equipe — o
+> corpus e a nova estrutura do texto — continuam abertas e estão registradas
+> no `PLANO.md`.
 
 ## Pontos de atenção para quem revisar
 
