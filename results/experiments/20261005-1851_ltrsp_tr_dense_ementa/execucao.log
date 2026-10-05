@@ -1,0 +1,9 @@
+[18:51:04] experimento 20261005-1851_ltrsp_tr_dense_ementa
+[18:51:04]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:51:04]   commit: be8aa59a (arvore suja) em leo/f7-evolucao
+[18:51:08]   [structural_pred] secoes ['ementa']: 285,308 -> 13,980 chunks (4.9%)
+[18:51:14]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[18:51:14]     embeddings do cache, recortados: 13,980 de 285,308 chunks (sem reencode)
+[18:51:14]     embeddings recuperados do cache (sem reencode)
+[18:51:57] structural_pred__dense-bge_m3__sec-em: 13,980 chunks, 1,200,000 linhas, 52.9s  [decorrido 0.0 h]
+[18:51:57] fim em 0.9 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1851_ltrsp_tr_dense_ementa

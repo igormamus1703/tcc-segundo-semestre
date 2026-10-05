@@ -1,0 +1,86 @@
+{
+  "rotulo": "ltrsp_tr_dense_semrel",
+  "inicio": "2026-10-05T18:45:52",
+  "fim": "2026-10-05T18:46:50",
+  "duracao_s": 58.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_pred --top-docs 200 --retriever dense --queries data/interim/jua/queries_train_amostra.jsonl --secoes sem:relatorio --label ltrsp_tr_dense_semrel",
+  "config": {
+    "estrategias": [
+      "structural_pred"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "be8aa59a3978e8c90287b70a50a791b50d533e11",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_pred__dense-bge_m3__sec-sem_relatorio",
+      "run": "structural_pred__dense-bge_m3__sec-sem_relatorio",
+      "n_chunks": 96219,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 57.1,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 285308,
+        "chunks_depois": 96219,
+        "fracao_mantida": 0.3372,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    }
+  ],
+  "erro": null
+}

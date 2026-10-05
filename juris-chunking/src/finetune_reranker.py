@@ -65,6 +65,42 @@ def grupo(qid: str, relevante: str, positivo: str, vencedores: list[dict], k: in
     return None
 
 
+def figura_curva(rodada: Path) -> None:
+    """Curva de treino (perda) e de validação (perda e acerto no topo) da rodada."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    with (rodada / "tables" / "curva.csv").open(encoding="utf-8") as f:
+        linhas = list(csv.DictReader(f))
+    x = [int(l["passo_otim"]) for l in linhas]
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 3.4))
+    xt = [xi for xi, l in zip(x, linhas) if l["perda_treino"]]
+    a1.plot(xt, [float(l["perda_treino"]) for l in linhas if l["perda_treino"]], "-o", ms=3,
+            color="#e09f3e", label="treino (média desde o último ponto)")
+    a1.plot(x, [float(l["perda_val"]) for l in linhas], "-o", ms=3, color="#1b4965", label="validação")
+    a1.axhline(math.log(8), color="#999", ls="--", lw=1)
+    a1.text(x[-1], math.log(8) + 0.05, "acaso (ln 8)", ha="right", fontsize=8, color="#666")
+    a1.set_xlabel("passo do otimizador")
+    a1.set_ylabel("entropia cruzada do grupo")
+    a1.legend(frameon=False, fontsize=8.5)
+    a2.plot(x, [100 * float(l["acerto_top1_val"]) for l in linhas], "-o", ms=3, color="#1b4965")
+    a2.axhline(100 / 8, color="#999", ls="--", lw=1)
+    a2.text(x[-1], 100 / 8 + 1.5, "acaso (1 em 8)", ha="right", fontsize=8, color="#666")
+    a2.set_xlabel("passo do otimizador")
+    a2.set_ylabel("trecho certo em 1º lugar (%)")
+    for ax in (a1, a2):
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.grid(alpha=0.25)
+    fig.suptitle("Fine-tune LoRA do bge-reranker-v2-m3 no treino do JUÁ-Juris "
+                 "(validação: 300 consultas, 1 positivo + 7 negativos difíceis)", fontsize=11, y=1.03)
+    destino = rodada / "figuras"
+    destino.mkdir(parents=True, exist_ok=True)
+    for ext in ("pdf", "png"):
+        fig.savefig(destino / f"{rodada.name}__curva.{ext}", bbox_inches="tight", dpi=200)
+    plt.close(fig)
+
+
 # --- CLI -----------------------------------------------------------------------
 
 def main() -> None:

@@ -1,0 +1,20 @@
+[17:50:38] experimento 20261005-1750_f7_finetune_reranker
+[17:50:38]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:50:38]   commit: e4616d89 (arvore suja) em leo/f7-evolucao
+[17:52:44] 5225 grupos (4925 treino, 300 validacao); 775 sem excerto localizado, 0 sem negativos suficientes
+[17:52:51] LoRA: 8,128,513 de 575,884,290 parametros treinaveis (1.41%)
+[17:54:01] antes do treino: {'passo_otim': 0, 'perda_treino': None, 'perda_val': 4.204391868490922, 'acerto_top1_val': 0.16666666666666666}
+[18:00:34] epoca 0 passo 50/616 {'passo_otim': 50, 'perda_treino': 2.8665329375863076, 'perda_val': 2.0799495483699597, 'acerto_top1_val': 0.25} [6.5 min]
+[18:05:16] epoca 0 passo 100/616 {'passo_otim': 100, 'perda_treino': 2.084418911933899, 'perda_val': 2.0714508044092277, 'acerto_top1_val': 0.36333333333333334} [11.2 min]
+[18:09:58] epoca 0 passo 150/616 {'passo_otim': 150, 'perda_treino': 1.9699515625834465, 'perda_val': 1.586455175751134, 'acerto_top1_val': 0.44666666666666666} [15.9 min]
+[18:14:40] epoca 0 passo 200/616 {'passo_otim': 200, 'perda_treino': 1.547951902151108, 'perda_val': 1.3710065797755593, 'acerto_top1_val': 0.5233333333333333} [20.6 min]
+[18:19:21] epoca 0 passo 250/616 {'passo_otim': 250, 'perda_treino': 1.3254383742716163, 'perda_val': 1.3811582617069547, 'acerto_top1_val': 0.59} [25.3 min]
+[18:24:02] epoca 0 passo 300/616 {'passo_otim': 300, 'perda_treino': 1.4073054407164454, 'perda_val': 1.230630653469186, 'acerto_top1_val': 0.5766666666666667} [30.0 min]
+[18:28:43] epoca 0 passo 350/616 {'passo_otim': 350, 'perda_treino': 1.2790988326072692, 'perda_val': 1.16400082958372, 'acerto_top1_val': 0.5866666666666667} [34.7 min]
+[18:33:24] epoca 0 passo 400/616 {'passo_otim': 400, 'perda_treino': 1.2449780076928436, 'perda_val': 1.1576778088745319, 'acerto_top1_val': 0.6066666666666667} [39.4 min]
+[18:38:05] epoca 0 passo 450/616 {'passo_otim': 450, 'perda_treino': 1.191916178506799, 'perda_val': 1.1255231985920353, 'acerto_top1_val': 0.6133333333333333} [44.1 min]
+[18:42:47] epoca 0 passo 500/616 {'passo_otim': 500, 'perda_treino': 1.1540616044774652, 'perda_val': 1.1204647970827002, 'acerto_top1_val': 0.6333333333333333} [48.8 min]
+[18:48:28] epoca 0 passo 550/616 {'passo_otim': 550, 'perda_treino': 1.1036619241535663, 'perda_val': 1.1306617416833575, 'acerto_top1_val': 0.6333333333333333} [54.4 min]
+[18:54:08] epoca 0 passo 600/616 {'passo_otim': 600, 'perda_treino': 1.164609831382404, 'perda_val': 1.1060624957868928, 'acerto_top1_val': 0.63} [60.1 min]
+[18:55:29] modelo salvo em C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\juris-chunking\data\models\bge-reranker-v2-m3-jua-lora
+[18:55:29] fim em 64.8 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1750_f7_finetune_reranker

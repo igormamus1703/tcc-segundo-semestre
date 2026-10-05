@@ -1,0 +1,57 @@
+{
+  "rotulo": "f7_finetune_reranker",
+  "inicio": "2026-10-05T17:50:38",
+  "fim": "2026-10-05T18:55:29",
+  "duracao_s": 3891.0,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\finetune_reranker.py",
+  "config": {
+    "base": "BAAI/bge-reranker-v2-m3",
+    "estrategia": "fixed_512_256",
+    "rodada_negativos": "h8_tr_bm25",
+    "queries": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\jua\\queries_train_amostra.jsonl",
+    "qrels": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\jua\\qrels_train_amostra.trec",
+    "negativos": "7",
+    "consultas_por_passo": "2",
+    "acumular": "4",
+    "epocas": "1",
+    "lr": "0.0001",
+    "max_length": "512",
+    "validacao": "300",
+    "saida": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\models\\bge-reranker-v2-m3-jua-lora",
+    "label": "f7_finetune_reranker"
+  },
+  "git": {
+    "commit": "e4616d89a4a3fe95277a01001b468ca67c64375d",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "modelo",
+      "saida": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\models\\bge-reranker-v2-m3-jua-lora",
+      "curva": {
+        "passo_otim": 600,
+        "perda_treino": 1.164609831382404,
+        "perda_val": 1.1060624957868928,
+        "acerto_top1_val": 0.63
+      }
+    }
+  ],
+  "erro": null
+}

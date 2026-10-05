@@ -1,0 +1,76 @@
+{
+  "rotulo": "ltrsp_te_bm25_dispositivo",
+  "inicio": "2026-10-05T18:43:46",
+  "fim": "2026-10-05T18:44:00",
+  "duracao_s": 14.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_pred --top-docs 200 --retriever bm25 --queries data/interim/jua/queries_test.jsonl --secoes dispositivo --label ltrsp_te_bm25_dispositivo",
+  "config": {
+    "estrategias": [
+      "structural_pred"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 1567,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_test.jsonl",
+    "secoes": [
+      "dispositivo"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "be8aa59a3978e8c90287b70a50a791b50d533e11",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_pred__bm25__sec-disp",
+      "run": "structural_pred__bm25__sec-disp",
+      "n_chunks": 21333,
+      "n_queries": 1567,
+      "n_linhas_run": 313400,
+      "segundos": 13.8,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 285308,
+        "chunks_depois": 21333,
+        "fracao_mantida": 0.0748,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    }
+  ],
+  "erro": null
+}

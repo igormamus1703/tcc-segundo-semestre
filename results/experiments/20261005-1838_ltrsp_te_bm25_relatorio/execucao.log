@@ -1,0 +1,6 @@
+[18:38:47] experimento 20261005-1838_ltrsp_te_bm25_relatorio
+[18:38:47]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:38:47]   commit: be8aa59a (arvore suja) em leo/f7-evolucao
+[18:38:51]   [structural_pred] secoes ['relatorio']: 285,308 -> 189,089 chunks (66.3%)
+[18:40:19] structural_pred__bm25__sec-rel: 189,089 chunks, 313,400 linhas, 91.2s  [decorrido 0.0 h]
+[18:40:19] fim em 1.5 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1838_ltrsp_te_bm25_relatorio

@@ -1,0 +1,59 @@
+{
+  "rotulo": "ltrsp_tr_bm25",
+  "inicio": "2026-10-05T18:30:34",
+  "fim": "2026-10-05T18:33:03",
+  "duracao_s": 149.5,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_pred --top-docs 200 --retriever bm25 --queries data/interim/jua/queries_train_amostra.jsonl --label ltrsp_tr_bm25",
+  "config": {
+    "estrategias": [
+      "structural_pred"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": null,
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "7afa7526f77a8fc802b07555e29d6e7a9e2f37e8",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_pred__bm25",
+      "run": "structural_pred__bm25",
+      "n_chunks": 285308,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 147.9
+    }
+  ],
+  "erro": null
+}

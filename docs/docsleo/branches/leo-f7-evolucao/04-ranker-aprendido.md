@@ -93,6 +93,25 @@ olhando o teste.
 3. **O modelo enxuto `ltr_recorte_f6` é o melhor no JUÁ** (0,2881) e o segundo
    no JurisTCU. Com 4 sinais em vez de 12, é a escolha de custo-benefício.
 
+## A versão implantável: sem a estrutura ouro
+
+Um acervo real não publica a estrutura em colunas. O mesmo LTR foi refeito
+sobre o **`structural_pred`** (o segmentador por regras da F2), com os
+atributos do documento (tamanho, fração de relatório) calculados a partir dos
+chunks rotulados pelo segmentador, e não dos spans ouro
+(`configs/f7_ltr_pred.json`, rodada `*_f7_ltr_pred`):
+
+| | JUÁ-Juris (teste) | JurisTCU |
+|---|---:|---:|
+| LTR com seções, **ouro** | 0,2781 | 0,2991 |
+| LTR com seções, **predito** | 0,2781 | 0,2976 |
+| predito × ouro | −0,0% (p = 0,98) | −0,5% (p = 0,75) |
+| predito × BM25 (predito) | +3,8% (p = 0,016) | **+17,8% (p < 10⁻⁵)** |
+| predito × LTR sem seções | +1,9% (p = 0,20) | **+18,0% (p < 10⁻⁵)** |
+
+**O modelo não depende da estrutura oficial do TCU.** É o mesmo resultado da
+ablação ouro × predito da F5–F7, agora para o modelo aprendido.
+
 ## O que o modelo aprendeu (SHAP)
 
 O LightGBM calcula valores SHAP exatos para árvores (`pred_contrib`).
