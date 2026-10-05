@@ -1,0 +1,70 @@
+{
+  "_comentario": "Especificacao da replicacao da F7 (src/replicacao.py). Escrita junto com o pre-registro: quais runs entram em cada colecao e quais pares comparar. Referencias no formato 'rotulo_da_rodada/arquivo.trec', resolvidas pela rodada mais recente com o rotulo EXATO.",
+  "colecoes": {
+    "JurisTCU": {
+      "qrels": "data/interim/qrels.trec",
+      "queries": "data/interim/queries.jsonl",
+      "runs": {
+        "B": "bm25/fixed_512_256__bm25.trec",
+        "Bc": "bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "ctrl": "bm25_controle_amostra/fixed_512_256__bm25__amostra-0.2800s42.trec",
+        "D": "dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+        "Dc": "dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+        "F2c": "juristcu_fusao2_recortados/fixed_512_256__soma_norm.trec",
+        "RB": "juristcu_rerank_bm25/fixed_512_256__rerank-bm25-todas.trec",
+        "R": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-todas.trec",
+        "Rs": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+        "Rsp": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+        "estrutural (ouro)": "bm25/structural_gold__bm25.trec",
+        "estrutural (predito)": "bm25/structural_pred__bm25.trec",
+        "fixo 512/256": "bm25/fixed_512_256__bm25.trec",
+        "fixo 1024/512": "bm25/fixed_1024_512__bm25.trec",
+        "recursivo": "bm25/recursive_default__bm25.trec"
+      }
+    },
+    "JUÁ-Juris": {
+      "qrels": "data/interim/jua/qrels_test.trec",
+      "queries": "data/interim/jua/queries_test.jsonl",
+      "runs": {
+        "B": "jua_bm25/fixed_512_256__bm25.trec",
+        "Bc": "jua_bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "ctrl": "jua_bm25_controle_amostra/fixed_512_256__bm25__amostra-0.2800s42.trec",
+        "D": "jua_dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+        "Dc": "jua_dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "jua_fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+        "F2c": "jua_fusao2_recortados/fixed_512_256__soma_norm.trec",
+        "RB": "jua_rerank_bm25/fixed_512_256__rerank-bm25-todas.trec",
+        "R": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-todas.trec",
+        "Rs": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+        "Rsp": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+        "estrutural (ouro)": "jua_bm25/structural_gold__bm25.trec",
+        "estrutural (predito)": "jua_bm25/structural_pred__bm25.trec",
+        "fixo 512/256": "jua_bm25/fixed_512_256__bm25.trec",
+        "fixo 1024/512": "jua_bm25/fixed_1024_512__bm25.trec",
+        "recursivo": "jua_bm25/recursive_default__bm25.trec"
+      }
+    }
+  },
+  "comparacoes": [
+    ["Bc", "B", "H1 · recorte sem relatório × completo (BM25)"],
+    ["ctrl", "B", "H2 · controle aleatório × completo (BM25)"],
+    ["Dc", "D", "recorte sem relatório × completo (denso)"],
+    ["F4", "B", "H3 · fusão das 4 × BM25 completo"],
+    ["F2c", "Bc", "H3 · fusão recortada × BM25 recortado"],
+    ["RB", "B", "BM25 + reranker × BM25"],
+    ["R", "F4", "H6 · reranker sobre a fusão das 4 × fusão das 4"],
+    ["Rs", "R", "H7 · reranker lendo fora do relatório × lendo tudo"],
+    ["Rsp", "R", "H7 · idem, sem rebaixar quem só tem relatório"]
+  ],
+  "colecao_estratos": "JUÁ-Juris",
+  "comparacoes_estratos": [
+    "H1 · recorte sem relatório × completo (BM25)",
+    "H3 · fusão das 4 × BM25 completo",
+    "H7 · reranker lendo fora do relatório × lendo tudo"
+  ],
+  "equivalencia": {
+    "margem": 0.01,
+    "condicoes": ["estrutural (ouro)", "estrutural (predito)", "fixo 512/256", "fixo 1024/512", "recursivo"]
+  }
+}
