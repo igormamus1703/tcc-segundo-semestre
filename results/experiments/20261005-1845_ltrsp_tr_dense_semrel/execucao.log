@@ -1,0 +1,9 @@
+[18:45:52] experimento 20261005-1845_ltrsp_tr_dense_semrel
+[18:45:52]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:45:52]   commit: be8aa59a (arvore suja) em leo/f7-evolucao
+[18:45:56]   [structural_pred] secoes ['dispositivo', 'ementa', 'fundamentacao']: 285,308 -> 96,219 chunks (33.7%)
+[18:46:02]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[18:46:03]     embeddings do cache, recortados: 96,219 de 285,308 chunks (sem reencode)
+[18:46:03]     embeddings recuperados do cache (sem reencode)
+[18:46:50] structural_pred__dense-bge_m3__sec-sem_relatorio: 96,219 chunks, 1,200,000 linhas, 57.1s  [decorrido 0.0 h]
+[18:46:50] fim em 1.0 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1845_ltrsp_tr_dense_semrel
