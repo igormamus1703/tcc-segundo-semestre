@@ -108,7 +108,7 @@ def fig_painel(linhas: list[dict], condicoes: list[str], rotulos: dict[str, str]
     cbar = fig.colorbar(im, ax=axes[0].tolist(), shrink=0.8, pad=0.015)
     cbar.set_label("Δ nDCG@10 contra o BM25 completo da mesma estratégia")
     cbar.ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
-    fig.suptitle("Qual receita funciona nas duas tarefas?  (número = nDCG@10; contorno = melhor da coleção)",
+    fig.suptitle("Qual receita funciona em todas as amostras?  (número = nDCG@10; contorno = melhor da coleção)",
                  fontsize=12, y=1.02)
     fig.text(0.01, -0.03, rodape, ha="left", va="top", fontsize=7.2, color="#444")
     destino.mkdir(parents=True, exist_ok=True)
