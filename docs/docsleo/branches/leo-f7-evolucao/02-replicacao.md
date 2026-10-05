@@ -18,7 +18,7 @@
 | H1 | O recorte "sem relatório" (critério da F6) melhora as 5 estratégias no JUÁ | ❌ **não replicou** | piora 3 de 5: −12,6% a −21,3% nas fixas e recursiva; ≈ 0 nas estruturais |
 | H2 | O controle aleatório do mesmo tamanho piora | ✅ | −31% no `fixed_512_256` (0,1715 × 0,2497) |
 | H3 | Fusão das 4 > BM25; fusão recortada > BM25 recortado | ❌ | no JUÁ, a fusão com o denso **piora** (−11%): o denso é 35% a 55% pior que o BM25 ali |
-| H4 | O recorte piora quando a resposta está no relatório e ajuda quando está na fundamentação | ver §H4 | |
+| H4 | O recorte piora quando a resposta está no relatório e ajuda quando está na fundamentação | ❌ (F6) · direção ✅ (`toca`) | a F6 piora até com a resposta na fundamentação (−15%); o `toca` dá +7% e −12% (este n.s.) |
 | H5 | As 5 estratégias são praticamente equivalentes (TOST, ±0,01) | ❌ **e isso é a notícia** | o estrutural **vence** os não estruturais por 0,018 a 0,029; só ouro × predito é equivalente |
 | H6 | O reranker sobre a melhor configuração melhora nas duas coleções | ❌ (zero-shot) | −15,9% no JurisTCU; +8% sobre a fusão no JUÁ, mas abaixo do BM25 |
 | H7 | O reranker lendo só fora do relatório ≥ lendo tudo | ✅ JurisTCU · ❌ JUÁ | +17,9% no JurisTCU; −6,7% no JUÁ |
@@ -57,12 +57,56 @@ a consulta repete a ementa ([03](03-fronteira-e-criterio-toca.md), mecanismo).
 
 ## H4: onde mora a resposta
 
-*(preenchido com `estratos.csv` da rodada final)*
+JUÁ difícil, `fixed_512_256`, BM25, Δ contra o índice completo
+(`estratos.csv`, figura `__estratos`):
+
+| Seção onde está o excerto | n | recorte da F6 | recorte `toca` |
+|---|---:|---:|---:|
+| fundamentação | 938 | **−15%** (IC < 0) | **+7%** (IC > 0) |
+| dispositivo | 198 | −2% | +11% (IC inclui 0) |
+| relatório | 148 | **−26%** (IC < 0) | −12% (IC inclui 0) |
+| não localizado | 275 | −2% | +5% |
+
+**Veredicto: ❌ para o recorte da F6, que é o que a hipótese descrevia.** Ele
+piora inclusive quando a resposta está na fundamentação, porque o artefato da
+ementa ([03](03-fronteira-e-criterio-toca.md)) atinge todas as consultas
+parecidas com a ementa, independentemente de onde está o excerto. **Com o
+`toca`, os sinais saem como a H4 previa** (ganho onde a resposta está na
+fundamentação, perda onde está no relatório), mas o estrato do relatório,
+com 148 consultas, não tem poder para significância. Leitura honesta: o
+mecanismo "tirar o relatório tira as respostas que moram nele" existe na
+direção prevista e é pequeno perto do artefato da ementa.
 
 ## Sensibilidade: a coleção independente
 
-*(preenchido com `replicacao.csv`: as mesmas comparações sem as 194 consultas
-cujo acórdão é relevante no JurisTCU)*
+Sem as 194 consultas cujo acórdão é relevante no JurisTCU (1.373 restantes),
+**todos os efeitos se mantêm**, com magnitudes quase idênticas:
+
+| Comparação | JUÁ difícil (1.567) | JUÁ independente (1.373) |
+|---|---:|---:|
+| recorte da F6 × completo | −12,6% | −15,0% |
+| controle aleatório × completo | −31,3% | −32,8% |
+| `toca` × completo | +5,5% | +5,3% |
+| `toca` × recorte da F6 | +20,7% | +23,8% |
+| estrutural (ouro) × fixo 512/256 | +8,1% | +8,2% |
+| fusão das 4 (F6) × BM25 | −11,3% | −12,4% |
+| LTR com seções × fusão das 4 (mesma estratégia) | +11,1% | +11,3% |
+
+A sobreposição com o JurisTCU não explica nada do que a F7 encontrou.
+
+## A correção de Bonferroni muda duas leituras
+
+Com 23 comparações por coleção:
+
+- **`toca` × completo no JUÁ difícil:** p = 0,012 sem correção, **0,24 com
+  ela**. O `toca` não perde em nenhuma amostra e ganha com significância
+  corrigida no JurisTCU e no JUÁ natural; no JUÁ difícil, o que é
+  significativo mesmo corrigido é a diferença para o critério da F6 (+20,7%,
+  p < 10⁻¹⁷).
+- **Controle aleatório × completo no JurisTCU:** −9,4%, p = 0,57 corrigido
+  (na F6, com 28 pares, era 0,028). No JUÁ, com 10× mais consultas, o
+  controle é −31% (p < 10⁻²²). A conclusão da F6 ("não é o tamanho do índice")
+  fica mais forte, não mais fraca.
 
 ## As figuras
 

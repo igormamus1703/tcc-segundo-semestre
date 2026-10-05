@@ -22,8 +22,8 @@ origem em cada doc desta pasta. **Nada aqui substitui a decisão de corpus**
 > (+1% a +12% de nDCG@10, conforme a dificuldade da consulta), efeito que uma
 > ablação atribui ao isolamento da ementa; o segmentador automático é
 > estatisticamente equivalente à estrutura oficial. Remover do índice os
-> trechos exclusivamente de relatório melhora o nDCG@10 nas três amostras
-> (+5,5% a +15,6%), enquanto a regra ingênua de remover pedaços
+> trechos exclusivamente de relatório melhora o nDCG@10 nas duas amostras
+> naturais (+9,7% e +15,6%) e não o prejudica nas difíceis (+5,5%), enquanto a regra ingênua de remover pedaços
 > majoritariamente de relatório falha (−12,6%) por descartar a ementa junto.
 > Um ranqueador treinado em consultas do JUÁ transfere ao JurisTCU (+18,6%) e
 > atribui a um casamento no relatório cerca de um quinto do peso do mesmo
@@ -63,7 +63,8 @@ análise das perdas mostra que, em 54% dos casos, o pedaço descartado continha
 a ementa, que nas estratégias sem fronteira divide o primeiro chunk com o
 relatório; o dano concentra-se no quartil de consultas lexicalmente mais
 próximas da ementa (−28,4%). Descartar apenas pedaços inteiramente de
-relatório elimina o modo de falha: +15,6%, +9,7% e +5,5% nas três amostras,
+relatório elimina o modo de falha: +15,6% e +9,7% (significativos após
+correção de Bonferroni) e +5,5% nas difíceis (p = 0,012 sem correção),
 resultado pré-registrado e confirmado em consultas não usadas na análise.*
 
 **Modelo aprendido.** *Um LambdaRank com doze sinais de busca por seção,

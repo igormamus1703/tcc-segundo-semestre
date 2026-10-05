@@ -9,7 +9,8 @@
 > fronteira: o chunk 0 junta a ementa com o começo do relatório, é rotulado
 > "relatório" pela maioria dos caracteres e sai junto com a ementa. Um critério
 > que só descarta chunks **100% relatório** (`toca`) corrige o defeito: o
-> recorte passa a ganhar **nas três amostras de consultas**, inclusive em
+> recorte deixa de perder em qualquer amostra e ganha com significância em
+> duas delas, inclusive em
 > 6.000 consultas nunca usadas em análise, onde a hipótese foi pré-registrada.
 
 ---
@@ -133,7 +134,11 @@ da consulta, independente da contagem de chunks do §2.
 | critério da F6 (`maioria`) | +16,2% | +8,1% | **−12,6%** |
 | **critério `toca`** | **+15,6%** | **+9,7%** | **+5,5%** |
 
-**O `toca` é o único que ganha nas três amostras.** É ele que deve ir para o
+**O `toca` é o único que não perde em nenhuma amostra.** Ganha com significância
+corrigida (Bonferroni, 23 comparações por coleção) no JurisTCU (p = 0,004) e no
+JUÁ natural (p < 10⁻⁹⁴); no JUÁ difícil, +5,5% com p = 0,012 sem correção e
+0,24 com ela, enquanto a diferença para o critério da F6 é de +20,7% com
+p < 10⁻¹⁷ mesmo corrigida. É ele que deve ir para o
 artigo como recomendação; o recorte da F6 tem um modo de falha conhecido.
 
 ## 5. O que fica em aberto: o relatório não é sempre ruído

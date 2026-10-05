@@ -18,7 +18,7 @@ inclusive as previsões que erraram.
    difíceis), ele piora as estratégias fixas e a recursiva em 13% a 21%.
 2. **A causa é um artefato de fronteira, e foi corrigida.** O chunk 0 junta a
    ementa com o relatório e sai junto. O critério `toca` (descartar só chunks
-   100% relatório) ganha **nas três amostras de consultas**: +15,6% no
+   100% relatório) **não perde em nenhuma amostra** e ganha com significância em duas: +15,6% no
    JurisTCU, +9,7% em 6.000 consultas naturais (hipótese pré-registrada,
    p < 10⁻⁹⁵) e +5,5% nas difíceis.
 3. **Chunking estrutural importa quando se seleciona conteúdo.** Isolada, a
