@@ -198,7 +198,12 @@ def fig_forest(linhas: list[dict], colecoes: list[str], destino: Path, rodape: s
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(axis="x", alpha=0.25)
     ax.set_ylim(-0.6, len(comps) - 0.4)
-    ax.legend(title="marcador cheio = p < 0,05 com Bonferroni dentro da coleção",
+    from matplotlib.lines import Line2D
+    # legenda fixa: a cor identifica a coleção; o preenchimento é a significância
+    # e não pode depender de qual comparação calhou de vir primeiro
+    alcas = [Line2D([], [], marker="o", ls="", ms=7, color=CORES_COLECAO[i], label=c)
+             for i, c in enumerate(colecoes)]
+    ax.legend(handles=alcas, title="marcador cheio = p < 0,05 com Bonferroni dentro da coleção",
               loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=len(colecoes),
               fontsize=9, title_fontsize=8.5, frameon=False)
     # título logo acima da legenda (que fica fora do eixo): em figuras altas, um y
@@ -282,7 +287,10 @@ def fig_equivalencia(linhas: list[dict], colecoes: list[str], destino: Path, rod
     ax.set_xlabel(f"Δ nDCG@10 (A − B), IC 90% — faixa verde: equivalência prática (±{margem})")
     ax.spines[["top", "right"]].set_visible(False)
     ax.set_ylim(-0.6, len(pares) - 0.4)
-    ax.legend(title="quadrado cheio = equivalente pelo TOST (p < 0,05)", fontsize=9,
+    from matplotlib.lines import Line2D
+    alcas = [Line2D([], [], marker="s", ls="", ms=7, color=CORES_COLECAO[i], label=c)
+             for i, c in enumerate(colecoes)]
+    ax.legend(handles=alcas, title="quadrado cheio = equivalente pelo TOST (p < 0,05)", fontsize=9,
               title_fontsize=8.5, frameon=False, loc="lower center",
               bbox_to_anchor=(0.5, 1.0), ncol=len(colecoes))
     fig.suptitle(titulo or "As estratégias de chunking são equivalentes? (teste de equivalência, TOST)",
