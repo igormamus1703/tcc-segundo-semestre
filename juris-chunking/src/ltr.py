@@ -214,6 +214,103 @@ MODELOS = {
     "ltr_recorte_f6": ["bm25_doc", "bm25_sem_relatorio", "dense_doc", "dense_sem_relatorio"],
 }
 
+VISOES = ("doc", "sem_relatorio", "ementa", "relatorio", "fundamentacao", "dispositivo")
+ROTULO_VISAO = {"doc": "documento\ninteiro", "sem_relatorio": "sem o\nrelatório",
+                "ementa": "só a\nementa", "relatorio": "só o\nrelatório",
+                "fundamentacao": "só a\nfundamentação", "dispositivo": "só o\ndispositivo"}
+
+
+def figuras(rodada: Path) -> None:
+    """Interpretação do modelo com seções, a partir do SHAP gravado na rodada.
+
+    1. `shap_secoes`: participação de cada sinal (score + posição) na média de
+       |SHAP|, como heatmap retriever × visão do documento, uma coleção por
+       painel. Responde "em que parte do acórdão o modelo confia?".
+    2. `shap_dependencia`: para os sinais "só a fundamentação" e "só o
+       relatório" do BM25, o score normalizado do documento (eixo x) contra a
+       contribuição SHAP desse atributo (eixo y). Se o modelo aprendeu que
+       casar no relatório vale menos, a nuvem do relatório fica abaixo da da
+       fundamentação para o mesmo score.
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    atributos = json.loads((rodada / "atributos.json").read_text(encoding="utf-8"))
+    pastas = sorted(p.stem.removeprefix("shap_") for p in rodada.glob("shap_*.npy"))
+    nomes_col = {"jua": "JUÁ-Juris (teste)", "juristcu": "JurisTCU (nunca visto no treino)"}
+    destino = rodada / "figuras"
+    destino.mkdir(parents=True, exist_ok=True)
+    git = (json.loads((rodada / "manifest.json").read_text(encoding="utf-8")).get("git") or {})
+    rodape = (f"Rodada {rodada.name}  ·  LambdaRank (LightGBM) treinado em 6.000 consultas do split de "
+              f"TREINO do JUÁ-Juris  ·  estrutural (ouro)  ·  SHAP exato de árvore  ·  commit "
+              f"{(git.get('commit') or '?')[:8]}")
+
+    fig, axes = plt.subplots(1, len(pastas), figsize=(7.4 * len(pastas), 2.7), squeeze=False)
+    for ax, pasta in zip(axes[0], pastas):
+        dados = np.load(rodada / f"shap_{pasta}.npy")
+        contrib = np.abs(dados[:, :len(atributos)]).mean(axis=0)
+        total = contrib.sum()
+        m = np.zeros((len(RETRIEVERS), len(VISOES)))
+        for a, v in zip(atributos, contrib):
+            sinal = a.split("__")[0]
+            if sinal in SINAIS:
+                r, vis = SINAIS[sinal]
+                m[RETRIEVERS.index(r), VISOES.index(vis)] += v / total
+        ax.imshow(m, cmap="Blues", vmin=0, vmax=max(0.45, m.max()), aspect="auto")
+        for i in range(m.shape[0]):
+            for j in range(m.shape[1]):
+                ax.text(j, i, f"{100 * m[i, j]:.1f}%", ha="center", va="center", fontsize=9,
+                        color="white" if m[i, j] > 0.25 else "#111")
+        ax.set_xticks(range(len(VISOES)))
+        ax.set_xticklabels([ROTULO_VISAO[v] for v in VISOES], fontsize=7.6)
+        ax.set_yticks(range(len(RETRIEVERS)))
+        ax.set_yticklabels(["BM25", "denso"], fontsize=9)
+        resto = 1 - m.sum()
+        ax.set_title(f"{nomes_col.get(pasta, pasta)}\n(atributos do documento: {100 * resto:.1f}%)",
+                     fontsize=9.5)
+    fig.suptitle("Em que parte do acórdão o ranker aprendido confia?  "
+                 "(participação na média de |SHAP|)", fontsize=12, y=1.1)
+    fig.text(0.01, -0.1, rodape, ha="left", va="top", fontsize=7, color="#444")
+    for ext in ("pdf", "png"):
+        fig.savefig(destino / f"{rodada.name}__shap_secoes.{ext}", bbox_inches="tight", dpi=200)
+    plt.close(fig)
+
+    fig, axes = plt.subplots(1, len(pastas), figsize=(5.6 * len(pastas), 3.8), squeeze=False,
+                             sharey=True)
+    rng = np.random.default_rng(42)
+    for ax, pasta in zip(axes[0], pastas):
+        dados = np.load(rodada / f"shap_{pasta}.npy")
+        n_attr = len(atributos)
+        idx = rng.choice(len(dados), size=min(20_000, len(dados)), replace=False)
+        for sinal, cor, rot in [("bm25_fundamentacao", "#1b4965", "BM25 só na fundamentação"),
+                                ("bm25_relatorio", "#e09f3e", "BM25 só no relatório")]:
+            k = atributos.index(f"{sinal}__score")
+            x, y = dados[idx, n_attr + k], dados[idx, k]
+            presente = x > 0
+            ax.scatter(x[presente], y[presente], s=3, alpha=0.18, color=cor, rasterized=True)
+            # média móvel por faixa de score, para a tendência ficar legível
+            bordas = np.linspace(0, 1, 11)
+            meio = (bordas[:-1] + bordas[1:]) / 2
+            medias = [y[presente & (x >= a) & (x < b)].mean() if (presente & (x >= a) & (x < b)).sum() > 30
+                      else np.nan for a, b in zip(bordas[:-1], bordas[1:])]
+            ax.plot(meio, medias, color=cor, lw=2.6, label=rot)
+        ax.axhline(0, color="#555", lw=0.8)
+        ax.set_xlabel("score normalizado do documento nessa seção (0 = pior do top-200, 1 = melhor)",
+                      fontsize=8)
+        ax.set_title(nomes_col.get(pasta, pasta), fontsize=9.5)
+        ax.spines[["top", "right"]].set_visible(False)
+    axes[0][0].set_ylabel("contribuição SHAP para o score do documento")
+    axes[0][0].legend(fontsize=8.5, frameon=False, loc="upper left")
+    fig.suptitle("O mesmo casamento vale menos no relatório do que na fundamentação?", fontsize=12,
+                 y=1.03)
+    fig.text(0.01, -0.06, rodape, ha="left", va="top", fontsize=7, color="#444")
+    for ext in ("pdf", "png"):
+        fig.savefig(destino / f"{rodada.name}__shap_dependencia.{ext}", bbox_inches="tight", dpi=200)
+    plt.close(fig)
+    print(f"  figuras em {destino}")
+
+
 PARAMS = dict(
     objective="lambdarank", metric="ndcg", eval_at=[10], n_estimators=3000,
     learning_rate=0.03, num_leaves=31, min_child_samples=50, subsample=0.8,
@@ -230,10 +327,17 @@ def main() -> None:
     from .experiment import Experimento
 
     parser = argparse.ArgumentParser(description="Treina e avalia o ranker aprendido da F7.")
-    parser.add_argument("--spec", type=Path, required=True)
+    parser.add_argument("--spec", type=Path, default=None)
     parser.add_argument("--label", default="f7_ltr")
     parser.add_argument("--validacao", type=float, default=0.15)
+    parser.add_argument("--figuras-de", type=Path, default=None,
+                        help="So regera as figuras de uma rodada ja treinada.")
     args = parser.parse_args()
+    if args.figuras_de:
+        figuras(args.figuras_de)
+        return
+    if args.spec is None:
+        parser.error("--spec e obrigatorio para treinar")
 
     raiz_repo = Path(__file__).resolve().parent.parent
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
@@ -292,6 +396,7 @@ def main() -> None:
         (exp.dir / "atributos.json").write_text(
             json.dumps(nomes_atributos(MODELOS["ltr_secoes"]), ensure_ascii=False), encoding="utf-8")
         exp.log("runs gravados em runs/<pasta>__<run>.trec; avalie com src.replicacao")
+    figuras(exp.dir)
 
 
 if __name__ == "__main__":
