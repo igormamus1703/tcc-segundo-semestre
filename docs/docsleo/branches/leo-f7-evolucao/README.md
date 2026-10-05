@@ -49,7 +49,8 @@ inclusive as previsões que erraram.
 | [03-fronteira-e-criterio-toca.md](03-fronteira-e-criterio-toca.md) | ⭐ O defeito do recorte, o mecanismo, a correção e a confirmação |
 | [04-ranker-aprendido.md](04-ranker-aprendido.md) | ⭐ LambdaRank com sinais por seção, ablação e SHAP |
 | [05-reranker.md](05-reranker.md) | Cross-encoder zero-shot e ajustado com LoRA |
-| [06-pergunta-original.md](06-pergunta-original.md) | A comparação entre estratégias de chunking, com poder e teste de equivalência |
+| [06-pergunta-original.md](06-pergunta-original.md) | A comparação entre estratégias de chunking, com poder e teste de equivalência, e a ablação da ementa |
+| [07-texto-para-o-artigo.md](07-texto-para-o-artigo.md) | ✍️ Rascunho de resumo, contribuições, resultados, discussão e limitações |
 
 ## Código entregue
 
@@ -71,7 +72,7 @@ em código existente é o parâmetro `criterio` em `sections.filtrar`, cujo padr
 
 ## Testes
 
-Eram **191** na F6. A F7 acrescenta testes para o que falha em silêncio:
+**221 passando** (eram 191 na F6). Os 30 novos travam o que falha em silêncio:
 
 - **offset do excerto** no texto dobrado × texto original (`test_jua.py`);
 - **o reranker** não perde documento sem passagem, nem lê relatório na
