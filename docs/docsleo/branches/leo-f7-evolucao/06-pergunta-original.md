@@ -53,13 +53,22 @@ afirmar nem diferença nem igualdade. Com 1.567 e 6.000, há.
 1. **O efeito existe, e o tamanho depende da consulta.** Nas consultas que o
    BM25 acha difíceis, separar as seções vale 7% a 12%; nas naturais, 1% a 3%.
    No JurisTCU, com 150 consultas, não há resolução para ver nem um nem outro.
-2. **O mecanismo provável é a ementa.** O corte estrutural a isola num chunk
-   curto e denso em termos da tese, e o BM25 (com normalização por tamanho) o
-   favorece quando a consulta é uma tese em uma frase. No `structural_gold`,
-   a ementa é o trecho que ganha o acórdão certo em 33% dos acertos no JUÁ
-   ([03](03-fronteira-e-criterio-toca.md), §2). No JurisTCU, onde a ementa
-   carrega 0,4% da relevância, o efeito some. *Hipótese coerente com os
-   dados, ainda não isolada por um experimento próprio.*
+2. **O mecanismo é a ementa isolada, e foi testado.** O corte estrutural põe
+   a ementa num chunk próprio, curto e denso em termos da tese, e o BM25 (com
+   normalização por tamanho) o favorece quando a consulta é uma tese em uma
+   frase. **Ablação:** tirando a ementa do índice estrutural, a vantagem
+   desaparece e vira desvantagem:
+
+   | | estrutural × fixo | estrutural **sem ementa** × fixo | efeito de tirar a ementa |
+   |---|---:|---:|---:|
+   | JUÁ difícil, ouro | +8,1% | **−20,9%** | −26,9% (p < 10⁻²⁸) |
+   | JUÁ difícil, predito | +7,3% | **−18,5%** | −24,0% (p < 10⁻²⁴) |
+   | JUÁ natural, ouro | +1,4% | **−2,3%** | −3,6% (p < 10⁻³¹) |
+   | JUÁ natural, predito | +1,2% | **−2,2%** | −3,4% (p < 10⁻²⁸) |
+
+   No JurisTCU, onde a ementa carrega 0,4% da relevância (F4) e tirá-la custa
+   −0,1% (auditoria da F6), o efeito some — coerente com o mecanismo. Rodadas:
+   `*_jua_bm25_sec_sem_ementa`, `*_juanat_bm25_sec_sem_ementa`.
 3. **O segmentador por regras basta.** Ouro × predito é equivalente nas três
    coleções, com a margem de ±0,01. É o que torna o resultado aplicável a
    acervos que não publicam a estrutura em colunas, agora com prova de

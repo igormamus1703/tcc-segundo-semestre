@@ -179,7 +179,10 @@ def main() -> None:
 
         def logits(lote: list[tuple[str, list[str]]]) -> torch.Tensor:
             pares = [(textos_q[q], texto_chunk[c]) for q, g in lote for c in g]
-            enc = tok([a for a, _ in pares], [b for _, b in pares], truncation="only_second",
+            # "longest_first", e não "only_second": há enunciados mais longos que
+            # a janela inteira, e cortar só a passagem aborta o treino no meio
+            # (aconteceu no passo ~200 da primeira tentativa).
+            enc = tok([a for a, _ in pares], [b for _, b in pares], truncation="longest_first",
                       max_length=args.max_length, padding=True, return_tensors="pt").to(disp)
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 out = modelo(**enc).logits.view(len(lote), -1)
@@ -224,6 +227,9 @@ def main() -> None:
                     agenda.step()
                     otim.zero_grad()
                     passo += 1
+                    if passo % 100 == 0:
+                        # checkpoint do adaptador: uma queda não custa o treino inteiro
+                        modelo.save_pretrained(args.saida.parent / (args.saida.name + "-ckpt"))
                     if passo % 50 == 0 or passo == total_otim:
                         ponto = {"passo_otim": passo, "perda_treino": float(np.mean(acum)), **avaliar()}
                         curva.append(ponto)
