@@ -29,6 +29,16 @@ def test_normalizar_da_score_minmax_e_posicao_com_desempate_por_doc():
     assert pos == {"a": 1, "b": 2, "c": 3}  # empate desfeito por doc_id, fixo
 
 
+def test_normalizar_corta_antes_do_minmax():
+    # 1.000 documentos com scores 1000..1: o top-3 normalizado tem de ir de 1
+    # a 0 dentro do próprio top, e não ficar espremido perto de 1
+    docs = {f"d{i:04d}": float(1000 - i) for i in range(1000)}
+    norm, pos = normalizar(docs, topo=3)
+    assert set(norm) == {"d0000", "d0001", "d0002"}
+    assert norm["d0002"] == 0.0 and norm["d0000"] == 1.0
+    assert max(pos.values()) == 3
+
+
 def test_candidatos_sao_a_uniao_dos_sinais_pool_sem_repetir():
     sinais = {POOL[0]: {"1": {"a": 3, "b": 2}}, POOL[2]: {"1": {"b": 5, "c": 1}},
               "bm25_relatorio": {"1": {"z": 9}}}  # não-pool não traz candidato
@@ -49,7 +59,7 @@ def test_matriz_alinha_linhas_chaves_e_rotulos_e_marca_ausentes():
     assert linha_a["dense_doc__score"] == 0.0
     assert linha_a["bm25_doc__posicao"] == 1
     assert linha_a["doc_fracao_relatorio"] == np.float32(0.7)
-    assert linha_a["consulta_palavras"] == 3
+    assert "consulta_palavras" not in nomes
 
 
 def test_treino_e_validacao_nunca_compartilham_consulta():
