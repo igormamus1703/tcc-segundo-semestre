@@ -63,6 +63,51 @@ estágio ([03](03-fronteira-e-criterio-toca.md)). Duas leituras:
    pelo relatório no JurisTCU.** O efeito de interferência não é artefato do
    BM25.
 
-## Ajustado ao domínio (LoRA)
+## Ajustado ao domínio (LoRA): a v1 aprendeu um atalho
 
-*(preenchido quando o treino terminar)*
+**O treino.** LoRA (r = 16, 1,4% dos parâmetros) no `bge-reranker-v2-m3`, uma
+época sobre 4.925 grupos do treino do JUÁ (`src/finetune_reranker.py`). Cada
+grupo tinha o **trecho que contém o excerto** como positivo e os **7 trechos
+que o BM25 pôs no topo, de outros acórdãos**, como negativos. Perda listwise.
+Rodada `*_f7_finetune_reranker`, figura `__curva`.
+
+**A curva era boa.** O trecho certo em 1º lugar, na validação, foi de **17%**
+(zero-shot; o acaso é 12,5%) para **63%**, com treino e validação juntos (sem
+sobreajuste aparente).
+
+**E o resultado no JurisTCU foi um desastre:**
+
+| JurisTCU, candidatos da fusão das 4 | nDCG@10 |
+|---|---:|
+| fusão das 4 (sem reranker) | 0,3215 |
+| reranker zero-shot | 0,2704 |
+| **reranker ajustado (v1)** | **0,1087** (−66% contra a fusão, abaixo do BM25) |
+
+**Não é bug de salvamento.** O modelo fundido reproduz o adaptador do
+checkpoint (correlação 1,0 nos mesmos pares).
+
+**É um atalho aprendido dos negativos.** Todo negativo veio do topo do BM25,
+logo tinha muito casamento literal com a consulta; o positivo (o excerto)
+muitas vezes tinha menos. O modelo aprendeu "casamento literal ⇒ trecho
+errado". Medido nos 12.335 pares do JurisTCU:
+
+| | Spearman(score, sobreposição consulta × trecho) |
+|---|---:|
+| zero-shot | **+0,59** |
+| ajustado (v1) | **−0,17** |
+| correlação entre os scores dos dois | −0,42 |
+
+Para consultas curtas de palavras-chave, como as do JurisTCU, penalizar o
+casamento literal é catastrófico. É o mesmo fenômeno de "falsos negativos
+difíceis" descrito na literatura de recuperação densa: negativos minerados
+só por um sistema léxico carregam o viés desse sistema.
+
+### A v2: negativos mistos
+
+Para testar o diagnóstico, a v2 muda **só** a composição dos negativos: 3 do
+topo do BM25, 2 do topo do denso (que erra por outro motivo) e 2 trechos
+vencedores de **outras** consultas (fáceis, sem casamento), mais taxa menor
+(5e-5) e meia época. Se o atalho vinha dos negativos, a correlação com a
+sobreposição deve voltar a ser positiva e o JurisTCU, a não colapsar.
+
+*(resultado da v2 a seguir)*
