@@ -19,7 +19,7 @@ pré-registrado. Detalhe em [RESULTADOS-F7.md](RESULTADOS-F7.md) e na
 | | Antes (F6, 150 consultas) | Depois (F7, + 7.567 consultas) |
 |---|---|---|
 | **Pergunta 1** | "Não melhora", empate | **O corte estrutural vence**: +1% a +3% nas naturais, +7% a +12% nas difíceis, por isolar a ementa. Segmentador ≡ ouro (teste de equivalência) |
-| **Pergunta 2** | "Tire o relatório" (+16%) | **Tire só os chunks 100% relatório (`toca`)**: a versão da F6 perde 12,6% nas consultas difíceis; a corrigida ganha nas três amostras |
+| **Pergunta 2** | "Tire o relatório" (+16%) | **Tire só os chunks 100% relatório (`toca`)**: a versão da F6 perde 12,6% nas consultas difíceis; a corrigida não perde em nenhuma amostra e ganha com significância (Bonferroni) no JurisTCU e no JUÁ natural |
 | **Novo** | — | Um ranker aprendido (LambdaRank) treinado no JUÁ transfere para o JurisTCU (+18,6%) e mostra, via SHAP, que o relatório vale ~5× menos |
 
 As seções abaixo ainda descrevem o estado de 28/09 e continuam válidas para o

@@ -352,7 +352,7 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
 
 <section>
   <p class="passo"><b>4</b> · A correção, confirmada</p>
-  <h2>Descartar só o que é 100% relatório ganha nas três amostras</h2>
+  <h2>Descartar só o que é 100% relatório não perde em nenhuma amostra</h2>
   <div class="leitura">
     <p>O critério <code>toca</code> mantém qualquer pedaço que tenha um trecho de
     seção mantida. Ele foi desenhado olhando o JUÁ difícil — então, antes de
@@ -363,7 +363,9 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
   <figure>
     <figcaption>
       <p class="fig-titulo">Recorte “sem relatório”, fixo 512/256, BM25: F6 × corrigido</p>
-      <p class="fig-sub">Δ nDCG@10 contra o índice completo, em cada amostra de consultas.</p>
+      <p class="fig-sub">Δ nDCG@10 contra o índice completo, em cada amostra de consultas. Com correção de Bonferroni
+      (23 comparações por coleção), o “toca” é significativo no JurisTCU e no JUÁ natural; no JUÁ difícil, p = 0,012 sem
+      correção e 0,24 com ela — mas a diferença para o critério da F6 ali é de +20,7%, p &lt; 10⁻¹⁷.</p>
     </figcaption>
     <div class="legenda">
       <span><i class="swatch" style="background:var(--base)"></i>critério da F6 · <i class="swatch" style="background:var(--pior)"></i> quando piora</span>
@@ -462,7 +464,7 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
   <div class="rolagem">
     <table>
       <caption>nDCG@10 nas três amostras (Δ contra o BM25 fixo 512/256 com o acórdão inteiro). * O LTR não é medido no JUÁ natural, que é o conjunto de treino dele.</caption>
-      <thead><tr><th>Configuração</th><th>JurisTCU</th><th>JUÁ natural</th><th>JUÁ difícil</th><th>Ganha nas 3?</th></tr></thead>
+      <thead><tr><th>Configuração</th><th>JurisTCU</th><th>JUÁ natural</th><th>JUÁ difícil</th><th>Não perde em nenhuma?</th></tr></thead>
       <tbody id="t-receitas"></tbody>
     </table>
   </div>
@@ -701,8 +703,8 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
     ["BM25, estrutural predito", 0.2526, 0.6628, 0.2679, "sim"],
     ["F6: sem relatório (maioria)", 0.2893, 0.7078, 0.2182, "não"],
     ["F7: sem relatório (toca)", 0.2878, 0.7182, 0.2634, "sim"],
-    ["F6: fusão das 4", 0.3215, null, 0.2215, "não"],
-    ["F7: fusão das 4 com toca", 0.3225, null, null, "—"],
+    ["F6: fusão das 4", 0.3215, 0.6486, 0.2215, "não"],
+    ["F7: fusão das 4 com toca", 0.3225, 0.6536, 0.2412, "não"],
     ["F7: LTR com seções (estrutural ouro)", 0.2991, null, 0.2781, "sim*"]
   ];
   var tb = document.getElementById("t-receitas");

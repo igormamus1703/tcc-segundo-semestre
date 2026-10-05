@@ -155,6 +155,8 @@ def carregar_colecao(spec: dict, raiz_repo: Path) -> tuple[dict, dict[str, dict]
 # --- figuras -----------------------------------------------------------------
 
 CORES_COLECAO = ["#1b4965", "#e09f3e", "#6a994e", "#bc4749"]
+NOME_SECAO = {"fundamentacao": "fundamentação", "relatorio": "relatório", "dispositivo": "dispositivo",
+              "ementa": "ementa", "nao_localizado": "não localizada"}
 
 
 def _rodape(fig, texto: str) -> None:
@@ -199,7 +201,10 @@ def fig_forest(linhas: list[dict], colecoes: list[str], destino: Path, rodape: s
     ax.legend(title="marcador cheio = p < 0,05 com Bonferroni dentro da coleção",
               loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=len(colecoes),
               fontsize=9, title_fontsize=8.5, frameon=False)
-    fig.suptitle(titulo or "O efeito replica numa segunda coleção de consultas?", fontsize=12.5, y=1.06)
+    # título logo acima da legenda (que fica fora do eixo): em figuras altas, um y
+    # fixo deixava um vão grande no topo
+    fig.suptitle(titulo or "O efeito replica numa segunda coleção de consultas?", fontsize=12.5,
+                 y=1.0 + 0.55 / fig.get_size_inches()[1])
     _rodape(fig, rodape)
     _salvar(fig, destino, nome)
 
@@ -239,7 +244,7 @@ def fig_estratos(linhas: list[dict], destino: Path, rodape: str) -> None:
         ax.grid(axis="x", alpha=0.25)
     axes[0][0].set_yticks(range(len(estratos)))
     axes[0][0].set_yticklabels(
-        [f"{e.replace('resposta em ', 'resposta na ').replace('_', ' ')}\n(n = {n_por_estrato[e]})"
+        [f"resposta: {NOME_SECAO.get(e.replace('resposta em ', ''), e)}\n(n = {n_por_estrato[e]})"
          for e in reversed(estratos)], fontsize=8.5)
     fig.suptitle("Onde mora a resposta decide o sinal do efeito?\n"
                  "verde: IC 95% acima de zero · vermelho: abaixo · cinza: inclui zero",

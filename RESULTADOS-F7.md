@@ -69,7 +69,8 @@ consultas naturais, nunca usadas:
 | critério da F6 | +16,2% | +8,1% | **−12,6%** |
 | **critério `toca`** | **+15,6%** | **+9,7%** (p < 10⁻⁹⁵) | **+5,5%** |
 
-**O `toca` é a única versão que ganha nas três amostras.** Uma das três
+**O `toca` é a única versão que não perde em nenhuma amostra**, e ganha com
+significância corrigida em duas (no JUÁ difícil, +5,5% com p = 0,012 sem correção e 0,24 com Bonferroni sobre 23 comparações). Uma das três
 previsões errou ("a F6 também piora nas naturais": na verdade melhora 8%), e
 o erro mostrou que o dano da F6 vivia só nas consultas difíceis.
 
