@@ -1,16 +1,20 @@
-# Rodada da F7: validacao externa no JUA-Juris, reranker e replicacao.
+# Rodada completa da F7: validacao externa (JUA-Juris), criterio 'toca',
+# ranker aprendido, reranker zero-shot e ajustado, replicacao e painel.
 #
 # Pre-requisito: as rodadas da F4-F6 (BM25, denso, recorte, controle, fusao das
-# 4) ja existem para o JurisTCU, e o cache de embeddings esta em disco.
-# Tudo aqui reaproveita indices e embeddings: nada e reencodado.
+# 4 e auditoria) existem para o JurisTCU, e o cache de embeddings esta em disco.
+# Nada aqui reencoda o corpus.
 #
 # Mesmas garantias do rodada_completa.ps1: cada etapa segue mesmo que a
 # anterior falhe, e o erro fica no log. Uma etapa cuja rodada ja existe e
-# PULADA (o rotulo e procurado com casamento exato), entao o script pode ser
-# rodado de novo depois de uma queda sem refazer o que ja saiu.
+# PULADA (rotulo com casamento exato), entao o script pode ser rodado de novo
+# depois de uma queda sem refazer o que ja saiu.
 #
-# Tempo (RTX 5060, 16 threads): ~40 min de BM25 no JUA, ~5 min de denso,
-# ~45 min de reranker no JUA, minutos para o resto.
+# Tempo aproximado (RTX 5060, 16 threads): ~2 h de buscas, ~1 h de fine-tune,
+# ~40 min de reranker, ~30 min de analise. Medido em 05/10/2026.
+#
+# ATENCAO: nao dispare este script com outra fila escrevendo no mesmo rotulo.
+# Uma rodada pela metade ja tem runs gravados e seria tomada como pronta.
 #
 # Uso (a partir da raiz do repositorio):
 #     .\scripts\rodada_f7.ps1
@@ -60,68 +64,116 @@ function SeFaltar($rotulo, [scriptblock]$acao) {
     else { Etapa $rotulo $acao }
 }
 
+function Busca($rotulo, $consultas, [string[]]$extra) {
+    SeFaltar $rotulo { & $Python -m src.run_experiments --queries $consultas --label $rotulo @extra }
+}
+
 Registrar "rodada F7 $carimbo"
 Set-Location $proj
 
-$Q = "data\interim\jua\queries_test.jsonl"
-$QR = "data\interim\jua\qrels_test.trec"
-if (-not (Test-Path $Q)) { Etapa "JUA-Juris -> acordaos (src.jua)" { & $Python -m src.jua } }
+$JT = "data\interim\queries.jsonl"
+$TE = "data\interim\jua\queries_test.jsonl"
+$TR = "data\interim\jua\queries_train_amostra.jsonl"
+$SemRel = @("--secoes", "sem:relatorio")
+$Toca = @("--secoes", "sem:relatorio", "--secoes-criterio", "toca")
 
-# 1. JUA-Juris: as rodadas base, sobre os mesmos indices ---------------------
-SeFaltar "jua_bm25" { & $Python -m src.run_experiments --strategy all --retriever bm25 --queries $Q --label jua_bm25 }
-SeFaltar "jua_bm25_sec_sem_relatorio" { & $Python -m src.run_experiments --strategy all --retriever bm25 --queries $Q --secoes sem:relatorio --label jua_bm25_sec_sem_relatorio }
-SeFaltar "jua_bm25_controle_amostra" { & $Python -m src.run_experiments --strategy all --retriever bm25 --queries $Q --amostra-igual-a sem:relatorio --label jua_bm25_controle_amostra }
-SeFaltar "jua_dense_bge_m3" { & $Python -m src.run_experiments --strategy all --retriever dense --queries $Q --label jua_dense_bge_m3 }
-SeFaltar "jua_dense_sec_sem_relatorio" { & $Python -m src.run_experiments --strategy all --retriever dense --queries $Q --secoes sem:relatorio --label jua_dense_sec_sem_relatorio }
+# 0. Colecao -----------------------------------------------------------------
+if (-not (Test-Path $TE)) { Etapa "JUA-Juris -> acordaos (src.jua)" { & $Python -m src.jua } }
+if (-not (Test-Path $TR)) { Etapa "amostra de treino" { & $Python -c "from src.jua import amostra_treino; print(amostra_treino())" } }
 
-# 2. Fusoes (segundos) ---------------------------------------------------------
-$jb = Rodada "jua_bm25"; $jbc = Rodada "jua_bm25_sec_sem_relatorio"
-$jd = Rodada "jua_dense_bge_m3"; $jdc = Rodada "jua_dense_sec_sem_relatorio"
-$tb = Rodada "bm25"; $tbc = Rodada "bm25_sec_sem_relatorio"
-$td = Rodada "dense_bge_m3"; $tdc = Rodada "dense_sec_sem_relatorio"
-SeFaltar "jua_fusao4_peso_igual" { & $Python -m src.fusion --metodo soma_norm --label jua_fusao4_peso_igual --experimentos $jb $jbc $jd $jdc }
-SeFaltar "jua_fusao2_recortados" { & $Python -m src.fusion --metodo soma_norm --label jua_fusao2_recortados --experimentos $jbc $jdc }
-SeFaltar "juristcu_fusao2_recortados" { & $Python -m src.fusion --metodo soma_norm --label juristcu_fusao2_recortados --experimentos $tbc $tdc }
+# 1. JUA dificil (teste): as condicoes da F6 e as novas -----------------------
+Busca "jua_bm25" $TE @("--strategy", "all", "--retriever", "bm25")
+Busca "jua_bm25_sec_sem_relatorio" $TE (@("--strategy", "all", "--retriever", "bm25") + $SemRel)
+Busca "jua_bm25_sec_sem_relatorio_toca" $TE (@("--strategy", "all", "--retriever", "bm25") + $Toca)
+Busca "jua_bm25_controle_amostra" $TE @("--strategy", "all", "--retriever", "bm25", "--amostra-igual-a", "sem:relatorio")
+Busca "jua_bm25_sec_sem_ementa" $TE @("--strategy", "structural_gold", "structural_pred", "--retriever", "bm25", "--secoes", "sem:ementa")
+Busca "jua_dense_bge_m3" $TE @("--strategy", "all", "--retriever", "dense")
+Busca "jua_dense_sec_sem_relatorio" $TE (@("--strategy", "all", "--retriever", "dense") + $SemRel)
+Busca "jua_dense_sec_sem_relatorio_toca" $TE (@("--strategy", "all", "--retriever", "dense") + $Toca)
 
-# 3. Reranker (GPU). O cache de scores e por colecao e e compartilhado -------
-function Fontes($b, $bc, $d, $dc) {
+# 2. JurisTCU: so o que a F7 acrescenta --------------------------------------
+Busca "bm25_sec_sem_relatorio_toca" $JT (@("--strategy", "all", "--retriever", "bm25") + $Toca)
+Busca "dense_sec_sem_relatorio_toca" $JT (@("--strategy", "all", "--retriever", "dense") + $Toca)
+
+# 3. JUA natural (amostra de 6.000 do treino) --------------------------------
+#    h8_* sao as rodadas da confirmacao pre-registrada (adendo 2), mantidas
+#    com o proprio rotulo para a proveniencia ficar clara.
+Busca "h8_tr_bm25" $TR @("--strategy", $Est, "--retriever", "bm25", "--top-docs", "200")
+Busca "h8_tr_bm25_maioria" $TR (@("--strategy", $Est, "--retriever", "bm25", "--top-docs", "200") + $SemRel)
+Busca "h8_tr_bm25_toca" $TR (@("--strategy", $Est, "--retriever", "bm25", "--top-docs", "200") + $Toca)
+Busca "juanat_bm25" $TR @("--strategy", "all", "--retriever", "bm25", "--top-docs", "200")
+Busca "juanat_bm25_sec_sem_relatorio" $TR (@("--strategy", "all", "--retriever", "bm25", "--top-docs", "200") + $SemRel)
+Busca "juanat_bm25_sec_sem_relatorio_toca" $TR (@("--strategy", "all", "--retriever", "bm25", "--top-docs", "200") + $Toca)
+Busca "juanat_bm25_sec_sem_ementa" $TR @("--strategy", "structural_gold", "structural_pred", "--retriever", "bm25", "--top-docs", "200", "--secoes", "sem:ementa")
+Busca "juanat_dense_bge_m3" $TR @("--strategy", "all", "--retriever", "dense", "--top-docs", "200")
+Busca "juanat_dense_sec_sem_relatorio" $TR (@("--strategy", "all", "--retriever", "dense", "--top-docs", "200") + $SemRel)
+Busca "juanat_dense_sec_sem_relatorio_toca" $TR (@("--strategy", "all", "--retriever", "dense", "--top-docs", "200") + $Toca)
+
+# 4. Fusoes (segundos) ---------------------------------------------------------
+foreach ($c in @(@{p = ""; f2 = "juristcu_fusao2_recortados"}, @{p = "jua_"; f2 = "jua_fusao2_recortados"}, @{p = "juanat_"; f2 = "juanat_fusao2_recortados"})) {
+    $p = $c.p
+    $b = Rodada "${p}bm25"; $bc = Rodada "${p}bm25_sec_sem_relatorio"; $bt = Rodada "${p}bm25_sec_sem_relatorio_toca"
+    $d = Rodada "${p}dense_bge_m3"; $dc = Rodada "${p}dense_sec_sem_relatorio"; $dt = Rodada "${p}dense_sec_sem_relatorio_toca"
+    if ($p) { SeFaltar "${p}fusao4_peso_igual" { & $Python -m src.fusion --metodo soma_norm --label "${p}fusao4_peso_igual" --experimentos $b $bc $d $dc } }
+    SeFaltar "${p}fusao4_toca" { & $Python -m src.fusion --metodo soma_norm --label "${p}fusao4_toca" --experimentos $b $bt $d $dt }
+    SeFaltar $c.f2 { & $Python -m src.fusion --metodo soma_norm --label $c.f2 --experimentos $bc $dc }
+    SeFaltar "${p}fusao2_toca" { & $Python -m src.fusion --metodo soma_norm --label "${p}fusao2_toca" --experimentos $bt $dt }
+}
+
+# 5. Ranker aprendido: sinais por secao (structural_gold) e treino ------------
+foreach ($c in @(@{p = "tr"; q = $TR}, @{p = "te"; q = $TE}, @{p = "jt"; q = $JT})) {
+    $base = @("--strategy", "structural_gold", "--top-docs", "200")
+    if ($c.p -eq "tr") {
+        Busca "ltrsg_tr_bm25" $c.q ($base + @("--retriever", "bm25"))
+        Busca "ltrsg_tr_bm25_semrel" $c.q ($base + @("--retriever", "bm25") + $SemRel)
+        Busca "ltrsg_tr_dense" $c.q ($base + @("--retriever", "dense"))
+        Busca "ltrsg_tr_dense_semrel" $c.q ($base + @("--retriever", "dense") + $SemRel)
+    }
+    foreach ($s in @("ementa", "relatorio", "fundamentacao", "dispositivo")) {
+        Busca "ltrsg_$($c.p)_bm25_$s" $c.q ($base + @("--retriever", "bm25", "--secoes", $s))
+        Busca "ltrsg_$($c.p)_dense_$s" $c.q ($base + @("--retriever", "dense", "--secoes", $s))
+    }
+}
+SeFaltar "f7_ltr" { & $Python -m src.ltr --spec configs\f7_ltr.json --label f7_ltr }
+
+# 6. Reranker zero-shot (cache de scores por colecao) --------------------------
+function Fontes($p) {
     return @(
-        "$b\runs\${Est}__bm25__chunks.jsonl",
-        "$bc\runs\${Est}__bm25__sec-sem_relatorio__chunks.jsonl",
-        "$d\runs\${Est}__dense-bge_m3__chunks.jsonl",
-        "$dc\runs\${Est}__dense-bge_m3__sec-sem_relatorio__chunks.jsonl"
+        "$(Rodada "${p}bm25")\runs\${Est}__bm25__chunks.jsonl",
+        "$(Rodada "${p}bm25_sec_sem_relatorio")\runs\${Est}__bm25__sec-sem_relatorio__chunks.jsonl",
+        "$(Rodada "${p}dense_bge_m3")\runs\${Est}__dense-bge_m3__chunks.jsonl",
+        "$(Rodada "${p}dense_sec_sem_relatorio")\runs\${Est}__dense-bge_m3__sec-sem_relatorio__chunks.jsonl"
     )
 }
-$tf4 = Rodada "fusao4_peso_igual"; $jf4 = Rodada "jua_fusao4_peso_igual"
-
-SeFaltar "juristcu_rerank_fusao4" {
-    & $Python -m src.rerank --estrategia $Est --nome fusao4 --label juristcu_rerank_fusao4 `
-        --candidatos "$tf4\runs\${Est}__soma_norm.trec" --fontes (Fontes $tb $tbc $td $tdc) `
-        --cache "data\interim\rerank_cache\juristcu_$Est.tsv"
-}
-SeFaltar "juristcu_rerank_bm25" {
-    & $Python -m src.rerank --estrategia $Est --nome bm25 --label juristcu_rerank_bm25 `
-        --candidatos "$tb\runs\${Est}__bm25.trec" --fontes "$tb\runs\${Est}__bm25__chunks.jsonl" `
-        --cache "data\interim\rerank_cache\juristcu_$Est.tsv"
-}
-SeFaltar "jua_rerank_fusao4" {
-    & $Python -m src.rerank --estrategia $Est --nome fusao4 --label jua_rerank_fusao4 --queries $Q `
-        --candidatos "$jf4\runs\${Est}__soma_norm.trec" --fontes (Fontes $jb $jbc $jd $jdc) `
-        --cache "data\interim\rerank_cache\jua_$Est.tsv"
-}
-SeFaltar "jua_rerank_bm25" {
-    & $Python -m src.rerank --estrategia $Est --nome bm25 --label jua_rerank_bm25 --queries $Q `
-        --candidatos "$jb\runs\${Est}__bm25.trec" --fontes "$jb\runs\${Est}__bm25__chunks.jsonl" `
-        --cache "data\interim\rerank_cache\jua_$Est.tsv"
+foreach ($c in @(@{n = "juristcu"; p = ""; f4 = "fusao4_peso_igual"; q = $JT}, @{n = "jua"; p = "jua_"; f4 = "jua_fusao4_peso_igual"; q = $TE})) {
+    $f4 = Rodada $c.f4; $b = Rodada "$($c.p)bm25"
+    SeFaltar "$($c.n)_rerank_fusao4" {
+        & $Python -m src.rerank --estrategia $Est --nome fusao4 --label "$($c.n)_rerank_fusao4" --queries $c.q `
+            --candidatos "$f4\runs\${Est}__soma_norm.trec" --fontes (Fontes $c.p) `
+            --cache "data\interim\rerank_cache\$($c.n)_$Est.tsv"
+    }
+    SeFaltar "$($c.n)_rerank_bm25" {
+        & $Python -m src.rerank --estrategia $Est --nome bm25 --label "$($c.n)_rerank_bm25" --queries $c.q `
+            --candidatos "$b\runs\${Est}__bm25.trec" --fontes "$b\runs\${Est}__bm25__chunks.jsonl" `
+            --cache "data\interim\rerank_cache\$($c.n)_$Est.tsv"
+    }
 }
 
-# 4. Avaliacao das rodadas do JUA (tabelas e figuras no padrao da F5/F6) ------
-Etapa "avaliacao JUA (5 estrategias x condicoes)" {
-    & $Python -m src.evaluate --experiment $jb --qrels $QR --queries $Q --incluir $jbc (Rodada "jua_bm25_controle_amostra") $jd $jdc
-    & $Python -m src.plots --experiment $jb
+# 7. Reranker ajustado ao dominio (LoRA, treino do JUA) ------------------------
+$modelo = "data\models\bge-reranker-v2-m3-jua-lora"
+if (-not (Test-Path $modelo)) { Etapa "fine-tune do reranker" { & $Python -m src.finetune_reranker } }
+foreach ($c in @(@{n = "juristcu"; p = ""; f4 = "fusao4_peso_igual"; q = $JT}, @{n = "jua"; p = "jua_"; f4 = "jua_fusao4_peso_igual"; q = $TE})) {
+    $f4 = Rodada $c.f4
+    SeFaltar "$($c.n)_rerank_ft_fusao4" {
+        & $Python -m src.rerank --estrategia $Est --nome fusao4ft --label "$($c.n)_rerank_ft_fusao4" --queries $c.q `
+            --modelo $modelo --max-length 512 `
+            --candidatos "$f4\runs\${Est}__soma_norm.trec" --fontes (Fontes $c.p) `
+            --cache "data\interim\rerank_cache\$($c.n)_${Est}_ft.tsv"
+    }
 }
 
-# 5. Replicacao: as hipoteses do pre-registro, nas duas colecoes --------------
-Etapa "replicacao (H1-H7)" { & $Python -m src.replicacao --spec configs\f7_replicacao.json --label f7_replicacao }
+# 8. Analise: replicacao em quatro amostras e painel ---------------------------
+Etapa "replicacao final (H1-H8)" { & $Python -m src.replicacao --spec configs\f7_replicacao_final.json --label f7_replicacao_final }
+Etapa "painel configuracao x colecao" { & $Python -m src.painel --spec configs\f7_painel.json --label f7_painel }
 
 Registrar "fim da rodada F7 -> log em $log"
