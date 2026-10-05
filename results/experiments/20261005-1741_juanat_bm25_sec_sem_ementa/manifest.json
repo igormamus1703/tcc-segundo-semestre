@@ -1,0 +1,106 @@
+{
+  "rotulo": "juanat_bm25_sec_sem_ementa",
+  "inicio": "2026-10-05T17:41:45",
+  "fim": "2026-10-05T17:47:18",
+  "duracao_s": 333.9,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold structural_pred --retriever bm25 --queries data/interim/jua/queries_train_amostra.jsonl --top-docs 200 --secoes sem:ementa --label juanat_bm25_sec_sem_ementa",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": [
+      "dispositivo",
+      "fundamentacao",
+      "relatorio"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "e4616d89a4a3fe95277a01001b468ca67c64375d",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25__sec-sem_ementa",
+      "run": "structural_gold__bm25__sec-sem_ementa",
+      "n_chunks": 273796,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 156.5,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "fundamentacao",
+          "relatorio"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 286689,
+        "chunks_depois": 273796,
+        "fracao_mantida": 0.955,
+        "distribuicao": {
+          "ementa": 12893,
+          "relatorio": 191389,
+          "fundamentacao": 64629,
+          "dispositivo": 17778
+        }
+      }
+    },
+    {
+      "nome": "structural_pred__bm25__sec-sem_ementa",
+      "run": "structural_pred__bm25__sec-sem_ementa",
+      "n_chunks": 271328,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 174.4,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "fundamentacao",
+          "relatorio"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 285308,
+        "chunks_depois": 271328,
+        "fracao_mantida": 0.951,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    }
+  ],
+  "erro": null
+}

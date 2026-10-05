@@ -1,0 +1,10 @@
+[17:27:06] experimento 20261005-1726_jua_fusao4_toca
+[17:27:06]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:27:06]   commit: 368f575b (arvore suja) em leo/f7-evolucao
+[17:27:13] fixed_1024_512__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,549,718 linhas
+[17:27:21] fixed_512_256__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,530,822 linhas
+[17:27:29] recursive_default__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,566,843 linhas
+[17:27:37] structural_gold__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,567,000 linhas
+[17:27:45] structural_pred__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,567,000 linhas
+[17:27:45] avalie com: python -m src.evaluate --experiment C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1726_jua_fusao4_toca --incluir C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1603_jua_bm25 C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1711_jua_bm25_sec_sem_relatorio_toca C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1603_jua_dense_bge_m3 C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1722_jua_dense_sec_sem_relatorio_toca
+[17:27:45] fim em 0.9 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1726_jua_fusao4_toca

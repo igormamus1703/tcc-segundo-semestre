@@ -1,0 +1,29 @@
+[17:22:06] experimento 20261005-1722_jua_dense_sec_sem_relatorio_toca
+[17:22:06]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:22:06]   commit: 9cbd4406 (arvore suja) em leo/f7-evolucao
+[17:22:11]   [structural_gold] secoes ['dispositivo', 'ementa', 'fundamentacao']: 286,689 -> 95,300 chunks (33.2%)
+[17:22:19]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[17:22:22]     embeddings do cache, recortados: 95,300 de 286,689 chunks (sem reencode)
+[17:22:23]     embeddings recuperados do cache (sem reencode)
+[17:22:35] structural_gold__dense-bge_m3__sec-sem_relatorio__crit-toca: 95,300 chunks, 1,559,979 linhas, 28.9s  [decorrido 0.0 h]
+[17:22:40]   [structural_pred] secoes ['dispositivo', 'ementa', 'fundamentacao']: 285,308 -> 97,013 chunks (34.0%)
+[17:22:46]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[17:22:50]     embeddings do cache, recortados: 97,013 de 285,308 chunks (sem reencode)
+[17:22:50]     embeddings recuperados do cache (sem reencode)
+[17:23:02] structural_pred__dense-bge_m3__sec-sem_relatorio__crit-toca: 97,013 chunks, 1,558,673 linhas, 26.8s  [decorrido 0.0 h]
+[17:23:07]   [recursive_default] secoes ['dispositivo', 'ementa', 'fundamentacao']: 270,070 -> 96,713 chunks (35.8%)
+[17:23:15]   [recursive_default] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[17:23:19]     embeddings do cache, recortados: 96,713 de 270,070 chunks (sem reencode)
+[17:23:19]     embeddings recuperados do cache (sem reencode)
+[17:23:31] recursive_default__dense-bge_m3__sec-sem_relatorio__crit-toca: 96,713 chunks, 1,545,461 linhas, 27.9s  [decorrido 0.0 h]
+[17:23:40]   [fixed_1024_512] secoes ['dispositivo', 'ementa', 'fundamentacao']: 450,786 -> 151,282 chunks (33.6%)
+[17:23:48]   [fixed_1024_512] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[17:23:54]     embeddings do cache, recortados: 151,282 de 450,786 chunks (sem reencode)
+[17:23:54]     embeddings recuperados do cache (sem reencode)
+[17:24:07] fixed_1024_512__dense-bge_m3__sec-sem_relatorio__crit-toca: 151,282 chunks, 1,411,523 linhas, 35.7s  [decorrido 0.0 h]
+[17:24:17]   [fixed_512_256] secoes ['dispositivo', 'ementa', 'fundamentacao']: 907,914 -> 279,974 chunks (30.8%)
+[17:24:25]   [fixed_512_256] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[17:24:34]     embeddings do cache, recortados: 279,974 de 907,914 chunks (sem reencode)
+[17:24:34]     embeddings recuperados do cache (sem reencode)
+[17:24:50] fixed_512_256__dense-bge_m3__sec-sem_relatorio__crit-toca: 279,974 chunks, 1,348,506 linhas, 43.3s  [decorrido 0.0 h]
+[17:24:50] fim em 2.7 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1722_jua_dense_sec_sem_relatorio_toca

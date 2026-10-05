@@ -1,0 +1,9 @@
+[17:06:38] experimento 20261005-1706_f7_ltr
+[17:06:38]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:06:38]   commit: 1e017f53 (arvore suja) em leo/f7-evolucao
+[17:06:55] treino: 6000 consultas; testes: JUÁ-Juris (1567), JurisTCU (150)
+[17:07:18] ltr_secoes: 26 atributos, 1,195,522 linhas de treino, melhor iteracao 262, nDCG@10 val = 0.7578
+[17:08:47] ltr_sem_secoes: 6 atributos, 1,195,522 linhas de treino, melhor iteracao 170, nDCG@10 val = 0.6833
+[17:09:06] ltr_recorte_f6: 10 atributos, 1,195,522 linhas de treino, melhor iteracao 326, nDCG@10 val = 0.7519
+[17:09:10] runs gravados em runs/<pasta>__<run>.trec; avalie com src.replicacao
+[17:09:10] fim em 2.8 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1706_f7_ltr

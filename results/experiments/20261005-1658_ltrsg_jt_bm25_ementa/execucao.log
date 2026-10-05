@@ -1,0 +1,6 @@
+[16:58:00] experimento 20261005-1658_ltrsg_jt_bm25_ementa
+[16:58:00]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:58:00]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:58:04]   [structural_gold] secoes ['ementa']: 286,689 -> 12,893 chunks (4.5%)
+[16:58:06] structural_gold__bm25__sec-em: 12,893 chunks, 30,000 linhas, 5.9s  [decorrido 0.0 h]
+[16:58:06] fim em 0.1 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1658_ltrsg_jt_bm25_ementa

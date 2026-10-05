@@ -1,0 +1,14 @@
+[17:16:48] experimento 20261005-1716_bm25_sec_sem_relatorio_toca
+[17:16:48]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:16:48]   commit: 9cbd4406 (arvore suja) em leo/f7-evolucao
+[17:16:52]   [structural_gold] secoes ['dispositivo', 'ementa', 'fundamentacao']: 286,689 -> 95,300 chunks (33.2%)
+[17:17:31] structural_gold__bm25__sec-sem_relatorio__crit-toca: 95,300 chunks, 146,182 linhas, 43.3s  [decorrido 0.0 h]
+[17:17:36]   [structural_pred] secoes ['dispositivo', 'ementa', 'fundamentacao']: 285,308 -> 97,013 chunks (34.0%)
+[17:18:15] structural_pred__bm25__sec-sem_relatorio__crit-toca: 97,013 chunks, 144,994 linhas, 43.3s  [decorrido 0.0 h]
+[17:18:19]   [recursive_default] secoes ['dispositivo', 'ementa', 'fundamentacao']: 270,070 -> 96,713 chunks (35.8%)
+[17:19:01] recursive_default__bm25__sec-sem_relatorio__crit-toca: 96,713 chunks, 145,995 linhas, 46.2s  [decorrido 0.0 h]
+[17:19:09]   [fixed_1024_512] secoes ['dispositivo', 'ementa', 'fundamentacao']: 450,786 -> 151,282 chunks (33.6%)
+[17:20:25] fixed_1024_512__bm25__sec-sem_relatorio__crit-toca: 151,282 chunks, 115,529 linhas, 83.5s  [decorrido 0.1 h]
+[17:20:36]   [fixed_512_256] secoes ['dispositivo', 'ementa', 'fundamentacao']: 907,914 -> 279,974 chunks (30.8%)
+[17:21:51] fixed_512_256__bm25__sec-sem_relatorio__crit-toca: 279,974 chunks, 109,746 linhas, 85.4s  [decorrido 0.1 h]
+[17:21:51] fim em 5.0 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1716_bm25_sec_sem_relatorio_toca
