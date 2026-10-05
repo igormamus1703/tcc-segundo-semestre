@@ -106,6 +106,26 @@ dataset), concentrando consultas que o BM25 erra. O dano do recorte por
 maioria mora nessas consultas difíceis. Na distribuição natural, ele ainda
 ajuda, só que menos que o `toca`.
 
+### O mecanismo consulta a consulta (`src/mecanismo.py`)
+
+Se o defeito é "a ementa sai junto", o dano deve se concentrar nas consultas
+**parecidas com a ementa** do acórdão certo. Medida: fração dos termos da
+consulta (sem acento, ≥ 3 letras, sem stopwords) presentes na ementa. Efeito
+dos dois recortes por quartil dessa medida (`fixed_512_256`, BM25; IC 95% por
+bootstrap; rodada `*_f7_mecanismo`, figura `__mecanismo`):
+
+| Quartil | JUÁ difícil: maioria | JUÁ difícil: toca | JUÁ natural: maioria | JUÁ natural: toca |
+|---|---:|---:|---:|---:|
+| Q1 (consulta quase sem termos da ementa) | −4,6% | −3,4% | +9,1% | +8,9% |
+| Q2 | +0,0% | +0,3% | +10,7% | +10,8% |
+| Q3 | +2,3% | +3,5% | +10,4% | +9,7% |
+| **Q4 (consulta ≈ ementa)** | **−28,4%** | **+12,5%** | **+2,4%** | **+9,3%** |
+
+**O dano da F6 mora inteiro no quartil em que a consulta repete a ementa**, nas
+duas amostras, e o `toca` o conserta exatamente ali. Nos outros três quartis,
+os dois critérios são indistinguíveis. É a confirmação do mecanismo no nível
+da consulta, independente da contagem de chunks do §2.
+
 ## 4. O resultado consolidado
 
 | Recorte "sem relatório", BM25, `fixed_512_256` | JurisTCU (150) | JUÁ natural (6.000) | JUÁ difícil (1.567) |
