@@ -137,9 +137,18 @@ def carregar_colecao(spec: dict, raiz_repo: Path) -> tuple[dict, dict[str, dict]
         for linha in f:
             r = json.loads(linha)
             fonte[r["query_id"]] = r.get("source", "")
-    scores = {nome: per_query_scores(qrels, load_run(resolver(ref), name=nome))
-              for nome, ref in spec["runs"].items()}
-    caminhos = {nome: str(resolver(ref)) for nome, ref in spec["runs"].items()}
+    scores, caminhos = {}, {}
+    for nome, ref in spec["runs"].items():
+        # Condição sem run vira ausência, com aviso, e não aborta a análise:
+        # nem toda condição existe em toda coleção (o reranker não roda na
+        # amostra natural, por exemplo), e as comparações que a usam são puladas.
+        try:
+            path = resolver(ref)
+        except SystemExit as e:
+            print(f"  [aviso] {nome}: {e}", flush=True)
+            continue
+        scores[nome] = per_query_scores(qrels, load_run(path, name=nome))
+        caminhos[nome] = str(path)
     return scores, fonte, caminhos
 
 
