@@ -197,6 +197,25 @@ def info_dos_documentos(gold_spans_path: Path) -> dict[str, tuple[float, float]]
     return out
 
 
+def info_dos_chunks(chunks_jsonl: Path) -> dict[str, tuple[float, float]]:
+    """O mesmo que `info_dos_documentos`, mas a partir de chunks ROTULADOS.
+
+    Para a versão implantável do LTR (sobre o `structural_pred`): os atributos
+    do documento não podem vir dos spans ouro, senão a estrutura oficial do
+    TCU entra pela porta dos fundos num modelo que diz não depender dela.
+    """
+    total: dict[str, int] = {}
+    rel: dict[str, int] = {}
+    with chunks_jsonl.open(encoding="utf-8") as f:
+        for linha in f:
+            r = json.loads(linha)
+            d = r["doc_id"]
+            total[d] = max(total.get(d, 0), r["end"])
+            if r.get("section") == "relatorio":
+                rel[d] = rel.get(d, 0) + (r["end"] - r["start"])
+    return {d: (math.log1p(t), min(1.0, rel.get(d, 0) / t) if t else 0.0) for d, t in total.items()}
+
+
 def carregar(spec: dict, raiz_repo: Path) -> dict:
     return {
         "qrels": ler_qrels(raiz_repo / spec["qrels"]),
@@ -241,9 +260,11 @@ def figuras(rodada: Path) -> None:
     nomes_col = {"jua": "JUÁ-Juris (teste)", "juristcu": "JurisTCU (nunca visto no treino)"}
     destino = rodada / "figuras"
     destino.mkdir(parents=True, exist_ok=True)
-    git = (json.loads((rodada / "manifest.json").read_text(encoding="utf-8")).get("git") or {})
+    manifesto = json.loads((rodada / "manifest.json").read_text(encoding="utf-8"))
+    git = manifesto.get("git") or {}
+    estrategia = ((manifesto.get("config") or {}).get("spec") or {}).get("estrategia", "?")
     rodape = (f"Rodada {rodada.name}  ·  LambdaRank (LightGBM) treinado em 6.000 consultas do split de "
-              f"TREINO do JUÁ-Juris  ·  estrutural (ouro)  ·  SHAP exato de árvore  ·  commit "
+              f"TREINO do JUÁ-Juris  ·  {estrategia}  ·  SHAP exato de árvore  ·  commit "
               f"{(git.get('commit') or '?')[:8]}")
 
     fig, axes = plt.subplots(1, len(pastas), figsize=(7.4 * len(pastas), 2.7), squeeze=False)
@@ -341,7 +362,10 @@ def main() -> None:
 
     raiz_repo = Path(__file__).resolve().parent.parent
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
-    doc_info = info_dos_documentos(raiz_repo / spec["gold_spans"])
+    if spec.get("doc_info_de_chunks"):
+        doc_info = info_dos_chunks(raiz_repo / spec["doc_info_de_chunks"])
+    else:
+        doc_info = info_dos_documentos(raiz_repo / spec["gold_spans"])
 
     with Experimento(args.label, config={"spec": spec, "params": PARAMS,
                                          "modelos": MODELOS}) as exp:
