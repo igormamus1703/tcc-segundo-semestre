@@ -1,0 +1,6 @@
+[16:58:17] experimento 20261005-1658_ltrsg_tr_bm25_dispositivo
+[16:58:17]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:58:17]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:58:22]   [structural_gold] secoes ['dispositivo']: 286,689 -> 17,778 chunks (6.2%)
+[16:58:41] structural_gold__bm25__sec-disp: 17,778 chunks, 1,200,000 linhas, 23.2s  [decorrido 0.0 h]
+[16:58:41] fim em 0.4 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1658_ltrsg_tr_bm25_dispositivo

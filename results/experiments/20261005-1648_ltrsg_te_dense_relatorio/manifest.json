@@ -1,0 +1,82 @@
+{
+  "rotulo": "ltrsg_te_dense_relatorio",
+  "inicio": "2026-10-05T16:48:52",
+  "fim": "2026-10-05T16:49:18",
+  "duracao_s": 25.8,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold --top-docs 200 --retriever dense --queries data/interim/jua/queries_test.jsonl --secoes relatorio --label ltrsg_te_dense_relatorio",
+  "config": {
+    "estrategias": [
+      "structural_gold"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 1567,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_test.jsonl",
+    "secoes": [
+      "relatorio"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "79752d069abeda35f600482a69ee84b69ffe90cf",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3__sec-rel",
+      "run": "structural_gold__dense-bge_m3__sec-rel",
+      "n_chunks": 191389,
+      "n_queries": 1567,
+      "n_linhas_run": 313400,
+      "segundos": 25.3,
+      "recorte_secoes": {
+        "secoes": [
+          "relatorio"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 286689,
+        "chunks_depois": 191389,
+        "fracao_mantida": 0.6676,
+        "distribuicao": {
+          "ementa": 12893,
+          "relatorio": 191389,
+          "fundamentacao": 64629,
+          "dispositivo": 17778
+        }
+      }
+    }
+  ],
+  "erro": null
+}

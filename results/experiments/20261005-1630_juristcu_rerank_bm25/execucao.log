@@ -1,0 +1,10 @@
+[16:30:22] experimento 20261005-1630_juristcu_rerank_bm25
+[16:30:22]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:30:22]   commit: 52d056f1 (arvore suja) em leo/f7-evolucao
+[16:30:22] 12,335 pares no cache; 3,246 a pontuar
+[16:30:52]   2,048/3,246 pares (100/s, faltam ~0 min)
+[16:31:04]   3,246/3,246 pares (100/s, faltam ~0 min)
+[16:31:07] fixed_512_256__rerank-bm25-todas: {'documentos_lidos': 7491, 'documentos_sem_passagem': 9, 'fracao_sem_passagem': 0.0012}
+[16:31:07] fixed_512_256__rerank-bm25-sem_relatorio: {'documentos_lidos': 1872, 'documentos_sem_passagem': 5628, 'fracao_sem_passagem': 0.7504}
+[16:31:07] fixed_512_256__rerank-bm25-sem_relatorio_preserva: {'documentos_lidos': 7491, 'documentos_sem_passagem': 9, 'fracao_sem_passagem': 0.0012}
+[16:31:07] fim em 0.7 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1630_juristcu_rerank_bm25

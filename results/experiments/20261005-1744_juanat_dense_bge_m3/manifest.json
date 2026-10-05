@@ -1,0 +1,101 @@
+{
+  "rotulo": "juanat_dense_bge_m3",
+  "inicio": "2026-10-05T17:44:29",
+  "fim": "2026-10-05T17:49:25",
+  "duracao_s": 296.5,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --queries data/interim/jua/queries_train_amostra.jsonl --top-docs 200 --strategy all --retriever dense --label juanat_dense_bge_m3",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "dense"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": null,
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null,
+    "modelo_denso": {
+      "hf_id": "BAAI/bge-m3",
+      "max_seq_length": 1024,
+      "batch_size": 32,
+      "dtype": "auto"
+    }
+  },
+  "git": {
+    "commit": "e4616d89a4a3fe95277a01001b468ca67c64375d",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__dense-bge_m3",
+      "run": "structural_gold__dense-bge_m3",
+      "n_chunks": 286689,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 50.0
+    },
+    {
+      "nome": "structural_pred__dense-bge_m3",
+      "run": "structural_pred__dense-bge_m3",
+      "n_chunks": 285308,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 48.5
+    },
+    {
+      "nome": "recursive_default__dense-bge_m3",
+      "run": "recursive_default__dense-bge_m3",
+      "n_chunks": 270070,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 48.3
+    },
+    {
+      "nome": "fixed_1024_512__dense-bge_m3",
+      "run": "fixed_1024_512__dense-bge_m3",
+      "n_chunks": 450786,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 58.5
+    },
+    {
+      "nome": "fixed_512_256__dense-bge_m3",
+      "run": "fixed_512_256__dense-bge_m3",
+      "n_chunks": 907914,
+      "n_queries": 6000,
+      "n_linhas_run": 1199732,
+      "segundos": 85.4
+    }
+  ],
+  "erro": null
+}

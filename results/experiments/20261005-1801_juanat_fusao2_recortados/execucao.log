@@ -1,0 +1,10 @@
+[18:01:48] experimento 20261005-1801_juanat_fusao2_recortados
+[18:01:48]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:01:48]   commit: c1b3c96e (arvore suja) em leo/f7-evolucao
+[18:01:52] fixed_1024_512__soma_norm: bm25 + dense-bge_m3 -> 1,967,411 linhas
+[18:01:56] fixed_512_256__soma_norm: bm25 + dense-bge_m3 -> 1,949,921 linhas
+[18:02:00] recursive_default__soma_norm: bm25 + dense-bge_m3 -> 1,992,825 linhas
+[18:02:05] structural_gold__soma_norm: bm25 + dense-bge_m3 -> 2,030,081 linhas
+[18:02:09] structural_pred__soma_norm: bm25 + dense-bge_m3 -> 2,027,082 linhas
+[18:02:09] avalie com: python -m src.evaluate --experiment C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1801_juanat_fusao2_recortados --incluir C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1731_juanat_bm25_sec_sem_relatorio C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1749_juanat_dense_sec_sem_relatorio
+[18:02:09] fim em 0.5 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1801_juanat_fusao2_recortados

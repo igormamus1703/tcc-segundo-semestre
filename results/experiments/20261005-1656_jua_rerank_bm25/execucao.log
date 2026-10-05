@@ -1,0 +1,25 @@
+[16:56:03] experimento 20261005-1656_jua_rerank_bm25
+[16:56:03]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:56:03]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:56:03] 122,590 pares no cache; 33,528 a pontuar
+[16:56:37]   2,048/33,528 pares (89/s, faltam ~6 min)
+[16:56:59]   4,096/33,528 pares (90/s, faltam ~5 min)
+[16:57:22]   6,144/33,528 pares (90/s, faltam ~5 min)
+[16:57:45]   8,192/33,528 pares (90/s, faltam ~5 min)
+[16:58:07]   10,240/33,528 pares (90/s, faltam ~4 min)
+[16:58:30]   12,288/33,528 pares (90/s, faltam ~4 min)
+[16:58:53]   14,336/33,528 pares (90/s, faltam ~4 min)
+[16:59:16]   16,384/33,528 pares (90/s, faltam ~3 min)
+[16:59:39]   18,432/33,528 pares (90/s, faltam ~3 min)
+[17:00:02]   20,480/33,528 pares (90/s, faltam ~2 min)
+[17:00:25]   22,528/33,528 pares (90/s, faltam ~2 min)
+[17:00:48]   24,576/33,528 pares (90/s, faltam ~2 min)
+[17:01:12]   26,624/33,528 pares (89/s, faltam ~1 min)
+[17:01:35]   28,672/33,528 pares (89/s, faltam ~1 min)
+[17:01:59]   30,720/33,528 pares (89/s, faltam ~1 min)
+[17:02:22]   32,768/33,528 pares (89/s, faltam ~0 min)
+[17:02:30]   33,528/33,528 pares (89/s, faltam ~0 min)
+[17:02:34] fixed_512_256__rerank-bm25-todas: {'documentos_lidos': 78341, 'documentos_sem_passagem': 9, 'fracao_sem_passagem': 0.0001}
+[17:02:36] fixed_512_256__rerank-bm25-sem_relatorio: {'documentos_lidos': 29498, 'documentos_sem_passagem': 48852, 'fracao_sem_passagem': 0.6235}
+[17:02:37] fixed_512_256__rerank-bm25-sem_relatorio_preserva: {'documentos_lidos': 78341, 'documentos_sem_passagem': 9, 'fracao_sem_passagem': 0.0001}
+[17:02:37] fim em 6.6 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1656_jua_rerank_bm25

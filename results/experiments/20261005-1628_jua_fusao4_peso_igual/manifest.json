@@ -1,0 +1,135 @@
+{
+  "rotulo": "jua_fusao4_peso_igual",
+  "inicio": "2026-10-05T16:28:33",
+  "fim": "2026-10-05T16:29:15",
+  "duracao_s": 41.7,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\fusion.py --metodo soma_norm --label jua_fusao4_peso_igual --experimentos C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25 C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3 C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio",
+  "config": {
+    "metodo": "soma_norm",
+    "k_rrf": null,
+    "pesos": null,
+    "experimentos_fundidos": [
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio"
+    ],
+    "top_docs": 1000,
+    "estrategias": [
+      "fixed_1024_512",
+      "fixed_512_256",
+      "recursive_default",
+      "structural_gold",
+      "structural_pred"
+    ]
+  },
+  "git": {
+    "commit": "52d056f19a09f60d2d5600a459f1bedd400ca14c",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_1024_512__soma_norm",
+      "fontes": [
+        "bm25",
+        "bm25",
+        "dense-bge_m3",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\fixed_1024_512__bm25__sec-sem_relatorio.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\fixed_1024_512__dense-bge_m3.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\fixed_1024_512__dense-bge_m3__sec-sem_relatorio.trec"
+      ],
+      "n_queries": 1567,
+      "n_linhas_run": 1557863
+    },
+    {
+      "nome": "fixed_512_256__soma_norm",
+      "fontes": [
+        "bm25",
+        "bm25",
+        "dense-bge_m3",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec"
+      ],
+      "n_queries": 1567,
+      "n_linhas_run": 1535795
+    },
+    {
+      "nome": "recursive_default__soma_norm",
+      "fontes": [
+        "bm25",
+        "bm25",
+        "dense-bge_m3",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\recursive_default__bm25.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\recursive_default__bm25__sec-sem_relatorio.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\recursive_default__dense-bge_m3.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\recursive_default__dense-bge_m3__sec-sem_relatorio.trec"
+      ],
+      "n_queries": 1567,
+      "n_linhas_run": 1567000
+    },
+    {
+      "nome": "structural_gold__soma_norm",
+      "fontes": [
+        "bm25",
+        "bm25",
+        "dense-bge_m3",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_gold__bm25.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\structural_gold__bm25__sec-sem_relatorio.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\structural_gold__dense-bge_m3.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\structural_gold__dense-bge_m3__sec-sem_relatorio.trec"
+      ],
+      "n_queries": 1567,
+      "n_linhas_run": 1567000
+    },
+    {
+      "nome": "structural_pred__soma_norm",
+      "fontes": [
+        "bm25",
+        "bm25",
+        "dense-bge_m3",
+        "dense-bge_m3"
+      ],
+      "arquivos": [
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_pred__bm25.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\structural_pred__bm25__sec-sem_relatorio.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\structural_pred__dense-bge_m3.trec",
+        "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\structural_pred__dense-bge_m3__sec-sem_relatorio.trec"
+      ],
+      "n_queries": 1567,
+      "n_linhas_run": 1567000
+    }
+  ],
+  "erro": null
+}

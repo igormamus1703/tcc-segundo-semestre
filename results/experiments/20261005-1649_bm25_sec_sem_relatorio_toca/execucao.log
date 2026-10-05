@@ -1,0 +1,10 @@
+[16:49:19] experimento 20261005-1649_bm25_sec_sem_relatorio_toca
+[16:49:19]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:49:19]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:49:30]   [fixed_512_256] secoes ['dispositivo', 'ementa', 'fundamentacao']: 907,914 -> 279,974 chunks (30.8%)
+[16:50:55] fixed_512_256__bm25__sec-sem_relatorio__crit-toca: 279,974 chunks, 109,746 linhas, 96.0s  [decorrido 0.0 h]
+[16:51:05]   [fixed_1024_512] secoes ['dispositivo', 'ementa', 'fundamentacao']: 450,786 -> 151,282 chunks (33.6%)
+[16:52:31] fixed_1024_512__bm25__sec-sem_relatorio__crit-toca: 151,282 chunks, 115,529 linhas, 96.1s  [decorrido 0.1 h]
+[16:52:36]   [recursive_default] secoes ['dispositivo', 'ementa', 'fundamentacao']: 270,070 -> 96,713 chunks (35.8%)
+[16:53:25] recursive_default__bm25__sec-sem_relatorio__crit-toca: 96,713 chunks, 145,995 linhas, 53.7s  [decorrido 0.1 h]
+[16:53:25] fim em 4.1 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1649_bm25_sec_sem_relatorio_toca

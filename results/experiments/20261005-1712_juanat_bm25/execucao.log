@@ -1,0 +1,9 @@
+[17:12:38] experimento 20261005-1712_juanat_bm25
+[17:12:38]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:12:38]   commit: e8fc295d (arvore suja) em leo/f7-evolucao
+[17:15:24] structural_gold__bm25: 286,689 chunks, 1,200,000 linhas, 164.5s  [decorrido 0.0 h]
+[17:18:07] structural_pred__bm25: 285,308 chunks, 1,200,000 linhas, 161.4s  [decorrido 0.1 h]
+[17:20:53] recursive_default__bm25: 270,070 chunks, 1,200,000 linhas, 164.5s  [decorrido 0.1 h]
+[17:25:47] fixed_1024_512__bm25: 450,786 chunks, 1,199,571 linhas, 291.9s  [decorrido 0.2 h]
+[17:31:05] fixed_512_256__bm25: 907,914 chunks, 1,198,311 linhas, 316.2s  [decorrido 0.3 h]
+[17:31:05] fim em 18.4 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1712_juanat_bm25

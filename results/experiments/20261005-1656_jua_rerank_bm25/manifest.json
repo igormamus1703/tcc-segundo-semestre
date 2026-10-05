@@ -1,0 +1,77 @@
+{
+  "rotulo": "jua_rerank_bm25",
+  "inicio": "2026-10-05T16:56:03",
+  "fim": "2026-10-05T17:02:37",
+  "duracao_s": 394.3,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\rerank.py --estrategia fixed_512_256 --nome bm25 --label jua_rerank_bm25 --queries data\\interim\\jua\\queries_test.jsonl --candidatos C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec --fontes C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25__chunks.jsonl --cache data\\interim\\rerank_cache\\jua_fixed_512_256.tsv",
+  "config": {
+    "candidatos": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+    "fontes": [
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25__chunks.jsonl"
+    ],
+    "estrategia": "fixed_512_256",
+    "nome": "bm25",
+    "variantes": [
+      "todas",
+      "sem_relatorio",
+      "sem_relatorio_preserva"
+    ],
+    "top": 50,
+    "modelo": "BAAI/bge-reranker-v2-m3",
+    "max_length": 1024,
+    "batch": 16,
+    "queries": "data\\interim\\jua\\queries_test.jsonl",
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\corpus_docs.jsonl",
+    "processed_dir": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\processed",
+    "cache": "data\\interim\\rerank_cache\\jua_fixed_512_256.tsv",
+    "label": "jua_rerank_bm25"
+  },
+  "git": {
+    "commit": "79752d069abeda35f600482a69ee84b69ffe90cf",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__rerank-bm25-todas",
+      "variante": "todas",
+      "top": 50,
+      "documentos_lidos": 78341,
+      "documentos_sem_passagem": 9,
+      "fracao_sem_passagem": 0.0001
+    },
+    {
+      "nome": "fixed_512_256__rerank-bm25-sem_relatorio",
+      "variante": "sem_relatorio",
+      "top": 50,
+      "documentos_lidos": 29498,
+      "documentos_sem_passagem": 48852,
+      "fracao_sem_passagem": 0.6235
+    },
+    {
+      "nome": "fixed_512_256__rerank-bm25-sem_relatorio_preserva",
+      "variante": "sem_relatorio_preserva",
+      "top": 50,
+      "documentos_lidos": 78341,
+      "documentos_sem_passagem": 9,
+      "fracao_sem_passagem": 0.0001
+    }
+  ],
+  "erro": null
+}

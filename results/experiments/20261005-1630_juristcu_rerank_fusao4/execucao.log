@@ -1,0 +1,8 @@
+[16:30:08] experimento 20261005-1630_juristcu_rerank_fusao4
+[16:30:08]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:30:08]   commit: 52d056f1 (arvore suja) em leo/f7-evolucao
+[16:30:08] 12,335 pares no cache; 0 a pontuar
+[16:30:12] fixed_512_256__rerank-fusao4-todas: {'documentos_lidos': 7348, 'documentos_sem_passagem': 152, 'fracao_sem_passagem': 0.0203}
+[16:30:12] fixed_512_256__rerank-fusao4-sem_relatorio: {'documentos_lidos': 6253, 'documentos_sem_passagem': 1247, 'fracao_sem_passagem': 0.1663}
+[16:30:12] fixed_512_256__rerank-fusao4-sem_relatorio_preserva: {'documentos_lidos': 7348, 'documentos_sem_passagem': 152, 'fracao_sem_passagem': 0.0203}
+[16:30:12] fim em 0.1 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1630_juristcu_rerank_fusao4

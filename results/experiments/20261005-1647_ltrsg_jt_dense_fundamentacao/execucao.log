@@ -1,0 +1,9 @@
+[16:47:03] experimento 20261005-1647_ltrsg_jt_dense_fundamentacao
+[16:47:03]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:47:03]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:47:08]   [structural_gold] secoes ['fundamentacao']: 286,689 -> 64,629 chunks (22.5%)
+[16:47:15]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[16:47:15]     embeddings do cache, recortados: 64,629 de 286,689 chunks (sem reencode)
+[16:47:15]     embeddings recuperados do cache (sem reencode)
+[16:47:17] structural_gold__dense-bge_m3__sec-fund: 64,629 chunks, 30,000 linhas, 13.7s  [decorrido 0.0 h]
+[16:47:17] fim em 0.2 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1647_ltrsg_jt_dense_fundamentacao

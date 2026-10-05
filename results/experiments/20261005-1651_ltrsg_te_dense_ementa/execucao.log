@@ -1,0 +1,9 @@
+[16:51:11] experimento 20261005-1651_ltrsg_te_dense_ementa
+[16:51:11]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:51:11]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:51:15]   [structural_gold] secoes ['ementa']: 286,689 -> 12,893 chunks (4.5%)
+[16:51:22]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
+[16:51:22]     embeddings do cache, recortados: 12,893 de 286,689 chunks (sem reencode)
+[16:51:22]     embeddings recuperados do cache (sem reencode)
+[16:51:32] structural_gold__dense-bge_m3__sec-em: 12,893 chunks, 313,400 linhas, 21.7s  [decorrido 0.0 h]
+[16:51:32] fim em 0.4 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1651_ltrsg_te_dense_ementa
