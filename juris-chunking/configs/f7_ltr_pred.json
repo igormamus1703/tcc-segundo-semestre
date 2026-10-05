@@ -1,0 +1,64 @@
+{
+  "_comentario": "Ranker aprendido da F7 sobre o structural_PRED (o segmentador automatico), para a versao implantavel: um acervo real nao tem a estrutura ouro. Mesmo treino, mesmos hiperparametros e mesmos testes de configs/f7_ltr.json.",
+  "gold_spans": "data/interim/gold_spans.json",
+  "treino": {
+    "qrels": "data/interim/jua/qrels_train_amostra.trec",
+    "queries": "data/interim/jua/queries_train_amostra.jsonl",
+    "sinais": {
+      "bm25_doc": "ltrsp_tr_bm25/*",
+      "bm25_sem_relatorio": "ltrsp_tr_bm25_semrel/*",
+      "bm25_ementa": "ltrsp_tr_bm25_ementa/*",
+      "bm25_relatorio": "ltrsp_tr_bm25_relatorio/*",
+      "bm25_fundamentacao": "ltrsp_tr_bm25_fundamentacao/*",
+      "bm25_dispositivo": "ltrsp_tr_bm25_dispositivo/*",
+      "dense_doc": "ltrsp_tr_dense/*",
+      "dense_sem_relatorio": "ltrsp_tr_dense_semrel/*",
+      "dense_ementa": "ltrsp_tr_dense_ementa/*",
+      "dense_relatorio": "ltrsp_tr_dense_relatorio/*",
+      "dense_fundamentacao": "ltrsp_tr_dense_fundamentacao/*",
+      "dense_dispositivo": "ltrsp_tr_dense_dispositivo/*"
+    }
+  },
+  "testes": {
+    "JUÁ-Juris": {
+      "pasta": "jua",
+      "qrels": "data/interim/jua/qrels_test.trec",
+      "queries": "data/interim/jua/queries_test.jsonl",
+      "sinais": {
+        "bm25_doc": "jua_bm25/structural_pred__bm25.trec",
+        "bm25_sem_relatorio": "jua_bm25_sec_sem_relatorio/structural_pred__bm25__sec-sem_relatorio.trec",
+        "bm25_ementa": "ltrsp_te_bm25_ementa/*",
+        "bm25_relatorio": "ltrsp_te_bm25_relatorio/*",
+        "bm25_fundamentacao": "ltrsp_te_bm25_fundamentacao/*",
+        "bm25_dispositivo": "ltrsp_te_bm25_dispositivo/*",
+        "dense_doc": "jua_dense_bge_m3/structural_pred__dense-bge_m3.trec",
+        "dense_sem_relatorio": "jua_dense_sec_sem_relatorio/structural_pred__dense-bge_m3__sec-sem_relatorio.trec",
+        "dense_ementa": "ltrsp_te_dense_ementa/*",
+        "dense_relatorio": "ltrsp_te_dense_relatorio/*",
+        "dense_fundamentacao": "ltrsp_te_dense_fundamentacao/*",
+        "dense_dispositivo": "ltrsp_te_dense_dispositivo/*"
+      }
+    },
+    "JurisTCU": {
+      "pasta": "juristcu",
+      "qrels": "data/interim/qrels.trec",
+      "queries": "data/interim/queries.jsonl",
+      "sinais": {
+        "bm25_doc": "bm25/structural_pred__bm25.trec",
+        "bm25_sem_relatorio": "bm25_sec_sem_relatorio/structural_pred__bm25__sec-sem_relatorio.trec",
+        "bm25_ementa": "ltrsp_jt_bm25_ementa/*",
+        "bm25_relatorio": "ltrsp_jt_bm25_relatorio/*",
+        "bm25_fundamentacao": "ltrsp_jt_bm25_fundamentacao/*",
+        "bm25_dispositivo": "ltrsp_jt_bm25_dispositivo/*",
+        "dense_doc": "dense_bge_m3/structural_pred__dense-bge_m3.trec",
+        "dense_sem_relatorio": "dense_sec_sem_relatorio/structural_pred__dense-bge_m3__sec-sem_relatorio.trec",
+        "dense_ementa": "ltrsp_jt_dense_ementa/*",
+        "dense_relatorio": "ltrsp_jt_dense_relatorio/*",
+        "dense_fundamentacao": "ltrsp_jt_dense_fundamentacao/*",
+        "dense_dispositivo": "ltrsp_jt_dense_dispositivo/*"
+      }
+    }
+  },
+  "estrategia": "structural_pred",
+  "doc_info_de_chunks": "data/processed/structural_pred/chunks.jsonl"
+}
