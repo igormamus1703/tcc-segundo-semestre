@@ -29,3 +29,25 @@ def test_negativos_nunca_vem_do_documento_relevante():
 def test_grupo_incompleto_e_descartado():
     venc = [{"rank": 1, "doc_id": "X", "chunk_id": "X::1"}]
     assert grupo("q", "REL", "REL::0", venc, k=2) is None
+
+
+def test_grupo_misto_tira_de_tres_fontes_sem_repetir_nem_usar_o_relevante():
+    import random
+
+    from src.finetune_reranker import grupo_misto
+    bm25 = [{"rank": i, "doc_id": d, "chunk_id": f"{d}::1"} for i, d in enumerate(["REL", "A", "B", "C", "D"], 1)]
+    denso = [{"rank": 1, "doc_id": "A", "chunk_id": "A::1"}, {"rank": 2, "doc_id": "E", "chunk_id": "E::2"},
+             {"rank": 3, "doc_id": "F", "chunk_id": "F::3"}]
+    aleat = ["REL::9", "X::1", "Y::1", "Z::1"]
+    g = grupo_misto("REL", "REL::0", bm25, denso, aleat, 3, 2, 2, random.Random(0))
+    assert g[0] == "REL::0" and len(g) == 8 and len(set(g)) == 8
+    assert g[1:4] == ["A::1", "B::1", "C::1"]
+    assert g[4:6] == ["E::2", "F::3"]  # A::1 já usado: o denso pula para o próximo
+    assert not any(c.startswith("REL::") for c in g[1:])
+
+
+def test_grupo_misto_incompleto_e_descartado():
+    import random
+
+    from src.finetune_reranker import grupo_misto
+    assert grupo_misto("REL", "REL::0", [], [], ["X::1"], 3, 2, 2, random.Random(0)) is None

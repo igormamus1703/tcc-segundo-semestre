@@ -36,7 +36,9 @@
         "E:fixed_1024_512": "bm25/fixed_1024_512__bm25.trec",
         "Et:fixed_1024_512": "bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
         "E:fixed_512_256": "bm25/fixed_512_256__bm25.trec",
-        "Et:fixed_512_256": "bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec"
+        "Et:fixed_512_256": "bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "juristcu_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "juristcu_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
       }
     },
     "JUÁ difícil (teste)": {
@@ -74,7 +76,9 @@
         "E:fixed_1024_512": "jua_bm25/fixed_1024_512__bm25.trec",
         "Et:fixed_1024_512": "jua_bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
         "E:fixed_512_256": "jua_bm25/fixed_512_256__bm25.trec",
-        "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec"
+        "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
       }
     },
     "JUÁ independente": {
@@ -112,7 +116,9 @@
         "E:fixed_1024_512": "jua_bm25/fixed_1024_512__bm25.trec",
         "Et:fixed_1024_512": "jua_bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
         "E:fixed_512_256": "jua_bm25/fixed_512_256__bm25.trec",
-        "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec"
+        "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
       }
     },
     "JUÁ natural (treino)": {
@@ -259,6 +265,21 @@
       "Bsg",
       "B",
       "estrutural (ouro) × fixo 512/256, completo"
+    ],
+    [
+      "Rft2",
+      "R",
+      "reranker ajustado v2 (negativos mistos) × zero-shot"
+    ],
+    [
+      "Rft2",
+      "F4",
+      "reranker ajustado v2 × fusão das 4"
+    ],
+    [
+      "Rft2s",
+      "Rft2",
+      "reranker ajustado v2: sem relatório × tudo"
     ]
   ],
   "blocos_forest": [
@@ -295,7 +316,10 @@
         "H7 · idem, sem rebaixar",
         "reranker ajustado × zero-shot",
         "reranker ajustado × fusão das 4",
-        "reranker ajustado: sem relatório × tudo"
+        "reranker ajustado: sem relatório × tudo",
+        "reranker ajustado v2 (negativos mistos) × zero-shot",
+        "reranker ajustado v2 × fusão das 4",
+        "reranker ajustado v2: sem relatório × tudo"
       ]
     },
     {
