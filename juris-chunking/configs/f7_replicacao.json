@@ -20,7 +20,11 @@
         "estrutural (predito)": "bm25/structural_pred__bm25.trec",
         "fixo 512/256": "bm25/fixed_512_256__bm25.trec",
         "fixo 1024/512": "bm25/fixed_1024_512__bm25.trec",
-        "recursivo": "bm25/recursive_default__bm25.trec"
+        "recursivo": "bm25/recursive_default__bm25.trec",
+        "Bsg": "bm25/structural_gold__bm25.trec",
+        "Bcsg": "bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+        "Bsp": "bm25/structural_pred__bm25.trec",
+        "Bcsp": "bm25_sec_sem_relatorio/structural_pred__bm25__sec-sem_relatorio.trec"
       }
     },
     "JUÁ-Juris": {
@@ -42,7 +46,11 @@
         "estrutural (predito)": "jua_bm25/structural_pred__bm25.trec",
         "fixo 512/256": "jua_bm25/fixed_512_256__bm25.trec",
         "fixo 1024/512": "jua_bm25/fixed_1024_512__bm25.trec",
-        "recursivo": "jua_bm25/recursive_default__bm25.trec"
+        "recursivo": "jua_bm25/recursive_default__bm25.trec",
+        "Bsg": "jua_bm25/structural_gold__bm25.trec",
+        "Bcsg": "jua_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+        "Bsp": "jua_bm25/structural_pred__bm25.trec",
+        "Bcsp": "jua_bm25_sec_sem_relatorio/structural_pred__bm25__sec-sem_relatorio.trec"
       }
     },
     "JUÁ-Juris (independente)": {
@@ -64,7 +72,11 @@
         "estrutural (predito)": "jua_bm25/structural_pred__bm25.trec",
         "fixo 512/256": "jua_bm25/fixed_512_256__bm25.trec",
         "fixo 1024/512": "jua_bm25/fixed_1024_512__bm25.trec",
-        "recursivo": "jua_bm25/recursive_default__bm25.trec"
+        "recursivo": "jua_bm25/recursive_default__bm25.trec",
+        "Bsg": "jua_bm25/structural_gold__bm25.trec",
+        "Bcsg": "jua_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+        "Bsp": "jua_bm25/structural_pred__bm25.trec",
+        "Bcsp": "jua_bm25_sec_sem_relatorio/structural_pred__bm25__sec-sem_relatorio.trec"
       }
     }
   },
@@ -113,12 +125,37 @@
       "Rsp",
       "R",
       "H7 · idem, sem rebaixar quem só tem relatório"
+    ],
+    [
+      "Bcsg",
+      "Bsg",
+      "[expl.] recorte × completo (BM25, estrutural ouro)"
+    ],
+    [
+      "Bcsp",
+      "Bsp",
+      "[expl.] recorte × completo (BM25, estrutural predito)"
+    ],
+    [
+      "Bsg",
+      "B",
+      "[expl.] estrutural ouro × fixo 512/256, índice completo"
+    ],
+    [
+      "Bcsg",
+      "Bc",
+      "[expl.] estrutural ouro × fixo 512/256, com recorte"
+    ],
+    [
+      "Bcsp",
+      "Bc",
+      "[expl.] estrutural predito × fixo 512/256, com recorte"
     ]
   ],
   "colecao_estratos": "JUÁ-Juris",
   "comparacoes_estratos": [
     "H1 · recorte sem relatório × completo (BM25)",
-    "H3 · fusão das 4 × BM25 completo",
+    "[expl.] recorte × completo (BM25, estrutural ouro)",
     "H7 · reranker lendo fora do relatório × lendo tudo"
   ],
   "equivalencia": {

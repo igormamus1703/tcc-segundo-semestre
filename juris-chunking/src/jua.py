@@ -161,6 +161,31 @@ def construir(jua_dir: Path = JUA_DIR, out_dir: Path = OUT_DIR,
     return relatorio
 
 
+def amostra_treino(n: int = 6000, seed: int = 42, out_dir: Path = OUT_DIR) -> int:
+    """Amostra fixa do split de TREINO, para treinar o ranker aprendido (F7).
+
+    6 mil consultas bastam para um LambdaRank com algumas dezenas de
+    atributos, e custam ~40% do tempo de busca das 14 mil. A amostra é
+    uniforme, com semente fixa, e nunca toca o split de teste.
+    """
+    import random
+
+    with (out_dir / "queries_train.jsonl").open(encoding="utf-8") as f:
+        linhas = f.readlines()
+    escolhidas = sorted(random.Random(seed).sample(range(len(linhas)), min(n, len(linhas))))
+    ids = set()
+    with (out_dir / "queries_train_amostra.jsonl").open("w", encoding="utf-8") as fo:
+        for i in escolhidas:
+            fo.write(linhas[i])
+            ids.add(json.loads(linhas[i])["query_id"])
+    with (out_dir / "qrels_train.trec").open(encoding="utf-8") as fi, \
+         (out_dir / "qrels_train_amostra.trec").open("w", encoding="utf-8") as fo:
+        for linha in fi:
+            if linha.split()[0] in ids:
+                fo.write(linha)
+    return len(ids)
+
+
 def recorte_independente(out_dir: Path = OUT_DIR,
                          qrels_juristcu: Path = INTERIM_DIR / "qrels.trec") -> dict:
     """Teste do JUÁ sem as consultas cujo acórdão é relevante no JurisTCU.

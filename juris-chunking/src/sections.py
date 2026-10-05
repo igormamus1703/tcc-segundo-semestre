@@ -157,10 +157,32 @@ def rotular(chunks: Sequence[Chunk], spans_por_doc: dict[str, list[dict]]) -> li
     return [secao_do_chunk(c, spans_por_doc.get(c.doc_id)) for c in chunks]
 
 
+CRITERIOS = ("maioria", "toca")
+
+
+def toca_alguma(chunk: Chunk, secoes: set[str], spans: Sequence[dict] | None) -> bool:
+    """O chunk tem pelo menos um caractere de alguma das `secoes`?
+
+    F7: nas estratégias que não respeitam fronteira (fixas e recursiva), o
+    chunk 0 costuma juntar a ementa inteira com o começo do relatório e é
+    rotulado "relatório" pela maioria. O recorte "sem relatório" então joga a
+    ementa fora junto — e no JUÁ-Juris, onde a consulta é um enunciado quase
+    igual à ementa, isso explica mais da metade das perdas grandes. O critério
+    `toca` mantém esse chunk, e isola o efeito da fronteira do efeito da seção.
+    """
+    if chunk.section:
+        return chunk.section in secoes
+    for s in spans or ():
+        if s["section"] in secoes and min(chunk.end, s["end"]) > max(chunk.start, s["start"]):
+            return True
+    return False
+
+
 def filtrar(
     chunks: Sequence[Chunk],
     secoes: Iterable[str],
     spans_por_doc: dict[str, list[dict]],
+    criterio: str = "maioria",
 ) -> tuple[list[Chunk], dict[str, int]]:
     """Mantém só os chunks cuja seção está em `secoes`.
 
@@ -173,14 +195,24 @@ def filtrar(
     trechos de relatório de documentos cujo span falhou, e o efeito medido
     seria menor do que o real por contaminação — um erro que puxa o resultado
     na direção de um falso negativo, não de um falso positivo.
+
+    `criterio="maioria"` (o da F6) decide pela seção de maior sobreposição;
+    `criterio="toca"` mantém o chunk se ele tiver qualquer trecho de uma seção
+    pedida (ver `toca_alguma`).
     """
+    if criterio not in CRITERIOS:
+        raise ValueError(f"criterio desconhecido: {criterio!r} (validos: {CRITERIOS})")
     pedidas = set(secoes)
     contagem: dict[str, int] = {}
     mantidos: list[Chunk] = []
     for chunk, secao in zip(chunks, rotular(chunks, spans_por_doc)):
         chave = secao or "indefinido"
         contagem[chave] = contagem.get(chave, 0) + 1
-        if secao in pedidas:
+        if criterio == "maioria":
+            manter = secao in pedidas
+        else:
+            manter = toca_alguma(chunk, pedidas, spans_por_doc.get(chunk.doc_id))
+        if manter:
             mantidos.append(chunk)
     return mantidos, contagem
 
