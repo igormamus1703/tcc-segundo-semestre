@@ -37,7 +37,8 @@ inclusive as previsões que erraram.
 |---|---|
 | O achado principal | [03-fronteira-e-criterio-toca.md](03-fronteira-e-criterio-toca.md) |
 | O modelo que aprende os pesos | [04-ranker-aprendido.md](04-ranker-aprendido.md) |
-| O que foi previsto antes, e o que errou | [00-preregistro.md](00-preregistro.md) |
+| O que foi previsto antes, e o que errou | [00-preregistro.md](00-preregistro.md) e o placar em [02-replicacao.md](02-replicacao.md) |
+| Tudo numa figura | o painel `results/experiments/*_f7_painel/figuras/*__painel.png` (também em [`docs/apresentacao/f7.html`](../../../apresentacao/f7.html)) |
 
 ## Documentos
 
