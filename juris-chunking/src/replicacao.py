@@ -152,14 +152,18 @@ def _rodape(fig, texto: str) -> None:
     fig.text(0.01, -0.02, texto, ha="left", va="top", fontsize=7.2, color="#444")
 
 
-def fig_forest(linhas: list[dict], colecoes: list[str], destino: Path, rodape: str) -> None:
+def fig_forest(linhas: list[dict], colecoes: list[str], destino: Path, rodape: str,
+               titulo: str = "", nome: str = "forest") -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
     comps = list(dict.fromkeys(l["comparacao"] for l in linhas))
-    fig, ax = plt.subplots(figsize=(9.5, 0.62 * len(comps) + 1.6))
-    passo = 0.32 / max(len(colecoes) - 1, 1)
+    # cada coleção ganha sua "faixa" dentro da linha da comparação: com 3 ou 4
+    # coleções, rótulos de 0,1 unidade de distância se sobreporiam
+    altura_linha = 0.42 + 0.22 * len(colecoes)
+    fig, ax = plt.subplots(figsize=(10.5, altura_linha * len(comps) + 1.8))
+    passo = (0.32 if len(colecoes) <= 2 else 0.66) / max(len(colecoes) - 1, 1)
     for ci, col in enumerate(colecoes):
         for yi, comp in enumerate(comps):
             l = next((x for x in linhas if x["comparacao"] == comp and x["colecao"] == col), None)
@@ -186,9 +190,9 @@ def fig_forest(linhas: list[dict], colecoes: list[str], destino: Path, rodape: s
     ax.legend(title="marcador cheio = p < 0,05 com Bonferroni dentro da coleção",
               loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=len(colecoes),
               fontsize=9, title_fontsize=8.5, frameon=False)
-    fig.suptitle("O efeito replica numa segunda coleção de consultas?", fontsize=12.5, y=1.06)
+    fig.suptitle(titulo or "O efeito replica numa segunda coleção de consultas?", fontsize=12.5, y=1.06)
     _rodape(fig, rodape)
-    _salvar(fig, destino, "forest")
+    _salvar(fig, destino, nome)
 
 
 def fig_estratos(linhas: list[dict], destino: Path, rodape: str) -> None:
@@ -235,7 +239,8 @@ def fig_estratos(linhas: list[dict], destino: Path, rodape: str) -> None:
     _salvar(fig, destino, "estratos")
 
 
-def fig_equivalencia(linhas: list[dict], colecoes: list[str], destino: Path, rodape: str) -> None:
+def fig_equivalencia(linhas: list[dict], colecoes: list[str], destino: Path, rodape: str,
+                     titulo: str = "", nome: str = "estrategias") -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -266,10 +271,10 @@ def fig_equivalencia(linhas: list[dict], colecoes: list[str], destino: Path, rod
     ax.legend(title="quadrado cheio = equivalente pelo TOST (p < 0,05)", fontsize=9,
               title_fontsize=8.5, frameon=False, loc="lower center",
               bbox_to_anchor=(0.5, 1.0), ncol=len(colecoes))
-    fig.suptitle("As estratégias de chunking são equivalentes? (teste de equivalência, TOST)",
+    fig.suptitle(titulo or "As estratégias de chunking são equivalentes? (teste de equivalência, TOST)",
                  fontsize=12.5, y=1.04)
     _rodape(fig, rodape)
-    _salvar(fig, destino, "equivalencia")
+    _salvar(fig, destino, f"equivalencia_{nome}")
 
 
 def _salvar(fig, destino: Path, nome: str) -> None:
@@ -336,13 +341,18 @@ def main() -> None:
             linhas += bloco
 
         equiv = []
-        eq = spec.get("equivalencia")
-        if eq:
+        conjuntos = spec.get("equivalencia") or []
+        if isinstance(conjuntos, dict):  # formato antigo: um conjunto só
+            conjuntos = [{"nome": "estrategias", **conjuntos}]
+        for eq in conjuntos:
+            rotulos = eq.get("rotulos", {})
             for nome, (scores, fonte) in dados.items():
                 qids = sorted(fonte)
                 for a, b in combinations(eq["condicoes"], 2):
                     if a in scores and b in scores:
-                        equiv.append({"colecao": nome, "par": f"{a} × {b}", "a": a, "b": b,
+                        equiv.append({"conjunto": eq["nome"], "colecao": nome,
+                                      "par": f"{rotulos.get(a, a)} × {rotulos.get(b, b)}",
+                                      "a": a, "b": b,
                                       **tost(scores[a], scores[b], qids, eq["margem"])})
 
         _gravar(exp.tables_dir / "replicacao.csv", linhas)
@@ -358,13 +368,24 @@ def main() -> None:
                   + "; ".join(f"{c} ({len(dados[c][1])} consultas)" for c in colecoes)
                   + f"  ·  commit {(git.get('commit') or '?')[:8]}")
         destino = exp.dir / "figuras"
-        fig_forest(linhas, colecoes, destino, rodape)
+        blocos = spec.get("blocos_forest")
+        if blocos:
+            for b in blocos:
+                ls = [l for l in linhas if l["comparacao"] in b["comparacoes"]]
+                if ls:
+                    fig_forest(ls, [c for c in colecoes if any(l["colecao"] == c for l in ls)],
+                               destino, rodape, b["titulo"], f"forest_{b['nome']}")
+        else:
+            fig_forest(linhas, colecoes, destino, rodape)
         estr_jua = [l for l in estratos if l["colecao"] == spec.get("colecao_estratos", colecoes[-1])
                     and l["comparacao"] in spec.get("comparacoes_estratos", [])]
         if estr_jua:
             fig_estratos(estr_jua, destino, rodape)
-        if equiv:
-            fig_equivalencia(equiv, colecoes, destino, rodape)
+        for eq in conjuntos:
+            linhas_eq = [l for l in equiv if l["conjunto"] == eq["nome"]]
+            if linhas_eq:
+                fig_equivalencia(linhas_eq, [c for c in colecoes if any(l["colecao"] == c for l in linhas_eq)],
+                                 destino, rodape, eq.get("titulo", ""), eq["nome"])
 
 
 if __name__ == "__main__":
