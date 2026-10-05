@@ -56,16 +56,28 @@ SINAIS = {f"{r}_{v}": (r, v) for r in RETRIEVERS
           for v in ("doc", "sem_relatorio", *SECOES)}
 POOL = ("bm25_doc", "bm25_sem_relatorio", "dense_doc", "dense_sem_relatorio")
 PROFUNDIDADE = 100      # top-k de cada sinal-pool que entra nos candidatos
-AUSENTE = 201           # posição atribuída a quem não aparece no top-200 do sinal
+TOPO_SINAL = 200        # todo sinal é truncado aqui ANTES de normalizar
+AUSENTE = TOPO_SINAL + 1  # posição atribuída a quem não aparece no top do sinal
 
 
 # --- atributos (puro, testado) -----------------------------------------------
 
-def normalizar(docs: dict[str, float]) -> tuple[dict[str, float], dict[str, int]]:
-    """(score min-max na consulta, posição a partir de 1) de um ranking."""
+def normalizar(docs: dict[str, float], topo: int = TOPO_SINAL
+               ) -> tuple[dict[str, float], dict[str, int]]:
+    """(score min-max na consulta, posição a partir de 1) do top-`topo` de um ranking.
+
+    **O corte vem antes do min-max, e isso não é detalhe.** Os runs de treino
+    têm 200 documentos por consulta, e parte dos runs de teste tem 1.000. Sem
+    o corte, o mínimo de uma lista de 1.000 é muito menor, todo score
+    normalizado sobe, e o modelo recebe no teste uma distribuição que nunca
+    viu. A primeira versão do LTR tinha esse defeito: no JurisTCU, o modelo
+    "sem seções" ficava 29% abaixo do próprio BM25 que ele recebia como
+    atributo. Travado por `test_normalizar_corta_antes_do_minmax`.
+    """
     if not docs:
         return {}, {}
-    ordem = sorted(docs.items(), key=lambda kv: (-kv[1], kv[0]))
+    ordem = sorted(docs.items(), key=lambda kv: (-kv[1], kv[0]))[:topo]
+    docs = dict(ordem)
     lo, hi = min(docs.values()), max(docs.values())
     faixa = hi - lo
     norm = {d: (0.5 if faixa == 0 else (s - lo) / faixa) for d, s in docs.items()}
@@ -84,8 +96,12 @@ def candidatos(sinais: dict[str, Ranking], qid: str, profundidade: int = PROFUND
 
 
 def nomes_atributos(sinais: list[str]) -> list[str]:
+    # Sem atributo de tamanho da consulta: o treino (enunciados do JUÁ) só tem
+    # consultas de 10 a 60 palavras, e o JurisTCU tem consultas de 3. Uma árvore
+    # extrapolaria uma divisão aprendida em "12 palavras" para um regime que
+    # nunca viu. Removido na segunda versão, junto com o corte do `normalizar`.
     return ([f"{s}__score" for s in sinais] + [f"{s}__posicao" for s in sinais]
-            + ["doc_log_tamanho", "doc_fracao_relatorio", "consulta_palavras"])
+            + ["doc_log_tamanho", "doc_fracao_relatorio"])
 
 
 def matriz(
@@ -107,12 +123,11 @@ def matriz(
         if not cands:
             continue
         por_sinal = [normalizar(sinais.get(s, {}).get(qid, {})) for s in usar]
-        n_palavras = len(textos.get(qid, "").split())
         for d in cands:
             scores = [ns.get(d, 0.0) for ns, _p in por_sinal]
             posicoes = [p.get(d, AUSENTE) for _ns, p in por_sinal]
             log_tam, frac_rel = doc_info.get(d, (0.0, 0.0))
-            linhas.append(scores + posicoes + [log_tam, frac_rel, n_palavras])
+            linhas.append(scores + posicoes + [log_tam, frac_rel])
             rotulos.append((qrels or {}).get(qid, {}).get(d, 0))
             chaves.append((qid, d))
         grupos.append(len(cands))
