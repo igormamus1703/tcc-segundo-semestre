@@ -157,10 +157,17 @@ A branch `leo/f7-evolucao` está **local e não mergeada**, por decisão
 explícita: ela muda a recomendação do artigo. O critério de merge foi escrito
 **antes** dos resultados, no
 [pré-registro](docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md): a
-branch entra se (a) a F6 replicar, (b) a pergunta original ganhar resposta com
-poder, ou (c) o reranker ganhar ≥ 5% nas duas coleções. **(b) foi atingido**,
-e a correção do recorte (H8b) foi confirmada em dados não vistos. Se a equipe
-decidir não mergear, a `main` continua no estado da F6, sem perda nenhuma.
+branch entra se (a) H1 e H2 replicarem, (b) H5 confirmar **equivalência**
+entre as estratégias, ou (c) o reranker ganhar ≥ 5% nas duas coleções.
+
+**Pela letra, nenhum dos três foi cumprido:** H1 não replicou no teste do JUÁ;
+H5 previu equivalência e encontrou **diferença** (o estrutural vence); e o
+reranker zero-shot não superou a fusão (o ajustado está sendo avaliado). O que
+a F7 produziu de mais forte veio **fora** do critério escrito: a correção do
+recorte (H8b, pré-registrada no adendo 2 e confirmada em dados não vistos), a
+resposta com poder à pergunta original e o ranker aprendido. **A decisão é da
+equipe**, sabendo disso. Se ela decidir não mergear, a `main` continua no
+estado da F6, sem perda nenhuma.
 
 ---
 
