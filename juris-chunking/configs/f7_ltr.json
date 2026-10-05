@@ -1,0 +1,63 @@
+{
+  "_comentario": "Especificacao do ranker aprendido da F7 (src/ltr.py). Treino: amostra de 6 mil consultas do split de TREINO do JUA-Juris. Teste: split de teste do JUA-Juris e JurisTCU. Estrategia structural_gold: e a unica em que o sinal 'so a secao X' e limpo (nas fixas, o chunk 0 mistura ementa e relatorio e e rotulado relatorio). 'rotulo/*' = a rodada tem um run so.",
+  "gold_spans": "data/interim/gold_spans.json",
+  "treino": {
+    "qrels": "data/interim/jua/qrels_train_amostra.trec",
+    "queries": "data/interim/jua/queries_train_amostra.jsonl",
+    "sinais": {
+      "bm25_doc": "ltrsg_tr_bm25/*",
+      "bm25_sem_relatorio": "ltrsg_tr_bm25_semrel/*",
+      "bm25_ementa": "ltrsg_tr_bm25_ementa/*",
+      "bm25_relatorio": "ltrsg_tr_bm25_relatorio/*",
+      "bm25_fundamentacao": "ltrsg_tr_bm25_fundamentacao/*",
+      "bm25_dispositivo": "ltrsg_tr_bm25_dispositivo/*",
+      "dense_doc": "ltrsg_tr_dense/*",
+      "dense_sem_relatorio": "ltrsg_tr_dense_semrel/*",
+      "dense_ementa": "ltrsg_tr_dense_ementa/*",
+      "dense_relatorio": "ltrsg_tr_dense_relatorio/*",
+      "dense_fundamentacao": "ltrsg_tr_dense_fundamentacao/*",
+      "dense_dispositivo": "ltrsg_tr_dense_dispositivo/*"
+    }
+  },
+  "testes": {
+    "JUÁ-Juris": {
+      "pasta": "jua",
+      "qrels": "data/interim/jua/qrels_test.trec",
+      "queries": "data/interim/jua/queries_test.jsonl",
+      "sinais": {
+        "bm25_doc": "jua_bm25/structural_gold__bm25.trec",
+        "bm25_sem_relatorio": "jua_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+        "bm25_ementa": "ltrsg_te_bm25_ementa/*",
+        "bm25_relatorio": "ltrsg_te_bm25_relatorio/*",
+        "bm25_fundamentacao": "ltrsg_te_bm25_fundamentacao/*",
+        "bm25_dispositivo": "ltrsg_te_bm25_dispositivo/*",
+        "dense_doc": "jua_dense_bge_m3/structural_gold__dense-bge_m3.trec",
+        "dense_sem_relatorio": "jua_dense_sec_sem_relatorio/structural_gold__dense-bge_m3__sec-sem_relatorio.trec",
+        "dense_ementa": "ltrsg_te_dense_ementa/*",
+        "dense_relatorio": "ltrsg_te_dense_relatorio/*",
+        "dense_fundamentacao": "ltrsg_te_dense_fundamentacao/*",
+        "dense_dispositivo": "ltrsg_te_dense_dispositivo/*"
+      }
+    },
+    "JurisTCU": {
+      "pasta": "juristcu",
+      "qrels": "data/interim/qrels.trec",
+      "queries": "data/interim/queries.jsonl",
+      "sinais": {
+        "bm25_doc": "bm25/structural_gold__bm25.trec",
+        "bm25_sem_relatorio": "bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+        "bm25_ementa": "ltrsg_jt_bm25_ementa/*",
+        "bm25_relatorio": "ltrsg_jt_bm25_relatorio/*",
+        "bm25_fundamentacao": "ltrsg_jt_bm25_fundamentacao/*",
+        "bm25_dispositivo": "ltrsg_jt_bm25_dispositivo/*",
+        "dense_doc": "dense_bge_m3/structural_gold__dense-bge_m3.trec",
+        "dense_sem_relatorio": "dense_sec_sem_relatorio/structural_gold__dense-bge_m3__sec-sem_relatorio.trec",
+        "dense_ementa": "ltrsg_jt_dense_ementa/*",
+        "dense_relatorio": "ltrsg_jt_dense_relatorio/*",
+        "dense_fundamentacao": "ltrsg_jt_dense_fundamentacao/*",
+        "dense_dispositivo": "ltrsg_jt_dense_dispositivo/*"
+      }
+    }
+  },
+  "estrategia": "structural_gold"
+}
