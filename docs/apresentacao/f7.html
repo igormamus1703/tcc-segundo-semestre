@@ -459,7 +459,24 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
 </section>
 
 <section>
-  <p class="passo"><b>8</b> · O que vai para o artigo</p>
+  <p class="passo"><b>8</b> · Visão geral</p>
+  <h2>Todas as receitas, todas as estratégias, as três amostras</h2>
+  <div class="leitura">
+    <p>Cada célula é uma configuração; a cor é o ganho ou a perda contra o BM25 com o acórdão
+    inteiro da mesma estratégia. Leia a linha do critério <code>toca</code>: é a única sem perdas
+    relevantes nas três amostras. O retriever denso e as fusões que o usam ficam vermelhos no JUÁ,
+    onde ele é muito mais fraco que o BM25.</p>
+  </div>
+  <figure>
+    <img src="img/f7_painel.png" alt="Painel configuração × estratégia × coleção com o nDCG@10 de cada célula"
+         style="width:100%;height:auto;border-radius:2px;background:#fff">
+    <p class="fig-nota">Gerado por <code>src.painel</code> (rodada <code>20261005-1802_f7_painel</code>); IC 95% de
+    cada célula em <code>tables/painel.csv</code>.</p>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>9</b> · O que vai para o artigo</p>
   <h2>A recomendação mudou, e ficou mais forte</h2>
   <div class="rolagem">
     <table>

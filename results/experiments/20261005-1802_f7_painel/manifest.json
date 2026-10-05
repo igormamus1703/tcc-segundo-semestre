@@ -1,0 +1,95 @@
+{
+  "rotulo": "f7_painel",
+  "inicio": "2026-10-05T18:02:47",
+  "fim": "2026-10-05T18:29:05",
+  "duracao_s": 1577.9,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\painel.py --spec configs/f7_painel.json --label f7_painel",
+  "config": {
+    "spec": {
+      "_comentario": "Painel configuracao x colecao da F7 (src/painel.py). A primeira condicao e a referencia do delta. {st} = estrategia.",
+      "condicoes": [
+        "completo",
+        "sem_relatorio",
+        "sem_relatorio_toca",
+        "controle",
+        "denso",
+        "denso_sem_relatorio",
+        "fusao4",
+        "fusao4_toca"
+      ],
+      "rotulos": {
+        "completo": "BM25 completo",
+        "sem_relatorio": "BM25 sem relatório (F6)",
+        "sem_relatorio_toca": "BM25 sem relatório, critério 'toca'",
+        "controle": "BM25 controle aleatório",
+        "denso": "denso completo",
+        "denso_sem_relatorio": "denso sem relatório",
+        "fusao4": "fusão das 4 (F6)",
+        "fusao4_toca": "fusão das 4, critério 'toca'"
+      },
+      "colecoes": {
+        "JurisTCU": {
+          "qrels": "data/interim/qrels.trec",
+          "condicoes": {
+            "completo": "bm25/{st}__bm25.trec",
+            "sem_relatorio": "bm25_sec_sem_relatorio/{st}__bm25__sec-sem_relatorio.trec",
+            "sem_relatorio_toca": "bm25_sec_sem_relatorio_toca/{st}__bm25__sec-sem_relatorio__crit-toca.trec",
+            "denso": "dense_bge_m3/{st}__dense-bge_m3.trec",
+            "denso_sem_relatorio": "dense_sec_sem_relatorio/{st}__dense-bge_m3__sec-sem_relatorio.trec",
+            "fusao4": "fusao4_peso_igual/{st}__soma_norm.trec",
+            "controle": "bm25_controle_amostra/{st}__bm25__amostra-*.trec",
+            "fusao4_toca": "fusao4_toca/{st}__soma_norm.trec"
+          }
+        },
+        "JUÁ-Juris (difícil)": {
+          "qrels": "data/interim/jua/qrels_test.trec",
+          "condicoes": {
+            "completo": "jua_bm25/{st}__bm25.trec",
+            "sem_relatorio": "jua_bm25_sec_sem_relatorio/{st}__bm25__sec-sem_relatorio.trec",
+            "sem_relatorio_toca": "jua_bm25_sec_sem_relatorio_toca/{st}__bm25__sec-sem_relatorio__crit-toca.trec",
+            "denso": "jua_dense_bge_m3/{st}__dense-bge_m3.trec",
+            "denso_sem_relatorio": "jua_dense_sec_sem_relatorio/{st}__dense-bge_m3__sec-sem_relatorio.trec",
+            "fusao4": "jua_fusao4_peso_igual/{st}__soma_norm.trec",
+            "controle": "jua_bm25_controle_amostra/{st}__bm25__amostra-*.trec",
+            "fusao4_toca": "jua_fusao4_toca/{st}__soma_norm.trec"
+          }
+        },
+        "JUÁ-Juris (natural)": {
+          "qrels": "data/interim/jua/qrels_train_amostra.trec",
+          "condicoes": {
+            "completo": "juanat_bm25/{st}__bm25.trec",
+            "sem_relatorio": "juanat_bm25_sec_sem_relatorio/{st}__bm25__sec-sem_relatorio.trec",
+            "sem_relatorio_toca": "juanat_bm25_sec_sem_relatorio_toca/{st}__bm25__sec-sem_relatorio__crit-toca.trec",
+            "denso": "juanat_dense_bge_m3/{st}__dense-bge_m3.trec",
+            "denso_sem_relatorio": "juanat_dense_sec_sem_relatorio/{st}__dense-bge_m3__sec-sem_relatorio.trec",
+            "fusao4": "juanat_fusao4_peso_igual/{st}__soma_norm.trec",
+            "fusao4_toca": "juanat_fusao4_toca/{st}__soma_norm.trec"
+          }
+        }
+      }
+    }
+  },
+  "git": {
+    "commit": "316714f06dd3ecdb8e29aec6ab471b88ca40f1c5",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [],
+  "erro": null
+}
