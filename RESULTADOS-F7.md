@@ -140,9 +140,15 @@ que separa um ganho robusto de um ganho que inverte de sinal.
 
 ## 6. O que preciso decidir com a equipe
 
-1. 🔴 **Mergear a F7?** Pelo critério escrito no pré-registro, ela passa: H1
-   não replicou como estava, mas a correção (H8b) confirmou em dados não
-   vistos, e a pergunta original ganhou resposta com poder.
+1. 🔴 **Mergear a F7?** Preciso ser preciso aqui: **pela letra do critério
+   escrito antes, ela não passa.** O critério dizia (a) H1 e H2 replicam,
+   (b) as estratégias se mostram *equivalentes*, ou (c) o reranker ganha ≥ 5%
+   nas duas coleções. H1 não replicou; H5 encontrou o oposto de equivalência
+   (o estrutural vence); e o reranker zero-shot não ganhou. O que a F7 tem de
+   mais forte veio fora do critério: a correção do recorte (pré-registrada no
+   adendo 2 e confirmada em 6.000 consultas não vistas), a resposta com poder
+   à pergunta original e o ranker aprendido. Minha recomendação é mergear,
+   **declarando no texto** que o critério original não foi atingido e por quê.
 2. 🟠 **A tabela principal do artigo** passa a ter três colunas (JurisTCU, JUÁ
    natural, JUÁ difícil) e a receita recomendada passa a ser o `toca`.
 3. 🟡 **Ainda o corpus** (pendente desde 05/09).
