@@ -155,9 +155,42 @@ def construir(jua_dir: Path = JUA_DIR, out_dir: Path = OUT_DIR,
             "fora_do_corpus": n_fora,
             "secao_da_resposta": dict(secoes.most_common()),
         }
+    relatorio["test_independente"] = recorte_independente(out_dir)
     (out_dir / "construcao.json").write_text(
         json.dumps(relatorio, ensure_ascii=False, indent=2), encoding="utf-8")
     return relatorio
+
+
+def recorte_independente(out_dir: Path = OUT_DIR,
+                         qrels_juristcu: Path = INTERIM_DIR / "qrels.trec") -> dict:
+    """Teste do JUÁ sem as consultas cujo acórdão é relevante no JurisTCU.
+
+    As consultas sintéticas do JurisTCU vieram de enunciados da mesma base.
+    Nada é treinado nelas, então não há vazamento; mas a coleção deixa de ser
+    100% independente da que guiou as decisões da F6. Este recorte é a
+    análise de sensibilidade prometida no pré-registro (ameaça 2): se o efeito
+    vale no teste inteiro e some aqui, ele era herança do JurisTCU.
+    """
+    relevantes = set()
+    with qrels_juristcu.open(encoding="utf-8") as f:
+        for linha in f:
+            _q, _z, doc, score = linha.split()
+            if int(score) > 0:
+                relevantes.add(doc)
+    with (out_dir / "qrels_test.trec").open(encoding="utf-8") as f:
+        alvo = {l.split()[0]: l.split()[2] for l in f}
+    manter = {q for q, d in alvo.items() if d not in relevantes}
+    with (out_dir / "queries_test.jsonl").open(encoding="utf-8") as fi, \
+         (out_dir / "queries_test_indep.jsonl").open("w", encoding="utf-8") as fo:
+        for linha in fi:
+            if json.loads(linha)["query_id"] in manter:
+                fo.write(linha)
+    with (out_dir / "qrels_test.trec").open(encoding="utf-8") as fi, \
+         (out_dir / "qrels_test_indep.trec").open("w", encoding="utf-8") as fo:
+        for linha in fi:
+            if linha.split()[0] in manter:
+                fo.write(linha)
+    return {"consultas": len(manter), "removidas": len(alvo) - len(manter)}
 
 
 if __name__ == "__main__":

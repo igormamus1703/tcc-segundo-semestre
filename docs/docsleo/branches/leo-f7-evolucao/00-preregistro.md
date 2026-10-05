@@ -104,4 +104,29 @@ continuar sendo a manchete.
 
 ## Adendos
 
-*(nenhum ainda)*
+### Adendo 1 — 05/10/2026, antes de qualquer resultado do JUÁ-Juris
+
+Desvios do plano, todos decididos **antes** de ver os números do JUÁ (o único
+resultado já visto é o do reranker no JurisTCU, a coleção da F6):
+
+1. **H6/H7 reranqueiam o top-50, não o top-100.** O `__chunks.jsonl` que cada
+   run grava só guarda o chunk vencedor dos 50 primeiros documentos, e
+   regravá-lo exigiria refazer todas as rodadas. Para o nDCG@10, top-50 basta;
+   o Recall@100 dos runs reranqueados herda a ordem original do 51º em diante.
+2. **H7 ganha uma terceira variante, exploratória** (`sem_relatorio_preserva`).
+   No JurisTCU, a variante `sem_relatorio` deixa 16,6% dos documentos sem
+   passagem permitida, que são rebaixados para depois dos lidos. Isso mistura
+   dois efeitos: *o que o modelo lê* e *quem é rebaixado*. A variante nova lê
+   pelo relatório quem não tem outra passagem, e isola o primeiro efeito. **A
+   confirmação de H7 continua sendo a da variante pré-registrada**; a nova
+   serve para interpretá-la.
+3. **Ameaça 2 medida:** 194 das 1.567 consultas de teste (12,4%) apontam para
+   acórdãos que são relevantes para alguma consulta do JurisTCU. A
+   especificação ganha uma terceira coleção, **"JUÁ-Juris (independente)"**,
+   com 1.373 consultas, sem elas. É análise de sensibilidade: as hipóteses
+   continuam sendo julgadas no teste inteiro.
+4. **Resultado já visto no JurisTCU, registrado aqui para não parecer
+   descoberto depois:** reranquear a fusão das 4 lendo **todas** as passagens
+   dá 0,2704 (−15,9% contra a fusão, p < 0,0001); lendo só passagens **fora
+   do relatório**, 0,3189 (+17,9% sobre ler todas, p < 0,000001). No JurisTCU,
+   H7 confirma e H6 não.
