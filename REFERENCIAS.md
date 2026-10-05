@@ -119,6 +119,16 @@ recuperação.
 
 ---
 
+## 5b. Aprender a ranquear, interpretar o modelo e ajustar o reranker (F7)
+
+| Chave | Referência | Selo | Papel no TCC |
+|---|---|---|---|
+| `burges2010lambdamart` | Burges, C. J. C. **From RankNet to LambdaRank to LambdaMART: An Overview.** Microsoft Research Technical Report MSR-TR-2010-82, 2010. | 📚 | Objetivo LambdaRank do ranker aprendido (`src/ltr.py`) |
+| `ke2017lightgbm` | Ke, G.; Meng, Q.; Finley, T.; Wang, T.; Chen, W.; Ma, W.; Ye, Q.; Liu, T.-Y. **LightGBM: A Highly Efficient Gradient Boosting Decision Tree.** NeurIPS 2017. | 📚 | Implementação do LambdaRank |
+| `lundberg2017shap` | Lundberg, S. M.; Lee, S.-I. **A Unified Approach to Interpreting Model Predictions.** NeurIPS 2017. | 📚 | Valores SHAP |
+| `lundberg2020treeshap` | Lundberg, S. M. et al. **From Local Explanations to Global Understanding with Explainable AI for Trees.** *Nature Machine Intelligence* 2:56–67, 2020. | 📚 | SHAP exato para árvores (`pred_contrib` do LightGBM): a figura "o mesmo casamento vale 5× menos no relatório" |
+| `hu2022lora` | Hu, E. J. et al. **LoRA: Low-Rank Adaptation of Large Language Models.** ICLR 2022. arXiv:2106.09685. | 📚 | Ajuste do reranker em 8 GB (`src/finetune_reranker.py`) |
+
 ## 6. Fusão de rankings
 
 | Chave | Referência | Selo | Papel no TCC |
@@ -143,6 +153,8 @@ recuperação.
 | `buckley2004bpref` | Buckley, C.; Voorhees, E. M. **Retrieval Evaluation with Incomplete Information.** SIGIR 2004. | 📚 | bpref; julgamento incompleto |
 | `efron1993bootstrap` | Efron, B.; Tibshirani, R. J. **An Introduction to the Bootstrap.** Chapman & Hall, 1993. | 📚 | IC 95% por bootstrap |
 | `dunn1961bonferroni` | Dunn, O. J. **Multiple Comparisons Among Means.** *JASA* 56(293):52–64, 1961. | 📚 | Correção de Bonferroni |
+| `schuirmann1987tost` | Schuirmann, D. J. **A Comparison of the Two One-Sided Tests Procedure and the Power Approach for Assessing the Equivalence of Average Bioavailability.** *Journal of Pharmacokinetics and Biopharmaceutics* 15(6):657–680, 1987. | 📚 | **Teste de equivalência (TOST)**: transforma "não deu diferença" em "são equivalentes dentro de ±δ" (F7) |
+| `lakens2017equivalence` | Lakens, D. **Equivalence Tests: A Practical Primer for t Tests, Correlations, and Meta-Analyses.** *Social Psychological and Personality Science* 8(4):355–362, 2017. | 📚 | Guia prático do TOST, citado junto do Schuirmann |
 | `kohavi1995cv` | Kohavi, R. **A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection.** IJCAI 1995. | 📚 | Validação cruzada para escolher hiperparâmetro sem tocar no teste (F6) |
 
 ---
@@ -369,6 +381,47 @@ recuperação.
   author    = {Karpukhin, Vladimir and others},
   booktitle = {Proceedings of EMNLP 2020},
   year      = {2020}
+}
+@techreport{burges2010lambdamart,
+  title       = {From {RankNet} to {LambdaRank} to {LambdaMART}: An Overview},
+  author      = {Burges, Christopher J. C.},
+  institution = {Microsoft Research}, number = {MSR-TR-2010-82}, year = {2010}
+}
+@inproceedings{ke2017lightgbm,
+  title     = {{LightGBM}: A Highly Efficient Gradient Boosting Decision Tree},
+  author    = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng and Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NeurIPS)},
+  year      = {2017}
+}
+@inproceedings{lundberg2017shap,
+  title     = {A Unified Approach to Interpreting Model Predictions},
+  author    = {Lundberg, Scott M. and Lee, Su-In},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NeurIPS)},
+  year      = {2017}
+}
+@article{lundberg2020treeshap,
+  title   = {From Local Explanations to Global Understanding with Explainable {AI} for Trees},
+  author  = {Lundberg, Scott M. and others},
+  journal = {Nature Machine Intelligence},
+  volume  = {2}, pages = {56--67}, year = {2020}
+}
+@inproceedings{hu2022lora,
+  title     = {{LoRA}: Low-Rank Adaptation of Large Language Models},
+  author    = {Hu, Edward J. and others},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2022}, note = {arXiv:2106.09685}
+}
+@article{schuirmann1987tost,
+  title   = {A Comparison of the Two One-Sided Tests Procedure and the Power Approach for Assessing the Equivalence of Average Bioavailability},
+  author  = {Schuirmann, Donald J.},
+  journal = {Journal of Pharmacokinetics and Biopharmaceutics},
+  volume  = {15}, number = {6}, pages = {657--680}, year = {1987}
+}
+@article{lakens2017equivalence,
+  title   = {Equivalence Tests: A Practical Primer for t Tests, Correlations, and Meta-Analyses},
+  author  = {Lakens, Dani{\"e}l},
+  journal = {Social Psychological and Personality Science},
+  volume  = {8}, number = {4}, pages = {355--362}, year = {2017}
 }
 @inproceedings{khattab2020colbert,
   title     = {{ColBERT}: Efficient and Effective Passage Search via Contextualized Late Interaction over {BERT}},
