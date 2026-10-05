@@ -70,9 +70,22 @@ consultas naturais, nunca usadas:
 | **critério `toca`** | **+15,6%** | **+9,7%** (p < 10⁻⁹⁵) | **+5,5%** |
 
 **O `toca` é a única versão que não perde em nenhuma amostra**, e ganha com
-significância corrigida em duas (no JUÁ difícil, +5,5% com p = 0,012 sem correção e 0,24 com Bonferroni sobre 23 comparações). Uma das três
-previsões errou ("a F6 também piora nas naturais": na verdade melhora 8%), e
-o erro mostrou que o dano da F6 vivia só nas consultas difíceis.
+significância corrigida em duas. No JUÁ difícil, o ganho sobre o completo é
++5,5% com p = 0,012 sem correção e 0,24 com Bonferroni (23 comparações); o que
+é significativo mesmo corrigido ali é a vantagem sobre o critério da F6
+(+20,7%, p < 10⁻¹⁷). Uma das três previsões errou ("a F6 também piora nas
+naturais": na verdade melhora 8%), e o erro mostrou que o dano da F6 vivia só
+nas consultas difíceis.
+
+**E ele vive exatamente onde o mecanismo prevê:** dividindo as consultas pela
+fração dos seus termos que aparecem na ementa do acórdão certo, a F6 perde
+**28%** no quartil em que a consulta repete a ementa e fica neutra nos outros
+três; o `toca` **ganha 12,5%** nesse mesmo quartil.
+
+**Os 12% de consultas do JUÁ que apontam para acórdãos relevantes no JurisTCU
+não explicam nada:** sem elas (1.373 consultas), todos os efeitos se repetem
+com magnitudes quase idênticas (F6 −15,0%, `toca` +5,3%, `toca` × F6 +23,8%,
+estrutural × fixo +8,2%).
 
 ### 3.4 A pergunta original do TCC, finalmente com poder
 
