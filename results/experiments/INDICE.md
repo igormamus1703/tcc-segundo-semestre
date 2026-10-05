@@ -6,6 +6,8 @@ Não editar à mão.
 | Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |
 |---|---|---|---|---|---|---|---|
 | [`20261005-1802_juanat_fusao2_toca`](20261005-1802_juanat_fusao2_toca/) | 2026-10-05T18:02:10 | 0 min | `316714f0` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1802_f7_replicacao_final`](20261005-1802_f7_replicacao_final/) | 2026-10-05T18:02:47 | 23 min | `316714f0` | NVIDIA GeForce RTX 5060 | 4 | — | — |
+| [`20261005-1802_f7_painel`](20261005-1802_f7_painel/) | 2026-10-05T18:02:47 | 26 min | `316714f0` | NVIDIA GeForce RTX 5060 | 0 | — | — |
 | [`20261005-1801_juanat_fusao2_recortados`](20261005-1801_juanat_fusao2_recortados/) | 2026-10-05T18:01:38 | 1 min | `c1b3c96e` | NVIDIA GeForce RTX 5060 | 5 | — | — |
 | [`20261005-1800_juanat_fusao4_toca`](20261005-1800_juanat_fusao4_toca/) | 2026-10-05T18:00:51 | 1 min | `f5dd5fad` | NVIDIA GeForce RTX 5060 | 5 | — | — |
 | [`20261005-1800_juanat_fusao4_peso_igual`](20261005-1800_juanat_fusao4_peso_igual/) | 2026-10-05T18:00:03 | 1 min | `f5dd5fad` | NVIDIA GeForce RTX 5060 | 5 | — | — |
