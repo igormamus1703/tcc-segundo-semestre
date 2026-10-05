@@ -101,6 +101,45 @@ def figura_curva(rodada: Path) -> None:
     plt.close(fig)
 
 
+def grupo_misto(relevante: str, positivo: str, venc_bm25: list[dict], venc_denso: list[dict],
+                aleatorios: list[str], k_bm25: int, k_denso: int, k_aleat: int,
+                rng: random.Random) -> list[str] | None:
+    """[positivo, negativos de três fontes], sem repetir chunk e sem tocar o relevante.
+
+    Por que misturar (a lição da primeira versão): com negativos tirados SÓ do
+    topo do BM25, todo negativo tem muito casamento literal com a consulta, e o
+    positivo (o excerto) muitas vezes tem menos. O modelo aprende o atalho
+    "casamento literal = trecho errado" — no JurisTCU, a correlação de Spearman
+    entre o score e a sobreposição consulta × trecho foi de +0,59 (zero-shot)
+    para −0,17 (ajustado), e o nDCG@10 desabou. Negativos do denso (que erra
+    por outro motivo) e negativos fáceis (trechos vencedores de OUTRAS
+    consultas) quebram essa correlação espúria.
+    """
+    usados = {positivo}
+    neg: list[str] = []
+
+    def pegar(cands: list[str], k: int) -> bool:
+        n = 0
+        for c in cands:
+            if n == k:
+                break
+            if c not in usados:
+                usados.add(c)
+                neg.append(c)
+                n += 1
+        return n == k
+
+    def errados(venc: list[dict]) -> list[str]:
+        return [r["chunk_id"] for r in sorted(venc, key=lambda r: r["rank"]) if r["doc_id"] != relevante]
+
+    alea = [c for c in aleatorios if not c.startswith(relevante + "::")]
+    rng.shuffle(alea)
+    if not (pegar(errados(venc_bm25), k_bm25) and pegar(errados(venc_denso), k_denso)
+            and pegar(alea, k_aleat)):
+        return None
+    return [positivo, *neg]
+
+
 # --- CLI -----------------------------------------------------------------------
 
 def main() -> None:
@@ -123,6 +162,11 @@ def main() -> None:
     p.add_argument("--queries", type=Path, default=INTERIM_DIR / "jua" / "queries_train_amostra.jsonl")
     p.add_argument("--qrels", type=Path, default=INTERIM_DIR / "jua" / "qrels_train_amostra.trec")
     p.add_argument("--negativos", type=int, default=7)
+    p.add_argument("--negativos-mistos", action="store_true",
+                   help="v2: 3 negativos do BM25 + 2 do denso + 2 de outras consultas (ver grupo_misto).")
+    p.add_argument("--rodada-negativos-denso", default="juanat_dense_bge_m3")
+    p.add_argument("--fracao-treino", type=float, default=1.0,
+                   help="Fração dos grupos de treino usada (o resto é descartado, não vira validação).")
     p.add_argument("--consultas-por-passo", type=int, default=2)
     p.add_argument("--acumular", type=int, default=4)
     p.add_argument("--epocas", type=int, default=1)
@@ -169,13 +213,21 @@ def main() -> None:
                     chunks_doc.setdefault(doc, []).append(
                         {"chunk_id": r["chunk_id"], "start": r["start"], "end": r["end"]})
 
-        rodada = ultima_rodada(args.rodada_negativos)
-        sidecar = next(p for p in (rodada / "runs").glob("*__chunks.jsonl"))
-        vencedores: dict[str, list[dict]] = {}
-        with sidecar.open(encoding="utf-8") as f:
-            for l in f:
-                r = json.loads(l)
-                vencedores.setdefault(r["query_id"], []).append(r)
+        def ler_vencedores(rotulo: str) -> dict[str, list[dict]]:
+            # pela estratégia: uma rodada com cinco estratégias tem cinco sidecars
+            rodada = ultima_rodada(rotulo)
+            sidecar = next(p for p in (rodada / "runs").glob(f"{args.estrategia}__*__chunks.jsonl"))
+            out: dict[str, list[dict]] = {}
+            with sidecar.open(encoding="utf-8") as f:
+                for l in f:
+                    r = json.loads(l)
+                    out.setdefault(r["query_id"], []).append(r)
+            return out
+
+        vencedores = ler_vencedores(args.rodada_negativos)
+        venc_denso = ler_vencedores(args.rodada_negativos_denso) if args.negativos_mistos else {}
+        pool_aleat = sorted({r["chunk_id"] for rs in vencedores.values() for r in rs[:5]})
+        rng_neg = random.Random(42)
 
         grupos, sem_local, sem_neg = [], 0, 0
         for qid in sorted(textos_q):
@@ -187,13 +239,18 @@ def main() -> None:
             if c is None:
                 sem_local += 1
                 continue
-            g = grupo(qid, d, c["chunk_id"], vencedores.get(qid, []), args.negativos)
+            if args.negativos_mistos:
+                g = grupo_misto(d, c["chunk_id"], vencedores.get(qid, []), venc_denso.get(qid, []),
+                                pool_aleat, 3, 2, 2, rng_neg)
+            else:
+                g = grupo(qid, d, c["chunk_id"], vencedores.get(qid, []), args.negativos)
             if g is None:
                 sem_neg += 1
                 continue
             grupos.append((qid, g))
         random.shuffle(grupos)
         val, treino = grupos[:args.validacao], grupos[args.validacao:]
+        treino = treino[:int(len(treino) * args.fracao_treino)]
         exp.log(f"{len(grupos)} grupos ({len(treino)} treino, {len(val)} validacao); "
                 f"{sem_local} sem excerto localizado, {sem_neg} sem negativos suficientes")
         ids = {c for _q, g in grupos for c in g}
