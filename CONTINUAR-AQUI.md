@@ -8,6 +8,22 @@ contexto necessário para continuar sem redescobrir nada.
 
 ---
 
+## 0. ATUALIZAÇÃO 05/10/2026 — F7 na branch `leo/f7-evolucao` (não mergeada)
+
+Se a sessão nova estiver na branch `leo/f7-evolucao`, leia
+**`RESULTADOS-F7.md`** e **`docs/docsleo/branches/leo-f7-evolucao/README.md`**
+antes do resto deste arquivo. Em uma frase: o recorte da F6 foi testado em
+7.567 consultas novas do JUÁ-Juris, quebrou nas consultas difíceis por um
+artefato de fronteira (a ementa saía junto com o relatório), foi corrigido
+(critério `toca`, confirmado em dados não vistos), e a pergunta original do
+TCC ganhou resposta com poder (o corte estrutural vence, por isolar a ementa).
+
+Comandos novos: `python -m src.jua`, `src.rerank`, `src.finetune_reranker`,
+`src.ltr`, `src.replicacao`, `src.painel`, e `.\scripts\rodada_f7.ps1` para
+refazer tudo. Referências do artigo em **`REFERENCIAS.md`**.
+
+---
+
 ## 1. Contexto em 30 segundos
 
 TCC de RI jurídica (PUCPR, 4 alunos). Pergunta original: *chunking que respeita

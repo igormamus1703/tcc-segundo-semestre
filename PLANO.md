@@ -5,7 +5,25 @@ codar ou escrever. Atualize **acrescentando**, não apagando: a seção
 [Histórico](#histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
 e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
-**Última atualização:** 28/09/2026 · por Leonardo Marques
+**Última atualização:** 05/10/2026 · por Leonardo Marques (F7, na branch `leo/f7-evolucao`, **não mergeada**)
+
+---
+
+## 0. Atualização de 05/10 — a F7 muda três respostas (ler antes do resto)
+
+A F7 testou a F6 numa segunda coleção, o **JUÁ-Juris**: 1.567 consultas
+difíceis e 6.000 naturais sobre os **mesmos 12.880 acórdãos**, com tudo
+pré-registrado. Detalhe em [RESULTADOS-F7.md](RESULTADOS-F7.md) e na
+[pasta da branch](docs/docsleo/branches/leo-f7-evolucao/README.md).
+
+| | Antes (F6, 150 consultas) | Depois (F7, + 7.567 consultas) |
+|---|---|---|
+| **Pergunta 1** | "Não melhora", empate | **O corte estrutural vence**: +1% a +3% nas naturais, +7% a +12% nas difíceis, por isolar a ementa. Segmentador ≡ ouro (teste de equivalência) |
+| **Pergunta 2** | "Tire o relatório" (+16%) | **Tire só os chunks 100% relatório (`toca`)**: a versão da F6 perde 12,6% nas consultas difíceis; a corrigida ganha nas três amostras |
+| **Novo** | — | Um ranker aprendido (LambdaRank) treinado no JUÁ transfere para o JurisTCU (+18,6%) e mostra, via SHAP, que o relatório vale ~5× menos |
+
+As seções abaixo ainda descrevem o estado de 28/09 e continuam válidas para o
+JurisTCU; onde a F7 as corrige, a correção está aqui e na decisão 5.
 
 ---
 
@@ -132,6 +150,17 @@ sem tocar em `ingest.py`, `segmenter/` ou `chunkers/`.
 F6 muda a tese do artigo. Checklist e pontos de atenção no
 [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md);
 resumo para a orientação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
+
+### 🔴 DECISÃO 5 — Mergear a F7? (05/10)
+
+A branch `leo/f7-evolucao` está **local e não mergeada**, por decisão
+explícita: ela muda a recomendação do artigo. O critério de merge foi escrito
+**antes** dos resultados, no
+[pré-registro](docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md): a
+branch entra se (a) a F6 replicar, (b) a pergunta original ganhar resposta com
+poder, ou (c) o reranker ganhar ≥ 5% nas duas coleções. **(b) foi atingido**,
+e a correção do recorte (H8b) foi confirmada em dados não vistos. Se a equipe
+decidir não mergear, a `main` continua no estado da F6, sem perda nenhuma.
 
 ---
 
