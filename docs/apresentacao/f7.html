@@ -334,6 +334,20 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
     </figcaption>
     <div id="g-mecanismo"></div>
   </figure>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">O dano mora onde a consulta “é” a ementa</p>
+      <p class="fig-sub">Consultas do JUÁ divididas em quartis pela fração dos seus termos que estão na ementa do
+      acórdão certo. Efeito de cada recorte (fixo 512/256, BM25) contra o índice completo.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--pior)"></i>critério da F6</span>
+      <span><i class="swatch" style="background:var(--melhor)"></i>critério “toca”</span>
+    </div>
+    <div id="g-quartis"></div>
+    <p class="fig-nota">Nos três primeiros quartis os dois critérios são indistinguíveis. No quarto, a F6 perde
+    28% (difícil) e o “toca” ganha 12,5%.</p>
+  </figure>
 </section>
 
 <section>
@@ -541,6 +555,38 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
       x += w;
     });
     document.getElementById("g-mecanismo").appendChild(s);
+  })();
+
+  /* mecanismo por quartil */
+  (function () {
+    var D = [
+      {nome: "JUÁ difícil", q: [[-4.6, -3.4], [0.0, 0.3], [2.3, 3.5], [-28.4, 12.5]]},
+      {nome: "JUÁ natural", q: [[9.1, 8.9], [10.7, 10.8], [10.4, 9.7], [2.4, 9.3]]}
+    ];
+    var W = 720, H = 250, s = svg(W, H, "Efeito do recorte por quartil de sobreposição com a ementa");
+    var L = 60, R = W - 20, T = 22, B = H - 52, min = -30, max = 15;
+    var y = function (v) { return T + (max - v) / (max - min) * (B - T); };
+    [-30, -20, -10, 0, 10].forEach(function (v) {
+      s.appendChild(el("line", {x1: L, y1: y(v), x2: R, y2: y(v), stroke: v === 0 ? "var(--regua)" : "var(--grade)", "stroke-width": v === 0 ? 1.5 : 1}));
+      txt(s, L - 8, y(v), pct(v, 0), {a: "end", f: 11, c: "var(--tinta-3)"});
+    });
+    var larg = (R - L) / 2;
+    D.forEach(function (c, ci) {
+      var x0 = L + ci * larg;
+      txt(s, x0 + larg / 2, 8, c.nome, {a: "middle", f: 12, w: 600, c: "var(--tinta)"});
+      c.q.forEach(function (par, qi) {
+        var xc = x0 + (qi + 0.5) * larg / 4;
+        par.forEach(function (v, j) {
+          var x = xc - 17 + j * 18, cor = j ? "var(--melhor)" : "var(--pior)";
+          var r = el("rect", {x: x, y: Math.min(y(v), y(0)), width: 16, height: Math.max(Math.abs(y(v) - y(0)), 1), rx: 2, fill: cor});
+          r.appendChild(el("title", null, c.nome + " Q" + (qi + 1) + " · " + (j ? "toca" : "F6") + ": " + pct(v)));
+          s.appendChild(r);
+        });
+        txt(s, xc, B + 16, "Q" + (qi + 1), {a: "middle", f: 11.5, c: "var(--tinta-2)"});
+      });
+    });
+    txt(s, W / 2, H - 10, "quartil de sobreposição consulta × ementa (Q4 = consulta quase igual à ementa)", {a: "middle", f: 11, c: "var(--tinta-3)"});
+    document.getElementById("g-quartis").appendChild(s);
   })();
 
   /* pergunta original: dot plot por coleção */
