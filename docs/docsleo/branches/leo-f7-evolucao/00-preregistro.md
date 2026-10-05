@@ -130,3 +130,29 @@ resultado já visto é o do reranker no JurisTCU, a coleção da F6):
    dá 0,2704 (−15,9% contra a fusão, p < 0,0001); lendo só passagens **fora
    do relatório**, 0,3189 (+17,9% sobre ler todas, p < 0,000001). No JurisTCU,
    H7 confirma e H6 não.
+
+### Adendo 2 — 05/10/2026, 17h00: hipótese nova, a confirmar em dados não vistos
+
+**O que se viu no teste do JUÁ (exploratório):** o recorte "sem relatório"
+**piora** as estratégias fixas e a recursiva (−12,6% a −21,3%), e não as
+estruturais. Mecanismo identificado: o chunk 0 dessas estratégias junta a
+ementa inteira com o começo do relatório, é rotulado "relatório" pela maioria
+dos caracteres e sai junto com a ementa. Em 57 das 105 perdas grandes, o chunk
+que achava o acórdão certo era exatamente esse.
+
+**Intervenção derivada:** o critério `toca` (`--secoes-criterio toca`), que só
+descarta chunks **100% relatório**. No teste do JUÁ, ele vira as perdas em
+ganhos (+4,5% a +6,0%) e mantém o ganho no JurisTCU (+10,3% a +15,6%).
+
+**Como isso foi visto no teste, ainda não vale como confirmação.** Previsão
+registrada agora, para o **split de treino do JUÁ** (amostra de 6.000
+consultas, nunca usada em análise nenhuma), com `fixed_512_256`, BM25:
+
+| # | Hipótese | Confirma se |
+|---|---|---|
+| **H8a** | O recorte por `maioria` piora | Δ < 0 contra o completo, p < 0,05 |
+| **H8b** | O recorte por `toca` melhora | Δ > 0 contra o completo, p < 0,05 |
+| **H8c** | `toca` supera `maioria` | Δ > 0, p < 0,05 |
+
+Se H8b falhar, a receita corrigida não é recomendada no artigo, mesmo com o
+resultado do teste.
