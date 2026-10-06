@@ -1,0 +1,95 @@
+{
+  "rotulo": "jua_bm25",
+  "inicio": "2026-10-05T16:03:57",
+  "fim": "2026-10-05T16:18:35",
+  "duracao_s": 877.7,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever bm25 --queries data/interim/jua/queries_test.jsonl --label jua_bm25",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 1567,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_test.jsonl",
+    "secoes": null,
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "10f3bf9c8f4a39dc36d89d548299b6e978d10a99",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25",
+      "run": "structural_gold__bm25",
+      "n_chunks": 286689,
+      "n_queries": 1567,
+      "n_linhas_run": 1321848,
+      "segundos": 147.7
+    },
+    {
+      "nome": "structural_pred__bm25",
+      "run": "structural_pred__bm25",
+      "n_chunks": 285308,
+      "n_queries": 1567,
+      "n_linhas_run": 1322261,
+      "segundos": 142.4
+    },
+    {
+      "nome": "recursive_default__bm25",
+      "run": "recursive_default__bm25",
+      "n_chunks": 270070,
+      "n_queries": 1567,
+      "n_linhas_run": 1344389,
+      "segundos": 130.6
+    },
+    {
+      "nome": "fixed_1024_512__bm25",
+      "run": "fixed_1024_512__bm25",
+      "n_chunks": 450786,
+      "n_queries": 1567,
+      "n_linhas_run": 1042652,
+      "segundos": 222.5
+    },
+    {
+      "nome": "fixed_512_256__bm25",
+      "run": "fixed_512_256__bm25",
+      "n_chunks": 907914,
+      "n_queries": 1567,
+      "n_linhas_run": 1004689,
+      "segundos": 230.5
+    }
+  ],
+  "erro": null
+}

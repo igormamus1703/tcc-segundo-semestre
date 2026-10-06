@@ -219,3 +219,28 @@ def test_amostra_aleatoria_recusa_fracao_invalida():
         amostra_aleatoria(chunks, 0.0)
     with pytest.raises(ValueError, match="fracao"):
         amostra_aleatoria(chunks, 1.5)
+
+
+# --- F7: criterio "toca" -----------------------------------------------------
+
+def test_criterio_toca_mantem_o_chunk_que_mistura_ementa_e_relatorio():
+    # o chunk 0 típico das fixas: 100 caracteres de ementa + 300 de relatório.
+    # Pela maioria ele é "relatório" e sai junto com a ementa; pelo "toca", fica.
+    misto = Chunk("c0", "docA", "...", None, 0, 400)
+    so_relatorio = Chunk("c1", "docA", "...", None, 150, 450)
+    sem_rel = {"ementa", "fundamentacao", "dispositivo"}
+    maioria, _ = filtrar([misto, so_relatorio], sem_rel, SPANS)
+    toca, _ = filtrar([misto, so_relatorio], sem_rel, SPANS, criterio="toca")
+    assert [c.chunk_id for c in maioria] == []
+    assert [c.chunk_id for c in toca] == ["c0"]  # relatório puro continua saindo
+
+
+def test_criterio_toca_respeita_o_rotulo_das_estruturais():
+    rotulado = Chunk("c2", "docA", "...", "relatorio", 0, 400)  # offset toca a ementa
+    toca, _ = filtrar([rotulado], {"ementa"}, SPANS, criterio="toca")
+    assert toca == []  # nas estruturais o rótulo é a definição do chunk
+
+
+def test_criterio_desconhecido_falha():
+    with pytest.raises(ValueError):
+        filtrar([], {"ementa"}, SPANS, criterio="metade")

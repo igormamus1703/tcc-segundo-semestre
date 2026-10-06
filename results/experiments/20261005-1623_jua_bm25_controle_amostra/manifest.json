@@ -1,0 +1,154 @@
+{
+  "rotulo": "jua_bm25_controle_amostra",
+  "inicio": "2026-10-05T16:23:15",
+  "fim": "2026-10-05T16:28:12",
+  "duracao_s": 297.2,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy all --retriever bm25 --queries data/interim/jua/queries_test.jsonl --amostra-igual-a sem:relatorio --label jua_bm25_controle_amostra",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 1567,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_test.jsonl",
+    "secoes": null,
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "amostra_seed": 42
+  },
+  "git": {
+    "commit": "52d056f19a09f60d2d5600a459f1bedd400ca14c",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25__amostra-0.3324s42",
+      "run": "structural_gold__bm25__amostra-0.3324s42",
+      "n_chunks": 95300,
+      "n_queries": 1567,
+      "n_linhas_run": 1551968,
+      "segundos": 54.0,
+      "controle_amostra": {
+        "fracao": 0.332416,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 286689,
+        "chunks_depois": 95300
+      }
+    },
+    {
+      "nome": "structural_pred__bm25__amostra-0.3372s42",
+      "run": "structural_pred__bm25__amostra-0.3372s42",
+      "n_chunks": 96219,
+      "n_queries": 1567,
+      "n_linhas_run": 1549356,
+      "segundos": 52.9,
+      "controle_amostra": {
+        "fracao": 0.337246,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 285308,
+        "chunks_depois": 96219
+      }
+    },
+    {
+      "nome": "recursive_default__bm25__amostra-0.2908s42",
+      "run": "recursive_default__bm25__amostra-0.2908s42",
+      "n_chunks": 78548,
+      "n_queries": 1567,
+      "n_linhas_run": 1561919,
+      "segundos": 43.1,
+      "controle_amostra": {
+        "fracao": 0.290843,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 270070,
+        "chunks_depois": 78548
+      }
+    },
+    {
+      "nome": "fixed_1024_512__bm25__amostra-0.2804s42",
+      "run": "fixed_1024_512__bm25__amostra-0.2804s42",
+      "n_chunks": 126392,
+      "n_queries": 1567,
+      "n_linhas_run": 1481296,
+      "segundos": 69.1,
+      "controle_amostra": {
+        "fracao": 0.280381,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 450786,
+        "chunks_depois": 126392
+      }
+    },
+    {
+      "nome": "fixed_512_256__bm25__amostra-0.2800s42",
+      "run": "fixed_512_256__bm25__amostra-0.2800s42",
+      "n_chunks": 254234,
+      "n_queries": 1567,
+      "n_linhas_run": 1422508,
+      "segundos": 74.8,
+      "controle_amostra": {
+        "fracao": 0.28002,
+        "seed": 42,
+        "igual_a_secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "chunks_antes": 907914,
+        "chunks_depois": 254234
+      }
+    }
+  ],
+  "erro": null
+}

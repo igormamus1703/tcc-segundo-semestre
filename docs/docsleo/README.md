@@ -32,6 +32,8 @@ docsleo/
 |---|---|---|
 | [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | ✅ mergeada em 07/09 |
 | [leo/f6-secoes-e-fusao](branches/leo-f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+29,3% de nDCG@10** | ✅ mergeada em 28/09 |
+| [leo/f7-enxuta](branches/leo-f7-enxuta/) | F7 no essencial: validação em 7.567 consultas do JUÁ, critério `toca`, pergunta original com poder, e o que já foi testado e não repetir | 🟡 aguardando aprovação |
+| `leo/f7-evolucao` | F7 completa (ranker aprendido, reranker, fine-tune, painel), **arquivo, não mergear**; resumida na `f7-enxuta` | 📦 arquivo |
 
 ## Atalhos para o que mais importa
 
