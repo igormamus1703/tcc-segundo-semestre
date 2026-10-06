@@ -73,7 +73,7 @@ em código existente é o parâmetro `criterio` em `sections.filtrar`, cujo padr
 
 ## Testes
 
-**221 passando** (eram 191 na F6). Os 30 novos travam o que falha em silêncio:
+**223 passando** (eram 191 na F6). Os 32 novos travam o que falha em silêncio:
 
 - **offset do excerto** no texto dobrado × texto original (`test_jua.py`);
 - **o reranker** não perde documento sem passagem, nem lê relatório na
