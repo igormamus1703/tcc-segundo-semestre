@@ -1,6 +1,6 @@
 # Branch `leo/f7-enxuta` — a validação externa da F6, no essencial
 
-**Autor:** Leonardo Marques · **Data:** 06/10/2026 · **Status:** 🟡 aguardando aprovação para merge
+**Autor:** Leonardo Marques · **Data:** 06/10/2026 · **Status:** ✅ mergeada na `main` em 06/10/2026
 
 A F7 completa (validação externa, ranker aprendido, reranker, fine-tune,
 painel) foi feita na branch **`leo/f7-evolucao`**, que fica **guardada como
@@ -94,8 +94,10 @@ segura.*
 
 ## 5. Já testamos — não repetir
 
-Tudo isto está na branch-arquivo **`leo/f7-evolucao`**, em
-`docs/docsleo/branches/leo-f7-evolucao/`, com código, testes e rodadas.
+A documentação completa está em [`../leo-f7-evolucao/`](../leo-f7-evolucao/README.md)
+(também na `main`); o código, os testes e as rodadas, na branch-arquivo
+**`leo/f7-evolucao`** do GitHub. A página visual da F7 completa está em
+[`docs/apresentacao/f7.html`](../../../apresentacao/f7.html).
 
 | O que | Resultado | Lição |
 |---|---|---|
