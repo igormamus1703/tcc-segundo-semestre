@@ -77,8 +77,11 @@ casamento na fundamentação contribui cerca de 0,75 e um no relatório cerca de
 **Reranking.** *Um cross-encoder multilíngue sem ajuste [bge_reranker_v2_m3]
 piora a melhor configuração no JurisTCU (−15,9%) e recupera o desempenho
 quando impedido de ler passagens do relatório (+17,9%): a interferência do
-relatório não é exclusiva da recuperação léxica.* **[completar com o reranker
-ajustado — ver 05-reranker.md]**
+relatório não é exclusiva da recuperação léxica. O ajuste com LoRA sobre
+5 mil consultas do JUÁ, com negativos minerados do BM25, induziu um atalho
+anti-lexical (Spearman entre score e sobreposição de termos de +0,59 para
+−0,17) e reduziu o nDCG@10 em 60%; diversificar os negativos atenuou, mas não
+eliminou, a perda.*
 
 ## Discussão — pontos a desenvolver
 

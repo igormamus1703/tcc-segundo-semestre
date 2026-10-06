@@ -5,6 +5,10 @@ Não editar à mão.
 
 | Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |
 |---|---|---|---|---|---|---|---|
+| [`20261005-1958_jua_rerank_ft2_fusao4`](20261005-1958_jua_rerank_ft2_fusao4/) | 2026-10-05T19:58:47 | 22 min | `c1fe3e76` | NVIDIA GeForce RTX 5060 | 3 | — | — |
+| [`20261005-1956_juristcu_rerank_ft2_fusao4`](20261005-1956_juristcu_rerank_ft2_fusao4/) | 2026-10-05T19:56:24 | 2 min | `c1fe3e76` | NVIDIA GeForce RTX 5060 | 3 | — | — |
+| [`20261005-1924_f7_finetune_reranker_v2`](20261005-1924_f7_finetune_reranker_v2/) | 2026-10-05T19:24:20 | 32 min | `c1fe3e76` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20261005-1901_jua_rerank_ft_fusao4`](20261005-1901_jua_rerank_ft_fusao4/) | 2026-10-05T19:01:54 | 22 min | `be8130d6` | NVIDIA GeForce RTX 5060 | 3 | — | — |
 | [`20261005-1856_juristcu_rerank_ft_fusao4`](20261005-1856_juristcu_rerank_ft_fusao4/) | 2026-10-05T18:56:28 | 2 min | `be8aa59a` | NVIDIA GeForce RTX 5060 | 3 | — | — |
 | [`20261005-1855_f7_ltr_pred`](20261005-1855_f7_ltr_pred/) | 2026-10-05T18:55:03 | 2 min | `be8aa59a` | NVIDIA GeForce RTX 5060 | 0 | — | — |
 | [`20261005-1854_ltrsp_te_dense_dispositivo`](20261005-1854_ltrsp_te_dense_dispositivo/) | 2026-10-05T18:54:05 | 0 min | `be8aa59a` | NVIDIA GeForce RTX 5060 | 1 | — | — |

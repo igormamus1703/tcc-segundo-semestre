@@ -1,0 +1,80 @@
+{
+  "rotulo": "jua_rerank_ft_fusao4",
+  "inicio": "2026-10-05T19:01:54",
+  "fim": "2026-10-05T19:23:55",
+  "duracao_s": 1321.0,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\rerank.py --estrategia fixed_512_256 --nome fusao4ft --label jua_rerank_ft_fusao4 --queries data/interim/jua/queries_test.jsonl --modelo data/models/bge-reranker-v2-m3-jua-lora --max-length 512 --candidatos C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual/runs/fixed_512_256__soma_norm.trec --fontes C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25/runs/fixed_512_256__bm25__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio/runs/fixed_512_256__bm25__sec-sem_relatorio__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3/runs/fixed_512_256__dense-bge_m3__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio/runs/fixed_512_256__dense-bge_m3__sec-sem_relatorio__chunks.jsonl --cache data/interim/rerank_cache/jua_fixed_512_256_ft.tsv",
+  "config": {
+    "candidatos": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+    "fontes": [
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio__chunks.jsonl"
+    ],
+    "estrategia": "fixed_512_256",
+    "nome": "fusao4ft",
+    "variantes": [
+      "todas",
+      "sem_relatorio",
+      "sem_relatorio_preserva"
+    ],
+    "top": 50,
+    "modelo": "data/models/bge-reranker-v2-m3-jua-lora",
+    "max_length": 512,
+    "batch": 16,
+    "queries": "data\\interim\\jua\\queries_test.jsonl",
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\corpus_docs.jsonl",
+    "processed_dir": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\processed",
+    "cache": "data\\interim\\rerank_cache\\jua_fixed_512_256_ft.tsv",
+    "label": "jua_rerank_ft_fusao4"
+  },
+  "git": {
+    "commit": "be8130d61f0d2184923d4c90186bdcc5bff1ae15",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-todas",
+      "variante": "todas",
+      "top": 50,
+      "documentos_lidos": 76883,
+      "documentos_sem_passagem": 1467,
+      "fracao_sem_passagem": 0.0187
+    },
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-sem_relatorio",
+      "variante": "sem_relatorio",
+      "top": 50,
+      "documentos_lidos": 67544,
+      "documentos_sem_passagem": 10806,
+      "fracao_sem_passagem": 0.1379
+    },
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-sem_relatorio_preserva",
+      "variante": "sem_relatorio_preserva",
+      "top": 50,
+      "documentos_lidos": 76883,
+      "documentos_sem_passagem": 1467,
+      "fracao_sem_passagem": 0.0187
+    }
+  ],
+  "erro": null
+}

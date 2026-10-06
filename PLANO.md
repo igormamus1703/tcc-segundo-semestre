@@ -162,7 +162,7 @@ entre as estratégias, ou (c) o reranker ganhar ≥ 5% nas duas coleções.
 
 **Pela letra, nenhum dos três foi cumprido:** H1 não replicou no teste do JUÁ;
 H5 previu equivalência e encontrou **diferença** (o estrutural vence); e o
-reranker zero-shot não superou a fusão (o ajustado está sendo avaliado). O que
+reranker não superou a fusão, nem zero-shot nem ajustado com LoRA (o ajuste piorou; ver o doc 05 da branch). O que
 a F7 produziu de mais forte veio **fora** do critério escrito: a correção do
 recorte (H8b, pré-registrada no adendo 2 e confirmada em dados não vistos), a
 resposta com poder à pergunta original e o ranker aprendido. **A decisão é da

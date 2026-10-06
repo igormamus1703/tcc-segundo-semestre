@@ -440,19 +440,22 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
 
 <section>
   <p class="passo"><b>7</b> · Um modelo neural também se engana</p>
-  <h2>O reranker lê o relatório e erra — até ser ajustado ao domínio</h2>
+  <h2>O reranker lê o relatório e erra — e ajustá-lo não resolveu</h2>
   <div class="leitura">
     <p>Um <em>cross-encoder</em> (<code>bge-reranker-v2-m3</code>) lê consulta e
     trecho juntos. Sem ajuste, ele <strong>piora</strong> a melhor configuração
     da F6 no JurisTCU (−15,9%) — e, impedido de ler o relatório, recupera tudo
     (+17,9%). A interferência do relatório não é coisa do BM25.</p>
-    <p id="txt-ft">Ajustado com LoRA em 5 mil consultas do treino do JUÁ, com o trecho exato
-    da resposta como positivo: <em>resultado na figura abaixo</em>.</p>
+    <p id="txt-ft">Ajustado com LoRA em 5 mil consultas do treino do JUÁ, com o trecho exato da resposta
+    como positivo, ele <strong>piorou muito</strong>, inclusive no próprio JUÁ. O diagnóstico: com negativos
+    tirados só do topo do BM25, o modelo aprendeu que “casamento literal = trecho errado” (a correlação do score
+    com a sobreposição de termos foi de +0,59 para −0,17). Misturar os negativos (v2) recupera quase o dobro,
+    mas ainda fica abaixo do modelo genérico. Fica registrado como resultado negativo, com a causa medida.</p>
   </div>
   <figure>
     <figcaption>
       <p class="fig-titulo">Reranker sobre os 50 primeiros da fusão: zero-shot e ajustado</p>
-      <p class="fig-sub">nDCG@10. A linha tracejada é a fusão sem reranker.</p>
+      <p class="fig-sub">nDCG@10, lendo todas as passagens (exceto a linha “sem relatório”). A linha tracejada é a fusão sem reranker.</p>
     </figcaption>
     <div id="g-reranker"></div>
   </figure>
@@ -698,20 +701,20 @@ td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
   ], 0.36, "Ranker aprendido nas duas coleções");
 
   var RERANK = {
-    juristcu: {fusao: 0.3215, zs: 0.2704, zsSem: 0.3189, ft: null, ftSem: null},
-    jua: {fusao: 0.2215, zs: 0.2392, zsSem: 0.2231, ft: null, ftSem: null}
+    juristcu: {fusao: 0.3215, zs: 0.2704, zsSem: 0.3189, ft: 0.1087, ftSem: 0.1949},
+    jua: {fusao: 0.2215, zs: 0.2392, zsSem: 0.2231, ft: 0.0961, ftSem: 0.1829}
   };
   grupos("g-reranker", [
     {nome: "JurisTCU", ref: RERANK.juristcu.fusao, itens: [
       {nome: "zero-shot, lendo tudo", v: RERANK.juristcu.zs},
       {nome: "zero-shot, sem relatório", v: RERANK.juristcu.zsSem},
-      {nome: "ajustado (LoRA), lendo tudo", v: RERANK.juristcu.ft, destaque: true},
-      {nome: "ajustado, sem relatório", v: RERANK.juristcu.ftSem, destaque: true}]},
+      {nome: "ajustado v1 (negativos do BM25)", v: RERANK.juristcu.ft, cor: "var(--pior)"},
+      {nome: "ajustado v2 (negativos mistos)", v: RERANK.juristcu.ftSem, cor: "var(--pior)"}]},
     {nome: "JUÁ difícil", ref: RERANK.jua.fusao, itens: [
       {nome: "zero-shot, lendo tudo", v: RERANK.jua.zs},
       {nome: "zero-shot, sem relatório", v: RERANK.jua.zsSem},
-      {nome: "ajustado (LoRA), lendo tudo", v: RERANK.jua.ft, destaque: true},
-      {nome: "ajustado, sem relatório", v: RERANK.jua.ftSem, destaque: true}]}
+      {nome: "ajustado v1 (negativos do BM25)", v: RERANK.jua.ft, cor: "var(--pior)"},
+      {nome: "ajustado v2 (negativos mistos)", v: RERANK.jua.ftSem, cor: "var(--pior)"}]}
   ], 0.40, "Reranker zero-shot e ajustado");
 
   /* tabela de receitas */

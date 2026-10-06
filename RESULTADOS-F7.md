@@ -125,7 +125,13 @@ O reranker `bge-reranker-v2-m3` sem ajuste **piora** a melhor configuração
 da F6 no JurisTCU (−15,9%); impedido de ler o relatório, recupera tudo
 (+17,9%). A interferência do relatório não é um artefato do BM25. Ajustei o
 reranker com LoRA em 5 mil consultas do treino do JUÁ, com o trecho exato da
-resposta como positivo: **[resultado a completar quando a avaliação terminar]**.
+resposta como positivo, e **piorou muito** (−60%, inclusive no próprio JUÁ):
+com negativos tirados só do topo do BM25, o modelo aprendeu que "casamento
+literal = trecho errado" (correlação com a sobreposição de termos de +0,59
+para −0,17). Misturar os tipos de negativo (v2) quase dobra o resultado, mas
+ainda fica 24% a 28% abaixo do modelo genérico. **Resultado negativo,
+documentado com a causa medida**; o desenho certo (treinar no nível do
+documento) fica para trabalho futuro.
 
 ## 4. O que muda no artigo
 

@@ -1,0 +1,60 @@
+{
+  "rotulo": "f7_finetune_reranker_v2",
+  "inicio": "2026-10-05T19:24:20",
+  "fim": "2026-10-05T19:56:10",
+  "duracao_s": 1909.9,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\finetune_reranker.py --negativos-mistos --lr 5e-5 --fracao-treino 0.5 --saida data/models/bge-reranker-v2-m3-jua-lora-v2 --label f7_finetune_reranker_v2",
+  "config": {
+    "base": "BAAI/bge-reranker-v2-m3",
+    "estrategia": "fixed_512_256",
+    "rodada_negativos": "h8_tr_bm25",
+    "queries": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\jua\\queries_train_amostra.jsonl",
+    "qrels": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\jua\\qrels_train_amostra.trec",
+    "negativos": "7",
+    "negativos_mistos": "True",
+    "rodada_negativos_denso": "juanat_dense_bge_m3",
+    "fracao_treino": "0.5",
+    "consultas_por_passo": "2",
+    "acumular": "4",
+    "epocas": "1",
+    "lr": "5e-05",
+    "max_length": "512",
+    "validacao": "300",
+    "saida": "data\\models\\bge-reranker-v2-m3-jua-lora-v2",
+    "label": "f7_finetune_reranker_v2"
+  },
+  "git": {
+    "commit": "c1fe3e76ff23f0405f2439f822fb1136f37ca40a",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "modelo",
+      "saida": "data\\models\\bge-reranker-v2-m3-jua-lora-v2",
+      "curva": {
+        "passo_otim": 300,
+        "perda_treino": 1.4032810590788722,
+        "perda_val": 1.3181098777996867,
+        "acerto_top1_val": 0.5433333333333333
+      }
+    }
+  ],
+  "erro": null
+}
