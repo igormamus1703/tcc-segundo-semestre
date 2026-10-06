@@ -1,0 +1,33 @@
+{
+  "rotulo": "f7_mecanismo",
+  "inicio": "2026-10-05T17:58:24",
+  "fim": "2026-10-05T18:00:19",
+  "duracao_s": 114.8,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\mecanismo.py",
+  "config": {
+    "estrategia": "fixed_512_256"
+  },
+  "git": {
+    "commit": "f5dd5fad4ed0a76800054de14920523df9464dd4",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [],
+  "erro": null
+}

@@ -1,0 +1,8 @@
+[17:41:45] experimento 20261005-1741_juanat_bm25_sec_sem_ementa
+[17:41:45]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:41:45]   commit: e4616d89 (arvore suja) em leo/f7-evolucao
+[17:41:49]   [structural_gold] secoes ['dispositivo', 'fundamentacao', 'relatorio']: 286,689 -> 273,796 chunks (95.5%)
+[17:44:23] structural_gold__bm25__sec-sem_ementa: 273,796 chunks, 1,200,000 linhas, 156.5s  [decorrido 0.0 h]
+[17:44:27]   [structural_pred] secoes ['dispositivo', 'fundamentacao', 'relatorio']: 285,308 -> 271,328 chunks (95.1%)
+[17:47:18] structural_pred__bm25__sec-sem_ementa: 271,328 chunks, 1,200,000 linhas, 174.4s  [decorrido 0.1 h]
+[17:47:18] fim em 5.6 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1741_juanat_bm25_sec_sem_ementa

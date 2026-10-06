@@ -1,0 +1,14 @@
+[16:23:15] experimento 20261005-1623_jua_bm25_controle_amostra
+[16:23:15]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[16:23:15]   commit: 52d056f1 (arvore suja) em leo/f7-evolucao
+[16:23:19]   [structural_gold] amostra aleatoria 0.3324 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 286,689 -> 95,300 chunks
+[16:24:10] structural_gold__bm25__amostra-0.3324s42: 95,300 chunks, 1,551,968 linhas, 54.0s  [decorrido 0.0 h]
+[16:24:14]   [structural_pred] amostra aleatoria 0.3372 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 285,308 -> 96,219 chunks
+[16:25:03] structural_pred__bm25__amostra-0.3372s42: 96,219 chunks, 1,549,356 linhas, 52.9s  [decorrido 0.0 h]
+[16:25:07]   [recursive_default] amostra aleatoria 0.2908 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 270,070 -> 78,548 chunks
+[16:25:47] recursive_default__bm25__amostra-0.2908s42: 78,548 chunks, 1,561,919 linhas, 43.1s  [decorrido 0.0 h]
+[16:25:53]   [fixed_1024_512] amostra aleatoria 0.2804 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 450,786 -> 126,392 chunks
+[16:26:56] fixed_1024_512__bm25__amostra-0.2804s42: 126,392 chunks, 1,481,296 linhas, 69.1s  [decorrido 0.1 h]
+[16:27:05]   [fixed_512_256] amostra aleatoria 0.2800 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 907,914 -> 254,234 chunks
+[16:28:12] fixed_512_256__bm25__amostra-0.2800s42: 254,234 chunks, 1,422,508 linhas, 74.8s  [decorrido 0.1 h]
+[16:28:12] fim em 5.0 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1623_jua_bm25_controle_amostra
