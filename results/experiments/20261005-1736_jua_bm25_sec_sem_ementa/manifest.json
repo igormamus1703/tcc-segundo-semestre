@@ -1,0 +1,106 @@
+{
+  "rotulo": "jua_bm25_sec_sem_ementa",
+  "inicio": "2026-10-05T17:36:50",
+  "fim": "2026-10-05T17:41:31",
+  "duracao_s": 281.0,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy structural_gold structural_pred --retriever bm25 --queries data/interim/jua/queries_test.jsonl --secoes sem:ementa --label jua_bm25_sec_sem_ementa",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 1000,
+    "n_queries": 1567,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_test.jsonl",
+    "secoes": [
+      "dispositivo",
+      "fundamentacao",
+      "relatorio"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "6f13a17663b52cc5b6dae3d24ab551233c9bf5ea",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25__sec-sem_ementa",
+      "run": "structural_gold__bm25__sec-sem_ementa",
+      "n_chunks": 273796,
+      "n_queries": 1567,
+      "n_linhas_run": 1333211,
+      "segundos": 144.6,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "fundamentacao",
+          "relatorio"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 286689,
+        "chunks_depois": 273796,
+        "fracao_mantida": 0.955,
+        "distribuicao": {
+          "ementa": 12893,
+          "relatorio": 191389,
+          "fundamentacao": 64629,
+          "dispositivo": 17778
+        }
+      }
+    },
+    {
+      "nome": "structural_pred__bm25__sec-sem_ementa",
+      "run": "structural_pred__bm25__sec-sem_ementa",
+      "n_chunks": 271328,
+      "n_queries": 1567,
+      "n_linhas_run": 1334134,
+      "segundos": 134.9,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "fundamentacao",
+          "relatorio"
+        ],
+        "criterio": "maioria",
+        "chunks_antes": 285308,
+        "chunks_depois": 271328,
+        "fracao_mantida": 0.951,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    }
+  ],
+  "erro": null
+}

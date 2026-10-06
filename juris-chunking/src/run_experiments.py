@@ -174,6 +174,7 @@ def run_one(
     amostra: float | None = None,
     amostra_seed: int = 42,
     amostra_igual_a: set[str] | None = None,
+    criterio: str = "maioria",
 ) -> dict:
     t0 = time.time()
     chunks = load_chunks(strategy, processed_dir)
@@ -187,7 +188,7 @@ def run_one(
     if secoes:
         spans = spans_por_doc or {}
         antes = len(chunks)
-        chunks, contagem = secoes_mod.filtrar(chunks, secoes, spans)
+        chunks, contagem = secoes_mod.filtrar(chunks, secoes, spans, criterio=criterio)
         if not chunks:
             raise SystemExit(
                 f"{strategy}: o recorte {sorted(secoes)} nao deixou nenhum chunk "
@@ -195,6 +196,7 @@ def run_one(
             )
         recorte_secoes = {
             "secoes": sorted(secoes),
+            "criterio": criterio,
             "chunks_antes": antes,
             "chunks_depois": len(chunks),
             "fracao_mantida": round(len(chunks) / antes, 4),
@@ -278,6 +280,8 @@ def run_one(
     suffix = "" if aggregation == "max_pooling" else f"__{aggregation}"
     if secoes:
         suffix += f"__sec-{secoes_mod.rotulo_secoes(secoes)}"
+        if criterio != "maioria":
+            suffix += f"__crit-{criterio}"
     if pesos:
         suffix += f"__peso-{secoes_mod.rotulo_pesos(pesos)}"
     if controle_amostra:
@@ -365,6 +369,9 @@ def main() -> None:
                              "por estas secoes deixaria, em cada estrategia. E o controle "
                              "exato: mesmo tamanho de indice, sem respeitar a estrutura.")
     parser.add_argument("--amostra-seed", type=int, default=42)
+    parser.add_argument("--secoes-criterio", default="maioria", choices=list(secoes_mod.CRITERIOS),
+                        help="F7 — como decidir se um chunk e da secao: 'maioria' (F6) ou 'toca' "
+                             "(qualquer trecho de uma secao mantida basta).")
     parser.add_argument("--corpus", type=Path, default=INTERIM_DIR / "corpus_docs.jsonl",
                         help="So usado por --secoes/--pesos, para ler os spans do documento.")
     parser.add_argument("--top-chunks", type=int, default=2000)
@@ -513,6 +520,7 @@ def main() -> None:
                     amostra=args.amostra,
                     amostra_seed=args.amostra_seed,
                     amostra_igual_a=amostra_igual_a,
+                    criterio=args.secoes_criterio,
                 )
                 if info["segundos"] > 0:
                     taxa_chunks_s = info["n_chunks"] / info["segundos"]
@@ -566,6 +574,8 @@ def _rotulo_automatico(args, retrievers, models_cfg) -> str:
     # é assim que o INDICE.md mostra de relance o que cada rodada testou.
     if getattr(args, "secoes", None):
         partes.append("sec-" + secoes_mod.rotulo_secoes(secoes_mod.parse_secoes(args.secoes)))
+        if getattr(args, "secoes_criterio", "maioria") != "maioria":
+            partes.append("crit-" + args.secoes_criterio)
     if getattr(args, "pesos", None):
         partes.append("peso-" + secoes_mod.rotulo_pesos(secoes_mod.parse_pesos(args.pesos)))
     if getattr(args, "amostra", None) is not None:

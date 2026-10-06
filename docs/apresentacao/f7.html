@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Validação externa da F7</title>
+<meta name="description" content="F7: o resultado da F6 testado em 7.567 consultas novas, a correção do recorte por seção e o ranker aprendido.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --plano:        #f4f2ee;
+  --superficie:   #faf9f7;
+  --superficie-2: #efece6;
+  --tinta:        #16161c;
+  --tinta-2:      #55545e;
+  --tinta-3:      #86858e;
+  --linha:        #e0ddd4;
+  --regua:        #c8c5bb;
+  --melhor:       #2a78d6;
+  --pior:         #e34948;
+  --base:         #b9b7b0;
+  --serie-a:      #2a78d6;
+  --serie-b:      #eb6834;
+  --realce:       #1c5cab;
+  --grade:        #e6e3db;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --plano:        #0e0f12;
+    --superficie:   #17181c;
+    --superficie-2: #202126;
+    --tinta:        #f5f4f1;
+    --tinta-2:      #b8b6b0;
+    --tinta-3:      #8b8a92;
+    --linha:        #2a2b30;
+    --regua:        #3a3b41;
+    --melhor:       #3987e5;
+    --pior:         #e66767;
+    --base:         #6b6a66;
+    --serie-a:      #3987e5;
+    --serie-b:      #d95926;
+    --realce:       #86b6ef;
+    --grade:        #26272c;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plano:        #0e0f12;
+  --superficie:   #17181c;
+  --superficie-2: #202126;
+  --tinta:        #f5f4f1;
+  --tinta-2:      #b8b6b0;
+  --tinta-3:      #8b8a92;
+  --linha:        #2a2b30;
+  --regua:        #3a3b41;
+  --melhor:       #3987e5;
+  --pior:         #e66767;
+  --base:         #6b6a66;
+  --serie-a:      #3987e5;
+  --serie-b:      #d95926;
+  --realce:       #86b6ef;
+  --grade:        #26272c;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--plano);
+  color:var(--tinta);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  padding-inline:16px;
+  padding-block:0;
+}
+.pagina{max-width:1080px;margin:0 auto}
+.leitura{max-width:68ch}
+
+/* ---------- cabeçalho ---------- */
+header.capa{padding-block:56px 40px;border-bottom:1px solid var(--linha)}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-3);margin:0 0 18px;
+}
+h1{
+  font-family:Spectral,Georgia,"Times New Roman",serif;
+  font-weight:600;font-size:clamp(2rem,5.5vw,3.1rem);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance;
+}
+.subtitulo{font-size:1.1rem;color:var(--tinta-2);margin:0;max-width:60ch}
+.assinatura{
+  margin-top:28px;font-size:.85rem;color:var(--tinta-3);
+  display:flex;flex-wrap:wrap;gap:6px 18px;
+}
+
+/* ---------- destaque numérico ---------- */
+.destaque{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--linha);border:1px solid var(--linha);
+  margin-block:40px;border-radius:3px;overflow:hidden;
+}
+.kpi{background:var(--superficie);padding:20px 18px}
+.kpi .rotulo{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta-3);display:block;margin-bottom:8px;
+}
+.kpi .valor{
+  font-family:Spectral,Georgia,serif;font-size:2.1rem;font-weight:600;
+  line-height:1;display:block;font-variant-numeric:tabular-nums;
+}
+.kpi .nota{font-size:.82rem;color:var(--tinta-2);display:block;margin-top:6px}
+.kpi.principal{background:var(--superficie-2)}
+.kpi.principal .valor{color:var(--realce)}
+
+/* ---------- seções ---------- */
+section{padding-block:44px;border-top:1px solid var(--linha)}
+section:first-of-type{border-top:none}
+.passo{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-3);margin:0 0 10px;
+}
+.passo b{color:var(--realce);font-weight:500}
+h2{
+  font-family:Spectral,Georgia,serif;font-weight:600;
+  font-size:clamp(1.45rem,3.4vw,2rem);line-height:1.2;letter-spacing:-.01em;
+  margin:0 0 18px;text-wrap:balance;
+}
+h3{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-weight:600;
+  font-size:1rem;margin:32px 0 10px;letter-spacing:.005em;
+}
+p{margin:0 0 16px}
+.leitura p:last-child{margin-bottom:0}
+strong{font-weight:600}
+em{font-style:italic}
+.solta{color:var(--tinta-2)}
+
+/* ---------- gráficos ---------- */
+figure{
+  margin:32px 0 0;padding:22px 20px 18px;
+  background:var(--superficie);border:1px solid var(--linha);border-radius:3px;
+}
+figcaption{margin-bottom:18px}
+.fig-titulo{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-weight:600;font-size:.98rem;margin:0 0 4px;
+}
+.fig-sub{font-size:.85rem;color:var(--tinta-2);margin:0;max-width:62ch}
+.legenda{
+  display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 14px;
+  font-size:.82rem;color:var(--tinta-2);
+}
+.legenda span{display:inline-flex;align-items:center;gap:7px}
+.swatch{width:11px;height:11px;border-radius:2px;flex:none}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:"IBM Plex Sans",system-ui,sans-serif}
+.fig-nota{
+  margin:14px 0 0;font-size:.8rem;color:var(--tinta-3);
+  padding-top:12px;border-top:1px solid var(--linha);
+}
+
+/* ---------- caixa de citação / pergunta ---------- */
+.pergunta{
+  margin:28px 0;padding:18px 22px;background:var(--superficie-2);
+  border-left:3px solid var(--regua);border-radius:0 3px 3px 0;
+}
+.pergunta p{
+  margin:0;font-family:Spectral,Georgia,serif;font-size:1.08rem;
+  font-style:italic;color:var(--tinta-2);
+}
+
+/* ---------- tabela ---------- */
+.rolagem{overflow-x:auto;margin-top:22px}
+table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:520px}
+caption{text-align:left;font-size:.85rem;color:var(--tinta-2);margin-bottom:10px}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--linha)}
+th:first-child,td:first-child{text-align:left}
+thead th{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--tinta-3);font-weight:500;border-bottom:1px solid var(--regua);
+}
+tbody td{font-variant-numeric:tabular-nums}
+tbody tr.base td{color:var(--tinta-2)}
+tbody tr.topo td{font-weight:600}
+
+/* ---------- rodapé ---------- */
+footer{
+  padding-block:36px 56px;border-top:1px solid var(--linha);
+  font-size:.85rem;color:var(--tinta-3);
+}
+footer a{color:var(--realce)}
+code{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em;
+  background:var(--superficie-2);padding:1px 5px;border-radius:3px;
+}
+a:focus-visible,button:focus-visible{outline:2px solid var(--realce);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){
+  .kpi .valor{font-size:1.75rem}
+  figure{padding:18px 14px 14px}
+}
+/* ---------- extras da F7 ---------- */
+.selo{
+  display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;
+  letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;
+  border:1px solid var(--regua);color:var(--tinta-2);vertical-align:2px;margin-left:6px;
+}
+.selo.ok{border-color:var(--melhor);color:var(--melhor)}
+.selo.nao{border-color:var(--pior);color:var(--pior)}
+.duas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.navega{font-size:.85rem;margin:0 0 6px}
+.navega a{color:var(--realce)}
+.cartoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:22px}
+.cartao{background:var(--superficie);border:1px solid var(--linha);border-radius:3px;padding:16px 16px 14px}
+.cartao h4{margin:0 0 6px;font-size:.92rem}
+.cartao p{margin:0;font-size:.86rem;color:var(--tinta-2)}
+td.pos{color:var(--melhor)} td.neg{color:var(--pior)}
+</style>
+</head>
+<body>
+<div class="pagina">
+
+<header class="capa">
+  <p class="eyebrow">TCC · Recuperação de informação jurídica · PUCPR · F7</p>
+  <p class="navega"><a href="index.html">← A página anterior: o resultado da F6</a></p>
+  <h1>O resultado sobreviveu a 10× mais consultas?</h1>
+  <p class="subtitulo">
+    Testamos o achado da F6 numa segunda coleção, sobre os mesmos 12.880 acórdãos.
+    Ele <em>quebrou</em> de um jeito instrutivo — e o conserto respondeu,
+    de quebra, a pergunta original do TCC.
+  </p>
+  <div class="assinatura">
+    <span>Leonardo Marques</span><span>5 de outubro de 2026</span>
+    <span>12.880 acórdãos · 150 + 1.567 + 6.000 consultas · tudo pré-registrado</span>
+  </div>
+</header>
+
+<div class="destaque">
+  <div class="kpi">
+    <span class="rotulo">Consultas</span>
+    <span class="valor">+7.567</span>
+    <span class="nota">do JUÁ-Juris, sobre os mesmos acórdãos, sem reencodar nada</span>
+  </div>
+  <div class="kpi principal">
+    <span class="rotulo">Correção pré-registrada</span>
+    <span class="valor">+9,7%</span>
+    <span class="nota">em 6.000 consultas nunca vistas · p &lt; 10⁻⁹⁵</span>
+  </div>
+  <div class="kpi">
+    <span class="rotulo">Modelo aprendido</span>
+    <span class="valor">+18,6%</span>
+    <span class="nota">no JurisTCU, que ele nunca viu no treino</span>
+  </div>
+  <div class="kpi">
+    <span class="rotulo">Relatório</span>
+    <span class="valor">5×</span>
+    <span class="nota">menos peso que a fundamentação, para o mesmo casamento (SHAP)</span>
+  </div>
+</div>
+
+<section>
+  <p class="passo"><b>1</b> · O que faltava</p>
+  <h2>150 consultas, e a decisão tomada olhando o gabarito</h2>
+  <div class="leitura">
+    <p>A F6 mostrou +29% de nDCG@10 tirando o relatório do índice. Mas o número
+    tinha duas fraquezas que nenhuma análise sobre as <strong>mesmas 150
+    consultas</strong> resolvia: a decisão de cortar veio de olhar os
+    julgamentos de relevância, e com 150 consultas nenhuma diferença menor que
+    ~0,02 é detectável.</p>
+    <p>O <strong>JUÁ-Juris</strong>, um benchmark de 2026 montado sobre a mesma
+    base de jurisprudência do TCU, usa as mesmas chaves de documento do
+    JurisTCU. Isso permitiu levar <strong>1.567 consultas de teste e 6.000 de
+    treino</strong> direto aos nossos acórdãos, com os mesmos índices. E, antes
+    de rodar qualquer coisa, <strong>as previsões foram escritas e commitadas</strong>.</p>
+  </div>
+  <div class="cartoes">
+    <div class="cartao"><h4>JurisTCU · 150</h4><p>“Quais acórdãos firmam esta tese?” Relevância graduada, ~15 relevantes por consulta.</p></div>
+    <div class="cartao"><h4>JUÁ difícil · 1.567</h4><p>“Qual é o acórdão deste enunciado?” Um relevante. Teste montado com consultas que o BM25 erra.</p></div>
+    <div class="cartao"><h4>JUÁ natural · 6.000</h4><p>A mesma tarefa, na distribuição natural. Nunca usada em análise antes do pré-registro.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="passo"><b>2</b> · A surpresa</p>
+  <h2>No JUÁ, tirar o relatório piorou — mas só em parte das estratégias</h2>
+  <div class="leitura">
+    <p>A primeira rodada no JUÁ difícil contrariou a F6: o recorte <strong>piorou
+    13% a 21%</strong> nas estratégias de corte fixo e recursivo. Nas estruturais,
+    praticamente não mexeu. O padrão apontava para a fronteira entre seções.</p>
+  </div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Efeito do recorte “sem relatório” no JUÁ difícil, por estratégia</p>
+      <p class="fig-sub">Δ nDCG@10 contra o índice completo da mesma estratégia, BM25, 1.567 consultas.
+      Cinza ou vermelho: critério da F6 (maioria dos caracteres). Azul: o critério corrigido (seção 4).</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--base)"></i>critério da F6 (maioria) · <i class="swatch" style="background:var(--pior)"></i> quando piora</span>
+      <span><i class="swatch" style="background:var(--melhor)"></i>critério corrigido (“toca”)</span>
+    </div>
+    <div id="g-estrategias-jua"></div>
+    <p class="fig-nota">No JurisTCU, as mesmas cinco estratégias ganham de +11% a +16% com o recorte da F6.</p>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>3</b> · O mecanismo</p>
+  <h2>A ementa estava indo para o lixo junto com o relatório</h2>
+  <div class="leitura">
+    <p>No corte fixo, o primeiro pedaço do acórdão junta a <strong>ementa
+    inteira</strong> com o começo do relatório. Como a maior parte dos caracteres é
+    de relatório, o pedaço é rotulado “relatório” — e sai do índice com a ementa
+    dentro. No JUÁ, a consulta é um enunciado, que costuma repetir a ementa quase
+    palavra por palavra.</p>
+  </div>
+  <div class="pergunta"><p>Consulta: “Contra decisão genérica e abstrata, tomada no âmbito da
+  jurisdição objetiva, não deve ser conhecido o recurso…” · Ementa do acórdão certo:
+  “Não se conhece de recurso contra decisão genérica e abstrata, tomada no âmbito da
+  jurisdição objetiva…” · Índice completo: 1º lugar. Recorte da F6: 393º.</p></div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Por que o acórdão certo caiu, nas 105 perdas grandes do recorte</p>
+      <p class="fig-sub">Trecho que achava o acórdão certo no índice completo, quando o recorte o
+      tirou do top-3 para fora do top-10 (fixo 512/256, JUÁ difícil).</p>
+    </figcaption>
+    <div id="g-mecanismo"></div>
+  </figure>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">O dano mora onde a consulta “é” a ementa</p>
+      <p class="fig-sub">Consultas do JUÁ divididas em quartis pela fração dos seus termos que estão na ementa do
+      acórdão certo. Efeito de cada recorte (fixo 512/256, BM25) contra o índice completo.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--pior)"></i>critério da F6</span>
+      <span><i class="swatch" style="background:var(--melhor)"></i>critério “toca”</span>
+    </div>
+    <div id="g-quartis"></div>
+    <p class="fig-nota">Nos três primeiros quartis os dois critérios são indistinguíveis. No quarto, a F6 perde
+    28% (difícil) e o “toca” ganha 12,5%.</p>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>4</b> · A correção, confirmada</p>
+  <h2>Descartar só o que é 100% relatório não perde em nenhuma amostra</h2>
+  <div class="leitura">
+    <p>O critério <code>toca</code> mantém qualquer pedaço que tenha um trecho de
+    seção mantida. Ele foi desenhado olhando o JUÁ difícil — então, antes de
+    acreditar, <strong>registramos a previsão</strong> e testamos em 6.000
+    consultas que nunca tinham sido usadas. Duas previsões acertaram; uma
+    errou, e o erro ensinou algo: o dano da F6 vivia só nas consultas difíceis.</p>
+  </div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Recorte “sem relatório”, fixo 512/256, BM25: F6 × corrigido</p>
+      <p class="fig-sub">Δ nDCG@10 contra o índice completo, em cada amostra de consultas. Com correção de Bonferroni
+      (23 comparações por coleção), o “toca” é significativo no JurisTCU e no JUÁ natural; no JUÁ difícil, p = 0,012 sem
+      correção e 0,24 com ela — mas a diferença para o critério da F6 ali é de +20,7%, p &lt; 10⁻¹⁷.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--base)"></i>critério da F6 · <i class="swatch" style="background:var(--pior)"></i> quando piora</span>
+      <span><i class="swatch" style="background:var(--melhor)"></i>critério “toca”</span>
+    </div>
+    <div id="g-tres-amostras"></div>
+    <p class="fig-nota">Pré-registro (6.000 consultas): <b>H8a</b> “a F6 piora” <span class="selo nao">errou: +8,1%</span>
+    · <b>H8b</b> “toca melhora” <span class="selo ok">+9,7%, p &lt; 10⁻⁹⁵</span>
+    · <b>H8c</b> “toca &gt; F6” <span class="selo ok">+1,5%, p &lt; 10⁻¹²</span></p>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>5</b> · A pergunta original, respondida</p>
+  <h2>Com poder estatístico, o corte estrutural vence</h2>
+  <div class="leitura">
+    <p>A F5 tinha dado empate entre as cinco estratégias de corte. Com 10× mais
+    consultas, o empate se desfaz: <strong>o corte que respeita as seções
+    vence</strong> — pouco nas consultas naturais, bastante nas difíceis — e o
+    nosso segmentador automático é <strong>estatisticamente equivalente</strong>
+    à estrutura oficial do TCU (teste de equivalência, margem ±0,01).</p>
+    <p>E sabemos <em>por quê</em>: o corte estrutural isola a <strong>ementa</strong> num
+    pedaço próprio, curto e cheio da tese. Tirando a ementa do índice estrutural, a
+    vantagem não só some como vira desvantagem (−21% contra o fixo nas consultas
+    difíceis). No JurisTCU, onde a ementa quase não carrega relevância, não há efeito.</p>
+  </div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">nDCG@10 de cada estratégia relativo ao fixo 512/256, índice completo, BM25</p>
+      <p class="fig-sub">Ponto cheio: diferença significativa (p &lt; 0,05). No JurisTCU nada se separa:
+      150 consultas não têm resolução para efeitos desse tamanho.</p>
+    </figcaption>
+    <div class="legenda" id="leg-pergunta"></div>
+    <div id="g-pergunta"></div>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>6</b> · O que um modelo aprende sozinho</p>
+  <h2>Treinado no JUÁ, testado no JurisTCU: o relatório vale 5× menos</h2>
+  <div class="leitura">
+    <p>Em vez de decidir à mão o que cortar, treinamos um ranqueador
+    (LambdaRank) com doze sinais de busca — o acórdão inteiro, sem o relatório e
+    cada seção isolada — em consultas do JUÁ, e o testamos no
+    <strong>JurisTCU, que ele nunca viu</strong>. Com os sinais por seção, ele
+    ganha <strong>+16,5%</strong> do mesmo modelo sem eles (p &lt; 0,0001).</p>
+    <p>Abrindo o modelo (SHAP), aparece a regra da F6, aprendida dos dados: o
+    mesmo casamento de termos vale cerca de <strong>5× menos</strong> quando
+    acontece no relatório.</p>
+  </div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Quanto um casamento numa seção soma ao score do acórdão</p>
+      <p class="fig-sub">Contribuição SHAP média do sinal “BM25 só nesta seção”, por faixa de score normalizado.
+      Linha cheia: JurisTCU. Tracejada: JUÁ.</p>
+    </figcaption>
+    <div class="legenda">
+      <span><i class="swatch" style="background:var(--serie-a)"></i>casamento na fundamentação</span>
+      <span><i class="swatch" style="background:var(--serie-b)"></i>casamento no relatório</span>
+    </div>
+    <div id="g-shap"></div>
+  </figure>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">O modelo aprendido nas duas coleções</p>
+      <p class="fig-sub">nDCG@10. Nenhuma receita fixa é a melhor nas duas; o modelo com seções fica perto
+      do topo em ambas.</p>
+    </figcaption>
+    <div id="g-ltr"></div>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>7</b> · Um modelo neural também se engana</p>
+  <h2>O reranker lê o relatório e erra — e ajustá-lo não resolveu</h2>
+  <div class="leitura">
+    <p>Um <em>cross-encoder</em> (<code>bge-reranker-v2-m3</code>) lê consulta e
+    trecho juntos. Sem ajuste, ele <strong>piora</strong> a melhor configuração
+    da F6 no JurisTCU (−15,9%) — e, impedido de ler o relatório, recupera tudo
+    (+17,9%). A interferência do relatório não é coisa do BM25.</p>
+    <p id="txt-ft">Ajustado com LoRA em 5 mil consultas do treino do JUÁ, com o trecho exato da resposta
+    como positivo, ele <strong>piorou muito</strong>, inclusive no próprio JUÁ. O diagnóstico: com negativos
+    tirados só do topo do BM25, o modelo aprendeu que “casamento literal = trecho errado” (a correlação do score
+    com a sobreposição de termos foi de +0,59 para −0,17). Misturar os negativos (v2) recupera quase o dobro,
+    mas ainda fica abaixo do modelo genérico. Fica registrado como resultado negativo, com a causa medida.</p>
+  </div>
+  <figure>
+    <figcaption>
+      <p class="fig-titulo">Reranker sobre os 50 primeiros da fusão: zero-shot e ajustado</p>
+      <p class="fig-sub">nDCG@10, lendo todas as passagens (exceto a linha “sem relatório”). A linha tracejada é a fusão sem reranker.</p>
+    </figcaption>
+    <div id="g-reranker"></div>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>8</b> · Visão geral</p>
+  <h2>Todas as receitas, todas as estratégias, as três amostras</h2>
+  <div class="leitura">
+    <p>Cada célula é uma configuração; a cor é o ganho ou a perda contra o BM25 com o acórdão
+    inteiro da mesma estratégia. Leia a linha do critério <code>toca</code>: é a única sem perdas
+    relevantes nas três amostras. O retriever denso e as fusões que o usam ficam vermelhos no JUÁ,
+    onde ele é muito mais fraco que o BM25.</p>
+  </div>
+  <figure>
+    <img src="img/f7_painel.png" alt="Painel configuração × estratégia × coleção com o nDCG@10 de cada célula"
+         style="width:100%;height:auto;border-radius:2px;background:#fff">
+    <p class="fig-nota">Gerado por <code>src.painel</code> (rodada <code>20261005-1802_f7_painel</code>); IC 95% de
+    cada célula em <code>tables/painel.csv</code>.</p>
+  </figure>
+</section>
+
+<section>
+  <p class="passo"><b>9</b> · O que vai para o artigo</p>
+  <h2>A recomendação mudou, e ficou mais forte</h2>
+  <div class="rolagem">
+    <table>
+      <caption>nDCG@10 nas três amostras (Δ contra o BM25 fixo 512/256 com o acórdão inteiro). * O LTR não é medido no JUÁ natural, que é o conjunto de treino dele.</caption>
+      <thead><tr><th>Configuração</th><th>JurisTCU</th><th>JUÁ natural</th><th>JUÁ difícil</th><th>Não perde em nenhuma?</th></tr></thead>
+      <tbody id="t-receitas"></tbody>
+    </table>
+  </div>
+  <div class="leitura" style="margin-top:26px">
+    <p><strong>A tese do TCC, depois da F7:</strong> isoladamente, a estratégia de corte
+    importa pouco — mas importa, e com 7.567 consultas o efeito aparece a favor da
+    estrutura. Quando o pipeline seleciona conteúdo por seção, a estrutura deixa de ser
+    detalhe: é o que separa um ganho robusto de um ganho que inverte de sinal.</p>
+    <p class="solta"><strong>Limitações que ficam:</strong> as 50 consultas reais de log do
+    JurisTCU continuam sem poder (todas as configurações melhoram, nenhuma é significativa);
+    e o JUÁ mede uma tarefa diferente da do JurisTCU (<em>known-item</em>, consultas em forma de
+    tese), justamente a tarefa em que a ementa pesa — os ganhos do corte estrutural valem para ela.</p>
+  </div>
+</section>
+
+<footer>
+  Detalhe técnico, artefatos e testes em
+  <code>docs/docsleo/branches/leo-f7-evolucao/</code> · pré-registro em
+  <code>00-preregistro.md</code> · F7 completa na branch-arquivo <code>leo/f7-evolucao</code>; na <code>main</code> entrou a versão enxuta.
+  Corpus: 12.880 acórdãos do TCU (2003–2023). BM25 (bm25s), denso BAAI/bge-m3,
+  reranker BAAI/bge-reranker-v2-m3, LambdaRank (LightGBM).
+</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(n, a, t) { var e = document.createElementNS(NS, n); for (var k in a) if (a[k] !== null) e.setAttribute(k, a[k]); if (t !== undefined) e.textContent = t; return e; }
+  function fmt(v, c) { return v.toFixed(c === undefined ? 4 : c).replace(".", ","); }
+  function pct(v, c) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(c === undefined ? 1 : c).replace(".", ",") + "%"; }
+  function svg(w, h, titulo) { var s = el("svg", {viewBox: "0 0 " + w + " " + h, role: "img"}); s.appendChild(el("title", null, titulo)); return s; }
+  function txt(s, x, y, t, o) { o = o || {}; s.appendChild(el("text", {x: x, y: y, "text-anchor": o.a || "start", "dominant-baseline": "middle", "font-size": o.f || 12, "font-weight": o.w || 400, fill: o.c || "var(--tinta-2)"}, t)); }
+  function barra(s, x0, y, larg, alt, cor, titulo) {
+    var r = el("rect", {x: larg >= 0 ? x0 : x0 + larg, y: y, width: Math.max(Math.abs(larg), 0.8), height: alt, rx: 3, fill: cor});
+    if (titulo) r.appendChild(el("title", null, titulo));
+    s.appendChild(r);
+  }
+  function grade(s, xs, rotulos, y1, y2) {
+    xs.forEach(function (x, i) {
+      s.appendChild(el("line", {x1: x, y1: y1, x2: x, y2: y2, stroke: rotulos[i] === "0%" ? "var(--regua)" : "var(--grade)", "stroke-width": rotulos[i] === "0%" ? 1.5 : 1}));
+      txt(s, x, y2 + 14, rotulos[i], {a: "middle", f: 11, c: "var(--tinta-3)"});
+    });
+  }
+
+  /* divergente agrupado: grupos com 2 barras (F6, toca) */
+  function divergente(alvo, grupos, min, max, titulo) {
+    var W = 720, ROT = 190, DIR = W - 70, AB = 15, G = 4, LIN = AB * 2 + G + 18, TOP = 10;
+    var H = TOP + grupos.length * LIN + 30, s = svg(W, H, titulo);
+    var esc = function (v) { return ROT + (v - min) / (max - min) * (DIR - ROT); };
+    var ticks = []; for (var t = Math.ceil(min / 10) * 10; t <= max; t += 10) ticks.push(t);
+    grade(s, ticks.map(esc), ticks.map(function (t) { return t === 0 ? "0%" : pct(t, 0); }), TOP - 4, H - 26);
+    grupos.forEach(function (g, i) {
+      var y = TOP + i * LIN;
+      txt(s, ROT - 12, y + AB + G / 2, g.nome, {a: "end", f: 12.5, c: "var(--tinta)"});
+      [["F6", g.f6, "var(--base)"], ["toca", g.toca, "var(--melhor)"]].forEach(function (p, j) {
+        if (p[1] === null) return;
+        var yy = y + j * (AB + G), x0 = esc(0), larg = esc(p[1]) - x0;
+        barra(s, x0, yy, larg, AB, p[1] < 0 && j === 0 ? "var(--pior)" : p[2], g.nome + " · " + p[0] + ": " + pct(p[1]));
+        txt(s, p[1] >= 0 ? esc(p[1]) + 6 : esc(p[1]) - 6, yy + AB / 2, pct(p[1]), {a: p[1] >= 0 ? "start" : "end", f: 11, w: j ? 600 : 400, c: j ? "var(--realce)" : "var(--tinta-2)"});
+      });
+    });
+    document.getElementById(alvo).appendChild(s);
+  }
+
+  divergente("g-estrategias-jua", [
+    {nome: "estrutural (ouro)", f6: -0.0, toca: -0.0},
+    {nome: "estrutural (predito)", f6: -4.1, toca: -0.9},
+    {nome: "recursivo", f6: -21.3, toca: 4.5},
+    {nome: "fixo 1024/512", f6: -20.2, toca: 6.0},
+    {nome: "fixo 512/256", f6: -12.6, toca: 5.5}
+  ], -25, 10, "Efeito do recorte por estratégia no JUÁ difícil");
+
+  divergente("g-tres-amostras", [
+    {nome: "JurisTCU (150)", f6: 16.2, toca: 15.6},
+    {nome: "JUÁ natural (6.000)", f6: 8.1, toca: 9.7},
+    {nome: "JUÁ difícil (1.567)", f6: -12.6, toca: 5.5}
+  ], -20, 20, "Recorte da F6 e corrigido nas três amostras");
+
+  /* mecanismo: barra empilhada */
+  (function () {
+    var W = 720, H = 92, s = svg(W, H, "Causa das 105 perdas grandes"), x0 = 20, larg = W - 40, y = 18, a = 26;
+    var partes = [[57, "ementa dentro de um pedaço rotulado “relatório”", "var(--serie-b)"], [48, "relatório puro (sinal genuíno)", "var(--base)"]];
+    var x = x0;
+    partes.forEach(function (p) {
+      var w = larg * p[0] / 105;
+      barra(s, x, y, w - 2, a, p[2], p[1] + ": " + p[0] + " consultas");
+      txt(s, x + 10, y + a / 2, p[0] + " (" + Math.round(p[0] / 1.05) + "%)", {f: 12.5, w: 600, c: "#fff"});
+      txt(s, x, y + a + 18, p[1], {f: 11.5});
+      x += w;
+    });
+    document.getElementById("g-mecanismo").appendChild(s);
+  })();
+
+  /* mecanismo por quartil */
+  (function () {
+    var D = [
+      {nome: "JUÁ difícil", q: [[-4.6, -3.4], [0.0, 0.3], [2.3, 3.5], [-28.4, 12.5]]},
+      {nome: "JUÁ natural", q: [[9.1, 8.9], [10.7, 10.8], [10.4, 9.7], [2.4, 9.3]]}
+    ];
+    var W = 720, H = 250, s = svg(W, H, "Efeito do recorte por quartil de sobreposição com a ementa");
+    var L = 60, R = W - 20, T = 22, B = H - 52, min = -30, max = 15;
+    var y = function (v) { return T + (max - v) / (max - min) * (B - T); };
+    [-30, -20, -10, 0, 10].forEach(function (v) {
+      s.appendChild(el("line", {x1: L, y1: y(v), x2: R, y2: y(v), stroke: v === 0 ? "var(--regua)" : "var(--grade)", "stroke-width": v === 0 ? 1.5 : 1}));
+      txt(s, L - 8, y(v), pct(v, 0), {a: "end", f: 11, c: "var(--tinta-3)"});
+    });
+    var larg = (R - L) / 2;
+    D.forEach(function (c, ci) {
+      var x0 = L + ci * larg;
+      txt(s, x0 + larg / 2, 8, c.nome, {a: "middle", f: 12, w: 600, c: "var(--tinta)"});
+      c.q.forEach(function (par, qi) {
+        var xc = x0 + (qi + 0.5) * larg / 4;
+        par.forEach(function (v, j) {
+          var x = xc - 17 + j * 18, cor = j ? "var(--melhor)" : "var(--pior)";
+          var r = el("rect", {x: x, y: Math.min(y(v), y(0)), width: 16, height: Math.max(Math.abs(y(v) - y(0)), 1), rx: 2, fill: cor});
+          r.appendChild(el("title", null, c.nome + " Q" + (qi + 1) + " · " + (j ? "toca" : "F6") + ": " + pct(v)));
+          s.appendChild(r);
+        });
+        txt(s, xc, B + 16, "Q" + (qi + 1), {a: "middle", f: 11.5, c: "var(--tinta-2)"});
+      });
+    });
+    txt(s, W / 2, H - 10, "quartil de sobreposição consulta × ementa (Q4 = consulta quase igual à ementa)", {a: "middle", f: 11, c: "var(--tinta-3)"});
+    document.getElementById("g-quartis").appendChild(s);
+  })();
+
+  /* pergunta original: dot plot por coleção */
+  (function () {
+    var cols = [
+      {nome: "JurisTCU (150)", cor: "var(--tinta-3)"},
+      {nome: "JUÁ natural (6.000)", cor: "var(--serie-a)"},
+      {nome: "JUÁ difícil (1.567)", cor: "var(--serie-b)"}
+    ];
+    var dados = [
+      {nome: "estrutural (ouro)", v: [1.3, 1.4, 8.1], sig: [0, 1, 1]},
+      {nome: "estrutural (predito)", v: [1.4, 1.2, 7.3], sig: [0, 1, 1]},
+      {nome: "fixo 1024/512", v: [0.8, -0.5, -3.6], sig: [0, 0, 1]},
+      {nome: "recursivo", v: [-3.2, -1.2, -2.4], sig: [0, 1, 0]}
+    ];
+    var leg = document.getElementById("leg-pergunta");
+    cols.forEach(function (c) { var sp = document.createElement("span"); sp.innerHTML = '<i class="swatch" style="background:' + c.cor + ';border-radius:50%"></i>' + c.nome; leg.appendChild(sp); });
+    var W = 720, ROT = 190, DIR = W - 40, LIN = 40, TOP = 14, H = TOP + dados.length * LIN + 30, s = svg(W, H, "Estratégias contra o fixo 512/256");
+    var min = -6, max = 10, esc = function (v) { return ROT + (v - min) / (max - min) * (DIR - ROT); };
+    grade(s, [-5, 0, 5, 10].map(esc), ["−5%", "0%", "+5%", "+10%"], TOP - 6, H - 26);
+    dados.forEach(function (d, i) {
+      var y = TOP + i * LIN + 12;
+      txt(s, ROT - 12, y, d.nome, {a: "end", f: 12.5, c: "var(--tinta)"});
+      d.v.forEach(function (v, j) {
+        var c = el("circle", {cx: esc(v), cy: y + (j - 1) * 8, r: 6, fill: d.sig[j] ? cols[j].cor : "var(--superficie)", stroke: cols[j].cor, "stroke-width": 2});
+        c.appendChild(el("title", null, d.nome + " · " + cols[j].nome + ": " + pct(v) + (d.sig[j] ? " (significativo)" : " (n.s.)")));
+        s.appendChild(c);
+      });
+    });
+    document.getElementById("g-pergunta").appendChild(s);
+  })();
+
+  /* SHAP: curvas */
+  (function () {
+    var D = {
+      juristcu: {f: [-0.129, 0.069, 0.682, 0.824, 0.752, 0.78, 0.76, 0.793, 0.78, 0.742], r: [-0.009, -0.008, -0.015, 0.125, 0.166, 0.149, 0.142, 0.145, 0.139, 0.125]},
+      jua: {f: [-0.129, 0.038, 0.66, 0.762, 0.694, 0.729, 0.744, 0.811, 0.803, 0.769], r: [-0.012, -0.012, -0.019, 0.123, 0.17, 0.151, 0.142, 0.15, 0.147, 0.147]}
+    };
+    var W = 720, H = 300, L = 70, R = W - 30, T = 18, B = H - 44, s = svg(W, H, "Dependência SHAP");
+    var x = function (i) { return L + (i + 0.5) / 10 * (R - L); }, y = function (v) { return B - (v + 0.2) / 1.1 * (B - T); };
+    [-0.2, 0, 0.2, 0.4, 0.6, 0.8].forEach(function (v) {
+      s.appendChild(el("line", {x1: L, y1: y(v), x2: R, y2: y(v), stroke: v === 0 ? "var(--regua)" : "var(--grade)", "stroke-width": v === 0 ? 1.5 : 1}));
+      txt(s, L - 8, y(v), fmt(v, 1), {a: "end", f: 11, c: "var(--tinta-3)"});
+    });
+    [0, 0.2, 0.4, 0.6, 0.8, 1].forEach(function (v) { txt(s, L + v * (R - L), B + 16, fmt(v, 1), {a: "middle", f: 11, c: "var(--tinta-3)"}); });
+    txt(s, (L + R) / 2, H - 8, "score normalizado do acórdão nessa seção (0 = pior do top-200, 1 = melhor)", {a: "middle", f: 11, c: "var(--tinta-3)"});
+    [["juristcu", null], ["jua", "5 4"]].forEach(function (c) {
+      [["f", "var(--serie-a)", "fundamentação"], ["r", "var(--serie-b)", "relatório"]].forEach(function (k) {
+        var pts = D[c[0]][k[0]].map(function (v, i) { return x(i) + "," + y(v); }).join(" ");
+        s.appendChild(el("polyline", {points: pts, fill: "none", stroke: k[1], "stroke-width": c[1] ? 2 : 3, "stroke-dasharray": c[1], "stroke-linejoin": "round"}));
+      });
+    });
+    txt(s, x(9) + 4, y(0.62), "fundamentação ≈ 0,75", {a: "end", f: 11.5, w: 600, c: "var(--serie-a)"});
+    txt(s, x(9) + 4, y(0.27), "relatório ≈ 0,15", {a: "end", f: 11.5, w: 600, c: "var(--serie-b)"});
+    document.getElementById("g-shap").appendChild(s);
+  })();
+
+  /* barras horizontais agrupadas por coleção */
+  function grupos(alvo, blocos, max, titulo, base) {
+    var W = 720, ROT = 250, DIR = W - 80, AB = 16, LIN = AB + 9, TOP = 6, CAB = 26;
+    var n = 0; blocos.forEach(function (b) { n += b.itens.length; });
+    var H = TOP + blocos.length * CAB + n * LIN + 24, s = svg(W, H, titulo);
+    var esc = function (v) { return ROT + v / max * (DIR - ROT); }, y = TOP;
+    blocos.forEach(function (b) {
+      txt(s, 0, y + 12, b.nome, {f: 12, w: 600, c: "var(--tinta)"}); y += CAB;
+      var ref = b.ref;
+      if (ref !== undefined) s.appendChild(el("line", {x1: esc(ref), y1: y - 6, x2: esc(ref), y2: y + b.itens.length * LIN, stroke: "var(--regua)", "stroke-width": 1.5, "stroke-dasharray": "3 3"}));
+      b.itens.forEach(function (it) {
+        txt(s, ROT - 12, y + AB / 2, it.nome, {a: "end", f: 12, c: it.destaque ? "var(--tinta)" : "var(--tinta-2)", w: it.destaque ? 600 : 400});
+        if (it.v === null) { txt(s, ROT + 6, y + AB / 2, "em treinamento", {f: 11, c: "var(--tinta-3)"}); y += LIN; return; }
+        barra(s, ROT, y, esc(it.v) - ROT, AB, it.cor || (it.destaque ? "var(--melhor)" : "var(--base)"), it.nome + ": " + fmt(it.v));
+        txt(s, esc(it.v) + 6, y + AB / 2, fmt(it.v), {f: 11.5, w: it.destaque ? 600 : 400, c: it.destaque ? "var(--realce)" : "var(--tinta-2)"});
+        y += LIN;
+      });
+    });
+    document.getElementById(alvo).appendChild(s);
+  }
+
+  grupos("g-ltr", [
+    {nome: "JurisTCU (nunca visto no treino)", itens: [
+      {nome: "BM25", v: 0.2523},
+      {nome: "LTR sem sinais de seção", v: 0.2567},
+      {nome: "LTR com sinais de seção", v: 0.2991, destaque: true},
+      {nome: "fusão das 4 da F6 (ajustada aqui)", v: 0.3215, cor: "var(--tinta-3)"}]},
+    {nome: "JUÁ difícil", itens: [
+      {nome: "BM25", v: 0.2699},
+      {nome: "LTR sem sinais de seção", v: 0.2759},
+      {nome: "LTR com sinais de seção", v: 0.2781, destaque: true},
+      {nome: "fusão das 4 da F6", v: 0.2215, cor: "var(--tinta-3)"}]}
+  ], 0.36, "Ranker aprendido nas duas coleções");
+
+  var RERANK = {
+    juristcu: {fusao: 0.3215, zs: 0.2704, zsSem: 0.3189, ft: 0.1087, ftSem: 0.1949},
+    jua: {fusao: 0.2215, zs: 0.2392, zsSem: 0.2231, ft: 0.0961, ftSem: 0.1829}
+  };
+  grupos("g-reranker", [
+    {nome: "JurisTCU", ref: RERANK.juristcu.fusao, itens: [
+      {nome: "zero-shot, lendo tudo", v: RERANK.juristcu.zs},
+      {nome: "zero-shot, sem relatório", v: RERANK.juristcu.zsSem},
+      {nome: "ajustado v1 (negativos do BM25)", v: RERANK.juristcu.ft, cor: "var(--pior)"},
+      {nome: "ajustado v2 (negativos mistos)", v: RERANK.juristcu.ftSem, cor: "var(--pior)"}]},
+    {nome: "JUÁ difícil", ref: RERANK.jua.fusao, itens: [
+      {nome: "zero-shot, lendo tudo", v: RERANK.jua.zs},
+      {nome: "zero-shot, sem relatório", v: RERANK.jua.zsSem},
+      {nome: "ajustado v1 (negativos do BM25)", v: RERANK.jua.ft, cor: "var(--pior)"},
+      {nome: "ajustado v2 (negativos mistos)", v: RERANK.jua.ftSem, cor: "var(--pior)"}]}
+  ], 0.40, "Reranker zero-shot e ajustado");
+
+  /* tabela de receitas */
+  var RECEITAS = [
+    ["BM25, acórdão inteiro (fixo 512/256)", 0.2490, 0.6549, 0.2497, "—"],
+    ["BM25, estrutural predito", 0.2526, 0.6628, 0.2679, "sim"],
+    ["F6: sem relatório (maioria)", 0.2893, 0.7078, 0.2182, "não"],
+    ["F7: sem relatório (toca)", 0.2878, 0.7182, 0.2634, "sim"],
+    ["F6: fusão das 4", 0.3215, 0.6486, 0.2215, "não"],
+    ["F7: fusão das 4 com toca", 0.3225, 0.6536, 0.2412, "não"],
+    ["F7: LTR com seções (estrutural ouro)", 0.2991, null, 0.2781, "sim*"],
+    ["F7: LTR com seções (estrutural predito, implantável)", 0.2976, null, 0.2781, "sim*"]
+  ];
+  var tb = document.getElementById("t-receitas");
+  RECEITAS.forEach(function (r, i) {
+    var tr = document.createElement("tr"); if (i === 0) tr.className = "base"; if (r[0].indexOf("toca") > 0 && r[0].indexOf("fusão") < 0) tr.className = "topo";
+    var html = "<td>" + r[0] + "</td>";
+    [[1, 0.2490], [2, 0.6549], [3, 0.2497]].forEach(function (c) {
+      var v = r[c[0]];
+      if (v === null) { html += "<td>—</td>"; return; }
+      var d = (v - c[1]) / c[1] * 100;
+      html += "<td class='" + (i === 0 ? "" : d > 0.5 ? "pos" : d < -0.5 ? "neg" : "") + "'>" + fmt(v) + (i === 0 ? "" : " <small>(" + pct(d) + ")</small>") + "</td>";
+    });
+    tr.innerHTML = html + "<td>" + r[4] + "</td>"; tb.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

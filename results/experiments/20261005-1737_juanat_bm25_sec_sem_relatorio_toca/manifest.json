@@ -1,0 +1,184 @@
+{
+  "rotulo": "juanat_bm25_sec_sem_relatorio_toca",
+  "inicio": "2026-10-05T17:37:36",
+  "fim": "2026-10-05T17:44:14",
+  "duracao_s": 397.8,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --queries data/interim/jua/queries_train_amostra.jsonl --top-docs 200 --strategy all --retriever bm25 --secoes sem:relatorio --secoes-criterio toca --label juanat_bm25_sec_sem_relatorio_toca",
+  "config": {
+    "estrategias": [
+      "structural_gold",
+      "structural_pred",
+      "recursive_default",
+      "fixed_1024_512",
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "6f13a17663b52cc5b6dae3d24ab551233c9bf5ea",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "structural_gold__bm25__sec-sem_relatorio__crit-toca",
+      "run": "structural_gold__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 95300,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 63.6,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 286689,
+        "chunks_depois": 95300,
+        "fracao_mantida": 0.3324,
+        "distribuicao": {
+          "ementa": 12893,
+          "relatorio": 191389,
+          "fundamentacao": 64629,
+          "dispositivo": 17778
+        }
+      }
+    },
+    {
+      "nome": "structural_pred__bm25__sec-sem_relatorio__crit-toca",
+      "run": "structural_pred__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 97013,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 62.1,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 285308,
+        "chunks_depois": 97013,
+        "fracao_mantida": 0.34,
+        "distribuicao": {
+          "ementa": 13980,
+          "relatorio": 189089,
+          "fundamentacao": 60906,
+          "dispositivo": 21333
+        }
+      }
+    },
+    {
+      "nome": "recursive_default__bm25__sec-sem_relatorio__crit-toca",
+      "run": "recursive_default__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 96713,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 61.8,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 270070,
+        "chunks_depois": 96713,
+        "fracao_mantida": 0.3581,
+        "distribuicao": {
+          "relatorio": 191522,
+          "fundamentacao": 61804,
+          "dispositivo": 16298,
+          "ementa": 446
+        }
+      }
+    },
+    {
+      "nome": "fixed_1024_512__bm25__sec-sem_relatorio__crit-toca",
+      "run": "fixed_1024_512__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 151282,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 97.1,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 450786,
+        "chunks_depois": 151282,
+        "fracao_mantida": 0.3356,
+        "distribuicao": {
+          "relatorio": 324394,
+          "fundamentacao": 106798,
+          "dispositivo": 19242,
+          "ementa": 352
+        }
+      }
+    },
+    {
+      "nome": "fixed_512_256__bm25__sec-sem_relatorio__crit-toca",
+      "run": "fixed_512_256__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 279974,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 107.4,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 907914,
+        "chunks_depois": 279974,
+        "fracao_mantida": 0.3084,
+        "distribuicao": {
+          "ementa": 2445,
+          "relatorio": 653680,
+          "fundamentacao": 209952,
+          "dispositivo": 41837
+        }
+      }
+    }
+  ],
+  "erro": null
+}

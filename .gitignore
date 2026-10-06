@@ -10,3 +10,4 @@ results/experiments/*/runs/
 # experimento ja versiona, e sua criacao marcava a arvore como suja no
 # manifesto da propria rodada.
 results/logs/
+results/experiments/*/shap_*.npy

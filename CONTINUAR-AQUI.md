@@ -8,6 +8,15 @@ contexto necessário para continuar sem redescobrir nada.
 
 ---
 
+## 0. ATUALIZAÇÃO 06/10/2026 — F7
+
+Leia **`docs/docsleo/branches/leo-f7-enxuta/README.md`** antes do resto: a F6
+foi validada em 7.567 consultas do JUÁ-Juris, o recorte ganhou o critério
+`--secoes-criterio toca` (corrige o defeito da ementa), e há uma lista do que
+já foi testado e não deve ser repetido (ranker aprendido, reranker,
+fine-tune). A F7 completa está guardada na branch `leo/f7-evolucao` (arquivo).
+Bibliografia do artigo em **`REFERENCIAS.md`**.
+
 ## 1. Contexto em 30 segundos
 
 TCC de RI jurídica (PUCPR, 4 alunos). Pergunta original: *chunking que respeita

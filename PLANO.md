@@ -5,7 +5,25 @@ codar ou escrever. Atualize **acrescentando**, não apagando: a seção
 [Histórico](#histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
 e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
-**Última atualização:** 28/09/2026 · por Leonardo Marques
+**Última atualização:** 06/10/2026 · por Leonardo Marques
+
+---
+
+## 0. Atualização de 06/10 — F7 (branch `leo/f7-enxuta`)
+
+A F6 foi validada em **7.567 consultas novas** do JUÁ-Juris, sobre os mesmos
+acórdãos. Duas mudanças para o artigo, detalhadas em
+[docs/docsleo/branches/leo-f7-enxuta/](docs/docsleo/branches/leo-f7-enxuta/README.md):
+
+1. **O recorte da F6 tem um defeito** nas estratégias de corte fixo (a ementa
+   sai junto com o relatório; −12,6% nas consultas difíceis). A receita
+   recomendada passa a ser o critério **`toca`** (`--secoes-criterio toca`):
+   mesmo ganho no JurisTCU, e não perde em nenhuma amostra.
+2. **A pergunta 1 deixa de ser "empate":** com poder estatístico, o corte
+   estrutural vence (+1% a +12%), por isolar a ementa; segmentador ≡ ouro.
+
+O que mais foi testado na F7 (ranker aprendido, reranker, fine-tune) e **não
+deve ser repetido** está no §5 do README da branch.
 
 ---
 

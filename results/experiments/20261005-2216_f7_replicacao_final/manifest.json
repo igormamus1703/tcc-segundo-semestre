@@ -1,0 +1,559 @@
+{
+  "rotulo": "f7_replicacao_final",
+  "inicio": "2026-10-05T22:16:51",
+  "fim": "2026-10-05T22:41:22",
+  "duracao_s": 1471.5,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\replicacao.py --spec configs/f7_replicacao_final.json --label f7_replicacao_final",
+  "config": {
+    "spec": {
+      "_comentario": "Especificacao FINAL da replicacao da F7 (src/replicacao.py): quatro amostras de consultas sobre o mesmo corpus. As hipoteses confirmatorias sao as do pre-registro (H1-H8); o resto e exploratorio. Condicao ausente numa colecao e pulada.",
+      "colecoes": {
+        "JurisTCU": {
+          "qrels": "data/interim/qrels.trec",
+          "queries": "data/interim/queries.jsonl",
+          "runs": {
+            "B": "bm25/fixed_512_256__bm25.trec",
+            "Bc": "bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+            "Bct": "bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "D": "dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+            "Dc": "dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+            "F4": "fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+            "F4t": "fusao4_toca/fixed_512_256__soma_norm.trec",
+            "F2c": "juristcu_fusao2_recortados/fixed_512_256__soma_norm.trec",
+            "F2t": "fusao2_toca/fixed_512_256__soma_norm.trec",
+            "Bsg": "bm25/structural_gold__bm25.trec",
+            "Bcsg": "bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+            "F4sg": "fusao4_peso_igual/structural_gold__soma_norm.trec",
+            "ctrl": "bm25_controle_amostra/fixed_512_256__bm25__amostra-0.2800s42.trec",
+            "RB": "juristcu_rerank_bm25/fixed_512_256__rerank-bm25-todas.trec",
+            "R": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-todas.trec",
+            "Rs": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+            "Rsp": "juristcu_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+            "Rft": "juristcu_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-todas.trec",
+            "Rfts": "juristcu_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+            "L": "f7_ltr/juristcu__structural_gold__ltr_secoes.trec",
+            "L0": "f7_ltr/juristcu__structural_gold__ltr_sem_secoes.trec",
+            "LF6": "f7_ltr/juristcu__structural_gold__ltr_recorte_f6.trec",
+            "E:structural_gold": "bm25/structural_gold__bm25.trec",
+            "Et:structural_gold": "bm25_sec_sem_relatorio_toca/structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:structural_pred": "bm25/structural_pred__bm25.trec",
+            "Et:structural_pred": "bm25_sec_sem_relatorio_toca/structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:recursive_default": "bm25/recursive_default__bm25.trec",
+            "Et:recursive_default": "bm25_sec_sem_relatorio_toca/recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_1024_512": "bm25/fixed_1024_512__bm25.trec",
+            "Et:fixed_1024_512": "bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_512_256": "bm25/fixed_512_256__bm25.trec",
+            "Et:fixed_512_256": "bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "Rft2": "juristcu_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+            "Rft2s": "juristcu_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+          }
+        },
+        "JUÁ difícil (teste)": {
+          "qrels": "data/interim/jua/qrels_test.trec",
+          "queries": "data/interim/jua/queries_test.jsonl",
+          "runs": {
+            "B": "jua_bm25/fixed_512_256__bm25.trec",
+            "Bc": "jua_bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+            "Bct": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "D": "jua_dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+            "Dc": "jua_dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+            "F4": "jua_fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+            "F4t": "jua_fusao4_toca/fixed_512_256__soma_norm.trec",
+            "F2c": "jua_fusao2_recortados/fixed_512_256__soma_norm.trec",
+            "F2t": "jua_fusao2_toca/fixed_512_256__soma_norm.trec",
+            "Bsg": "jua_bm25/structural_gold__bm25.trec",
+            "Bcsg": "jua_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+            "F4sg": "jua_fusao4_peso_igual/structural_gold__soma_norm.trec",
+            "ctrl": "jua_bm25_controle_amostra/fixed_512_256__bm25__amostra-0.2800s42.trec",
+            "RB": "jua_rerank_bm25/fixed_512_256__rerank-bm25-todas.trec",
+            "R": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-todas.trec",
+            "Rs": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+            "Rsp": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+            "Rft": "jua_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-todas.trec",
+            "Rfts": "jua_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+            "L": "f7_ltr/jua__structural_gold__ltr_secoes.trec",
+            "L0": "f7_ltr/jua__structural_gold__ltr_sem_secoes.trec",
+            "LF6": "f7_ltr/jua__structural_gold__ltr_recorte_f6.trec",
+            "E:structural_gold": "jua_bm25/structural_gold__bm25.trec",
+            "Et:structural_gold": "jua_bm25_sec_sem_relatorio_toca/structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:structural_pred": "jua_bm25/structural_pred__bm25.trec",
+            "Et:structural_pred": "jua_bm25_sec_sem_relatorio_toca/structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:recursive_default": "jua_bm25/recursive_default__bm25.trec",
+            "Et:recursive_default": "jua_bm25_sec_sem_relatorio_toca/recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_1024_512": "jua_bm25/fixed_1024_512__bm25.trec",
+            "Et:fixed_1024_512": "jua_bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_512_256": "jua_bm25/fixed_512_256__bm25.trec",
+            "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "Rft2": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+            "Rft2s": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+          }
+        },
+        "JUÁ independente": {
+          "qrels": "data/interim/jua/qrels_test_indep.trec",
+          "queries": "data/interim/jua/queries_test_indep.jsonl",
+          "runs": {
+            "B": "jua_bm25/fixed_512_256__bm25.trec",
+            "Bc": "jua_bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+            "Bct": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "D": "jua_dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+            "Dc": "jua_dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+            "F4": "jua_fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+            "F4t": "jua_fusao4_toca/fixed_512_256__soma_norm.trec",
+            "F2c": "jua_fusao2_recortados/fixed_512_256__soma_norm.trec",
+            "F2t": "jua_fusao2_toca/fixed_512_256__soma_norm.trec",
+            "Bsg": "jua_bm25/structural_gold__bm25.trec",
+            "Bcsg": "jua_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+            "F4sg": "jua_fusao4_peso_igual/structural_gold__soma_norm.trec",
+            "ctrl": "jua_bm25_controle_amostra/fixed_512_256__bm25__amostra-0.2800s42.trec",
+            "RB": "jua_rerank_bm25/fixed_512_256__rerank-bm25-todas.trec",
+            "R": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-todas.trec",
+            "Rs": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+            "Rsp": "jua_rerank_fusao4/fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+            "Rft": "jua_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-todas.trec",
+            "Rfts": "jua_rerank_ft_fusao4/fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+            "L": "f7_ltr/jua__structural_gold__ltr_secoes.trec",
+            "L0": "f7_ltr/jua__structural_gold__ltr_sem_secoes.trec",
+            "LF6": "f7_ltr/jua__structural_gold__ltr_recorte_f6.trec",
+            "E:structural_gold": "jua_bm25/structural_gold__bm25.trec",
+            "Et:structural_gold": "jua_bm25_sec_sem_relatorio_toca/structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:structural_pred": "jua_bm25/structural_pred__bm25.trec",
+            "Et:structural_pred": "jua_bm25_sec_sem_relatorio_toca/structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:recursive_default": "jua_bm25/recursive_default__bm25.trec",
+            "Et:recursive_default": "jua_bm25_sec_sem_relatorio_toca/recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_1024_512": "jua_bm25/fixed_1024_512__bm25.trec",
+            "Et:fixed_1024_512": "jua_bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_512_256": "jua_bm25/fixed_512_256__bm25.trec",
+            "Et:fixed_512_256": "jua_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "Rft2": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-todas.trec",
+            "Rft2s": "jua_rerank_ft2_fusao4/fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+          }
+        },
+        "JUÁ natural (treino)": {
+          "qrels": "data/interim/jua/qrels_train_amostra.trec",
+          "queries": "data/interim/jua/queries_train_amostra.jsonl",
+          "runs": {
+            "B": "juanat_bm25/fixed_512_256__bm25.trec",
+            "Bc": "juanat_bm25_sec_sem_relatorio/fixed_512_256__bm25__sec-sem_relatorio.trec",
+            "Bct": "juanat_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+            "D": "juanat_dense_bge_m3/fixed_512_256__dense-bge_m3.trec",
+            "Dc": "juanat_dense_sec_sem_relatorio/fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+            "F4": "juanat_fusao4_peso_igual/fixed_512_256__soma_norm.trec",
+            "F4t": "juanat_fusao4_toca/fixed_512_256__soma_norm.trec",
+            "F2c": "juanat_fusao2_recortados/fixed_512_256__soma_norm.trec",
+            "F2t": "juanat_fusao2_toca/fixed_512_256__soma_norm.trec",
+            "Bsg": "juanat_bm25/structural_gold__bm25.trec",
+            "Bcsg": "juanat_bm25_sec_sem_relatorio/structural_gold__bm25__sec-sem_relatorio.trec",
+            "F4sg": "juanat_fusao4_peso_igual/structural_gold__soma_norm.trec",
+            "E:structural_gold": "juanat_bm25/structural_gold__bm25.trec",
+            "Et:structural_gold": "juanat_bm25_sec_sem_relatorio_toca/structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:structural_pred": "juanat_bm25/structural_pred__bm25.trec",
+            "Et:structural_pred": "juanat_bm25_sec_sem_relatorio_toca/structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:recursive_default": "juanat_bm25/recursive_default__bm25.trec",
+            "Et:recursive_default": "juanat_bm25_sec_sem_relatorio_toca/recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_1024_512": "juanat_bm25/fixed_1024_512__bm25.trec",
+            "Et:fixed_1024_512": "juanat_bm25_sec_sem_relatorio_toca/fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+            "E:fixed_512_256": "juanat_bm25/fixed_512_256__bm25.trec",
+            "Et:fixed_512_256": "juanat_bm25_sec_sem_relatorio_toca/fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec"
+          }
+        }
+      },
+      "comparacoes": [
+        [
+          "Bc",
+          "B",
+          "H1 · sem relatório (F6, maioria) × completo"
+        ],
+        [
+          "ctrl",
+          "B",
+          "H2 · controle aleatório × completo"
+        ],
+        [
+          "Dc",
+          "D",
+          "sem relatório × completo (denso)"
+        ],
+        [
+          "Bct",
+          "B",
+          "sem relatório (toca) × completo"
+        ],
+        [
+          "Bct",
+          "Bc",
+          "toca × maioria"
+        ],
+        [
+          "Bcsg",
+          "Bsg",
+          "sem relatório × completo (estrutural ouro)"
+        ],
+        [
+          "F4",
+          "B",
+          "H3 · fusão das 4 (F6) × BM25"
+        ],
+        [
+          "F2c",
+          "Bc",
+          "H3 · fusão recortada × BM25 recortado"
+        ],
+        [
+          "F4t",
+          "B",
+          "fusão das 4 (toca) × BM25"
+        ],
+        [
+          "F4t",
+          "F4",
+          "fusão das 4: toca × maioria"
+        ],
+        [
+          "F2t",
+          "B",
+          "fusão recortada (toca) × BM25"
+        ],
+        [
+          "RB",
+          "B",
+          "BM25 + reranker × BM25"
+        ],
+        [
+          "R",
+          "F4",
+          "H6 · reranker × fusão das 4"
+        ],
+        [
+          "Rs",
+          "R",
+          "H7 · reranker sem relatório × lendo tudo"
+        ],
+        [
+          "Rsp",
+          "R",
+          "H7 · idem, sem rebaixar"
+        ],
+        [
+          "Rft",
+          "R",
+          "reranker ajustado × zero-shot"
+        ],
+        [
+          "Rft",
+          "F4",
+          "reranker ajustado × fusão das 4"
+        ],
+        [
+          "Rfts",
+          "Rft",
+          "reranker ajustado: sem relatório × tudo"
+        ],
+        [
+          "L",
+          "Bsg",
+          "LTR com seções × BM25"
+        ],
+        [
+          "L",
+          "L0",
+          "LTR com seções × LTR sem seções"
+        ],
+        [
+          "L",
+          "F4sg",
+          "LTR com seções × fusão das 4 (mesma estratégia)"
+        ],
+        [
+          "LF6",
+          "Bsg",
+          "LTR enxuto (recorte F6) × BM25"
+        ],
+        [
+          "Bsg",
+          "B",
+          "estrutural (ouro) × fixo 512/256, completo"
+        ],
+        [
+          "Rft2",
+          "R",
+          "reranker ajustado v2 (negativos mistos) × zero-shot"
+        ],
+        [
+          "Rft2",
+          "F4",
+          "reranker ajustado v2 × fusão das 4"
+        ],
+        [
+          "Rft2s",
+          "Rft2",
+          "reranker ajustado v2: sem relatório × tudo"
+        ]
+      ],
+      "blocos_forest": [
+        {
+          "nome": "recorte",
+          "titulo": "Tirar o relatório: o critério da F6 e o critério \"toca\", em quatro amostras",
+          "comparacoes": [
+            "H1 · sem relatório (F6, maioria) × completo",
+            "H2 · controle aleatório × completo",
+            "sem relatório × completo (denso)",
+            "sem relatório (toca) × completo",
+            "toca × maioria",
+            "sem relatório × completo (estrutural ouro)"
+          ]
+        },
+        {
+          "nome": "fusao",
+          "titulo": "Fusão BM25 + denso: a receita da F6 e a corrigida",
+          "comparacoes": [
+            "H3 · fusão das 4 (F6) × BM25",
+            "H3 · fusão recortada × BM25 recortado",
+            "fusão das 4 (toca) × BM25",
+            "fusão das 4: toca × maioria",
+            "fusão recortada (toca) × BM25"
+          ]
+        },
+        {
+          "nome": "reranker",
+          "titulo": "Reranker com cross-encoder: zero-shot e ajustado ao domínio",
+          "comparacoes": [
+            "BM25 + reranker × BM25",
+            "H6 · reranker × fusão das 4",
+            "H7 · reranker sem relatório × lendo tudo",
+            "H7 · idem, sem rebaixar",
+            "reranker ajustado × zero-shot",
+            "reranker ajustado × fusão das 4",
+            "reranker ajustado: sem relatório × tudo",
+            "reranker ajustado v2 (negativos mistos) × zero-shot",
+            "reranker ajustado v2 × fusão das 4",
+            "reranker ajustado v2: sem relatório × tudo"
+          ]
+        },
+        {
+          "nome": "ltr",
+          "titulo": "Ranker aprendido (treinado no JUÁ, testado também no JurisTCU)",
+          "comparacoes": [
+            "LTR com seções × BM25",
+            "LTR com seções × LTR sem seções",
+            "LTR com seções × fusão das 4 (mesma estratégia)",
+            "LTR enxuto (recorte F6) × BM25"
+          ]
+        }
+      ],
+      "colecao_estratos": "JUÁ difícil (teste)",
+      "comparacoes_estratos": [
+        "H1 · sem relatório (F6, maioria) × completo",
+        "sem relatório (toca) × completo",
+        "H7 · reranker sem relatório × lendo tudo"
+      ],
+      "equivalencia": [
+        {
+          "nome": "completo",
+          "margem": 0.01,
+          "titulo": "As estratégias de chunking são equivalentes? Índice completo (TOST, margem ±0,01)",
+          "condicoes": [
+            "E:structural_gold",
+            "E:structural_pred",
+            "E:recursive_default",
+            "E:fixed_1024_512",
+            "E:fixed_512_256"
+          ],
+          "rotulos": {
+            "E:structural_gold": "estrutural (ouro)",
+            "E:structural_pred": "estrutural (predito)",
+            "E:recursive_default": "recursivo",
+            "E:fixed_1024_512": "fixo 1024/512",
+            "E:fixed_512_256": "fixo 512/256"
+          }
+        },
+        {
+          "nome": "toca",
+          "margem": 0.01,
+          "titulo": "E com o recorte \"toca\"? (TOST, margem ±0,01)",
+          "condicoes": [
+            "Et:structural_gold",
+            "Et:structural_pred",
+            "Et:recursive_default",
+            "Et:fixed_1024_512",
+            "Et:fixed_512_256"
+          ],
+          "rotulos": {
+            "Et:structural_gold": "estrutural (ouro)",
+            "Et:structural_pred": "estrutural (predito)",
+            "Et:recursive_default": "recursivo",
+            "Et:fixed_1024_512": "fixo 1024/512",
+            "Et:fixed_512_256": "fixo 512/256"
+          }
+        }
+      ]
+    }
+  },
+  "git": {
+    "commit": "c1fe3e76ff23f0405f2439f822fb1136f37ca40a",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "JurisTCU",
+      "runs": {
+        "B": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Bc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1638_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "Bct": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "D": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec",
+        "Dc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1650_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1728_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+        "F4t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1727_fusao4_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "F2c": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1629_juristcu_fusao2_recortados\\runs\\fixed_512_256__soma_norm.trec",
+        "F2t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1728_fusao2_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "Bsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\structural_gold__bm25.trec",
+        "Bcsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1638_bm25_sec_sem_relatorio\\runs\\structural_gold__bm25__sec-sem_relatorio.trec",
+        "F4sg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1728_fusao4_peso_igual\\runs\\structural_gold__soma_norm.trec",
+        "ctrl": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1652_bm25_controle_amostra\\runs\\fixed_512_256__bm25__amostra-0.2800s42.trec",
+        "RB": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1630_juristcu_rerank_bm25\\runs\\fixed_512_256__rerank-bm25-todas.trec",
+        "R": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1630_juristcu_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-todas.trec",
+        "Rs": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1630_juristcu_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+        "Rsp": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1630_juristcu_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+        "Rft": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1856_juristcu_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-todas.trec",
+        "Rfts": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1856_juristcu_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+        "L": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\juristcu__structural_gold__ltr_secoes.trec",
+        "L0": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\juristcu__structural_gold__ltr_sem_secoes.trec",
+        "LF6": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\juristcu__structural_gold__ltr_recorte_f6.trec",
+        "E:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\structural_gold__bm25.trec",
+        "Et:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\structural_pred__bm25.trec",
+        "Et:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\recursive_default__bm25.trec",
+        "Et:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "Et:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Et:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1716_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1956_juristcu_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1956_juristcu_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+      }
+    },
+    {
+      "nome": "JUÁ difícil (teste)",
+      "runs": {
+        "B": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Bc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "Bct": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "D": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec",
+        "Dc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+        "F4t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1726_jua_fusao4_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "F2c": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1629_jua_fusao2_recortados\\runs\\fixed_512_256__soma_norm.trec",
+        "F2t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1728_jua_fusao2_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "Bsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_gold__bm25.trec",
+        "Bcsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\structural_gold__bm25__sec-sem_relatorio.trec",
+        "F4sg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual\\runs\\structural_gold__soma_norm.trec",
+        "ctrl": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1623_jua_bm25_controle_amostra\\runs\\fixed_512_256__bm25__amostra-0.2800s42.trec",
+        "RB": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1656_jua_rerank_bm25\\runs\\fixed_512_256__rerank-bm25-todas.trec",
+        "R": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-todas.trec",
+        "Rs": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+        "Rsp": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+        "Rft": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1901_jua_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-todas.trec",
+        "Rfts": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1901_jua_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+        "L": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_secoes.trec",
+        "L0": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_sem_secoes.trec",
+        "LF6": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_recorte_f6.trec",
+        "E:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_gold__bm25.trec",
+        "Et:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_pred__bm25.trec",
+        "Et:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\recursive_default__bm25.trec",
+        "Et:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "Et:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Et:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1958_jua_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1958_jua_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+      }
+    },
+    {
+      "nome": "JUÁ independente",
+      "runs": {
+        "B": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Bc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "Bct": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "D": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec",
+        "Dc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1606_jua_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+        "F4t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1726_jua_fusao4_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "F2c": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1629_jua_fusao2_recortados\\runs\\fixed_512_256__soma_norm.trec",
+        "F2t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1728_jua_fusao2_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "Bsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_gold__bm25.trec",
+        "Bcsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1618_jua_bm25_sec_sem_relatorio\\runs\\structural_gold__bm25__sec-sem_relatorio.trec",
+        "F4sg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1628_jua_fusao4_peso_igual\\runs\\structural_gold__soma_norm.trec",
+        "ctrl": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1623_jua_bm25_controle_amostra\\runs\\fixed_512_256__bm25__amostra-0.2800s42.trec",
+        "RB": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1656_jua_rerank_bm25\\runs\\fixed_512_256__rerank-bm25-todas.trec",
+        "R": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-todas.trec",
+        "Rs": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio.trec",
+        "Rsp": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1631_jua_rerank_fusao4\\runs\\fixed_512_256__rerank-fusao4-sem_relatorio_preserva.trec",
+        "Rft": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1901_jua_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-todas.trec",
+        "Rfts": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1901_jua_rerank_ft_fusao4\\runs\\fixed_512_256__rerank-fusao4ft-sem_relatorio.trec",
+        "L": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_secoes.trec",
+        "L0": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_sem_secoes.trec",
+        "LF6": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1706_f7_ltr\\runs\\jua__structural_gold__ltr_recorte_f6.trec",
+        "E:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_gold__bm25.trec",
+        "Et:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\structural_pred__bm25.trec",
+        "Et:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\recursive_default__bm25.trec",
+        "Et:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "Et:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1603_jua_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Et:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1711_jua_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "Rft2": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1958_jua_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-todas.trec",
+        "Rft2s": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1958_jua_rerank_ft2_fusao4\\runs\\fixed_512_256__rerank-fusao4ft2-sem_relatorio.trec"
+      }
+    },
+    {
+      "nome": "JUÁ natural (treino)",
+      "runs": {
+        "B": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Bc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1731_juanat_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio.trec",
+        "Bct": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec",
+        "D": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1744_juanat_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3.trec",
+        "Dc": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1749_juanat_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio.trec",
+        "F4": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1800_juanat_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+        "F4t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1800_juanat_fusao4_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "F2c": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1801_juanat_fusao2_recortados\\runs\\fixed_512_256__soma_norm.trec",
+        "F2t": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1802_juanat_fusao2_toca\\runs\\fixed_512_256__soma_norm.trec",
+        "Bsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\structural_gold__bm25.trec",
+        "Bcsg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1731_juanat_bm25_sec_sem_relatorio\\runs\\structural_gold__bm25__sec-sem_relatorio.trec",
+        "F4sg": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1800_juanat_fusao4_peso_igual\\runs\\structural_gold__soma_norm.trec",
+        "E:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\structural_gold__bm25.trec",
+        "Et:structural_gold": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\structural_gold__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\structural_pred__bm25.trec",
+        "Et:structural_pred": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\structural_pred__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\recursive_default__bm25.trec",
+        "Et:recursive_default": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\recursive_default__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\fixed_1024_512__bm25.trec",
+        "Et:fixed_1024_512": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\fixed_1024_512__bm25__sec-sem_relatorio__crit-toca.trec",
+        "E:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1712_juanat_bm25\\runs\\fixed_512_256__bm25.trec",
+        "Et:fixed_512_256": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20261005-1737_juanat_bm25_sec_sem_relatorio_toca\\runs\\fixed_512_256__bm25__sec-sem_relatorio__crit-toca.trec"
+      }
+    }
+  ],
+  "erro": null
+}
