@@ -1,0 +1,80 @@
+{
+  "rotulo": "juristcu_rerank_ft_fusao4",
+  "inicio": "2026-10-05T18:56:28",
+  "fim": "2026-10-05T18:58:44",
+  "duracao_s": 136.1,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\rerank.py --estrategia fixed_512_256 --nome fusao4ft --label juristcu_rerank_ft_fusao4 --queries data/interim/queries.jsonl --modelo data/models/bge-reranker-v2-m3-jua-lora --max-length 512 --candidatos C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1728_fusao4_peso_igual/runs/fixed_512_256__soma_norm.trec --fontes C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25/runs/fixed_512_256__bm25__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1638_bm25_sec_sem_relatorio/runs/fixed_512_256__bm25__sec-sem_relatorio__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260907-0125_dense_bge_m3/runs/fixed_512_256__dense-bge_m3__chunks.jsonl C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1650_dense_sec_sem_relatorio/runs/fixed_512_256__dense-bge_m3__sec-sem_relatorio__chunks.jsonl --cache data/interim/rerank_cache/juristcu_fixed_512_256_ft.tsv",
+  "config": {
+    "candidatos": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1728_fusao4_peso_igual\\runs\\fixed_512_256__soma_norm.trec",
+    "fontes": [
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260906-0515_bm25\\runs\\fixed_512_256__bm25__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1638_bm25_sec_sem_relatorio\\runs\\fixed_512_256__bm25__sec-sem_relatorio__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260907-0125_dense_bge_m3\\runs\\fixed_512_256__dense-bge_m3__chunks.jsonl",
+      "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\results\\experiments\\20260928-1650_dense_sec_sem_relatorio\\runs\\fixed_512_256__dense-bge_m3__sec-sem_relatorio__chunks.jsonl"
+    ],
+    "estrategia": "fixed_512_256",
+    "nome": "fusao4ft",
+    "variantes": [
+      "todas",
+      "sem_relatorio",
+      "sem_relatorio_preserva"
+    ],
+    "top": 50,
+    "modelo": "data/models/bge-reranker-v2-m3-jua-lora",
+    "max_length": 512,
+    "batch": 16,
+    "queries": "data\\interim\\queries.jsonl",
+    "corpus": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\interim\\corpus_docs.jsonl",
+    "processed_dir": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\data\\processed",
+    "cache": "data\\interim\\rerank_cache\\juristcu_fixed_512_256_ft.tsv",
+    "label": "juristcu_rerank_ft_fusao4"
+  },
+  "git": {
+    "commit": "be8aa59a3978e8c90287b70a50a791b50d533e11",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-todas",
+      "variante": "todas",
+      "top": 50,
+      "documentos_lidos": 7348,
+      "documentos_sem_passagem": 152,
+      "fracao_sem_passagem": 0.0203
+    },
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-sem_relatorio",
+      "variante": "sem_relatorio",
+      "top": 50,
+      "documentos_lidos": 6253,
+      "documentos_sem_passagem": 1247,
+      "fracao_sem_passagem": 0.1663
+    },
+    {
+      "nome": "fixed_512_256__rerank-fusao4ft-sem_relatorio_preserva",
+      "variante": "sem_relatorio_preserva",
+      "top": 50,
+      "documentos_lidos": 7348,
+      "documentos_sem_passagem": 152,
+      "fracao_sem_passagem": 0.0203
+    }
+  ],
+  "erro": null
+}

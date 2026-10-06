@@ -172,8 +172,40 @@ foreach ($c in @(@{n = "juristcu"; p = ""; f4 = "fusao4_peso_igual"; q = $JT}, @
     }
 }
 
-# 8. Analise: replicacao em quatro amostras e painel ---------------------------
+# 7b. v2 do fine-tune: negativos mistos (a v1 aprendeu o atalho anti-lexical) --
+$modelo2 = "data\models\bge-reranker-v2-m3-jua-lora-v2"
+if (-not (Test-Path $modelo2)) {
+    Etapa "fine-tune do reranker v2" { & $Python -m src.finetune_reranker --negativos-mistos --lr 5e-5 --fracao-treino 0.5 --saida $modelo2 --label f7_finetune_reranker_v2 }
+}
+foreach ($c in @(@{n = "juristcu"; p = ""; f4 = "fusao4_peso_igual"; q = $JT}, @{n = "jua"; p = "jua_"; f4 = "jua_fusao4_peso_igual"; q = $TE})) {
+    $f4 = Rodada $c.f4
+    SeFaltar "$($c.n)_rerank_ft2_fusao4" {
+        & $Python -m src.rerank --estrategia $Est --nome fusao4ft2 --label "$($c.n)_rerank_ft2_fusao4" --queries $c.q `
+            --modelo $modelo2 --max-length 512 `
+            --candidatos "$f4\runs\${Est}__soma_norm.trec" --fontes (Fontes $c.p) `
+            --cache "data\interim\rerank_cache\$($c.n)_${Est}_ft2.tsv"
+    }
+}
+
+# 7c. LTR implantavel (structural_pred) ----------------------------------------
+foreach ($c in @(@{p = "tr"; q = $TR}, @{p = "te"; q = $TE}, @{p = "jt"; q = $JT})) {
+    $base = @("--strategy", "structural_pred", "--top-docs", "200")
+    if ($c.p -eq "tr") {
+        Busca "ltrsp_tr_bm25" $c.q ($base + @("--retriever", "bm25"))
+        Busca "ltrsp_tr_bm25_semrel" $c.q ($base + @("--retriever", "bm25") + $SemRel)
+        Busca "ltrsp_tr_dense" $c.q ($base + @("--retriever", "dense"))
+        Busca "ltrsp_tr_dense_semrel" $c.q ($base + @("--retriever", "dense") + $SemRel)
+    }
+    foreach ($s in @("ementa", "relatorio", "fundamentacao", "dispositivo")) {
+        Busca "ltrsp_$($c.p)_bm25_$s" $c.q ($base + @("--retriever", "bm25", "--secoes", $s))
+        Busca "ltrsp_$($c.p)_dense_$s" $c.q ($base + @("--retriever", "dense", "--secoes", $s))
+    }
+}
+SeFaltar "f7_ltr_pred" { & $Python -m src.ltr --spec configs\f7_ltr_pred.json --label f7_ltr_pred }
+
+# 8. Analise: replicacao em quatro amostras, painel e mecanismo ----------------
 Etapa "replicacao final (H1-H8)" { & $Python -m src.replicacao --spec configs\f7_replicacao_final.json --label f7_replicacao_final }
 Etapa "painel configuracao x colecao" { & $Python -m src.painel --spec configs\f7_painel.json --label f7_painel }
+Etapa "mecanismo por quartil" { & $Python -m src.mecanismo --label f7_mecanismo }
 
 Registrar "fim da rodada F7 -> log em $log"

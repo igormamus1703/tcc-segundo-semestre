@@ -110,4 +110,35 @@ vencedores de **outras** consultas (fáceis, sem casamento), mais taxa menor
 (5e-5) e meia época. Se o atalho vinha dos negativos, a correlação com a
 sobreposição deve voltar a ser positiva e o JurisTCU, a não colapsar.
 
-*(resultado da v2 a seguir)*
+### Resultado: o diagnóstico se confirma em parte, e o fine-tune não ajuda
+
+| nDCG@10, candidatos da fusão das 4 | JurisTCU | JUÁ difícil (domínio do treino) |
+|---|---:|---:|
+| fusão das 4 (sem reranker) | 0,3215 | 0,2215 |
+| reranker zero-shot | **0,2704** | **0,2392** |
+| ajustado v1 (negativos só do BM25) | 0,1087 | 0,0961 |
+| ajustado v2 (negativos mistos) | 0,1949 | 0,1829 |
+| v2 × v1 | +79% (p < 10⁻⁹) | +90% (p < 10⁻³⁷) |
+| v2 × zero-shot | −28% (p < 10⁻⁶) | −24% (p < 10⁻⁷) |
+
+Validação durante o treino: v1 chega a 63% de trecho certo em 1º lugar; v2
+(meia época, negativos mistos), a 55%. Curvas em `*_f7_finetune_reranker{,_v2}`.
+
+**Três leituras:**
+
+1. **A v1 falha também no domínio do treino** (−60% no JUÁ), então o problema
+   não é só transferência. O treino ensinou a separar *o trecho do excerto*
+   de *trechos de outros acórdãos*; na hora de reranquear, porém, o modelo lê
+   o **trecho vencedor** de cada documento, que muitas vezes não é o do
+   excerto. O objetivo de treino e a tarefa de inferência não coincidem.
+2. **O atalho anti-lexical era real.** Trocar só a composição dos negativos
+   (v2) recupera quase o dobro do nDCG@10 e devolve uma correlação positiva
+   com o zero-shot (Spearman +0,16 nos pares do JurisTCU, contra −0,42 da v1).
+3. **Ainda assim, nenhum ajuste supera o modelo genérico.** Com essa
+   supervisão (excerto como positivo, a partir de 5 mil consultas), o
+   fine-tune não ajuda. Um desenho melhor treinaria no nível do documento
+   (positivo = melhor trecho do acórdão relevante, segundo o próprio
+   reranker), com negativos de várias fontes, e fica como trabalho futuro.
+
+**Para o critério de merge:** o item (c) do pré-registro ("reranker com ≥ 5%
+nas duas coleções") **não foi atingido**, nem zero-shot, nem ajustado.

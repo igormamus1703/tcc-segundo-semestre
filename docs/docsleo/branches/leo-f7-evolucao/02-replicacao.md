@@ -28,7 +28,7 @@
 
 **Critério de merge** (escrito antes): (a) H1 e H2, (b) H5 confirmando
 equivalência, ou (c) H6 com ≥ 5% nas duas coleções. **Pela letra, nenhum foi
-atingido** até a avaliação do reranker ajustado (ver [05](05-reranker.md)). O
+atingido**, nem com o reranker ajustado (ver [05](05-reranker.md)). O
 que a F7 tem de mais forte (H8b, a resposta à pergunta original e o ranker
 aprendido) veio fora desse critério; está declarado assim no
 [README](README.md) e no `RESULTADOS-F7.md`.

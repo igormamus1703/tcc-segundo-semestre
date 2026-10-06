@@ -1,0 +1,15 @@
+[18:56:28] experimento 20261005-1856_juristcu_rerank_ft_fusao4
+[18:56:28]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[18:56:28]   commit: be8aa59a (arvore suja) em leo/f7-evolucao
+[18:56:28] 0 pares no cache; 12,335 a pontuar
+[18:56:58]   2,048/12,335 pares (102/s, faltam ~2 min)
+[18:57:19]   4,096/12,335 pares (101/s, faltam ~1 min)
+[18:57:39]   6,144/12,335 pares (101/s, faltam ~1 min)
+[18:57:59]   8,192/12,335 pares (101/s, faltam ~1 min)
+[18:58:20]   10,240/12,335 pares (101/s, faltam ~0 min)
+[18:58:40]   12,288/12,335 pares (101/s, faltam ~0 min)
+[18:58:41]   12,335/12,335 pares (101/s, faltam ~0 min)
+[18:58:43] fixed_512_256__rerank-fusao4ft-todas: {'documentos_lidos': 7348, 'documentos_sem_passagem': 152, 'fracao_sem_passagem': 0.0203}
+[18:58:43] fixed_512_256__rerank-fusao4ft-sem_relatorio: {'documentos_lidos': 6253, 'documentos_sem_passagem': 1247, 'fracao_sem_passagem': 0.1663}
+[18:58:44] fixed_512_256__rerank-fusao4ft-sem_relatorio_preserva: {'documentos_lidos': 7348, 'documentos_sem_passagem': 152, 'fracao_sem_passagem': 0.0203}
+[18:58:44] fim em 2.3 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1856_juristcu_rerank_ft_fusao4

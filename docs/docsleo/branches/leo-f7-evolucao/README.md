@@ -94,7 +94,14 @@ em código existente é o parâmetro `criterio` em `sections.filtrar`, cujo padr
 2. **Previsão errada (H8a):** eu previ que o recorte da F6 pioraria também nas
    consultas naturais do JUÁ; ele melhora 8%. O dano estava concentrado no
    teste do JUÁ, estratificado por dificuldade. Registrado como errado.
-3. **Uma fila de LTR montada sobre `fixed_512_256`** foi descartada no meio,
+3. **O fine-tune do reranker piorou tudo (−60%)**, inclusive no domínio do
+   treino: os negativos tirados só do BM25 ensinaram um atalho anti-lexical,
+   e o objetivo de treino (achar o trecho do excerto) não coincide com a
+   inferência (ler o trecho vencedor). A v2, com negativos mistos, confirma o
+   diagnóstico em parte e ainda fica abaixo do zero-shot ([05](05-reranker.md)).
+   Antes, a primeira tentativa de treino caiu no passo ~200 por truncamento
+   (`only_second` com enunciados longos), corrigido e travado com checkpoint.
+4. **Uma fila de LTR montada sobre `fixed_512_256`** foi descartada no meio,
    quando o artefato da ementa mostrou que os sinais "só a seção X" dessa
    estratégia estavam contaminados. Refeita sobre `structural_gold`.
 

@@ -1,0 +1,14 @@
+[19:24:20] experimento 20261005-1924_f7_finetune_reranker_v2
+[19:24:20]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[19:24:20]   commit: c1fe3e76 (arvore suja) em leo/f7-evolucao
+[19:26:34] 5225 grupos (2462 treino, 300 validacao); 775 sem excerto localizado, 0 sem negativos suficientes
+[19:26:40] LoRA: 8,128,513 de 575,884,290 parametros treinaveis (1.41%)
+[19:27:26] antes do treino: {'passo_otim': 0, 'perda_treino': None, 'perda_val': 4.1015180976767285, 'acerto_top1_val': 0.15666666666666668}
+[19:32:06] epoca 0 passo 50/308 {'passo_otim': 50, 'perda_treino': 2.7495237894356253, 'perda_val': 1.9957248317567926, 'acerto_top1_val': 0.20333333333333334} [4.7 min]
+[19:36:47] epoca 0 passo 100/308 {'passo_otim': 100, 'perda_treino': 1.941132602095604, 'perda_val': 1.6750647111942893, 'acerto_top1_val': 0.38333333333333336} [9.4 min]
+[19:41:27] epoca 0 passo 150/308 {'passo_otim': 150, 'perda_treino': 1.4733292591013014, 'perda_val': 1.434012687519977, 'acerto_top1_val': 0.49} [14.0 min]
+[19:46:08] epoca 0 passo 200/308 {'passo_otim': 200, 'perda_treino': 1.484761182665825, 'perda_val': 1.3594337591999455, 'acerto_top1_val': 0.5233333333333333} [18.7 min]
+[19:50:49] epoca 0 passo 250/308 {'passo_otim': 250, 'perda_treino': 1.4020880352705718, 'perda_val': 1.3272159232905036, 'acerto_top1_val': 0.55} [23.4 min]
+[19:55:29] epoca 0 passo 300/308 {'passo_otim': 300, 'perda_treino': 1.4032810590788722, 'perda_val': 1.3181098777996867, 'acerto_top1_val': 0.5433333333333333} [28.1 min]
+[19:56:10] modelo salvo em data\models\bge-reranker-v2-m3-jua-lora-v2
+[19:56:10] fim em 31.8 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1924_f7_finetune_reranker_v2
