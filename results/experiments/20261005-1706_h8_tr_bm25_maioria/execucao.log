@@ -1,0 +1,6 @@
+[17:06:40] experimento 20261005-1706_h8_tr_bm25_maioria
+[17:06:40]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
+[17:06:40]   commit: 1e017f53 (arvore suja) em leo/f7-evolucao
+[17:06:50]   [fixed_512_256] secoes ['dispositivo', 'ementa', 'fundamentacao']: 907,914 -> 254,234 chunks (28.0%)
+[17:09:10] fixed_512_256__bm25__sec-sem_relatorio: 254,234 chunks, 1,200,000 linhas, 148.2s  [decorrido 0.0 h]
+[17:09:10] fim em 2.5 min -> C:\Users\leomr\Documents\GoogleDrive\Workspace\Projetos_Pessoais\TCC2\tcc-segundo-semestre\results\experiments\20261005-1706_h8_tr_bm25_maioria

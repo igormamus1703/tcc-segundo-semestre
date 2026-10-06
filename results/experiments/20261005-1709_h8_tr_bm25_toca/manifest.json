@@ -1,0 +1,80 @@
+{
+  "rotulo": "h8_tr_bm25_toca",
+  "inicio": "2026-10-05T17:09:21",
+  "fim": "2026-10-05T17:11:07",
+  "duracao_s": 105.7,
+  "comando": "C:\\Users\\leomr\\Documents\\GoogleDrive\\Workspace\\Projetos_Pessoais\\TCC2\\tcc-segundo-semestre\\juris-chunking\\src\\run_experiments.py --strategy fixed_512_256 --retriever bm25 --queries data/interim/jua/queries_train_amostra.jsonl --top-docs 200 --secoes sem:relatorio --secoes-criterio toca --label h8_tr_bm25_toca",
+  "config": {
+    "estrategias": [
+      "fixed_512_256"
+    ],
+    "retrievers": [
+      "bm25"
+    ],
+    "embedder": "bge_m3",
+    "agregacao": "max_pooling",
+    "top_chunks": 2000,
+    "top_docs": 200,
+    "n_queries": 6000,
+    "limite_queries": null,
+    "corpus": "data\\interim\\jua\\queries_train_amostra.jsonl",
+    "secoes": [
+      "dispositivo",
+      "ementa",
+      "fundamentacao"
+    ],
+    "pesos_por_secao": null,
+    "amostra_aleatoria": null,
+    "amostra_igual_a": null,
+    "amostra_seed": null
+  },
+  "git": {
+    "commit": "1e017f53df091f28abba9b00a89575aacf320ffd",
+    "branch": "leo/f7-evolucao",
+    "sujo": true
+  },
+  "versoes": {
+    "python": "3.13.7",
+    "torch": "2.14.0+cu130",
+    "sentence_transformers": "6.0.1",
+    "faiss": "1.15.0",
+    "bm25s": "0.3.11",
+    "ranx": null,
+    "tiktoken": "0.14.0",
+    "numpy": "2.5.2"
+  },
+  "hardware": {
+    "so": "Windows 11",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "vram_gb": 8.0
+  },
+  "etapas": [
+    {
+      "nome": "fixed_512_256__bm25__sec-sem_relatorio__crit-toca",
+      "run": "fixed_512_256__bm25__sec-sem_relatorio__crit-toca",
+      "n_chunks": 279974,
+      "n_queries": 6000,
+      "n_linhas_run": 1200000,
+      "segundos": 104.4,
+      "recorte_secoes": {
+        "secoes": [
+          "dispositivo",
+          "ementa",
+          "fundamentacao"
+        ],
+        "criterio": "toca",
+        "chunks_antes": 907914,
+        "chunks_depois": 279974,
+        "fracao_mantida": 0.3084,
+        "distribuicao": {
+          "ementa": 2445,
+          "relatorio": 653680,
+          "fundamentacao": 209952,
+          "dispositivo": 41837
+        }
+      }
+    }
+  ],
+  "erro": null
+}

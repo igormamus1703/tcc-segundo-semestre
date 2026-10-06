@@ -5,6 +5,21 @@ Não editar à mão.
 
 | Rodada | Início | Duração | Commit | Hardware | Etapas | Melhor nDCG@10 | p<0,05 |
 |---|---|---|---|---|---|---|---|
+| [`20261005-2216_f7_replicacao_final`](20261005-2216_f7_replicacao_final/) | 2026-10-05T22:16:51 | 25 min | `c1fe3e76` | NVIDIA GeForce RTX 5060 | 4 | — | — |
+| [`20261005-1758_f7_mecanismo`](20261005-1758_f7_mecanismo/) | 2026-10-05T17:58:24 | 2 min | `f5dd5fad` | NVIDIA GeForce RTX 5060 | 0 | — | — |
+| [`20261005-1741_juanat_bm25_sec_sem_ementa`](20261005-1741_juanat_bm25_sec_sem_ementa/) | 2026-10-05T17:41:45 | 6 min | `e4616d89` | NVIDIA GeForce RTX 5060 | 2 | — | — |
+| [`20261005-1737_juanat_bm25_sec_sem_relatorio_toca`](20261005-1737_juanat_bm25_sec_sem_relatorio_toca/) | 2026-10-05T17:37:36 | 7 min | `6f13a176` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1736_jua_bm25_sec_sem_ementa`](20261005-1736_jua_bm25_sec_sem_ementa/) | 2026-10-05T17:36:50 | 5 min | `6f13a176` | NVIDIA GeForce RTX 5060 | 2 | — | — |
+| [`20261005-1731_juanat_bm25_sec_sem_relatorio`](20261005-1731_juanat_bm25_sec_sem_relatorio/) | 2026-10-05T17:31:17 | 6 min | `368f575b` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1716_bm25_sec_sem_relatorio_toca`](20261005-1716_bm25_sec_sem_relatorio_toca/) | 2026-10-05T17:16:48 | 5 min | `9cbd4406` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1712_juanat_bm25`](20261005-1712_juanat_bm25/) | 2026-10-05T17:12:38 | 18 min | `e8fc295d` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1711_jua_bm25_sec_sem_relatorio_toca`](20261005-1711_jua_bm25_sec_sem_relatorio_toca/) | 2026-10-05T17:11:17 | 5 min | `1e017f53` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1709_h8_tr_bm25_toca`](20261005-1709_h8_tr_bm25_toca/) | 2026-10-05T17:09:21 | 2 min | `1e017f53` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20261005-1706_h8_tr_bm25_maioria`](20261005-1706_h8_tr_bm25_maioria/) | 2026-10-05T17:06:40 | 2 min | `1e017f53` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20261005-1700_h8_tr_bm25`](20261005-1700_h8_tr_bm25/) | 2026-10-05T17:00:44 | 6 min | `1e017f53` | NVIDIA GeForce RTX 5060 | 1 | — | — |
+| [`20261005-1623_jua_bm25_controle_amostra`](20261005-1623_jua_bm25_controle_amostra/) | 2026-10-05T16:23:15 | 5 min | `52d056f1` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1618_jua_bm25_sec_sem_relatorio`](20261005-1618_jua_bm25_sec_sem_relatorio/) | 2026-10-05T16:18:45 | 4 min | `52d056f1` | NVIDIA GeForce RTX 5060 | 5 | — | — |
+| [`20261005-1603_jua_bm25`](20261005-1603_jua_bm25/) | 2026-10-05T16:03:57 | 15 min | `10f3bf9c` | NVIDIA GeForce RTX 5060 | 5 | — | — |
 | [`20260928-1909_aud_controle_seed2026`](20260928-1909_aud_controle_seed2026/) | 2026-09-28T19:09:44 | 1 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
 | [`20260928-1908_aud_controle_seed7`](20260928-1908_aud_controle_seed7/) | 2026-09-28T19:08:25 | 1 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
 | [`20260928-1903_aud_sec_sem-dispositivo`](20260928-1903_aud_sec_sem-dispositivo/) | 2026-09-28T19:03:49 | 4 min | `aa177710` | NVIDIA GeForce RTX 5060 | 1 | — | — |
