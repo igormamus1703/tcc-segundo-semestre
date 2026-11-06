@@ -1,6 +1,6 @@
 [18:00:13] experimento 20261005-1800_juanat_fusao4_peso_igual
 [18:00:13]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[18:00:13]   commit: f5dd5fad (arvore suja) em leo/f7-evolucao
+[18:00:13]   commit: eb5ef452 (arvore suja) em leo/f7-evolucao
 [18:00:20] fixed_1024_512__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 2,829,800 linhas
 [18:00:27] fixed_512_256__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 2,812,409 linhas
 [18:00:34] recursive_default__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 2,879,865 linhas

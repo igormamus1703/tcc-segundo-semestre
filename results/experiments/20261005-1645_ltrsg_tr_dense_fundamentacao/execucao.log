@@ -1,6 +1,6 @@
 [16:45:19] experimento 20261005-1645_ltrsg_tr_dense_fundamentacao
 [16:45:19]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:45:19]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:45:19]   commit: bf90821b (arvore suja) em leo/f7-evolucao
 [16:45:24]   [structural_gold] secoes ['fundamentacao']: 286,689 -> 64,629 chunks (22.5%)
 [16:45:31]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [16:45:31]     embeddings do cache, recortados: 64,629 de 286,689 chunks (sem reencode)

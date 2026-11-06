@@ -1,6 +1,6 @@
 [18:02:56] experimento 20261005-1802_f7_painel
 [18:02:56]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[18:02:56]   commit: 316714f0 (arvore suja) em leo/f7-evolucao
+[18:02:56]   commit: bbe7c643 (arvore suja) em leo/f7-evolucao
 [18:29:04] [JurisTCU] completo                     structural_gold    0.2523 (+0.0%)
 [18:29:04] [JurisTCU] completo                     structural_pred    0.2526 (+0.0%)
 [18:29:04] [JurisTCU] completo                     recursive_default  0.2410 (+0.0%)

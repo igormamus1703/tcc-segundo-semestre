@@ -1,6 +1,6 @@
 [16:03:57] experimento 20261005-1603_jua_dense_bge_m3
 [16:03:57]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:03:57]   commit: 10f3bf9c (arvore suja) em leo/f7-evolucao
+[16:03:57]   commit: 9c0865bb (arvore suja) em leo/f7-evolucao
 [16:04:09]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [16:04:10]     embeddings recuperados do cache (sem reencode)
 [16:04:22] structural_gold__dense-bge_m3: 286,689 chunks, 1,473,358 linhas, 24.6s  [decorrido 0.0 h]

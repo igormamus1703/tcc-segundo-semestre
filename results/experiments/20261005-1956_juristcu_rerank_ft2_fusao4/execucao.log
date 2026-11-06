@@ -1,6 +1,6 @@
 [19:56:24] experimento 20261005-1956_juristcu_rerank_ft2_fusao4
 [19:56:24]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[19:56:24]   commit: c1fe3e76 (arvore suja) em leo/f7-evolucao
+[19:56:24]   commit: 7581dbf7 (arvore suja) em leo/f7-evolucao
 [19:56:24] 0 pares no cache; 12,335 a pontuar
 [19:56:49]   2,048/12,335 pares (102/s, faltam ~2 min)
 [19:57:10]   4,096/12,335 pares (102/s, faltam ~1 min)

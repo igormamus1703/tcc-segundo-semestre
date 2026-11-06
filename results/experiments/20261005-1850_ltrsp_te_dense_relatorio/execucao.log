@@ -1,6 +1,6 @@
 [18:50:07] experimento 20261005-1850_ltrsp_te_dense_relatorio
 [18:50:07]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[18:50:07]   commit: be8aa59a (arvore suja) em leo/f7-evolucao
+[18:50:07]   commit: dbabc61c (arvore suja) em leo/f7-evolucao
 [18:50:11]   [structural_pred] secoes ['relatorio']: 285,308 -> 189,089 chunks (66.3%)
 [18:50:17]   [structural_pred] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [18:50:17]     embeddings do cache, recortados: 189,089 de 285,308 chunks (sem reencode)

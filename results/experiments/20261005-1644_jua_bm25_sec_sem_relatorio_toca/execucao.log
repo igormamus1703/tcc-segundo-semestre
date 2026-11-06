@@ -1,6 +1,6 @@
 [16:44:41] experimento 20261005-1644_jua_bm25_sec_sem_relatorio_toca
 [16:44:41]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:44:41]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:44:41]   commit: bf90821b (arvore suja) em leo/f7-evolucao
 [16:44:53]   [fixed_512_256] secoes ['dispositivo', 'ementa', 'fundamentacao']: 907,914 -> 279,974 chunks (30.8%)
 [16:46:21] fixed_512_256__bm25__sec-sem_relatorio__crit-toca: 279,974 chunks, 1,211,944 linhas, 99.4s  [decorrido 0.0 h]
 [16:46:29]   [fixed_1024_512] secoes ['dispositivo', 'ementa', 'fundamentacao']: 450,786 -> 151,282 chunks (33.6%)

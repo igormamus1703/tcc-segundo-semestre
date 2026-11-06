@@ -2,7 +2,7 @@
 
 **Rodada:** `20260906-0547_dense_bge_m3` · **Data:** 06/09/2026 05:47 → 10:44 (4,94h)
 **Modelo:** `BAAI/bge-m3` fp16, janela 1024, batch 32, RTX 5060
-**Corpus:** 12.880 acórdãos · 150 consultas · 2.219 qrels · **Commit:** `76aee67f`
+**Corpus:** 12.880 acórdãos · 150 consultas · 2.219 qrels · **Commit:** `419b4803`
 **Estratégias:** structural_gold, structural_pred, recursive_default
 **Faltam:** `fixed_1024_512` e `fixed_512_256` — o orçamento de 5h as recusou
 (estimadas 2,8h e 5,6h com 4,9h já usadas). Rodando agora, com o cache das

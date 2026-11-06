@@ -1,6 +1,6 @@
 [16:53:19] experimento 20261005-1653_ltrsg_te_dense_dispositivo
 [16:53:19]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:53:19]   commit: 79752d06 (arvore suja) em leo/f7-evolucao
+[16:53:19]   commit: bf90821b (arvore suja) em leo/f7-evolucao
 [16:53:24]   [structural_gold] secoes ['dispositivo']: 286,689 -> 17,778 chunks (6.2%)
 [16:53:31]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [16:53:31]     embeddings do cache, recortados: 17,778 de 286,689 chunks (sem reencode)

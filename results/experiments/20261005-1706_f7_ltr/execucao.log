@@ -1,6 +1,6 @@
 [17:06:38] experimento 20261005-1706_f7_ltr
 [17:06:38]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[17:06:38]   commit: 1e017f53 (arvore suja) em leo/f7-evolucao
+[17:06:38]   commit: b0cde8ca (arvore suja) em leo/f7-evolucao
 [17:06:55] treino: 6000 consultas; testes: JUÁ-Juris (1567), JurisTCU (150)
 [17:07:18] ltr_secoes: 26 atributos, 1,195,522 linhas de treino, melhor iteracao 262, nDCG@10 val = 0.7578
 [17:08:47] ltr_sem_secoes: 6 atributos, 1,195,522 linhas de treino, melhor iteracao 170, nDCG@10 val = 0.6833

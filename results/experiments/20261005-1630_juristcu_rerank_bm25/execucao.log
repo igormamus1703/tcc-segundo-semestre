@@ -1,6 +1,6 @@
 [16:30:22] experimento 20261005-1630_juristcu_rerank_bm25
 [16:30:22]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:30:22]   commit: 52d056f1 (arvore suja) em leo/f7-evolucao
+[16:30:22]   commit: 01d8a84b (arvore suja) em leo/f7-evolucao
 [16:30:22] 12,335 pares no cache; 3,246 a pontuar
 [16:30:52]   2,048/3,246 pares (100/s, faltam ~0 min)
 [16:31:04]   3,246/3,246 pares (100/s, faltam ~0 min)

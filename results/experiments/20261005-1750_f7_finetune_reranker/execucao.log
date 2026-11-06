@@ -1,6 +1,6 @@
 [17:50:38] experimento 20261005-1750_f7_finetune_reranker
 [17:50:38]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[17:50:38]   commit: e4616d89 (arvore suja) em leo/f7-evolucao
+[17:50:38]   commit: 497bc759 (arvore suja) em leo/f7-evolucao
 [17:52:44] 5225 grupos (4925 treino, 300 validacao); 775 sem excerto localizado, 0 sem negativos suficientes
 [17:52:51] LoRA: 8,128,513 de 575,884,290 parametros treinaveis (1.41%)
 [17:54:01] antes do treino: {'passo_otim': 0, 'perda_treino': None, 'perda_val': 4.204391868490922, 'acerto_top1_val': 0.16666666666666666}

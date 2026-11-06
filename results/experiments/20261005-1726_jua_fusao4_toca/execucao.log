@@ -1,6 +1,6 @@
 [17:27:06] experimento 20261005-1726_jua_fusao4_toca
 [17:27:06]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[17:27:06]   commit: 368f575b (arvore suja) em leo/f7-evolucao
+[17:27:06]   commit: 98bc8051 (arvore suja) em leo/f7-evolucao
 [17:27:13] fixed_1024_512__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,549,718 linhas
 [17:27:21] fixed_512_256__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,530,822 linhas
 [17:27:29] recursive_default__soma_norm: bm25 + bm25 + dense-bge_m3 + dense-bge_m3 -> 1,566,843 linhas
