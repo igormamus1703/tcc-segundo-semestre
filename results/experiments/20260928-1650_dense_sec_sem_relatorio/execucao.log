@@ -1,6 +1,6 @@
 [16:50:37] experimento 20260928-1650_dense_sec_sem_relatorio
 [16:50:37]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:50:37]   commit: 289fc486 (arvore suja) em leo/f6-secoes-e-fusao
+[16:50:37]   commit: 2a86a2db (arvore suja) em leo/f6-secoes-e-fusao
 [16:50:41]   [structural_gold] secoes ['dispositivo', 'ementa', 'fundamentacao']: 286,689 -> 95,300 chunks (33.2%)
 [16:50:48]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [16:50:52]     embeddings do cache, recortados: 95,300 de 286,689 chunks (sem reencode)

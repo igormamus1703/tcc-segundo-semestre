@@ -90,7 +90,7 @@ doeu).
 
 O critério `toca` foi desenhado olhando o teste do JUÁ, então o resultado
 acima é exploratório. A previsão foi registrada no
-[pré-registro](00-preregistro.md) (adendo 2, commit `1e017f5`) **antes** de
+[pré-registro](00-preregistro.md) (adendo 2, commit `b0cde8c`) **antes** de
 rodar sobre a amostra de **6.000 consultas do split de treino** do JUÁ, que
 nunca tinha entrado em análise nenhuma:
 

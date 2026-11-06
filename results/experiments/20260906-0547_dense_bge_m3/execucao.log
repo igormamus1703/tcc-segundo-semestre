@@ -1,6 +1,6 @@
 [05:48:00] experimento 20260906-0547_dense_bge_m3
 [05:48:00]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[05:48:00]   commit: 76aee67f (arvore suja) em leo/f4-indexacao-e-docs
+[05:48:00]   commit: 419b4803 (arvore suja) em leo/f4-indexacao-e-docs
 [05:48:10]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [05:56:17]     bloco 1/12 (25,000 chunks) em 8.1 min — faltam ~1.5 h
 [06:04:35]     bloco 2/12 (25,000 chunks) em 8.3 min — faltam ~1.4 h

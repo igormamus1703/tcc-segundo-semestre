@@ -45,7 +45,7 @@ CHAVES UNICAS      : 12881
 disso — muito menos chegar a 113.827.
 
 **2. O que aconteceu, na palavra do próprio autor.** A mensagem do commit
-`92828d4` (Igor Mamus, 24/08/2026) diz, textualmente:
+`3f6e791` (Igor Mamus, 24/08/2026) diz, textualmente:
 
 > "validated against the gold spans on the **full 113k-doc corpus**, 92.7% char
 > accuracy, 1.6% fallback rate"
@@ -64,9 +64,9 @@ a ordem dos fatos:
 
 ```bash
 git log --oneline -S "key not in wanted_keys" -- juris-chunking/src/ingest.py
-# 92828d4 Add corpus ingestion (F1) and structural segmenter (F2)
+# 3f6e791 Add corpus ingestion (F1) and structural segmenter (F2)
 git log --oneline -- results/tables/
-# 92828d4 Add corpus ingestion (F1) and structural segmenter (F2)
+# 3f6e791 Add corpus ingestion (F1) and structural segmenter (F2)
 ```
 
 **Conclusão:** o Igor está certo quando diz que "está funcionando" — o código

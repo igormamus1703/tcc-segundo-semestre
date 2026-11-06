@@ -1,6 +1,6 @@
 [17:37:36] experimento 20261005-1737_juanat_bm25_sec_sem_relatorio_toca
 [17:37:36]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[17:37:36]   commit: 6f13a176 (arvore suja) em leo/f7-evolucao
+[17:37:36]   commit: b3711cab (arvore suja) em leo/f7-evolucao
 [17:37:41]   [structural_gold] secoes ['dispositivo', 'ementa', 'fundamentacao']: 286,689 -> 95,300 chunks (33.2%)
 [17:38:41] structural_gold__bm25__sec-sem_relatorio__crit-toca: 95,300 chunks, 1,200,000 linhas, 63.6s  [decorrido 0.0 h]
 [17:38:46]   [structural_pred] secoes ['dispositivo', 'ementa', 'fundamentacao']: 285,308 -> 97,013 chunks (34.0%)
