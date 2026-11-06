@@ -7,14 +7,17 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 - **`plano_tecnico.md`** — plano completo: arquitetura, stack, cronograma
   (16 semanas) e roteiro de leitura. Documento de referência, não muda com
   frequência.
-- **`plano_implementacao.md`** — plano de execução fase a fase (F0–F5),
+- **`plano_implementacao.md`** — plano de execução fase a fase (F0–F7),
   com os achados empíricos do corpus real e o que cada fase precisa
   entregar. **É este que diz "o que fazer agora"** — comece por ele.
 - **`juris-chunking/`** — todo o código do pipeline (ingestão, segmentador,
-  chunkers, indexação, avaliação). Ver `juris-chunking/README.md` para o
-  setup e o status de cada fase.
+  chunkers, indexação, avaliação, seleção por seção, fusão e a validação da
+  F7). Ver `juris-chunking/README.md` para o setup e o status de cada fase.
 - **`RESULTADOS-F6.md`** — o que avançou em 28/09, com as tabelas e a
   argumentação, escrito para levar à orientação.
+- **`docs/docsleo/branches/leo-f7-enxuta/README.md`** — a F7 (06/10):
+  validação em 7.567 consultas do JUÁ-Juris e critério `toca`, com o
+  parágrafo e as tabelas propostos para o artigo.
 - **`results/`** — resultados medidos: `corpus/` (caracterização do corpus) e
   `experiments/AAAAMMDD-HHMM_rotulo/` (uma pasta por rodada, com manifesto de
   reprodutibilidade). Ver `results/README.md`.
@@ -25,24 +28,32 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 > estado atual, o que já foi feito, o que falta e quem decide o quê. Este README
 > cobre o *como trabalhar*; o PLANO cobre o *o que fazer*.
 
-## Onde o projeto está (28/09/2026)
+## Onde o projeto está (06/11/2026): concluído
 
 | | |
 |---|---|
-| **Feito** | F0–F6 implementadas e mergeadas na `main` |
-| **Resposta à pergunta original** | O chunking estrutural **não** melhora a recuperação — e o empate se confirmou num segundo ponto de operação |
-| **Resposta à pergunta derivada** | **Qual parte indexar importa muito:** descartar o relatório melhora o nDCG@10 em 11–17% no BM25, nas cinco estratégias |
-| **Melhor configuração** | recorte por seção + fusão BM25/denso: **nDCG@10 = 0,3215 contra 0,2486** — +29,3%, p < 0,00001, com as quatro métricas subindo e **sem hiperparâmetro** |
-| **Por que acreditamos** | Controle pareado: descartar o **mesmo número** de chunks ao acaso **piora** o resultado |
-| **Bloqueio** | 🔴 Decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
-| **Testes** | 191 passando |
+| **Feito** | F0–F7 implementadas e mergeadas na `main` |
+| **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), decisão final da equipe; consultas e julgamentos do JurisTCU (150) e, na F7, do JUÁ-Juris (7.567) |
+| **Pergunta 1: como cortar o documento** | Com as 150 consultas do JurisTCU, as estratégias empatam. Com as 7.567 do JUÁ-Juris, o corte **estrutural vence** o fixo e o recursivo (+1% a +12% de nDCG@10), por isolar a ementa num chunk próprio; o segmentador por regras é equivalente à estrutura ouro |
+| **Pergunta 2: qual parte indexar** | Tirar do índice os trechos **só de relatório** (critério `toca`) melhora o nDCG@10 em +15,6% no JurisTCU e +9,7% no JUÁ natural, e não piora em nenhuma amostra |
+| **Melhor configuração** | recorte por seção + fusão BM25/denso: **nDCG@10 = 0,3215 contra 0,2486** no JurisTCU (+29,3%, p < 0,00001), com as quatro métricas subindo e **sem hiperparâmetro** |
+| **Por que acreditamos** | Controle pareado (descartar o **mesmo número** de chunks ao acaso **piora**), auditoria contra dez ameaças de validade e validação numa segunda coleção, com hipóteses pré-registradas |
+| **Testes** | 206 passando |
 
-Resumo dos resultados novos, escrito para apresentar:
-**[RESULTADOS-F6.md](RESULTADOS-F6.md)** — e a mesma coisa com gráficos, para
-abrir no navegador e mostrar para alguém:
-**[docs/apresentacao/index.html](docs/apresentacao/index.html)**.
-Detalhes, próximos passos e o que cada um pode pegar: **[PLANO.md](PLANO.md)**.
-O status fase a fase está em `plano_implementacao.md`.
+Resumos para apresentar: **[RESULTADOS-F6.md](RESULTADOS-F6.md)** (F6) e o
+**[README da F7](docs/docsleo/branches/leo-f7-enxuta/README.md)**; com
+gráficos, para abrir no navegador:
+**[docs/apresentacao/index.html](docs/apresentacao/index.html)** e
+**[docs/apresentacao/f7.html](docs/apresentacao/f7.html)**.
+Decisões e histórico: **[PLANO.md](PLANO.md)**. O status fase a fase está em
+`plano_implementacao.md`.
+
+**Branches.** A `main` é o projeto final. A exploração completa da F7 (ranker
+aprendido, reranker com cross-encoder e seu ajuste fino) está guardada na
+branch **`leo/f7-evolucao`**, sem merge: deu ganho pequeno ou negativo para a
+complexidade que acrescenta (detalhe no §5 do
+[README da F7](docs/docsleo/branches/leo-f7-enxuta/README.md)) e fica como
+base para trabalhos futuros.
 
 ## Para quem está entrando no projeto agora
 

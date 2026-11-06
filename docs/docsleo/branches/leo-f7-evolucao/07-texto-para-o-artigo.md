@@ -1,5 +1,12 @@
 # Rascunho de texto para o artigo (a partir da F7)
 
+> ⚠️ **Superado.** Rascunho de 05/10, anterior à decisão de 06/10 sobre o
+> escopo do artigo. O texto do artigo segue a F7 enxuta: parágrafo e tabelas
+> no [README da leo-f7-enxuta](../leo-f7-enxuta/README.md), §2 a §4. Os
+> trechos abaixo sobre o ranker aprendido e o reranker ficam como registro: no
+> artigo, o ranker aprendido vai para trabalhos futuros e o reranker, no
+> máximo, para uma frase. A decisão de corpus citada abaixo foi tomada: 12.880.
+
 **Data:** 05/10/2026 · **Autor:** Leonardo Marques
 **Status:** rascunho para a equipe revisar. As chaves entre colchetes estão em
 [`REFERENCIAS.md`](../../../../REFERENCIAS.md). Números com o artefato de

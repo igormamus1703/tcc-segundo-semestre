@@ -146,3 +146,4 @@ Em palavras, a recomendação do meio-termo:
    cruzada para ser reportável; a linha 1, não.
 4. **Corpus de 12.880 acórdãos**, como toda a F5. A decisão de corpus
    (12.880 × 113.827) continua aberta e vale igualmente para estes números.
+   *Desfecho em 06/11/2026: decidida, 12.880 acórdãos.*

@@ -5,7 +5,39 @@ codar ou escrever. Atualize **acrescentando**, não apagando: a seção
 [Histórico](#histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
 e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
-**Última atualização:** 06/10/2026 · por Leonardo Marques
+**Última atualização:** 06/11/2026 · por Leonardo Marques
+
+---
+
+## Estado final — 06/11/2026
+
+O projeto está concluído. O que mudou desde 06/10:
+
+- **Corpus decidido:** 12.880 acórdãos. O número 113.827, que saiu no pôster,
+  contava todos os acórdãos dos CSVs do TCU, antes do recorte pelos documentos
+  do JurisTCU. A DECISÃO 1 do §2 está encerrada.
+- **A F7 que vai para o artigo é a enxuta**: critério `toca`, validação no
+  JUÁ-Juris, corte estrutural com poder estatístico e o mecanismo da ementa,
+  com o parágrafo e as tabelas propostos no
+  [README da branch](docs/docsleo/branches/leo-f7-enxuta/README.md), §2 a §4.
+- **A `main` recebeu o `src/replicacao.py`** e as especificações da replicação
+  (`configs/f7_replicacao.json`, a do pré-registro, e
+  `configs/f7_replicacao_final.json`). Eles geram a tabela da F7
+  (rodada `20261005-2216_f7_replicacao_final`), que estava na `main` sem o
+  código que a produziu. Testes: **206**.
+- **Branches:** a `leo/f7-enxuta` foi apagada do GitHub depois do merge (o
+  conteúdo está na `main`). A **`leo/f7-evolucao`** continua no GitHub como
+  arquivo da exploração completa da F7 (ranker aprendido, reranker e ajuste
+  fino): ganho pequeno ou negativo para a complexidade acrescentada, e base
+  para trabalhos futuros.
+- **Dados:** o JUÁ-Juris entrou no `scripts/download_datasets.py`. O TCU regerou
+  os CSVs de acórdãos em 02/10/2026; os resultados usam a versão baixada em
+  05/09/2026 (ver `scripts/README.md`).
+- **Fica em aberto, registrado:** as tabelas de recorte, IC 95% e poder das
+  rodadas da F5 são anteriores à correção do bug dos empates (efeito na
+  terceira casa decimal; as médias das métricas não mudam, conferido em 06/11
+  na rodada `20260906-0515_bm25`). Para citar um recorte da F5, regerar com
+  `python -m src.evaluate --experiment <rodada>`.
 
 ---
 
@@ -34,12 +66,12 @@ deve ser repetido** está no §5 do README da branch.
 | **Pergunta 1 (original)** | Chunking que respeita as macro-seções do acórdão melhora a recuperação, comparado a chunking fixo/recursivo? |
 | **Pergunta 2 (derivada, 28/09)** | Se *como* cortar não importa, **qual parte** do documento indexar? |
 | **Corpus** | 12.880 acórdãos íntegros do TCU (2003–2023), 150 consultas e 2.219 qrels do JurisTCU |
-| **Fases** | F0–F6 concluídas e mergeadas na `main` |
-| **Testes** | 191 passando · resultado auditado contra 10 ameaças de validade |
-| **Resposta à pergunta 1** | **Não melhora.** Nenhuma diferença entre estratégias é significativa — e isso agora vale em **dois** pontos de operação diferentes |
+| **Fases** | F0–F7 concluídas e mergeadas na `main` |
+| **Testes** | 206 passando · resultado auditado contra 10 ameaças de validade |
+| **Resposta à pergunta 1** | Com 150 consultas, **nenhuma diferença significativa**, em dois pontos de operação. Com as 7.567 do JUÁ-Juris (F7), o corte **estrutural vence** o fixo e o recursivo (+1% a +12%), por isolar a ementa |
 | **Resposta à pergunta 2** | **A fundamentação. O relatório atrapalha.** Descartá-lo do índice melhora o nDCG@10 em 11–17% no BM25 e 12–28% no denso, nas cinco estratégias |
 | **Melhor configuração** | recorte + fusão BM25/denso: **nDCG@10 = 0,3215**, contra 0,2486 do baseline — **+29,3%**, p < 0,00001, e **sem hiperparâmetro** |
-| **Bloqueio nº 1** | 🔴 A equipe precisa decidir o corpus oficial: o artigo diz 113.827 documentos, o código produz 12.880 |
+| **Corpus** | ✅ Decidido: **12.880** acórdãos (o 113.827 do pôster vinha antes do recorte pelo JurisTCU) |
 
 ### A tabela principal (nDCG@10), índice completo — F5
 
@@ -94,7 +126,10 @@ e resumo para apresentação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
 ## 2. O que a equipe precisa decidir (não dá para decidir sozinho)
 
-### 🔴 DECISÃO 1 — Qual é o corpus oficial?
+### ✅ DECISÃO 1 — Qual é o corpus oficial?
+
+> **Decidida** (registro de 06/11/2026): **12.880 acórdãos**, como recomendado
+> abaixo. O texto a seguir é o registro de como a questão foi posta.
 
 O artigo e o pôster dizem **113.827** documentos. O `ingest.py` produz
 **12.880**. Não é bug: é uma mudança de escopo de agosto que não foi propagada
@@ -340,13 +375,13 @@ python -m venv .venv && .venv\Scripts\activate
 pip install -r juris-chunking/requirements.txt
 
 # 2. dados (~6 GB, retomável)
-python scripts/download_datasets.py juristcu tcu_acordaos
+python scripts/download_datasets.py juristcu tcu_acordaos jua
 
 # 3. corpus e validação
 cd juris-chunking
-python -m src.ingest                 # ~30 min, lê 6 GB de CSV
+python -m src.ingest                 # poucos minutos, lê 6 GB de CSV
 python -m src.segmenter.validate
-pytest -q                            # 115 passando
+pytest -q                            # 206 passando
 
 # 4. chunking (~50 min, gera 6 GB)
 python -m src.chunkers.run --strategy all
@@ -361,7 +396,18 @@ python -m src.plots                                              # figuras
 python -m src.run_experiments --strategy all --retriever bm25  --secoes sem:relatorio
 python -m src.run_experiments --strategy all --retriever dense --secoes sem:relatorio
 python -m src.tuning --bm25 <rodada-bm25-recortada> --denso <rodada-densa-recortada>
+
+# 7. F7 — validação no JUÁ-Juris e critério toca (06/10)
+python -m src.jua
+python -c "from src.jua import amostra_treino; amostra_treino()"
+python -m src.run_experiments --strategy all --retriever bm25 --secoes sem:relatorio --secoes-criterio toca
+python -m src.mecanismo
+python -m src.replicacao --spec configs/f7_replicacao_final.json
 ```
+
+A especificação da replicação também compara rodadas da exploração completa da
+F7, que estão na branch-arquivo `leo/f7-evolucao`; sem elas, essas linhas da
+tabela não são refeitas.
 
 Ou tudo de uma vez, com orçamento de tempo e log datado:
 
@@ -430,6 +476,9 @@ Resumo do que está decidido, para ninguém refazer. O detalhe está em
 | 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md) |
 | 28/09 | **Auditoria de validade:** 10 ameaças testadas — dose-resposta, nDCG reimplementado do zero, controle em 3 sementes, escolha da seção por CV | [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) |
 | 28/09 | Branch `leo/f6-secoes-e-fusao` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
+| 05/10 | **F7:** JUÁ-Juris como segunda coleção (7.567 consultas), hipóteses pré-registradas, critério `toca`, ranker aprendido, reranker e ajuste fino | [leo-f7-evolucao](docs/docsleo/branches/leo-f7-evolucao/README.md) |
+| 06/10 | Branch `leo/f7-enxuta` mergeada na `main` (critério `toca`, `jua.py`, `mecanismo.py`); a F7 completa fica na branch-arquivo `leo/f7-evolucao` | [leo-f7-enxuta](docs/docsleo/branches/leo-f7-enxuta/README.md) |
+| 06/11 | **Encerramento:** corpus 12.880 decidido, `replicacao.py` na `main`, JUÁ no script de download, documentação no estado final, `leo/f7-enxuta` apagada do GitHub | [leo-fechamento](docs/docsleo/branches/leo-fechamento/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram
 
@@ -446,3 +495,6 @@ Para ninguém repetir:
 | **Ponderar a seção** em vez de cortar (F6) | Satura no corte binário e **não** preserva o recall: o peso é aplicado depois do corte em `--top-chunks`, então o chunk descontado já ocupou vaga |
 | **RRF sem peso** para fundir BM25 + denso (F6) | p entre 0,206 e 0,906. Peso igual a um retriever 20% pior puxa a fusão para baixo tanto quanto o outro puxa para cima |
 | **`sum_top_k`** como agregação (F6) | Perde do `max_pooling` em 4 de 5 estratégias. Era análise de sensibilidade: cumpriu o papel de justificar o default |
+| **Ranker aprendido** (F7, LambdaRank com sinais por seção) | +18,6% sobre o BM25 no JurisTCU, mas empata com a fusão das 4 e acrescenta um modelo treinado. Fora do escopo; candidato a trabalho futuro |
+| **Reranker com cross-encoder** (F7, sem ajuste) | −15,9% contra a fusão das 4 no JurisTCU: não supera o primeiro estágio |
+| **Ajuste fino LoRA do reranker** (F7) | −60% (v1) e −28% (v2) contra o reranker sem ajuste. Não repetir assim: detalhe no §5 do [README da F7](docs/docsleo/branches/leo-f7-enxuta/README.md) |

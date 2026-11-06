@@ -32,8 +32,9 @@ docsleo/
 |---|---|---|
 | [leo/f4-indexacao-e-docs](branches/leo-f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | ✅ mergeada em 07/09 |
 | [leo/f6-secoes-e-fusao](branches/leo-f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+29,3% de nDCG@10** | ✅ mergeada em 28/09 |
-| [leo/f7-enxuta](branches/leo-f7-enxuta/) | F7 no essencial: validação em 7.567 consultas do JUÁ, critério `toca`, pergunta original com poder, e o que já foi testado e não repetir | ✅ mergeada em 06/10 |
-| [leo/f7-evolucao](branches/leo-f7-evolucao/) | F7 completa (ranker aprendido, reranker, fine-tune, painel). **Só a documentação está na `main`**; código e rodadas na branch-arquivo do GitHub | 📦 arquivo |
+| [leo/f7-enxuta](branches/leo-f7-enxuta/) | F7 no essencial: validação em 7.567 consultas do JUÁ, critério `toca`, pergunta original com poder, e o que já foi testado e não repetir. **É a F7 que vai para o artigo** | ✅ mergeada em 06/10 (branch apagada do GitHub em 06/11; o conteúdo está na `main`) |
+| [leo/f7-evolucao](branches/leo-f7-evolucao/) | F7 completa (ranker aprendido, reranker, fine-tune, painel). Na `main` estão a documentação e o `replicacao.py`; o resto do código e as rodadas, na branch-arquivo do GitHub, base para trabalhos futuros | 📦 arquivo |
+| [leo/fechamento](branches/leo-fechamento/) | Encerramento: `replicacao.py` na `main`, JUÁ no script de download, documentação no estado final | ✅ mergeada em 06/11 |
 
 ## Atalhos para o que mais importa
 
@@ -45,6 +46,7 @@ docsleo/
 | Ver o primeiro nDCG@10 e os recortes | [resultados/](branches/leo-f4-indexacao-e-docs/resultados/) |
 | Ver o resultado do retriever denso | [resultados/06-final-5x2.md](branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
 | Ver o achado mais promissor (exploratório, 07/09) | [resultados/05-filtragem-por-secao.md](branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| **Saber o que da F7 vai para o artigo** | [f7-enxuta/README.md](branches/leo-f7-enxuta/README.md), §2 a §4 |
 | **Ver o melhor resultado do trabalho** | [f6/resultados/04-tabela-principal.md](branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
 | **Saber por que ele é confiável** | [f6/resultados/02-controle-aleatorio.md](branches/leo-f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
 | Saber o que foi testado e descartado | [f6/resultados/05-negativos.md](branches/leo-f6-secoes-e-fusao/resultados/05-negativos.md) |

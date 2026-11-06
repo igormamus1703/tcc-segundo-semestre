@@ -8,7 +8,10 @@ bloqueia o resto.
 
 ---
 
-## 🔴 1. Qual é o corpus oficial? — BLOQUEIA TODOS OS NÚMEROS
+## ✅ 1. Qual é o corpus oficial? — BLOQUEIA TODOS OS NÚMEROS
+
+> **Decidida em 06/11/2026: 12.880 acórdãos (opção A).** O texto abaixo é o
+> registro de como a questão foi posta.
 
 **Situação:** o artigo e o pôster dizem 113.827 documentos; o código produz
 12.880. Detalhes e evidência em [02-achado-corpus.md](02-achado-corpus.md).
