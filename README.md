@@ -1,5 +1,14 @@
 # TCC — Segmentação Estrutural de Acórdãos para RI Jurídica
 
+> 📦 **Branch-arquivo `leo/f7-evolucao`.** Guarda a exploração completa da F7
+> (ranker aprendido, reranker com cross-encoder e seu ajuste fino, painel) e
+> **não foi mergeada**: o ganho foi pequeno ou negativo para a complexidade
+> acrescentada. Fica como registro do que foi tentado e como base para
+> trabalhos futuros. **A versão final do projeto está na branch `main`**; o
+> motivo de cada exploração ter ficado de fora está no §5 de
+> `docs/docsleo/branches/leo-f7-enxuta/README.md` (na `main`). O README abaixo
+> é o estado do projeto quando esta branch foi aberta.
+
 Comparação de estratégias de chunking (fixo, recursivo, estrutural) na
 recuperação de informação sobre acórdãos do Tribunal de Contas da União
 (TCU), avaliando BM25 e um retriever denso.
