@@ -1,6 +1,6 @@
 """F7 — O mecanismo, consulta a consulta: o recorte dói onde a consulta "é" a ementa?
 
-A explicação do [03](../../docs/docsleo/branches/leo-f7-evolucao/03-fronteira-e-criterio-toca.md)
+A explicação do [03](../../docs/documentos/branches/f7-evolucao/03-fronteira-e-criterio-toca.md)
 é que o recorte da F6 joga fora a ementa junto com o chunk de fronteira, e que
 isso dói quando a consulta se parece com a ementa. Se for isso, o dano deve
 **crescer com a sobreposição lexical entre a consulta e a ementa do acórdão

@@ -1,12 +1,12 @@
 # TCC — Segmentação Estrutural de Acórdãos para RI Jurídica
 
-> 📦 **Branch-arquivo `leo/f7-evolucao`.** Guarda a exploração completa da F7
+> 📦 **Branch-arquivo `f7-evolucao`.** Guarda a exploração completa da F7
 > (ranker aprendido, reranker com cross-encoder e seu ajuste fino, painel) e
 > **não foi mergeada**: o ganho foi pequeno ou negativo para a complexidade
 > acrescentada. Fica como registro do que foi tentado e como base para
 > trabalhos futuros. **A versão final do projeto está na branch `main`**; o
 > motivo de cada exploração ter ficado de fora está no §5 de
-> `docs/docsleo/branches/leo-f7-enxuta/README.md` (na `main`). O README abaixo
+> `docs/documentos/branches/f7-enxuta/README.md` (na `main`). O README abaixo
 > é o estado do projeto quando esta branch foi aberta.
 
 Comparação de estratégias de chunking (fixo, recursivo, estrutural) na
@@ -27,7 +27,7 @@ recuperação de informação sobre acórdãos do Tribunal de Contas da União
 - **`results/`** — resultados medidos: `corpus/` (caracterização do corpus) e
   `experiments/AAAAMMDD-HHMM_rotulo/` (uma pasta por rodada, com manifesto de
   reprodutibilidade). Ver `results/README.md`.
-- **`docs/`** — caderno de bordo de cada integrante (`docs/docsleo/` etc.):
+- **`docs/`** — caderno de bordo de cada integrante (`docs/documentos/` etc.):
   decisões, achados e evidências que viram o texto do artigo.
 
 > 📍 **Começando agora, ou voltando ao projeto?** Leia o **[PLANO.md](PLANO.md)**:
@@ -75,7 +75,7 @@ São quatro passos, nesta ordem: **branch → testar → anotar → merge**.
 ### 1. Trabalhe numa branch, nunca direto na `main`
 
 ```bash
-git checkout -b <seu-nome>/<assunto-curto>     # ex.: leo/f4-indexacao-e-docs
+git checkout -b <fase>-<assunto-curto>     # ex.: f4-indexacao-e-docs
 ```
 
 A `main` só recebe código que já rodou e foi revisado. Commits pequenos, com
@@ -99,27 +99,20 @@ python -m src.chunkers.run --strategy all --limit-docs 500
 python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
 ```
 
-### 3. Anote tudo na SUA pasta de documentação
+### 3. Anote tudo na pasta de documentação
 
-**Toda a documentação da equipe fica dentro de `docs/`** — uma subpasta por
-integrante, para não poluir a raiz do repositório:
+**Toda a documentação da equipe fica em `docs/documentos/`**, com uma pasta por
+branch de trabalho, para não poluir a raiz do repositório:
 
 ```
 docs/
-└── docs<nome>/
+└── documentos/
     └── branches/
         └── <nome-da-branch>/
             ├── README.md        o que a branch faz + checklist de merge
             ├── NN-assunto.md    decisões, achados, execução
             └── resultados/      números medidos, com o comando que os gerou
 ```
-
-| Integrante | Pasta |
-|---|---|
-| Leonardo Marques | `docs/docsleo/` ([exemplo pronto, use como modelo](docs/docsleo/)) |
-| João Vitor Manfrim | `docs/docsjoao/` |
-| Felipe Ribas | `docs/docsfelipe/` |
-| Igor Mamus | `docs/docsigor/` |
 
 Toda anotação precisa ter, no mínimo: **data e autor**, **o comando exato**
 (copiável, não parafraseado), **o número que saiu** e o artefato que o
@@ -131,7 +124,7 @@ aberto**.
 > ele não corresponde ao que o código produz porque alguém foi ler a mensagem
 > de um commit de agosto. Se a decisão de filtrar o corpus tivesse sido anotada
 > quando foi tomada, o artigo nunca teria saído com o número errado. Ver
-> [docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md).
+> [docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md](docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md).
 
 **Nenhum número vai para o artigo sem estar anotado com o artefato que o
 comprova.** Se você não consegue apontar o arquivo em `results/` que gerou

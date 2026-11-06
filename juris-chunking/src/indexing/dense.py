@@ -53,7 +53,7 @@ class DenseIndex:
         # A janela do modelo NÃO é detalhe de performance, é de validade: com
         # 512 tokens, ~37% do conteúdo dos chunks de 1024 é descartado, e só a
         # estratégia fixed_512_256 caberia inteira — o que lhe daria uma
-        # vantagem artificial na comparação. Ver o doc 10 do docsleo.
+        # vantagem artificial na comparação. Ver o doc 10 do documentos.
         self.max_seq_length = max_seq_length
         self.dtype = dtype
         self.device = device

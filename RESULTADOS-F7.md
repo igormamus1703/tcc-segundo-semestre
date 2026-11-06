@@ -1,13 +1,13 @@
 # Status do TCC — a validação externa (F7)
 
-**5 de outubro de 2026 · Leonardo Marques**
+**5 de outubro de 2026 · Equipe do TCC**
 
 Resumo do que a F7 mudou, escrito para ser lido antes da reunião. O detalhe
 técnico, com os artefatos de cada número, está em
-[`docs/docsleo/branches/leo-f7-evolucao/`](docs/docsleo/branches/leo-f7-evolucao/);
+[`docs/documentos/branches/f7-evolucao/`](docs/documentos/branches/f7-evolucao/);
 a versão visual, em [`docs/apresentacao/f7.html`](docs/apresentacao/f7.html).
 
-> ⚠️ A branch `leo/f7-evolucao` **não foi mergeada**. Tudo aqui está validado
+> ⚠️ A branch `f7-evolucao` **não foi mergeada**. Tudo aqui está validado
 > localmente e espera a decisão da equipe.
 
 ---
@@ -39,7 +39,7 @@ com os mesmos índices: **zero reencode**.
 | JUÁ natural (treino) | 6.000 | a mesma tarefa, na distribuição natural |
 
 **Antes de rodar qualquer número**, as previsões foram escritas e commitadas
-([pré-registro](docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md)).
+([pré-registro](docs/documentos/branches/f7-evolucao/00-preregistro.md)).
 Foi a primeira vez no trabalho que fizemos isso, e foi o que permitiu
 distinguir descoberta de pescaria.
 
@@ -177,7 +177,7 @@ que separa um ganho robusto de um ganho que inverte de sinal.
 
 | | |
 |---|---|
-| Branch | `leo/f7-evolucao`, local, não mergeada |
+| Branch | `f7-evolucao`, local, não mergeada |
 | Módulos novos | `jua`, `rerank`, `finetune_reranker`, `ltr`, `replicacao`, `painel` |
 | Mudança em código existente | só o parâmetro `criterio` em `sections.filtrar` (padrão reproduz a F6) |
 | Reprodução | `.\scripts\rodada_f7.ps1` refaz a F7 inteira, pulando o que já existe |

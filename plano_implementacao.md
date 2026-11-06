@@ -66,7 +66,7 @@ de chunks, sorteados ao acaso, **piora** o nDCG@10 (−7% a −17%, em três
 sementes). Mesmo tamanho de índice, efeitos de sinal oposto.
 
 Auditado contra dez ameaças de validade em
-`docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md`,
+`docs/documentos/branches/f6-secoes-e-fusao/04-auditoria-de-validade.md`,
 incluindo a circularidade (a decisão veio dos próprios rótulos de relevância;
 validada por CV, ganho honesto de +16,2%) e a limitação que fica (o JurisTCU
 julga excertos de jurisprudência, que saem do voto por construção).
@@ -76,12 +76,12 @@ julga excertos de jurisprudência, que saem do voto por construção).
 1. **🔴 Decidir o corpus oficial.** O artigo e o pôster dizem 113.827
    documentos; o código produz 12.880. **Ficou mais urgente**: um resultado
    significativo medido no corpus errado vai para o artigo como afirmação
-   forte. Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
+   forte. Ver `docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md`.
 2. ~~Análise de sensibilidade da agregação~~ — **feita em 28/09**: o
    `max_pooling` ganha do `sum_top_k` em 4 de 5 estratégias.
 3. Notebooks 01–03, que só consomem `results/`.
 4. Corrigir os números do artigo e do pôster (lista em
-   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
+   `docs/documentos/branches/f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
    e reescrever Introdução, Resultados e Conclusão com as **duas** perguntas.
 5. Regerar as tabelas da F5: os recortes, IC 95% e análise de poder das
    rodadas antigas foram calculados antes da correção do bug dos empates.
@@ -393,7 +393,7 @@ dez ameaças testadas. **191 testes** (eram 115).
    regeradas, as da F5 ainda não.
 
 Detalhe em
-[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+[docs/documentos/branches/f6-secoes-e-fusao/](docs/documentos/branches/f6-secoes-e-fusao/).
 
 ---
 

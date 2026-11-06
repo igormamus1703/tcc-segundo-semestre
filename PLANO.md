@@ -2,10 +2,10 @@
 
 **Documento vivo.** Comece por aqui se você vai pegar o projeto para rodar,
 codar ou escrever. Atualize **acrescentando**, não apagando: a seção
-[Histórico](#histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
+[Histórico](#7-histórico-o-que-já-foi-feito) é o registro do que já foi decidido,
 e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 
-**Última atualização:** 05/10/2026 · por Leonardo Marques (F7, na branch `leo/f7-evolucao`, **não mergeada**)
+**Última atualização:** 05/10/2026 · pela Equipe do TCC (F7, na branch `f7-evolucao`, **não mergeada**)
 
 ---
 
@@ -14,7 +14,7 @@ e apagá-la faz alguém redescobrir o mesmo problema daqui a um mês.
 A F7 testou a F6 numa segunda coleção, o **JUÁ-Juris**: 1.567 consultas
 difíceis e 6.000 naturais sobre os **mesmos 12.880 acórdãos**, com tudo
 pré-registrado. Detalhe em [RESULTADOS-F7.md](RESULTADOS-F7.md) e na
-[pasta da branch](docs/docsleo/branches/leo-f7-evolucao/README.md).
+[pasta da branch](docs/documentos/branches/f7-evolucao/README.md).
 
 | | Antes (F6, 150 consultas) | Depois (F7, + 7.567 consultas) |
 |---|---|---|
@@ -87,7 +87,7 @@ Três pontos na curva de custo × qualidade, e o artigo deve apresentar os três
 piora.** A melhor configuração funde quatro rankings com **peso igual** — ou
 seja, **não tem hiperparâmetro para ajustar**, e por isso dispensa a validação
 cruzada que a versão ponderada exige. As duas empatam (p = 0,338). Detalhe em
-[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/)
+[docs/documentos/branches/f6-secoes-e-fusao/](docs/documentos/branches/f6-secoes-e-fusao/)
 e resumo para apresentação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
 ---
@@ -99,7 +99,7 @@ e resumo para apresentação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 O artigo e o pôster dizem **113.827** documentos. O `ingest.py` produz
 **12.880**. Não é bug: é uma mudança de escopo de agosto que não foi propagada
 para os artefatos nem para o texto. Análise completa em
-[docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md).
+[docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md](docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md).
 
 **Por que é urgente:** o trabalho agora tem um resultado **significativo**
 (BM25 > denso). Um número significativo medido no corpus errado vai para o
@@ -116,7 +116,7 @@ de GPU.
 ### 🟠 DECISÃO 2 — Quem corrige o artigo e o pôster?
 
 Onze números do artigo mudam. Lista completa com "de → para" em
-[07-numeros-para-o-artigo.md](docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md).
+[07-numeros-para-o-artigo.md](docs/documentos/branches/f4-indexacao-e-docs/07-numeros-para-o-artigo.md).
 Os principais: 113.827 → 12.880 documentos; mediana 7.347 → 11.426 tokens;
 segmentador 92,7% → 92,2%; fallback 1,6% → 0,0%; Python 3.11 → 3.13.7.
 
@@ -141,22 +141,22 @@ a primeira foi respondida com cuidado.
 
 ### 🟠 DECISÃO 4 — Revisar a F6, já mergeada (nova)
 
-A branch `leo/f6-secoes-e-fusao` foi **mergeada em 28/09** com 191 testes
+A branch `f6-secoes-e-fusao` foi **mergeada em 28/09** com 191 testes
 verdes, todos os artefatos e uma auditoria de validade. O merge seguiu o
 mesmo critério da branch anterior: ela só **acrescenta** módulos e rodadas,
 sem tocar em `ingest.py`, `segmenter/` ou `chunkers/`.
 
 **O que ainda precisa da equipe é a revisão do conteúdo**, não do código: a
 F6 muda a tese do artigo. Checklist e pontos de atenção no
-[README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md);
+[README da branch](docs/documentos/branches/f6-secoes-e-fusao/README.md);
 resumo para a orientação em [RESULTADOS-F6.md](RESULTADOS-F6.md).
 
 ### 🔴 DECISÃO 5 — Mergear a F7? (05/10)
 
-A branch `leo/f7-evolucao` está **local e não mergeada**, por decisão
+A branch `f7-evolucao` está **local e não mergeada**, por decisão
 explícita: ela muda a recomendação do artigo. O critério de merge foi escrito
 **antes** dos resultados, no
-[pré-registro](docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md): a
+[pré-registro](docs/documentos/branches/f7-evolucao/00-preregistro.md): a
 branch entra se (a) H1 e H2 replicarem, (b) H5 confirmar **equivalência**
 entre as estratégias, ou (c) o reranker ganhar ≥ 5% nas duas coleções.
 
@@ -173,45 +173,45 @@ estado da F6, sem perda nenhuma.
 
 ## 3. Próximos passos, por frente
 
-Marque `[x]` quando concluir e **assine com seu nome**. Acrescente itens novos
+Marque `[x]` quando concluir, com a data. Acrescente itens novos
 no fim de cada lista.
 
 ### 3.1 Execução (precisa de máquina com GPU)
 
-- [x] Ambiente, download dos datasets (6 GB), corpus montado — *Leo, 05/09*
-- [x] Chunking: 2.200.767 chunks nas 5 estratégias — *Leo, 05/09*
-- [x] BM25 nas 5 estratégias, reproduzido idêntico em duas rodadas — *Leo, 06/09*
-- [x] Denso nas 4 primeiras estratégias — *Leo, 06/09*
-- [x] Denso na `fixed_512_256` — *Leo, 07/09*. **Experimento completo: 5 × 2**
+- [x] Ambiente, download dos datasets (6 GB), corpus montado — *05/09*
+- [x] Chunking: 2.200.767 chunks nas 5 estratégias — *05/09*
+- [x] BM25 nas 5 estratégias, reproduzido idêntico em duas rodadas — *06/09*
+- [x] Denso nas 4 primeiras estratégias — *06/09*
+- [x] Denso na `fixed_512_256` — *07/09*. **Experimento completo: 5 × 2**
 - [x] Análise de sensibilidade da agregação: `sum_top_k` vs `max_pooling` —
-      *Leo, 28/09*. O `max_pooling` ganha em 4 de 5; o default fica, agora com
+      *28/09*. O `max_pooling` ganha em 4 de 5; o default fica, agora com
       evidência. Rodada `20260928-1707_bm25_sec_sumtopk`
 - [ ] Opcional: rodar com o `embeddinggemma-300m` (exige `hf auth login`) para
       ter um segundo modelo denso
 
 ### 3.1b ✅ A frente mais promissora, agora fechada: filtragem por seção
 
-**Concluída em 28/09** na branch `leo/f6-secoes-e-fusao`. O que era um script
+**Concluída em 28/09** na branch `f6-secoes-e-fusao`. O que era um script
 exploratório virou opção de pipeline, rodou nos dois retrievers e nas cinco
 estratégias, e passou por um controle.
 
 - [x] Reimplementar no pipeline como opção de indexação (`--secoes ...`), com
-      testes — *Leo, 28/09*. Reproduz o exploratório: 95.300 chunks, idêntico
-- [x] Rodar no **BM25** — *Leo, 28/09*. **+11,2% a +16,8%, as cinco
+      testes — *28/09*. Reproduz o exploratório: 95.300 chunks, idêntico
+- [x] Rodar no **BM25** — *28/09*. **+11,2% a +16,8%, as cinco
       significativas** (p = 0,00025 a 0,003)
-- [x] Rodar nas **cinco** estratégias, não só nas estruturais — *Leo, 28/09*.
+- [x] Rodar nas **cinco** estratégias, não só nas estruturais — *28/09*.
       Nas fixas/recursiva a seção vem do offset do chunk
-- [x] Testar a variante **ponderada** — *Leo, 28/09*. **Negativa:** satura no
+- [x] Testar a variante **ponderada** — *28/09*. **Negativa:** satura no
       corte binário e não preserva o recall. Descartada, com o motivo medido
-- [x] Efeito por tipo de consulta — *Leo, 28/09*. **+24,1% nas consultas reais
+- [x] Efeito por tipo de consulta — *28/09*. **+24,1% nas consultas reais
       de log**, +25,7% e +30,1% nas sintéticas: o ganho não vem das fáceis
-- [x] Bootstrap de IC 95% e análise de poder — *Leo, 28/09*
-- [x] 🆕 **Controle pareado por amostra aleatória** — *Leo, 28/09*. Não estava
+- [x] Bootstrap de IC 95% e análise de poder — *28/09*
+- [x] 🆕 **Controle pareado por amostra aleatória** — *28/09*. Não estava
       previsto e é o item mais importante da lista: descartar 2/3 do índice ao
       acaso **piora** o nDCG@10; escolhendo o relatório, melhora. Mesmo tamanho
       de índice, efeitos opostos
 - [x] 🆕 **Fusão híbrida BM25 + denso**, com peso por validação cruzada —
-      *Leo, 28/09*. +4,4% a +8,7%, e **soma com o recorte**: 0,3160 na melhor
+      *28/09*. +4,4% a +8,7%, e **soma com o recorte**: 0,3160 na melhor
       configuração
 
 > A pergunta do trabalho deixa de ser só *"como cortar o documento?"*
@@ -343,7 +343,7 @@ candidatos: as cinco dobras escolheram a mesma configuração, e o ganho medido
 > por construção do gênero. A conclusão vale para a tarefa *"encontrar o
 > acórdão que firma determinada tese"*; **não** se pode afirmar que o
 > relatório seja inútil para quem busca fatos do caso concreto. Detalhe em
-> [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) §10.
+> [f6/04-auditoria-de-validade](docs/documentos/branches/f6-secoes-e-fusao/04-auditoria-de-validade.md) §10.
 
 ---
 
@@ -408,46 +408,45 @@ Hugging Face e `hf auth login`. O default (`bge-m3`) não exige nada.
 │   ├── corpus/                 caracterização do corpus (muda com o corpus)
 │   └── experiments/            uma pasta datada por rodada, com manifesto
 └── docs/
-    ├── docsleo/                caderno de bordo do Leo
-    ├── docsigor/               (a criar)
-    ├── docsjoao/               (a criar)
-    └── docsfelipe/             (a criar)
+    ├── documentos/             caderno de bordo da equipe, uma pasta por branch
+    └── apresentacao/           páginas com gráficos
 ```
 
-**Cada integrante mantém sua pasta em `docs/`** e anota lá o que fez, decidiu e
-mediu. O padrão está no [README.md](README.md#fluxo-de-trabalho-obrigatório):
-branch → testar → anotar → merge.
+**Toda branch de trabalho tem uma pasta em `docs/documentos/branches/`**, onde
+se anota o que foi feito, decidido e medido. O padrão está no
+[README.md](README.md#fluxo-de-trabalho-obrigatório): branch → testar → anotar
+→ merge.
 
 ---
 
 ## 7. Histórico: o que já foi feito
 
 Resumo do que está decidido, para ninguém refazer. O detalhe está em
-[docs/docsleo/](docs/docsleo/).
+[docs/documentos/](docs/documentos/).
 
 | Quando | O quê | Onde está documentado |
 |---|---|---|
 | 18/08 | Decisão de corpus: acórdãos íntegros do TCU + qrels do JurisTCU | `plano_implementacao.md` §0 |
 | 24/08 | F1 (ingestão) e F2 (segmentador) — Igor | `plano_implementacao.md` |
 | 24/08 | F3 (5 chunkers), com bug de offset do LangChain corrigido | docstring de `chunkers/recursive.py` |
-| 05/09 | Ambiente em Python 3.13 (o risco do `ranx`/numba não se materializou) | [01-ambiente-setup](docs/docsleo/branches/leo-f4-indexacao-e-docs/01-ambiente-setup.md) |
-| 05/09 | **Achado:** corpus do código (12.880) ≠ do artigo (113.827) | [02-achado-corpus](docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md) |
-| 05/09 | F4 e F5 implementadas (BM25, denso, avaliação, recortes) | [06-implementacao-f4](docs/docsleo/branches/leo-f4-indexacao-e-docs/06-implementacao-f4.md) |
-| 06/09 | As 8 citações do artigo verificadas no arXiv — nenhuma fantasma | [04-referencias-verificadas](docs/docsleo/branches/leo-f4-indexacao-e-docs/04-referencias-verificadas.md) |
-| 06/09 | Embedder escolhido pela **janela de contexto**, não pelo ranking | [05-modelos-embedding](docs/docsleo/branches/leo-f4-indexacao-e-docs/05-modelos-embedding.md) |
-| 06/09 | **Achado:** 72% da relevância está na fundamentação (22,8% do texto) | [03-analise-do-dominio](docs/docsleo/branches/leo-f4-indexacao-e-docs/03-analise-do-dominio.md) |
-| 06/09 | BM25 nas 5 estratégias — primeiro número | [resultados/01-bm25](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/01-bm25.md) |
-| 06/09 | Denso, 3 de 5: a ordem inverte, e o BM25 vence com significância | [resultados/04-denso-parcial](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/04-denso-parcial.md) |
-| 07/09 | **Achado:** descartar o relatório do índice dá +16,9% de nDCG@10 (p = 0,001) | [resultados/05-filtragem-por-secao](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
-| 07/09 | **Experimento fechado:** 5 estratégias × 2 retrievers, com a inversão completa | [resultados/06-final-5x2](docs/docsleo/branches/leo-f4-indexacao-e-docs/resultados/06-final-5x2.md) |
-| 07/09 | Branch `leo/f4-indexacao-e-docs` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f4-indexacao-e-docs/README.md) |
-| 28/09 | **F6:** recorte por seção vira pipeline e roda no BM25 — **+11% a +17%, as cinco significativas** | [f6/resultados/01](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/01-recorte-por-secao.md) |
-| 28/09 | **Controle:** −67% aleatório **piora**; −67% escolhendo o relatório melhora | [f6/resultados/02](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
-| 28/09 | **Fusão BM25 + denso** com peso por validação cruzada: +4,4% a +8,7% | [f6/resultados/03](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/03-fusao-hibrida.md) |
-| 28/09 | **Configuração final: nDCG@10 = 0,3215 (+29,3%)**, todas as métricas sobem, sem hiperparâmetro | [f6/resultados/04](docs/docsleo/branches/leo-f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
-| 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md) |
-| 28/09 | **Auditoria de validade:** 10 ameaças testadas — dose-resposta, nDCG reimplementado do zero, controle em 3 sementes, escolha da seção por CV | [f6/04-auditoria-de-validade](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) |
-| 28/09 | Branch `leo/f6-secoes-e-fusao` mergeada na `main` | [README da branch](docs/docsleo/branches/leo-f6-secoes-e-fusao/README.md) |
+| 05/09 | Ambiente em Python 3.13 (o risco do `ranx`/numba não se materializou) | [01-ambiente-setup](docs/documentos/branches/f4-indexacao-e-docs/01-ambiente-setup.md) |
+| 05/09 | **Achado:** corpus do código (12.880) ≠ do artigo (113.827) | [02-achado-corpus](docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md) |
+| 05/09 | F4 e F5 implementadas (BM25, denso, avaliação, recortes) | [06-implementacao-f4](docs/documentos/branches/f4-indexacao-e-docs/06-implementacao-f4.md) |
+| 06/09 | As 8 citações do artigo verificadas no arXiv — nenhuma fantasma | [04-referencias-verificadas](docs/documentos/branches/f4-indexacao-e-docs/04-referencias-verificadas.md) |
+| 06/09 | Embedder escolhido pela **janela de contexto**, não pelo ranking | [05-modelos-embedding](docs/documentos/branches/f4-indexacao-e-docs/05-modelos-embedding.md) |
+| 06/09 | **Achado:** 72% da relevância está na fundamentação (22,8% do texto) | [03-analise-do-dominio](docs/documentos/branches/f4-indexacao-e-docs/03-analise-do-dominio.md) |
+| 06/09 | BM25 nas 5 estratégias — primeiro número | [resultados/01-bm25](docs/documentos/branches/f4-indexacao-e-docs/resultados/01-bm25.md) |
+| 06/09 | Denso, 3 de 5: a ordem inverte, e o BM25 vence com significância | [resultados/04-denso-parcial](docs/documentos/branches/f4-indexacao-e-docs/resultados/04-denso-parcial.md) |
+| 07/09 | **Achado:** descartar o relatório do índice dá +16,9% de nDCG@10 (p = 0,001) | [resultados/05-filtragem-por-secao](docs/documentos/branches/f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| 07/09 | **Experimento fechado:** 5 estratégias × 2 retrievers, com a inversão completa | [resultados/06-final-5x2](docs/documentos/branches/f4-indexacao-e-docs/resultados/06-final-5x2.md) |
+| 07/09 | Branch `f4-indexacao-e-docs` mergeada na `main` | [README da branch](docs/documentos/branches/f4-indexacao-e-docs/README.md) |
+| 28/09 | **F6:** recorte por seção vira pipeline e roda no BM25 — **+11% a +17%, as cinco significativas** | [f6/resultados/01](docs/documentos/branches/f6-secoes-e-fusao/resultados/01-recorte-por-secao.md) |
+| 28/09 | **Controle:** −67% aleatório **piora**; −67% escolhendo o relatório melhora | [f6/resultados/02](docs/documentos/branches/f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
+| 28/09 | **Fusão BM25 + denso** com peso por validação cruzada: +4,4% a +8,7% | [f6/resultados/03](docs/documentos/branches/f6-secoes-e-fusao/resultados/03-fusao-hibrida.md) |
+| 28/09 | **Configuração final: nDCG@10 = 0,3215 (+29,3%)**, todas as métricas sobem, sem hiperparâmetro | [f6/resultados/04](docs/documentos/branches/f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| 28/09 | ⚠️ **Bug dos empates:** o mesmo arquivo TREC dava dois números no mesmo recorte. Corrigido, tabelas da F6 regeradas | [f6/03-empate-de-score](docs/documentos/branches/f6-secoes-e-fusao/03-empate-de-score.md) |
+| 28/09 | **Auditoria de validade:** 10 ameaças testadas — dose-resposta, nDCG reimplementado do zero, controle em 3 sementes, escolha da seção por CV | [f6/04-auditoria-de-validade](docs/documentos/branches/f6-secoes-e-fusao/04-auditoria-de-validade.md) |
+| 28/09 | Branch `f6-secoes-e-fusao` mergeada na `main` | [README da branch](docs/documentos/branches/f6-secoes-e-fusao/README.md) |
 
 ### Coisas que já foram tentadas e NÃO funcionaram
 

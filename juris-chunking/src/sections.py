@@ -5,7 +5,7 @@ Este módulo existe por causa de um descompasso medido na F5: a fundamentação
 julgado relevante, mas 65–74% dos chunks que vencem a agregação vêm do
 **relatório**, que tem 69,9% do texto e só 25,7% da relevância. Os dois
 retrievers acham o termo onde há *mais texto*, não onde há *mais informação*
-(ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/03-analise-do-dominio.md`).
+(ver `docs/documentos/branches/f4-indexacao-e-docs/03-analise-do-dominio.md`).
 
 Daí as duas intervenções implementadas aqui:
 

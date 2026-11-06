@@ -105,7 +105,7 @@ relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
 
 > ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
 > corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
-> `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A escolha
+> `docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md`). A escolha
 > do corpus oficial segue pendente de decisão da equipe, e **todos** os números
 > do artigo dependem dela.
 

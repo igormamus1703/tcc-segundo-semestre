@@ -1,11 +1,11 @@
 # Status do TCC — reunião de orientação
 
-**28 de setembro de 2026 · Leonardo Marques**
+**28 de setembro de 2026 · Equipe do TCC**
 
 Resumo do projeto e do que avançou nesta semana, escrito para ser lido antes
 da reunião. O detalhe técnico, com todos os artefatos que comprovam cada
 número, está em
-[`docs/docsleo/branches/leo-f6-secoes-e-fusao/`](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+[`docs/documentos/branches/f6-secoes-e-fusao/`](docs/documentos/branches/f6-secoes-e-fusao/).
 
 ---
 
