@@ -1,11 +1,11 @@
 # Status do TCC — reunião de orientação
 
-**28 de setembro de 2026 · Leonardo Marques**
+**28 de setembro de 2026 · Equipe do TCC**
 
 Resumo do projeto e do que avançou nesta semana, escrito para ser lido antes
 da reunião. O detalhe técnico, com todos os artefatos que comprovam cada
 número, está em
-[`docs/docsleo/branches/leo-f6-secoes-e-fusao/`](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+[`docs/documentos/branches/f6-secoes-e-fusao/`](docs/documentos/branches/f6-secoes-e-fusao/).
 
 > **Atualização de 06/10 (F7).** A receita deste documento ("tire o
 > relatório") foi refinada depois de validada em 7.567 consultas do JUÁ-Juris:
@@ -13,7 +13,7 @@ número, está em
 > junto. A recomendação final é o critério `toca`, que descarta só os trechos
 > inteiramente de relatório: mantém o ganho no JurisTCU e não piora em nenhuma
 > amostra. Os números abaixo continuam válidos para o JurisTCU. Ver o
-> [README da F7](docs/docsleo/branches/leo-f7-enxuta/README.md).
+> [README da F7](docs/documentos/branches/f7-enxuta/README.md).
 
 ---
 

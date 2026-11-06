@@ -1,7 +1,7 @@
 """F7 — Replicação: as mesmas comparações, em duas coleções de consultas.
 
 Responde às hipóteses do pré-registro
-(`docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md`) a partir de um
+(`docs/documentos/branches/f7-evolucao/00-preregistro.md`) a partir de um
 arquivo de especificação versionado (`configs/f7_replicacao.json`), que diz
 quais runs entram em cada coleção e quais pares comparar. Nada é escolhido
 olhando o resultado: a especificação foi escrita junto com o pré-registro.
