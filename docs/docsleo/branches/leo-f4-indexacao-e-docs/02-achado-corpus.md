@@ -179,3 +179,11 @@ realista sem estourar o cronograma. Só vale se sobrar tempo depois da F5.
 **Enquanto isso não for decidido, nenhum desses números deve ir para a versão
 final do artigo.** Falar com o Igor — ele é o autor da F1/F2 e pode ter tido uma
 razão para o filtro que não está escrita em lugar nenhum.
+
+## Desfecho (06/11/2026)
+
+A equipe decidiu pela opção A: **12.880 acórdãos**. O número 113.827, que saiu
+no pôster, contava todos os acórdãos dos CSVs do TCU, antes do recorte pelos
+documentos do JurisTCU. Os números do artigo seguem o corpus de 12.880; a
+lista do que corrigir está em
+[07-numeros-para-o-artigo.md](07-numeros-para-o-artigo.md).

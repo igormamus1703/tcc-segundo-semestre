@@ -157,7 +157,7 @@ que separa um ganho robusto de um ganho que inverte de sinal.
 - O JUÁ mede uma tarefa diferente (*known-item*, consultas em forma de tese).
   A vantagem estrutural vale para ela.
 - A decisão de corpus (12.880 × 113.827) continua aberta, e vale para estes
-  números também.
+  números também. *Desfecho em 06/11/2026: decidida, 12.880 acórdãos.*
 
 ## 6. O que preciso decidir com a equipe
 

@@ -167,6 +167,7 @@ Todas em `results/experiments/`, com manifesto, log e figuras.
    `chunkers/`). O recorte por seção lê os spans que a ingestão já grava.
 6. **A decisão de corpus continua aberta** (12.880 × 113.827). Todos os
    números desta branch são do corpus de 12.880, como os da F5.
+   *Desfecho em 06/11/2026: decidida, 12.880 acórdãos.*
 7. **Uma correção afeta números da F5.** O bug dos empates
    ([03-empate-de-score.md](03-empate-de-score.md)) mexe nos recortes, nos IC
    95% e na análise de poder de **todas** as rodadas, inclusive as antigas.

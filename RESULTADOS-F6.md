@@ -7,6 +7,14 @@ da reunião. O detalhe técnico, com todos os artefatos que comprovam cada
 número, está em
 [`docs/docsleo/branches/leo-f6-secoes-e-fusao/`](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
 
+> **Atualização de 06/10 (F7).** A receita deste documento ("tire o
+> relatório") foi refinada depois de validada em 7.567 consultas do JUÁ-Juris:
+> nos cortes fixos, o primeiro chunk junta a ementa com o relatório e sai
+> junto. A recomendação final é o critério `toca`, que descarta só os trechos
+> inteiramente de relatório: mantém o ganho no JurisTCU e não piora em nenhuma
+> amostra. Os números abaixo continuam válidos para o JurisTCU. Ver o
+> [README da F7](docs/docsleo/branches/leo-f7-enxuta/README.md).
+
 ---
 
 ## 0. Antes de tudo: o que os números querem dizer

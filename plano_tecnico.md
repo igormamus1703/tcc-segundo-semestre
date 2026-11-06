@@ -2,7 +2,7 @@
 
 Documento interno da equipe. Não é o entregável do professor.
 
-> **Status em 28/09/2026 — leia antes de usar este documento.**
+> **Status em 06/11/2026 (projeto concluído) — leia antes de usar este documento.**
 > Este é o plano de referência (arquitetura, stack, cronograma) e **não é
 > atualizado a cada execução**. Para o panorama e os próximos passos, veja o
 > **`PLANO.md`** na raiz; para o detalhe fase a fase, o
@@ -22,6 +22,12 @@ Documento interno da equipe. Não é o entregável do professor.
 > 11% a 17% no BM25 (as cinco estratégias, p entre 0,00025 e 0,003), e a
 > melhor configuração chega a **0,3215 contra 0,2486 do baseline (+29,3%)**.
 > Ver `RESULTADOS-F6.md` na raiz.
+>
+> **F7 (06/10), mergeada na `main`.** Validação em 7.567 consultas do
+> JUÁ-Juris: o critério `toca` corrige o recorte por seção nos cortes fixos e,
+> com poder estatístico, o corte estrutural vence o fixo e o recursivo (+1% a
+> +12%). A exploração completa da F7 (ranker aprendido, reranker) ficou na
+> branch `leo/f7-evolucao`. Ver `PLANO.md`.
 >
 > Três escolhas deste documento mudaram por medição — o embedder, o
 > cronograma e a própria lista de estágios do pipeline —, e estão marcadas
@@ -372,8 +378,8 @@ O TCC é bem-sucedido se, ao final, existir:
 >   poder, a F6 acrescentou **um controle pareado** (índice do mesmo tamanho,
 >   sorteado) e **validação cruzada por consulta** para escolher configuração
 >   sem usar o conjunto de avaliação;
-> - critério 5: a suíte foi de 115 para **191 testes**, e a avaliação é
->   byte-idêntica ao ser reexecutada.
+> - critério 5: a suíte foi de 115 para **191 testes** (e chegou a **206** no
+>   encerramento, em 06/11), e a avaliação é byte-idêntica ao ser reexecutada.
 >
 > E o trabalho deixou de depender de um resultado nulo: **a segunda pergunta,
 > derivada da primeira, tem resposta positiva e significativa** (+29,3% de

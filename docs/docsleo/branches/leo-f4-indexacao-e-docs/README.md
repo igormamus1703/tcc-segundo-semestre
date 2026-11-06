@@ -97,6 +97,7 @@ teste que criava pastas na `results/experiments/` de verdade.
 > segurá-la na prateleira atrasaria quem for continuar. A decisão do corpus
 > continua aberta, registrada em
 > [08-decisoes-pendentes.md](08-decisoes-pendentes.md).
+> *Desfecho em 06/11/2026: decidida, 12.880 acórdãos.*
 
 ## Pontos de atenção para quem revisar
 

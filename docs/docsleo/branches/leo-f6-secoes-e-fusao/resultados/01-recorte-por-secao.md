@@ -9,7 +9,7 @@
 ## O que estava em aberto
 
 O teste de 07/09
-([05-filtragem-por-secao](../leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md))
+([05-filtragem-por-secao](../../leo-f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md))
 mostrou +16,9% de nDCG@10 ao descartar o relatório do índice, mas com quatro
 buracos declarados: era um script fora do `src/`, só no **denso**, só nas
 estratégias **estruturais**, e sem controle. Esta rodada fecha os quatro.

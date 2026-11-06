@@ -6,9 +6,9 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 
 ---
 
-## STATUS ATUAL — 28/09/2026
+## STATUS ATUAL — 06/11/2026
 
-**F0 a F6 concluídas e mergeadas na `main`.**
+**F0 a F7 concluídas e mergeadas na `main`. Projeto encerrado.**
 
 > 📍 Para o panorama do projeto, próximos passos e o que cada integrante pode
 > pegar, veja o **[PLANO.md](PLANO.md)** na raiz. Este documento mantém o
@@ -23,10 +23,20 @@ houver conflito**, porque incorpora achados empíricos medidos no corpus real.
 | F4 — Indexação + runs | ✅ | BM25 (`20260906-0515_bm25`) e denso (`20260906-1046_dense_bge_m3`) |
 | F5 — Avaliação | ✅ | Tabelas, significância, poder estatístico e 4 recortes, nos dois retrievers |
 | F6 — Recorte por seção + fusão | ✅ | **nDCG@10 0,2486 → 0,3215 (+29,3%)**, com controle pareado e sem hiperparâmetro (`20260928-1822_f6_tabela_principal`) |
+| F7 — Validação externa + critério `toca` | ✅ | 7.567 consultas do JUÁ-Juris; `toca` +15,6% no JurisTCU e +9,7% no JUÁ natural, sem piorar em nenhuma amostra; estrutural vence com poder (`20261005-2216_f7_replicacao_final`) |
 
 **Marco da Semana 7 (primeiro número) e da Semana 11 (tabela fechada) —
 ambos alcançados**, com semanas de antecedência. A F6 não estava no plano
-original: nasceu do recorte analítico por seção que a F5 acrescentou.
+original: nasceu do recorte analítico por seção que a F5 acrescentou. A F7
+também não: nasceu da necessidade de validar a F6 fora do benchmark em que a
+decisão de recorte foi tomada.
+
+> **A resposta à pergunta de pesquisa mudou com a F7.** Com as 7.567 consultas
+> do JUÁ-Juris, o corte estrutural vence o fixo e o recursivo (+1% a +12% de
+> nDCG@10), por isolar a ementa num chunk próprio, e o segmentador é
+> equivalente à estrutura ouro (TOST). As duas seções abaixo registram a
+> resposta com as 150 consultas do JurisTCU (F5 e F6); a versão final está na
+> seção F7 deste documento.
 
 ### A resposta à pergunta de pesquisa
 
@@ -73,10 +83,9 @@ julga excertos de jurisprudência, que saem do voto por construção).
 
 ### O que falta, em ordem
 
-1. **🔴 Decidir o corpus oficial.** O artigo e o pôster dizem 113.827
-   documentos; o código produz 12.880. **Ficou mais urgente**: um resultado
-   significativo medido no corpus errado vai para o artigo como afirmação
-   forte. Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
+1. ~~Decidir o corpus oficial~~ — **decidido: 12.880 acórdãos** (registro de
+   06/11). O artigo e o pôster precisam usar este número no lugar de 113.827.
+   Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
 2. ~~Análise de sensibilidade da agregação~~ — **feita em 28/09**: o
    `max_pooling` ganha do `sum_top_k` em 4 de 5 estratégias.
 3. Notebooks 01–03, que só consomem `results/`.
@@ -85,6 +94,8 @@ julga excertos de jurisprudência, que saem do voto por construção).
    e reescrever Introdução, Resultados e Conclusão com as **duas** perguntas.
 5. Regerar as tabelas da F5: os recortes, IC 95% e análise de poder das
    rodadas antigas foram calculados antes da correção do bug dos empates.
+   As médias das métricas não mudam (conferido em 06/11 na rodada
+   `20260906-0515_bm25`); só quem citar um recorte da F5 precisa regerar.
 
 ### Decisões técnicas tomadas depois do plano original
 
@@ -349,7 +360,7 @@ Cada fase termina com testes (`pytest`), um smoke-run e um artefato verificável
    pelo corpus deu grupos de **3/67/80** consultas. Passou a cortar pelos
    percentis da distribuição das consultas: 50/50/50.
 
-### F6 — Recorte por seção e fusão híbrida (`sections.py`, `fusion.py`, `tuning.py`) 🟡 em revisão
+### F6 — Recorte por seção e fusão híbrida (`sections.py`, `fusion.py`, `tuning.py`) ✅ concluída
 
 Fase **não prevista no plano original**. Nasceu de um achado da F5: a
 fundamentação ocupa 22,8% do texto e concentra 72,0% da relevância, mas os
@@ -394,6 +405,35 @@ dez ameaças testadas. **191 testes** (eram 115).
 
 Detalhe em
 [docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+
+### F7 — Validação externa e critério `toca` (`jua.py`, `mecanismo.py`, `replicacao.py`) ✅ concluída
+
+Fase **não prevista no plano original**. A F6 tomou a decisão de recorte
+olhando o mesmo benchmark em que a mediu; a F7 a testou numa segunda coleção,
+com as hipóteses registradas antes de rodar.
+
+- `jua.py`: liga as consultas do JUÁ-Juris aos mesmos 12.880 acórdãos, pela
+  chave da ingestão, e localiza a seção onde está o excerto. 7.567 consultas:
+  1.567 de teste e uma amostra natural de 6.000 do treino. ✅
+- `sections.py` / `run_experiments.py`: critério `--secoes-criterio toca`, que
+  descarta só os chunks inteiramente de relatório e corrige o defeito do
+  recorte da F6 nos cortes fixos (o primeiro chunk junta a ementa com o
+  relatório). O padrão `maioria` reproduz a F6 byte a byte. ✅
+- `mecanismo.py`: efeito do recorte por quartil de sobreposição entre a
+  consulta e a ementa. ✅
+- `replicacao.py` + `configs/f7_replicacao*.json`: as comparações
+  pré-registradas em quatro amostras de consultas, com IC 95%, teste pareado,
+  TOST e estratos. ✅
+
+**Aceite atingido:** o critério `toca` não piora em nenhuma amostra; com poder
+estatístico, o corte estrutural vence o fixo e o recursivo; o segmentador é
+equivalente à estrutura ouro. **206 testes.**
+
+A exploração completa da F7 (ranker aprendido, reranker com cross-encoder e
+seu ajuste fino) ficou na branch-arquivo `leo/f7-evolucao`, sem merge: ganho
+pequeno ou negativo para a complexidade acrescentada. Detalhe e números em
+[docs/docsleo/branches/leo-f7-enxuta/](docs/docsleo/branches/leo-f7-enxuta/README.md)
+e [docs/docsleo/branches/leo-f7-evolucao/](docs/docsleo/branches/leo-f7-evolucao/README.md).
 
 ---
 
@@ -450,3 +490,10 @@ o corpus de 12.880.
 
 **Item 8, novo:** a F6 foi mergeada em 28/09, mas a **revisão de conteúdo**
 pela equipe continua pendente — ela muda a tese do artigo.
+
+**Situação em 06/11 (encerramento):** itens 1 a 6 ✅, com **206 testes**.
+Item 7: a decisão de corpus está tomada e registrada (**12.880**); a correção
+dos números do artigo acontece na escrita do artigo, a próxima fase da
+entrega. Item 8: a tese da F6 foi revista pela F7, que trocou a receita de
+recorte pelo critério `toca`; o texto do artigo segue o
+[README da leo-f7-enxuta](docs/docsleo/branches/leo-f7-enxuta/README.md).

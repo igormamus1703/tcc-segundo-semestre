@@ -31,6 +31,7 @@ leitura completos.
    ```bash
    python scripts/download_datasets.py juristcu
    python scripts/download_datasets.py tcu_acordaos   # ~6 GB, demora
+   python scripts/download_datasets.py jua            # F7, ~95 MB
    ```
 
    Detalhes, tamanhos e a recomendação de onde colocar `data/` estão em
@@ -57,11 +58,15 @@ leitura completos.
 
 ## Status (ver `PLANO.md` na raiz para o panorama e os próximos passos)
 
-**F0–F6 concluídas e mergeadas na `main`.** Nenhuma diferença entre estratégias de chunking é
-significativa; o BM25 supera o retriever denso com p < 0,001; e **descartar o
-relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
-0,2486 para 0,3215** (+29,3%, p < 0,00001). Ver
-[`RESULTADOS-F6.md`](../RESULTADOS-F6.md) na raiz.
+**F0–F7 concluídas e mergeadas na `main`.** Com as 150 consultas do JurisTCU,
+nenhuma diferença entre estratégias de chunking é significativa e o BM25
+supera o retriever denso (p < 0,001); **descartar o relatório do índice,
+combinado com a fusão BM25 + denso, sobe o nDCG@10 de 0,2486 para 0,3215**
+(+29,3%, p < 0,00001). Na F7, com as 7.567 consultas do JUÁ-Juris, o corte
+estrutural vence o fixo e o recursivo (+1% a +12%) e o critério `toca` torna o
+recorte seguro em todas as amostras. Ver
+[`RESULTADOS-F6.md`](../RESULTADOS-F6.md) e o
+[README da F7](../docs/docsleo/branches/leo-f7-enxuta/README.md).
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
@@ -102,6 +107,13 @@ relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
       validação cruzada por consulta). O cache de embeddings passou a servir
       **subconjuntos** de chunks, o que faz o recorte no denso custar 4 min em
       vez de 10 h de GPU.
+- [x] **F7 — Validação externa e critério `toca`**: `src/jua.py` (JUÁ-Juris
+      ligado aos mesmos acórdãos), `--secoes-criterio toca` em
+      `src/run_experiments.py`, `src/mecanismo.py` (efeito por quartil de
+      sobreposição consulta × ementa) e `src/replicacao.py` (comparações
+      pré-registradas entre coleções, com IC 95%, TOST e estratos). A
+      exploração completa da F7 (ranker aprendido, reranker com
+      cross-encoder e ajuste fino) ficou na branch-arquivo `leo/f7-evolucao`.
 
 > ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
 > corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
@@ -112,7 +124,7 @@ relatório do índice, combinado com a fusão BM25 + denso, sobe o nDCG@10 de
 ## Uso
 
 ```bash
-python scripts/download_datasets.py juristcu tcu_acordaos  # (raiz do repo)
+python scripts/download_datasets.py juristcu tcu_acordaos jua  # (raiz do repo)
 python -m src.ingest                  # monta o corpus + roda EDA
 python -m src.segmenter.validate      # mede acurácia do segmentador contra o gabarito
 python -m src.chunkers.run --strategy all --limit-docs 500  # smoke test
@@ -121,7 +133,7 @@ python -m src.run_experiments --strategy all --retriever bm25    # F4: runs BM25
 python -m src.run_experiments --strategy all --retriever dense   # F4: runs densos
 python -m src.evaluate                # F5: tabelas da rodada mais recente
 python -m src.plots                   # F5: figuras (PDF + PNG)
-pytest                                # roda a suite de testes (191)
+pytest                                # roda a suite de testes (206)
 ```
 
 ### F6 — recorte por seção, controle e fusão
@@ -154,6 +166,26 @@ aceitar um **subconjunto** dos chunks cacheados, selecionando as linhas por id
 com `mmap`. Com recorte ativo o cache é **somente leitura**: sem essa trava,
 indexar um recorte de uma estratégia ainda não encodada gravaria um cache
 parcial por cima do encode completo de 10 h.
+
+### F7 — JUÁ-Juris, critério `toca`, mecanismo e replicação
+
+```bash
+python -m src.jua                                        # consultas e qrels do JUÁ -> data/interim/jua/
+python -c "from src.jua import amostra_treino; amostra_treino()"   # amostra natural (6.000)
+
+# o recorte corrigido: descarta só os chunks inteiramente de relatório
+python -m src.run_experiments --strategy all --retriever bm25 \
+    --secoes sem:relatorio --secoes-criterio toca
+python -m src.run_experiments --strategy all --retriever bm25 \
+    --queries data/interim/jua/queries_test.jsonl --secoes sem:relatorio --secoes-criterio toca
+
+python -m src.mecanismo --label f7_mecanismo             # efeito por quartil consulta x ementa
+python -m src.replicacao --spec configs/f7_replicacao_final.json   # tabela da F7
+```
+
+`--secoes-criterio` tem padrão `maioria`, que reproduz a F6 byte a byte. A
+especificação da replicação também compara rodadas da exploração completa da
+F7 (branch `leo/f7-evolucao`); sem elas, essas linhas não são refeitas.
 
 Smoke test da F4 antes de rodar o corpus inteiro:
 

@@ -1,6 +1,6 @@
 # Branch `leo/f7-enxuta` — a validação externa da F6, no essencial
 
-**Autor:** Leonardo Marques · **Data:** 06/10/2026 · **Status:** ✅ mergeada na `main` em 06/10/2026
+**Autor:** Leonardo Marques · **Data:** 06/10/2026 · **Status:** ✅ mergeada na `main` em 06/10/2026 · branch apagada do GitHub em 06/11/2026 (o conteúdo está na `main`)
 
 A F7 completa (validação externa, ranker aprendido, reranker, fine-tune,
 painel) foi feita na branch **`leo/f7-evolucao`**, que fica **guardada como
@@ -8,7 +8,10 @@ arquivo, sem merge**. Esta branch traz para a `main` só o que muda o artigo:
 
 1. **o critério `toca`** do recorte por seção (a correção de um defeito da F6);
 2. **o `jua.py`**, que reproduz a validação em 7.567 consultas novas;
-3. **o `mecanismo.py`**, que sustenta a explicação do defeito.
+3. **o `mecanismo.py`**, que sustenta a explicação do defeito;
+4. **o `replicacao.py`** e as especificações da replicação, que geram as
+   tabelas dos §2 e §4 (trazidos da branch-arquivo em 06/11, pela branch
+   [`leo/fechamento`](../leo-fechamento/README.md)).
 
 Todo o resto está resumido no §5 ("já testamos, não repetir"), com os
 números e onde encontrar o detalhe.
@@ -95,8 +98,9 @@ segura.*
 ## 5. Já testamos — não repetir
 
 A documentação completa está em [`../leo-f7-evolucao/`](../leo-f7-evolucao/README.md)
-(também na `main`); o código, os testes e as rodadas, na branch-arquivo
-**`leo/f7-evolucao`** do GitHub. A página visual da F7 completa está em
+(também na `main`); o código, os testes e as rodadas (menos o
+`replicacao.py`, que está na `main`), na branch-arquivo **`leo/f7-evolucao`**
+do GitHub. A página visual da F7 completa está em
 [`docs/apresentacao/f7.html`](../../../apresentacao/f7.html).
 
 | O que | Resultado | Lição |
@@ -133,7 +137,15 @@ python -m src.evaluate --experiment <rodada> --qrels data/interim/jua/qrels_test
 
 # o mecanismo por quartil
 python -m src.mecanismo --label f7_mecanismo
+
+# as tabelas dos §2 e §4 (replicação entre coleções, TOST e estratos)
+python -m src.replicacao --spec configs/f7_replicacao_final.json --label f7_replicacao_final
 ```
+
+A especificação final da replicação também compara rodadas da exploração
+completa (fusão no JUÁ, ranker aprendido, reranker), que estão na
+branch-arquivo; sem elas, essas linhas da tabela não são refeitas. A
+especificação escrita junto com o pré-registro é a `configs/f7_replicacao.json`.
 
 `--secoes-criterio` tem padrão `maioria`, que reproduz a F6 byte a byte.
 
@@ -144,9 +156,11 @@ python -m src.mecanismo --label f7_mecanismo
 | `src/sections.py`, `src/run_experiments.py` | critério `toca` (`toca_alguma`, `--secoes-criterio`) |
 | `src/jua.py` | JUÁ-Juris → acórdãos do corpus, seção da resposta, amostra de treino, recorte independente |
 | `src/mecanismo.py` | efeito do recorte por quartil de sobreposição consulta × ementa |
+| `src/replicacao.py`, `configs/f7_replicacao.json`, `configs/f7_replicacao_final.json` | replicação entre coleções: efeito, IC 95%, teste pareado, TOST e estratos (na `main` desde 06/11) |
 | `REFERENCIAS.md` (raiz) | bibliografia do artigo, com BibTeX e nível de verificação |
 | `results/experiments/20261005-*` | as 15 rodadas que sustentam os números acima |
 
-**201 testes** (191 da F6 + 10): o critério `toca` mantém o chunk misto
+**201 testes** no merge (191 da F6 + 10), **206** depois que os 5 testes da
+replicação vieram para a `main` (06/11). Os desta branch: o critério `toca` mantém o chunk misto
 ementa+relatório e respeita o rótulo das estruturais; o offset do excerto cai
 na seção certa no texto original; e a medida de sobreposição.

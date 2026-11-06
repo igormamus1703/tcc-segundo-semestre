@@ -5,11 +5,21 @@
 > **Como esta pasta chegou à `main`.** Só a documentação desta branch foi
 > copiada para cá, para os resultados não se perderem. O que foi mergeado é a
 > versão enxuta, [`leo/f7-enxuta`](../leo-f7-enxuta/README.md): critério
-> `toca`, `jua.py` e `mecanismo.py`. **O código do ranker aprendido, do
-> reranker e do fine-tune, as especificações `configs/f7_*.json`, o
-> `scripts/rodada_f7.ps1` e as rodadas de resultados citadas aqui estão na
-> branch `leo/f7-evolucao` do GitHub.** Para usá-los:
-> `git fetch origin && git checkout leo/f7-evolucao`.
+> `toca`, `jua.py` e `mecanismo.py`; em 06/11 vieram também o `replicacao.py`
+> e as especificações `configs/f7_replicacao*.json`, que geram a tabela usada
+> na F7 enxuta. **O código do ranker aprendido, do reranker e do fine-tune,
+> as demais especificações `configs/f7_*.json`, o `scripts/rodada_f7.ps1` e as
+> rodadas de resultados citadas aqui estão na branch `leo/f7-evolucao` do
+> GitHub.** Para usá-los: `git fetch origin && git checkout leo/f7-evolucao`.
+
+> **Por que esta exploração ficou fora do artigo.** Testamos bem mais do que
+> a versão enxuta, mas o retorno não compensou a complexidade acrescentada: o
+> ranker aprendido ganha +18,6% sobre o BM25 no JurisTCU, mas empata com a
+> fusão das 4 condições, que não precisa de modelo treinado; o reranker com
+> cross-encoder não supera o primeiro estágio; e o ajuste fino do reranker
+> piorou o resultado. A branch fica como registro do que foi tentado e como
+> base para trabalhos futuros. Resumo no §5 do
+> [README da F7 enxuta](../leo-f7-enxuta/README.md).
 
 A F6 terminou com um ganho grande (+29% de nDCG@10), medido em **150
 consultas**, com a decisão principal ("tire o relatório") tomada olhando o
