@@ -12,6 +12,7 @@ Fecha as pontas soltas antes da entrega dos artefatos. **Nenhum número muda.**
 | JUÁ-Juris no `scripts/download_datasets.py` | O `src/jua.py` dependia de um dataset que nenhum script baixava |
 | Documentação no estado final | README, PLANO, planos e READMEs das pastas ainda falavam em F0–F6, 191 testes e corpus em aberto; o rascunho de texto da F7 completa não dizia que foi superado pela decisão de escopo de 06/10 |
 | Branch `leo/f7-enxuta` apagada do GitHub | Já estava inteira na `main`; manter duas branches da F7 confundia quem visita o repositório |
+| `README.md` da raiz reescrito | Era um guia de trabalho da equipe; passou a apresentar o projeto concluído (perguntas, resultados com as tabelas, dados, pipeline, reprodução, branches e documentação), mantendo o fluxo de trabalho |
 
 ## Como verificar
 
