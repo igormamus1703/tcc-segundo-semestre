@@ -27,7 +27,7 @@ Documento interno da equipe. Não é o entregável do professor.
 > JUÁ-Juris: o critério `toca` corrige o recorte por seção nos cortes fixos e,
 > com poder estatístico, o corte estrutural vence o fixo e o recursivo (+1% a
 > +12%). A exploração completa da F7 (ranker aprendido, reranker) ficou na
-> branch `leo/f7-evolucao`. Ver `PLANO.md`.
+> branch `f7-evolucao`. Ver `PLANO.md`.
 >
 > Três escolhas deste documento mudaram por medição — o embedder, o
 > cronograma e a própria lista de estágios do pipeline —, e estão marcadas
@@ -183,7 +183,7 @@ múltiplas. Recortes obrigatórios: por tipo de consulta, por tamanho de documen
 > | `Alibaba-NLP/gte-multilingual-base` | 8192 | Descartado: o código remoto quebra com assert de CUDA no stack atual |
 >
 > Detalhes e medições em
-> `docs/docsleo/branches/leo-f4-indexacao-e-docs/05-modelos-embedding.md`.
+> `docs/documentos/branches/f4-indexacao-e-docs/05-modelos-embedding.md`.
 
 Não use API paga. Custo, reprodutibilidade e o fato de que a nota não sobe por isso.
 

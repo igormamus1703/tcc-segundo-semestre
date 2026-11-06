@@ -100,11 +100,11 @@ correção de Bonferroni; o +5,5% no JUÁ difícil, não (p = 0,012 sem correç�
 > O índice completo dá 0,2490 nesta tabela e 0,2486 na anterior para o mesmo
 > run: a replicação desempata scores iguais pelo identificador do documento
 > antes de medir. Detalhe em
-> [`03-empate-de-score.md`](docs/docsleo/branches/leo-f6-secoes-e-fusao/03-empate-de-score.md).
+> [`03-empate-de-score.md`](docs/documentos/branches/f6-secoes-e-fusao/03-empate-de-score.md).
 
 ### O que foi tentado e ficou de fora
 
-A exploração completa da F7 está guardada na branch **`leo/f7-evolucao`**,
+A exploração completa da F7 está guardada na branch **`f7-evolucao`**,
 sem merge. Os resultados existem, mas não compensaram a complexidade
 acrescentada:
 
@@ -116,7 +116,7 @@ acrescentada:
 
 A branch fica como registro do que foi tentado e como base para trabalhos
 futuros. Análise completa em
-[`docs/docsleo/branches/leo-f7-evolucao/`](docs/docsleo/branches/leo-f7-evolucao/README.md).
+[`docs/documentos/branches/f7-evolucao/`](docs/documentos/branches/f7-evolucao/README.md).
 
 ### Limitações
 
@@ -237,7 +237,7 @@ convenção completa em [`results/README.md`](results/README.md).
 │   ├── corpus/                caracterização do corpus e do segmentador
 │   └── experiments/           uma pasta por rodada: manifesto, log, tabelas e figuras
 └── docs/
-    ├── docsleo/               caderno de bordo, uma pasta por branch de trabalho
+    ├── documentos/               caderno de bordo, uma pasta por branch de trabalho
     └── apresentacao/          páginas com gráficos da F6 e da F7
 ```
 
@@ -246,10 +246,10 @@ convenção completa em [`results/README.md`](results/README.md).
 | Branch | O que é |
 |---|---|
 | `main` | O projeto final |
-| `leo/f7-evolucao` | Arquivo da exploração completa da F7 (ranker aprendido, reranker com cross-encoder e ajuste fino), sem merge; base para trabalhos futuros |
+| `f7-evolucao` | Arquivo da exploração completa da F7 (ranker aprendido, reranker com cross-encoder e ajuste fino), sem merge; base para trabalhos futuros |
 
 As branches de trabalho já integradas à `main` (F4/F5, F6, F7 e encerramento)
-estão documentadas em [`docs/docsleo/`](docs/docsleo/README.md).
+estão documentadas em [`docs/documentos/`](docs/documentos/README.md).
 
 ## Documentação
 
@@ -259,9 +259,9 @@ estão documentadas em [`docs/docsleo/`](docs/docsleo/README.md).
 | Arquitetura, stack e cronograma | [`plano_tecnico.md`](plano_tecnico.md) |
 | O que cada fase entregou | [`plano_implementacao.md`](plano_implementacao.md) |
 | Os resultados da F6, com a argumentação | [`RESULTADOS-F6.md`](RESULTADOS-F6.md) |
-| A F7 que vai para o artigo (parágrafo e tabelas propostos) | [`docs/docsleo/branches/leo-f7-enxuta/README.md`](docs/docsleo/branches/leo-f7-enxuta/README.md) |
-| A auditoria de validade da F6 | [`04-auditoria-de-validade.md`](docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md) |
-| O pré-registro das hipóteses da F7 | [`00-preregistro.md`](docs/docsleo/branches/leo-f7-evolucao/00-preregistro.md) |
+| A F7 que vai para o artigo (parágrafo e tabelas propostos) | [`docs/documentos/branches/f7-enxuta/README.md`](docs/documentos/branches/f7-enxuta/README.md) |
+| A auditoria de validade da F6 | [`04-auditoria-de-validade.md`](docs/documentos/branches/f6-secoes-e-fusao/04-auditoria-de-validade.md) |
+| O pré-registro das hipóteses da F7 | [`00-preregistro.md`](docs/documentos/branches/f7-evolucao/00-preregistro.md) |
 | A bibliografia | [`REFERENCIAS.md`](REFERENCIAS.md) |
 
 ---
@@ -274,7 +274,7 @@ merge**.
 ### 1. Trabalhe numa branch, nunca direto na `main`
 
 ```bash
-git checkout -b <seu-nome>/<assunto-curto>     # ex.: leo/f4-indexacao-e-docs
+git checkout -b <fase>-<assunto-curto>     # ex.: f4-indexacao-e-docs
 ```
 
 A `main` só recebe código que já rodou e foi revisado. Commits pequenos, com
@@ -301,12 +301,12 @@ python -m src.run_experiments --strategy all --retriever bm25 --limit-queries 10
 
 ### 3. Anote tudo na pasta de documentação
 
-Toda a documentação fica em `docs/`, com uma subpasta por integrante
-(`docs/docs<nome>/`) e, dentro dela, uma pasta por branch:
+Toda a documentação fica em `docs/documentos/`, com uma pasta por branch de
+trabalho:
 
 ```
 docs/
-└── docs<nome>/
+└── documentos/
     └── branches/
         └── <nome-da-branch>/
             ├── README.md        o que a branch faz + checklist de merge
@@ -314,7 +314,7 @@ docs/
             └── resultados/      números medidos, com o comando que os gerou
 ```
 
-O caderno de bordo das fases F4 a F7 está em [`docs/docsleo/`](docs/docsleo/README.md).
+O caderno de bordo das fases F4 a F7 está em [`docs/documentos/`](docs/documentos/README.md).
 
 Toda anotação tem, no mínimo: **data e autor**, **o comando exato**
 (copiável, não parafraseado), **o número que saiu** e o artefato que o
@@ -326,7 +326,7 @@ aberto**.
 > produz porque alguém foi ler a mensagem de um commit de agosto. Se a decisão
 > de filtrar o corpus tivesse sido anotada quando foi tomada, o número errado
 > nunca teria saído. Ver
-> [`02-achado-corpus.md`](docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md).
+> [`02-achado-corpus.md`](docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md).
 
 **Nenhum número vai para o artigo sem estar anotado com o artefato que o
 comprova.** Se não dá para apontar o arquivo em `results/` que gerou aquele

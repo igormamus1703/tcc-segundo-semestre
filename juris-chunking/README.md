@@ -66,7 +66,7 @@ combinado com a fusão BM25 + denso, sobe o nDCG@10 de 0,2486 para 0,3215**
 estrutural vence o fixo e o recursivo (+1% a +12%) e o critério `toca` torna o
 recorte seguro em todas as amostras. Ver
 [`RESULTADOS-F6.md`](../RESULTADOS-F6.md) e o
-[README da F7](../docs/docsleo/branches/leo-f7-enxuta/README.md).
+[README da F7](../docs/documentos/branches/f7-enxuta/README.md).
 
 - [x] **F0 — Ambiente**: `.venv` + `requirements.txt`.
 - [x] **F1 — Ingestão**: corpus = acórdãos íntegros do TCU + qrels do
@@ -113,11 +113,11 @@ recorte seguro em todas as amostras. Ver
       sobreposição consulta × ementa) e `src/replicacao.py` (comparações
       pré-registradas entre coleções, com IC 95%, TOST e estratos). A
       exploração completa da F7 (ranker aprendido, reranker com
-      cross-encoder e ajuste fino) ficou na branch-arquivo `leo/f7-evolucao`.
+      cross-encoder e ajuste fino) ficou na branch-arquivo `f7-evolucao`.
 
 > ⚠️ **Corpus:** os artefatos em `results/corpus/` foram regerados sobre o
 > corpus que o `ingest.py` produz hoje (**12.880** acórdãos, não 113.827 — ver
-> `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`). A escolha
+> `docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md`). A escolha
 > do corpus oficial segue pendente de decisão da equipe, e **todos** os números
 > do artigo dependem dela.
 
@@ -185,7 +185,7 @@ python -m src.replicacao --spec configs/f7_replicacao_final.json   # tabela da F
 
 `--secoes-criterio` tem padrão `maioria`, que reproduz a F6 byte a byte. A
 especificação da replicação também compara rodadas da exploração completa da
-F7 (branch `leo/f7-evolucao`); sem elas, essas linhas não são refeitas.
+F7 (branch `f7-evolucao`); sem elas, essas linhas não são refeitas.
 
 Smoke test da F4 antes de rodar o corpus inteiro:
 

@@ -1,6 +1,6 @@
 # Referências do TCC
 
-**Criado em:** 05/10/2026 (branch `leo/f7-evolucao`) · **Mantido por:** Leonardo Marques
+**Criado em:** 05/10/2026 (branch `f7-evolucao`) · **Mantido por:** Equipe do TCC
 
 Base bibliográfica do artigo final e do pôster. Reúne o que o projeto já cita
 (artigo, `plano_tecnico.md`, docs da F4–F6) e o que foi pesquisado para a F7.
@@ -80,7 +80,7 @@ de verificação:
 | `anthropic2024contextual` | Anthropic. **Introducing Contextual Retrieval.** Blog técnico, set. 2024. | 🔎 | Contexto do documento prefixado ao chunk; relacionado ao "prefixo de seção" que ficou como trabalho futuro |
 | `domingos2025brtaxqar` | (ver §1) | 📄 | Janela 2.048 tokens > splitter recursivo de 1.000 caracteres. **Confunde estrutura com tamanho** — é o espaço que o TCC ocupa |
 
-**O que já está escrito sobre o BR-TaxQA-R** (`docs/docsleo/branches/leo-f4-indexacao-e-docs/04-referencias-verificadas.md`):
+**O que já está escrito sobre o BR-TaxQA-R** (`docs/documentos/branches/f4-indexacao-e-docs/04-referencias-verificadas.md`):
 sliding-window de 2.048/1.024 tokens: Response Relevancy 0,819 e Factual
 Correctness 0,313; recursivo de 1.000 caracteres: 0,791 e 0,286. A comparação
 mistura granularidade (~8×) com estrutura e mede geração (RAGAS), não

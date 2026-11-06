@@ -76,7 +76,7 @@ de chunks, sorteados ao acaso, **piora** o nDCG@10 (−7% a −17%, em três
 sementes). Mesmo tamanho de índice, efeitos de sinal oposto.
 
 Auditado contra dez ameaças de validade em
-`docs/docsleo/branches/leo-f6-secoes-e-fusao/04-auditoria-de-validade.md`,
+`docs/documentos/branches/f6-secoes-e-fusao/04-auditoria-de-validade.md`,
 incluindo a circularidade (a decisão veio dos próprios rótulos de relevância;
 validada por CV, ganho honesto de +16,2%) e a limitação que fica (o JurisTCU
 julga excertos de jurisprudência, que saem do voto por construção).
@@ -85,12 +85,12 @@ julga excertos de jurisprudência, que saem do voto por construção).
 
 1. ~~Decidir o corpus oficial~~ — **decidido: 12.880 acórdãos** (registro de
    06/11). O artigo e o pôster precisam usar este número no lugar de 113.827.
-   Ver `docs/docsleo/branches/leo-f4-indexacao-e-docs/02-achado-corpus.md`.
+   Ver `docs/documentos/branches/f4-indexacao-e-docs/02-achado-corpus.md`.
 2. ~~Análise de sensibilidade da agregação~~ — **feita em 28/09**: o
    `max_pooling` ganha do `sum_top_k` em 4 de 5 estratégias.
 3. Notebooks 01–03, que só consomem `results/`.
 4. Corrigir os números do artigo e do pôster (lista em
-   `docs/docsleo/branches/leo-f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
+   `docs/documentos/branches/f4-indexacao-e-docs/07-numeros-para-o-artigo.md`),
    e reescrever Introdução, Resultados e Conclusão com as **duas** perguntas.
 5. Regerar as tabelas da F5: os recortes, IC 95% e análise de poder das
    rodadas antigas foram calculados antes da correção do bug dos empates.
@@ -404,7 +404,7 @@ dez ameaças testadas. **191 testes** (eram 115).
    regeradas, as da F5 ainda não.
 
 Detalhe em
-[docs/docsleo/branches/leo-f6-secoes-e-fusao/](docs/docsleo/branches/leo-f6-secoes-e-fusao/).
+[docs/documentos/branches/f6-secoes-e-fusao/](docs/documentos/branches/f6-secoes-e-fusao/).
 
 ### F7 — Validação externa e critério `toca` (`jua.py`, `mecanismo.py`, `replicacao.py`) ✅ concluída
 
@@ -430,10 +430,10 @@ estatístico, o corte estrutural vence o fixo e o recursivo; o segmentador é
 equivalente à estrutura ouro. **206 testes.**
 
 A exploração completa da F7 (ranker aprendido, reranker com cross-encoder e
-seu ajuste fino) ficou na branch-arquivo `leo/f7-evolucao`, sem merge: ganho
+seu ajuste fino) ficou na branch-arquivo `f7-evolucao`, sem merge: ganho
 pequeno ou negativo para a complexidade acrescentada. Detalhe e números em
-[docs/docsleo/branches/leo-f7-enxuta/](docs/docsleo/branches/leo-f7-enxuta/README.md)
-e [docs/docsleo/branches/leo-f7-evolucao/](docs/docsleo/branches/leo-f7-evolucao/README.md).
+[docs/documentos/branches/f7-enxuta/](docs/documentos/branches/f7-enxuta/README.md)
+e [docs/documentos/branches/f7-evolucao/](docs/documentos/branches/f7-evolucao/README.md).
 
 ---
 
@@ -496,4 +496,4 @@ Item 7: a decisão de corpus está tomada e registrada (**12.880**); a correçã
 dos números do artigo acontece na escrita do artigo, a próxima fase da
 entrega. Item 8: a tese da F6 foi revista pela F7, que trocou a receita de
 recorte pelo critério `toca`; o texto do artigo segue o
-[README da leo-f7-enxuta](docs/docsleo/branches/leo-f7-enxuta/README.md).
+[README da f7-enxuta](docs/documentos/branches/f7-enxuta/README.md).

@@ -1,0 +1,55 @@
+# documentos — caderno de bordo do projeto
+
+Registro do que a equipe fez, decidiu e mediu neste projeto. Não é
+documentação de código (essa vive nos `README.md` do repo) — é o **histórico
+de decisões e evidências**, escrito para virar matéria-prima das seções de
+Metodologia, Resultados e Discussão do artigo final.
+
+> O padrão de trabalho da equipe (branch → testar → anotar → merge) está no
+> [README.md da raiz do repositório](../../README.md#fluxo-de-trabalho-da-equipe).
+> Esta pasta é a aplicação desse padrão.
+
+Regra seguida aqui: **toda decisão registrada diz (a) qual era a alternativa,
+(b) qual evidência decidiu e (c) o que muda no artigo se ela for revertida.**
+Decisão sem evidência anotada é decisão que vamos ter de redescobrir em
+novembro, na semana da entrega.
+
+## Organização
+
+```
+documentos/
+└── branches/
+    └── <nome-da-branch>/        uma pasta por branch de trabalho
+        ├── README.md            o que a branch faz + checklist de merge
+        ├── NN-*.md              decisões, achados e execução
+        ├── testes/              estado da suíte e o que cada teste trava
+        └── resultados/          números medidos, por retriever
+```
+
+## Branches
+
+| Branch | Assunto | Status |
+|---|---|---|
+| [f4-indexacao-e-docs](branches/f4-indexacao-e-docs/) | F4 (indexação e runs) + F5 (avaliação), e a divergência de corpus | ✅ mergeada em 07/09 |
+| [f6-secoes-e-fusao](branches/f6-secoes-e-fusao/) | F6: recorte por seção no pipeline, controle pareado e fusão híbrida — **+29,3% de nDCG@10** | ✅ mergeada em 28/09 |
+| [f7-enxuta](branches/f7-enxuta/) | F7 no essencial: validação em 7.567 consultas do JUÁ, critério `toca`, pergunta original com poder, e o que já foi testado e não repetir. **É a F7 que vai para o artigo** | ✅ mergeada em 06/10 (branch apagada do GitHub em 06/11; o conteúdo está na `main`) |
+| [f7-evolucao](branches/f7-evolucao/) | F7 completa (ranker aprendido, reranker, fine-tune, painel). Na `main` estão a documentação e o `replicacao.py`; o resto do código e as rodadas, na branch-arquivo do GitHub, base para trabalhos futuros | 📦 arquivo |
+| [fechamento](branches/fechamento/) | Encerramento: `replicacao.py` na `main`, JUÁ no script de download, documentação no estado final | ✅ mergeada em 06/11 |
+
+## Atalhos para o que mais importa
+
+| Se você quer... | Vá em |
+|---|---|
+| Entender o problema mais urgente do projeto | [02-achado-corpus.md](branches/f4-indexacao-e-docs/02-achado-corpus.md) |
+| Saber quais números do artigo estão errados | [07-numeros-para-o-artigo.md](branches/f4-indexacao-e-docs/07-numeros-para-o-artigo.md) |
+| Saber o que precisa ser decidido pela equipe | [08-decisoes-pendentes.md](branches/f4-indexacao-e-docs/08-decisoes-pendentes.md) |
+| Ver o primeiro nDCG@10 e os recortes | [resultados/](branches/f4-indexacao-e-docs/resultados/) |
+| Ver o resultado do retriever denso | [resultados/06-final-5x2.md](branches/f4-indexacao-e-docs/resultados/06-final-5x2.md) |
+| Ver o achado mais promissor (exploratório, 07/09) | [resultados/05-filtragem-por-secao.md](branches/f4-indexacao-e-docs/resultados/05-filtragem-por-secao.md) |
+| **Saber o que da F7 vai para o artigo** | [f7-enxuta/README.md](branches/f7-enxuta/README.md), §2 a §4 |
+| **Ver o melhor resultado do trabalho** | [f6/resultados/04-tabela-principal.md](branches/f6-secoes-e-fusao/resultados/04-tabela-principal.md) |
+| **Saber por que ele é confiável** | [f6/resultados/02-controle-aleatorio.md](branches/f6-secoes-e-fusao/resultados/02-controle-aleatorio.md) |
+| Saber o que foi testado e descartado | [f6/resultados/05-negativos.md](branches/f6-secoes-e-fusao/resultados/05-negativos.md) |
+| Ver o resultado final completo | [resultados/06-final-5x2.md](branches/f4-indexacao-e-docs/resultados/06-final-5x2.md) |
+| Entender o domínio: onde está a relevância no acórdão | [03-analise-do-dominio.md](branches/f4-indexacao-e-docs/03-analise-do-dominio.md) |
+| Montar o ambiente numa máquina nova | [01-ambiente-setup.md](branches/f4-indexacao-e-docs/01-ambiente-setup.md) |

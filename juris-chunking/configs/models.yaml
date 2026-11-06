@@ -9,7 +9,7 @@
 #    experimental (1024 tokens tiktoken ≈ 910 de subword). Com janela de 512,
 #    ~37% do conteúdo dos chunks grandes é descartado no encode e só a
 #    estratégia fixed_512_256 caberia inteira, ganhando vantagem artificial.
-#    Medição em docs/docsleo/.../10-escolha-do-embedder.md.
+#    Medição em docs/documentos/.../10-escolha-do-embedder.md.
 # 2. `query_prefix` / `passage_prefix` — cada família foi treinada com um
 #    formato de entrada. Prefixo errado degrada a recuperação silenciosamente.
 
