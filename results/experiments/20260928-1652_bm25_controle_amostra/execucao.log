@@ -1,6 +1,6 @@
 [16:52:53] experimento 20260928-1652_bm25_controle_amostra
 [16:52:53]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:52:53]   commit: 289fc486 (arvore suja) em leo/f6-secoes-e-fusao
+[16:52:53]   commit: 2a86a2db (arvore suja) em leo/f6-secoes-e-fusao
 [16:52:57]   [structural_gold] amostra aleatoria 0.3324 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 286,689 -> 95,300 chunks
 [16:53:39] structural_gold__bm25__amostra-0.3324s42: 95,300 chunks, 146,380 linhas, 45.4s  [decorrido 0.0 h]
 [16:53:43]   [structural_pred] amostra aleatoria 0.3372 (seed 42, igualando ['dispositivo', 'ementa', 'fundamentacao']): 285,308 -> 96,219 chunks

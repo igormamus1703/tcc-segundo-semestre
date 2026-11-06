@@ -1,6 +1,6 @@
 [17:58:51] experimento 20260928-1758_cv_fusao_sec_sem_relatorio
 [17:58:51]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[17:58:51]   commit: 99032025 (arvore suja) em leo/f6-secoes-e-fusao
+[17:58:51]   commit: b1bf1431 (arvore suja) em leo/f6-secoes-e-fusao
 [17:59:46] fixed_1024_512__cv-soma_norm: 0.2970 vs 0.2791 (+6.4%, p=0.0008) pesos=0.7|0.7|0.6|0.7|0.7
 [18:00:35] fixed_1024_512__cv-rrf: 0.2866 vs 0.2791 (+2.7%, p=0.1354) pesos=3|5|3|3|3
 [18:01:21] fixed_512_256__cv-soma_norm: 0.3160 vs 0.2893 (+9.2%, p=0.0001) pesos=0.6|0.6|0.6|0.7|0.6

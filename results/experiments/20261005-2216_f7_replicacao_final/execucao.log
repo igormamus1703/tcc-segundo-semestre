@@ -1,6 +1,6 @@
 [22:17:14] experimento 20261005-2216_f7_replicacao_final
 [22:17:14]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[22:17:14]   commit: c1fe3e76 (arvore suja) em leo/f7-evolucao
+[22:17:14]   commit: 7581dbf7 (arvore suja) em leo/f7-evolucao
 [22:18:07] JurisTCU: 150 consultas, 34 condicoes
 [22:26:32] JUÁ difícil (teste): 1567 consultas, 34 condicoes
 [22:34:33] JUÁ independente: 1373 consultas, 34 condicoes

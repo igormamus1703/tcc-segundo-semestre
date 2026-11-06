@@ -56,7 +56,7 @@ p com Bonferroni sobre 23 comparações por coleção):
 **0,3225** no JurisTCU, empatada com a fusão das 4 da F6 (0,3215).
 
 **Sobre a "pré-registração":** a hipótese do `toca` foi registrada (commit
-`1e017f5`, branch `leo/f7-evolucao`) **antes** de rodar a amostra natural.
+`b0cde8c`, branch `leo/f7-evolucao`) **antes** de rodar a amostra natural.
 Pode ser citada no texto como confirmação em dados não vistos.
 
 ## 3. O mecanismo (uma figura, se couber)

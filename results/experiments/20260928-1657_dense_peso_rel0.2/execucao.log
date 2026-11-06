@@ -1,6 +1,6 @@
 [16:57:20] experimento 20260928-1657_dense_peso_rel0.2
 [16:57:20]   hardware: NVIDIA GeForce RTX 5060 (8.0G)
-[16:57:20]   commit: 73a908ef (arvore suja) em leo/f6-secoes-e-fusao
+[16:57:20]   commit: e627b9ca (arvore suja) em leo/f6-secoes-e-fusao
 [16:57:24]   [structural_gold] pesos {'relatorio': 0.2}: 191,389 chunks com peso != 1
 [16:57:30]   [structural_gold] BAAI/bge-m3 | device=cuda | dtype=auto | janela=1024 | batch=32
 [16:57:31]     embeddings recuperados do cache (sem reencode)
