@@ -32,12 +32,13 @@ preferir não usar link) não afeta o Git de nenhuma forma.
 
 ## Como baixar
 
-Os dois datasets usados pelo pipeline atual (ver `plano_implementacao.md`,
-seção 0):
+Os três datasets usados pelo pipeline (ver `plano_implementacao.md`, seção 0,
+e a F7):
 
 ```bash
 python scripts/download_datasets.py juristcu        # ~91 MB — rápido
 python scripts/download_datasets.py tcu_acordaos     # ~6 GB — demora, retomável
+python scripts/download_datasets.py jua              # ~95 MB — F7 (JUÁ-Juris)
 ```
 
 `tcu_acordaos` baixa 21 arquivos (um por ano, 2003–2023) e é o mais pesado:
@@ -48,13 +49,21 @@ do ponto onde pararam.
 
 Para forçar o re-download de arquivos já existentes, adicione `--force`.
 
+> ⚠️ **Versão dos CSVs do TCU.** O TCU regera esses arquivos periodicamente:
+> em 02/10/2026, os de 2019, 2020, 2022 e 2023 mudaram de tamanho. Os
+> resultados do projeto usam a versão baixada em 05/09/2026, e um download
+> novo pode produzir um corpus diferente. Para reproduzir os números
+> exatamente, use a cópia de 05/09/2026 que acompanha o pacote de artefatos
+> da entrega, com checksums SHA-256. Não rode `--force` numa máquina que já
+> tem os dados dos experimentos.
+
 Rodar sem argumentos baixa **todos** os datasets cadastrados, incluindo dois
 que foram avaliados e descartados como alternativa de corpus (ver seção 0.5
 do `plano_implementacao.md` — mantidos no script só de referência, não são
 necessários para rodar o pipeline):
 
 ```bash
-python scripts/download_datasets.py                 # baixa os 4 (não recomendado)
+python scripts/download_datasets.py                 # baixa os 5 (não recomendado)
 python scripts/download_datasets.py jurisprudencias_stj
 python scripts/download_datasets.py brazilian_court_decisions
 ```
@@ -78,6 +87,10 @@ data/
 │   ├── doc.csv             # 16.045 documentos (enunciado + excerto)
 │   ├── qrel.csv             # 2.250 julgamentos de relevância
 │   └── query.csv             # 150 consultas
+├── jua/                       # JUÁ-Juris (F7)
+│   ├── corpus.jsonl          # enunciados e excertos
+│   ├── queries.jsonl
+│   └── qrels/{train,test}.tsv   # 15.433 e 1.714 pares
 └── tcu_acordaos/
     ├── acordao-completo-2003.csv
     ├── acordao-completo-2004.csv
@@ -113,6 +126,18 @@ etc.) — é o corpus principal do projeto. Ligado ao JurisTCU por join em
 
 - **Link:** https://sites.tcu.gov.br/dados-abertos/jurisprudencia/arquivos/acordao-completo/
 - **Arquivos:** `acordao-completo-{2003..2023}.csv`, separador `|`, ~6 GB total
+
+### JUÁ-Juris (F7)
+
+Segunda coleção de consultas, montada sobre a mesma base de jurisprudência do
+TCU que o JurisTCU: cada instância é um par (enunciado, excerto). A consulta é
+o enunciado; o relevante é o acórdão que contém o excerto. O `src/jua.py` liga
+cada par ao acórdão íntegro do corpus pela mesma chave da ingestão.
+
+- **Link:** https://huggingface.co/datasets/ufca-llms/jua (Pereira et al., 2026)
+- **Arquivos:** `corpus.jsonl`, `queries.jsonl`, `qrels/train.tsv` (15.433
+  pares) e `qrels/test.tsv` (1.714 pares). Baixado em 05/10/2026; conferido em
+  06/11/2026, mesmos tamanhos no Hugging Face.
 
 ### Datasets descartados (mantidos no script só de referência)
 

@@ -24,6 +24,12 @@ DATASETS = {
         "base_url": "https://huggingface.co/datasets/LeandroRibeiro/JurisTCU/resolve/main",
         "files": ["doc.csv", "qrel.csv", "query.csv"],
     },
+    # Segunda colecao de consultas (F7), sobre a mesma base de jurisprudencia
+    # do TCU: usada por juris-chunking/src/jua.py.
+    "jua": {
+        "base_url": "https://huggingface.co/datasets/ufca-llms/jua/resolve/main",
+        "files": ["corpus.jsonl", "queries.jsonl", "qrels/test.tsv", "qrels/train.tsv"],
+    },
     "jurisprudencias_stj": {
         "base_url": "https://huggingface.co/datasets/celsowm/jurisprudencias_stj/resolve/main",
         "files": ["jurisprudencias_stj.parquet"],
@@ -121,7 +127,9 @@ def download_dataset(name: str, force: bool) -> None:
     print(f"\n=== {name} ===")
     for filename in spec["files"]:
         url = f"{spec['base_url']}/{filename}"
-        download_file(url, dest_dir / filename, force)
+        destino = dest_dir / filename
+        destino.parent.mkdir(parents=True, exist_ok=True)  # ex.: jua/qrels/
+        download_file(url, destino, force)
 
 
 def main() -> None:

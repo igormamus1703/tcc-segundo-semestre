@@ -14,11 +14,16 @@ data/
 │   ├── doc.csv
 │   ├── qrel.csv
 │   └── query.csv
+├── jua/                      # JUÁ-Juris (F7)
+│   ├── corpus.jsonl
+│   ├── queries.jsonl
+│   └── qrels/{train,test}.tsv
 └── tcu_acordaos/
     └── acordao-completo-{2003..2023}.csv
 ```
 
 Os artefatos derivados desses arquivos brutos (`corpus_docs.jsonl`,
-`queries.jsonl`, `qrels.trec`, gerados por `juris-chunking/src/ingest.py`)
+`queries.jsonl`, `qrels.trec`, gerados por `juris-chunking/src/ingest.py`, e
+as consultas do JUÁ ligadas ao corpus, geradas por `juris-chunking/src/jua.py`)
 ficam em `juris-chunking/data/interim/`, também fora do Git pelo mesmo
 motivo de tamanho.
